@@ -1,0 +1,124 @@
+{
+  "atlas_id": "genome",
+  "atlas_name": "Genome Atlas",
+  "atlas_version": "2026-05-11-round1",
+  "atlas_description": "Assembly + annotation lens for the F₁ hybrid (C. gariepinus × C. macrocephalus). Chromosome architecture, gene tracks, repeat / TE landscape, synteny against related Siluriformes, and variant annotations that contextualize Inversion Atlas candidates.",
+  "_cohort": "F₁ hybrid (C. gariepinus × C. macrocephalus) — NOT the 226-sample hatchery cohort. See KICKOFF_genome_atlas.md.",
+  "pages": [
+    {
+      "id": "page1",
+      "label": "scaffold",
+      "stage": "assembly",
+      "fragment": "atlases/genome/pages/assembly/page1.html",
+      "module": "atlases/genome/pages/assembly/page1.js",
+      "tooltip": "Genome Atlas landing / scaffold preview. Vision, required data layers, chromosome-overview mockup, panel inventory, phasing roadmap, cross-references. Layout-only; per-page renderers ship as cluster-side genome layers land (SCHEMA §28, phase A)."
+    },
+    {
+      "id": "page2",
+      "label": "assembly stats",
+      "stage": "assembly",
+      "fragment": "atlases/genome/pages/assembly/page2.html",
+      "module": "atlases/genome/pages/assembly/page2.js",
+      "tooltip": "Headline assembly QC for the F₁ hybrid: BUSCO single-copy %, contig/scaffold N50, gap rate, T2T completeness. Global tiles + per-chromosome QC table. Phase B."
+    },
+    {
+      "id": "page3",
+      "label": "chromosome overview",
+      "stage": "assembly",
+      "fragment": "atlases/genome/pages/assembly/page3.html",
+      "module": "atlases/genome/pages/assembly/page3.js",
+      "tooltip": "Length-scaled chromosome strip with stacked density sub-tracks (gene · repeat · conserved · cohort overlay). Genome-Atlas primary phase-B deliverable. Mirrors the Inversion Atlas scrubber width."
+    },
+    {
+      "id": "page4",
+      "label": "assembly methods",
+      "stage": "assembly",
+      "fragment": "atlases/genome/pages/assembly/page4.html",
+      "module": "atlases/genome/pages/assembly/page4.js",
+      "tooltip": "HiFi + Hi-C + ONT pipeline walkthrough. Pure documentation; no layer dependencies. Stays useful as long as the assembly paper is in review."
+    },
+    {
+      "id": "page5",
+      "label": "genes",
+      "stage": "annotation",
+      "fragment": "atlases/genome/pages/annotation/page5.html",
+      "module": "atlases/genome/pages/annotation/page5.js",
+      "tooltip": "Gene track, density, and cargo-per-inversion views. Bridges the assembly paper to the Inversion Atlas's manuscript. Phase B–C."
+    },
+    {
+      "id": "page6",
+      "label": "repeats / TE",
+      "stage": "annotation",
+      "fragment": "atlases/genome/pages/annotation/page6.html",
+      "module": "atlases/genome/pages/annotation/page6.js",
+      "tooltip": "TE landscape: per-class composition, per-chrom density heatmap, breakpoint enrichment per candidate (Spalax focal-vs-bg). Phase B."
+    },
+    {
+      "id": "page7",
+      "label": "variant annotations",
+      "stage": "annotation",
+      "fragment": "atlases/genome/pages/annotation/page7.html",
+      "module": "atlases/genome/pages/annotation/page7.js",
+      "tooltip": "SnpEff / VEP impact overlay per inversion candidate. Final piece of the Genome Atlas (phase E). Depends on MODULE_CONSERVATION cluster-side outputs."
+    },
+    {
+      "id": "page8",
+      "label": "conserved elements",
+      "stage": "annotation",
+      "fragment": "atlases/genome/pages/annotation/page8.html",
+      "module": "atlases/genome/pages/annotation/page8.js",
+      "tooltip": "UCE + phastCons regulatory-disruption overlay per candidate. Complements the gene-cargo view (page5) by counting regulatory hits, not coding hits. Phase C–D."
+    },
+    {
+      "id": "page9",
+      "label": "synteny",
+      "stage": "comparative",
+      "fragment": "atlases/genome/pages/comparative/page9.html",
+      "module": "atlases/genome/pages/comparative/page9.js",
+      "tooltip": "Cactus pairwise synteny: ribbon diagram (Cgar vs Cmac and other Siluriformes) + per-chrom dotplot. Phase D."
+    },
+    {
+      "id": "page10",
+      "label": "ancestral karyotype",
+      "stage": "comparative",
+      "fragment": "atlases/genome/pages/comparative/page10.html",
+      "module": "atlases/genome/pages/comparative/page10.js",
+      "tooltip": "Reconstructed Siluriformes ancestral karyotype + per-branch event annotations. Likely promoted to a Supplementary Note. Phase D."
+    }
+  ],
+  "registries": {
+    "layers": "atlases/genome/registries/data/layers.registry.json",
+    "files": "atlases/genome/registries/data/files.registry.json",
+    "operations": "atlases/genome/registries/data/operations.registry.json",
+    "pages": "atlases/genome/registries/data/pages.registry.json",
+    "slots": "atlases/genome/registries/data/slots.registry.json"
+  },
+  "shared_modules": {},
+  "engines_dir": "atlases/genome/engines/",
+  "analysis_dir": "atlases/genome/analysis/",
+  "css_dir": "atlases/genome/css/",
+  "stylesheets": [
+    "atlases/genome/css/genome.css"
+  ],
+  "_stylesheets_doc": "Atlas-wide stylesheet for the Genome Atlas. Round 1 ships a minimal bundle: orange/coral accent overrides + the .ga-card section style used by the page1 scaffold. Future rounds add per-page stylesheets and reference them from each page entry's `stylesheet` field.",
+  "scope_pickers": [],
+  "_scope_pickers_doc": "No scope pickers in round 1. When chromosome_map + gene_track layers land (phase B), add an activeChrom picker analogous to the Inversion Atlas's.",
+  "stages": [
+    {
+      "id": "assembly",
+      "label": "assembly",
+      "order": 1
+    },
+    {
+      "id": "annotation",
+      "label": "annotation",
+      "order": 2
+    },
+    {
+      "id": "comparative",
+      "label": "comparative",
+      "order": 3
+    }
+  ],
+  "_stages_doc": "Three stages chosen to match the kickoff (KICKOFF_genome_atlas.md §Q2): assembly (chromosomes, N50, BUSCO, gaps), annotation (genes, repeats, TEs), comparative (synteny, ancestral karyotype). Round 1 ships only one page in `assembly`; the other two stages are reserved for future rounds."
+}

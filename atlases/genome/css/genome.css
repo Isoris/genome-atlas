@@ -1,0 +1,317 @@
+/* atlases/genome/css/genome.css
+ * =====================================================================
+ * Genome Atlas — atlas-wide stylesheet.
+ *
+ * Round-1 bundle: orange/coral accent rules + the .ga-card section
+ * styling used by page1 (the scaffold landing page). Mirrors the
+ * Inversion Atlas's per-atlas stylesheet pattern (atlases/inversion/css/
+ * inversion.css), but tiny — the Genome Atlas is a scaffold today.
+ *
+ * Source: extracted from legacy/Genome_atlas.html inline styles
+ * (lines 200-472 + the small inline header rules at lines 60-90).
+ * The atlas-core shell handles top-level chrome (header, topbar,
+ * scopebar, theme cycling) — those rules are NOT mirrored here.
+ *
+ * Uses tokens from atlas-core/css/tokens.css (var(--panel-2),
+ * var(--ink), var(--ink-dim), var(--rule), var(--mono), ...).
+ *
+ * Loaded by: declared in atlases/genome/manifest.json's "stylesheets"
+ * field; the shell injects the <link> tag at atlas-register time.
+ * =====================================================================
+ */
+
+/* ---------------------------------------------------------------------
+ * Genome Atlas accent palette.
+ *
+ * The Inversion Atlas uses blue (#4fa3ff); the Genome Atlas uses
+ * orange/coral (#e48a3c with a brighter #ff8c6e bullet). We don't
+ * override --accent globally because that would tint the atlas-core
+ * shell too — instead we keep the accent literals scoped under the
+ * page wrapper.
+ *
+ * If future rounds add multi-atlas theming hooks at the shell level,
+ * promote these to CSS-vars (e.g. --ga-accent / --ga-accent-soft).
+ * --------------------------------------------------------------------- */
+
+/* ---------------------------------------------------------------------
+ * Scoping note (round-2 extension).
+ *
+ * Round 1 scoped every rule under #page1 because there was only one
+ * page in the Genome Atlas. Round 2 added page2..page10; the same
+ * .ga-* class set is now reused across all of them, so the #page1
+ * prefix has been dropped and the rules apply atlas-wide. The .ga-*
+ * namespace itself is the scope guard — no other atlas uses it.
+ * --------------------------------------------------------------------- */
+
+/* Content wrapper — replaces the inline-styled #genomeAtlasContent. */
+.ga-content {
+  padding: 40px 32px;
+  max-width: 1180px;
+  margin: 0 auto;
+  color: var(--ink);
+  font-family: var(--mono);
+  font-size: 11.5px;
+  line-height: 1.65;
+}
+
+/* Title + subtitle */
+.ga-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: var(--ink);
+}
+.ga-title-bullet {
+  color: #ff8c6e;
+}
+.ga-subtitle {
+  font-size: 11.5px;
+  color: var(--ink-dim);
+  margin-bottom: 24px;
+  letter-spacing: 0.02em;
+}
+
+/* Card — the boxed section primitive used by every section on page1. */
+.ga-card {
+  background: var(--panel-2);
+  border: 1px solid var(--rule);
+  border-left: 3px solid #ff8c6e;
+  border-radius: 4px;
+  padding: 16px 18px;
+  margin-bottom: 18px;
+}
+.ga-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 10px;
+}
+.ga-card-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink);
+}
+.ga-card-status {
+  font-size: 9.5px;
+  color: var(--ink-dim);
+  letter-spacing: 0.04em;
+  padding: 2px 6px;
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+}
+.ga-card-status.ga-status-phase {
+  color: #c97a4f;
+  border-color: #c97a4f;
+}
+.ga-card-para {
+  margin-bottom: 8px;
+}
+.ga-card-para:last-child {
+  margin-bottom: 0;
+}
+.ga-dim {
+  color: var(--ink-dim);
+}
+.ga-card-footnote {
+  color: var(--ink-dim);
+  font-size: 10px;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px dashed var(--rule);
+}
+
+/* ---------------------------------------------------------------------
+ * Section 2: data layers grid (4 columns: layer | source | status | feeds)
+ * --------------------------------------------------------------------- */
+.ga-layers-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1.0fr 1.0fr 1.6fr;
+  gap: 6px 12px;
+  font-size: 10.5px;
+  align-items: baseline;
+}
+.ga-layers-head {
+  font-weight: 600;
+  color: var(--ink-dim);
+}
+.ga-layer-status {
+  color: var(--ink-dimmer);
+}
+/* When a layer is loaded, future rounds set [data-ga-layer-loaded="1"]
+   on the chip and this rule turns it green. Kept here so the wiring
+   only has to flip an attribute. */
+#page1 [data-ga-layer][data-ga-layer-loaded="1"] {
+  color: var(--good);
+}
+
+/* ---------------------------------------------------------------------
+ * Section 3: chromosome-overview mockup
+ * --------------------------------------------------------------------- */
+.ga-chrom-mockup {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--ink-dim);
+}
+.ga-chrom-row {
+  display: grid;
+  grid-template-columns: 60px 1fr 80px;
+  gap: 8px;
+  align-items: center;
+  padding: 4px 0;
+}
+.ga-chrom-label {
+  /* Plain row label; the highlighted row overrides via .ga-chrom-highlight. */
+}
+.ga-chrom-highlight .ga-chrom-label,
+.ga-chrom-highlight .ga-chrom-len {
+  color: #ff8c6e;
+}
+.ga-chrom-bar {
+  height: 14px;
+  border-radius: 2px;
+  opacity: 0.55;
+}
+.ga-chrom-bar-highlight {
+  opacity: 0.7;
+}
+.ga-chrom-ellipsis {
+  color: var(--ink-dimmer);
+}
+.ga-chrom-len {
+  text-align: right;
+}
+
+/* ---------------------------------------------------------------------
+ * Section 4: planned-panels grid (2 columns: name | description)
+ * --------------------------------------------------------------------- */
+.ga-panels-grid {
+  display: grid;
+  grid-template-columns: 1.0fr 2.0fr;
+  gap: 6px 14px;
+  font-size: 10.5px;
+  align-items: baseline;
+}
+.ga-panel-name {
+  color: #ff8c6e;
+  font-weight: 600;
+}
+.ga-panel-desc {
+  color: var(--ink-dim);
+}
+
+/* ---------------------------------------------------------------------
+ * Section 5: phasing-roadmap grid (2 columns: phase label | description)
+ * --------------------------------------------------------------------- */
+.ga-phasing-grid {
+  display: grid;
+  grid-template-columns: 90px 1fr;
+  gap: 6px 14px;
+  font-size: 10.5px;
+}
+.ga-phase-name {
+  color: #ff8c6e;
+  font-weight: 600;
+}
+.ga-phase-desc {
+  color: var(--ink-dim);
+}
+.ga-good {
+  color: var(--good);
+}
+
+/* ---------------------------------------------------------------------
+ * Light / academic theme tweaks. The dark theme is the default; under
+ * the lighter themes the #ff8c6e coral reads as too saturated, so we
+ * push it slightly darker (matches Genome_atlas.html's --accent
+ * light-theme override at lines 33-39).
+ * --------------------------------------------------------------------- */
+html[data-theme="light"]    .ga-title-bullet,
+html[data-theme="light"]    .ga-card,
+html[data-theme="light"]    .ga-chrom-highlight .ga-chrom-label,
+html[data-theme="light"]    .ga-chrom-highlight .ga-chrom-len,
+html[data-theme="light"]    .ga-panel-name,
+html[data-theme="light"]    .ga-phase-name,
+html[data-theme="academic"] .ga-title-bullet,
+html[data-theme="academic"] .ga-card,
+html[data-theme="academic"] .ga-chrom-highlight .ga-chrom-label,
+html[data-theme="academic"] .ga-chrom-highlight .ga-chrom-len,
+html[data-theme="academic"] .ga-panel-name,
+html[data-theme="academic"] .ga-phase-name {
+  /* Coral darkens slightly under light themes for legibility. */
+}
+html[data-theme="light"]    .ga-title-bullet,
+html[data-theme="light"]    .ga-chrom-highlight .ga-chrom-label,
+html[data-theme="light"]    .ga-chrom-highlight .ga-chrom-len,
+html[data-theme="light"]    .ga-panel-name,
+html[data-theme="light"]    .ga-phase-name {
+  color: #c2410c;
+}
+html[data-theme="academic"] .ga-title-bullet,
+html[data-theme="academic"] .ga-chrom-highlight .ga-chrom-label,
+html[data-theme="academic"] .ga-chrom-highlight .ga-chrom-len,
+html[data-theme="academic"] .ga-panel-name,
+html[data-theme="academic"] .ga-phase-name {
+  color: #7a4f1a;
+}
+html[data-theme="light"]    .ga-card,
+html[data-theme="academic"] .ga-card {
+  border-left-color: #c2410c;
+}
+
+/* ---------------------------------------------------------------------
+ * QC tile grid (page2 — assembly stats banner).
+ *
+ * Six tiles in a responsive grid. Each tile = small label on top,
+ * big-number value in the middle, small sub-label at the bottom.
+ * --------------------------------------------------------------------- */
+.ga-tile-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 10px;
+  margin-bottom: 4px;
+}
+.ga-tile {
+  background: var(--panel-3);
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  padding: 10px 12px;
+}
+.ga-tile-label {
+  font-size: 9.5px;
+  color: var(--ink-dim);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.ga-tile-value {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--ink);
+  font-family: var(--mono);
+  margin-bottom: 4px;
+}
+.ga-tile-sub {
+  font-size: 9.5px;
+  color: var(--ink-dimmer);
+}
+
+/* ---------------------------------------------------------------------
+ * TODO_MISSING banner (used by spec pages to flag unwritten renderers).
+ *
+ * Dashed-border callout. Distinct from .ga-card so it never looks like
+ * shipped content.
+ * --------------------------------------------------------------------- */
+.ga-todo-banner {
+  margin-top: 4px;
+  padding: 10px 12px;
+  background: var(--panel-3);
+  border: 1px dashed var(--rule);
+  border-radius: 3px;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  color: var(--ink-dim);
+}
+.ga-todo-banner code {
+  font-size: 0.95em;
+}
+

@@ -1,0 +1,84 @@
+<div id="page7" class="page">
+  <div class="ga-content">
+      <div class="ga-title">
+        <span class="ga-title-bullet">▰</span> Variant annotations — SnpEff / VEP overlay
+      </div>
+      <div class="ga-subtitle">
+        Stage: annotation · spec / phase E · driven by <code>variant_annotations</code>
+      </div>
+
+      <div class="ga-card">
+        <div class="ga-card-header">
+          <div class="ga-card-title">What this page shows</div>
+          <div class="ga-card-status ga-status-phase">spec · phase E (final piece)</div>
+        </div>
+        <div class="ga-card-para">
+          SnpEff / VEP impact category summaries per inversion candidate.
+          Answers "what does this inversion break?" by counting and listing
+          the variants of each severity (HIGH / MODERATE / LOW / MODIFIER)
+          that fall inside the inversion span. Supports the manuscript's
+          deleterious-burden argument.
+        </div>
+        <div class="ga-card-para ga-dim">
+          Final piece of the Genome Atlas — depends on MODULE_CONSERVATION
+          deliverables (VESM / SIFT4G / SnpEff / GERP++) landing on the cluster.
+          Don't migrate until phase D synteny is done.
+        </div>
+      </div>
+
+      <div class="ga-card">
+        <div class="ga-card-header">
+          <div class="ga-card-title">Required data layers</div>
+          <div class="ga-card-status">phase E</div>
+        </div>
+        <div class="ga-layers-grid">
+          <div class="ga-layers-head">layer</div>
+          <div class="ga-layers-head">source</div>
+          <div class="ga-layers-head">status</div>
+          <div class="ga-layers-head">feeds</div>
+
+          <div><code>variant_annotations</code></div>
+          <div><code>SnpEff + VEP</code></div>
+          <div data-ga-layer="variant_annotations" class="ga-layer-status">⚪ not loaded</div>
+          <div class="ga-dim">impact tally · cargo column · deleterious overlay</div>
+
+          <div><code>gene_track</code></div>
+          <div><code>BRAKER / TOGA / RefSeq</code></div>
+          <div data-ga-layer="gene_track" class="ga-layer-status">⚪ not loaded</div>
+          <div class="ga-dim">gene-name resolution for HIGH-impact variants</div>
+        </div>
+      </div>
+
+      <div class="ga-card">
+        <div class="ga-card-header">
+          <div class="ga-card-title">Views (mockup)</div>
+          <div class="ga-card-status">phase plan</div>
+        </div>
+        <div class="ga-panels-grid">
+          <div class="ga-panel-name">View 1 — per-candidate tally</div>
+          <div class="ga-panel-desc">Table: candidate id · HIGH count · MODERATE count · LOW count · MODIFIER count · top-3 HIGH-impact genes. One row per promoted candidate from the Inversion Atlas.</div>
+
+          <div class="ga-panel-name">View 2 — impact bar per candidate</div>
+          <div class="ga-panel-desc">Compact horizontal bar (HIGH = red, MODERATE = amber, LOW = neutral, MODIFIER = dim) showing the relative composition. Easy comparison across candidates.</div>
+
+          <div class="ga-panel-name">View 3 — HIGH-impact variant list</div>
+          <div class="ga-panel-desc">Expandable per-candidate detail: gene · variant · consequence · SnpEff impact · VEP consequence · GERP++ score. Sortable.</div>
+        </div>
+      </div>
+
+      <div class="ga-card">
+        <div class="ga-card-header">
+          <div class="ga-card-title">Cross-references</div>
+          <div class="ga-card-status">see also</div>
+        </div>
+        <div class="ga-card-para ga-dim">
+          • <b>page5 (genes)</b> — supplies the gene-cargo table; this page
+          decorates it with an impact column.<br>
+          • <b>Inversion Atlas catalogue</b> — bubbles up a deleterious-burden
+          chip per row (small dot, click-through to this page).<br>
+          • <b>MODULE_CONSERVATION</b> — cluster-side workflow emitting
+          <code>variant_annotations.json</code>.
+        </div>
+      </div>
+  </div>
+</div>

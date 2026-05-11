@@ -1,0 +1,28 @@
+{
+  "$schema": "../../../../core/registry_core.schema.json",
+  "_doc": "Cross-page state slots for the Genome Atlas. Round 1 is the scaffold-only phase — page1 doesn't read or write any state. The two slots declared below are RESERVED for phase B+ (they're what the page1 vision section commits to). Adding them now keeps the registry shape stable and lets the shell flag misuse early.",
+  "_round1_status": "Two reserved slots, neither used yet. activeChrom + activeHaplotype will be wired when phase B's chromosome-overview renderer lands.",
+  "slots": {
+
+    "_section_1": "==== CROSS-ATLAS reserved slots (will be shared.* once wired) ====",
+
+    "activeChrom": {
+      "type": "string",
+      "default": null,
+      "persist": false,
+      "scope": "shared",
+      "_status": "reserved_for_phase_B",
+      "_doc": "Cross-atlas: the active chromosome in the Inversion Atlas. Genome Atlas listens for changes and highlights the corresponding row in the chromosome strip (phase B). Same slot name as the Inversion Atlas's manifest.scope_pickers entry."
+    },
+
+    "_section_2": "==== GENOME-PRIVATE reserved slots ====",
+
+    "activeHaplotype": {
+      "type": "string",
+      "default": "Gar",
+      "persist": true,
+      "_status": "reserved_for_phase_B",
+      "_doc": "Which haplotype to render: 'Gar' (C. gariepinus, 28 chroms) or 'Mac' (C. macrocephalus, 27 chroms). Mentioned in KICKOFF_genome_atlas.md §Q3."
+    }
+  }
+}

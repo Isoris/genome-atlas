@@ -1,0 +1,87 @@
+{
+  "$schema": "../../../../core/registry_core.schema.json",
+  "_doc": "Per-page data and slot requirements for the Genome Atlas. Round 1 declares all ten planned pages (one per major spec); requires_layers / requires_slots / preloads are stubbed empty because none of the pages has a renderer yet — they're scaffold specs. Each pageN's _doc captures what the page will read once its phase ships.",
+  "_round1_status": "All ten pages declared as scaffolds. Real requires_* are added per page as renderers wire in (phase B+).",
+  "pages": {
+    "page1": {
+      "_label": "scaffold — landing / phase A preview",
+      "_doc": "Static landing page. Six sections: vision, required data layers (eight chips, all '⚪ not loaded' in round 1), chromosome-overview mockup (gradient stand-ins for real density tracks), planned-panel inventory, phasing roadmap (A → E), cross-references to the three sibling atlases. SCHEMA §28. Round-1 status: stub-preserving + lifecycle scaffolding — mount() builds a no-op _pageState; unmount() clears it. Renderer hook (refreshPage1) is a no-op pending phase B+.",
+      "requires_layers": [],
+      "requires_operations": [],
+      "requires_slots": [],
+      "preloads": []
+    },
+    "page2": {
+      "_label": "assembly stats — QC banner",
+      "_doc": "Headline assembly QC: BUSCO single-copy %, contig/scaffold N50, gap rate, T2T completeness, total length. Six global tiles + a per-chromosome QC table (chrom × haplotype, with centromere/telomere status, T2T chip). Phase B wires assembly_stats + centromere_telomere layers. Future requires_layers: ['assembly_stats', 'centromere_telomere'].",
+      "requires_layers": [],
+      "requires_operations": [],
+      "requires_slots": [],
+      "preloads": []
+    },
+    "page3": {
+      "_label": "chromosome overview — length-scaled strip",
+      "_doc": "Primary phase-B deliverable. One row per chromosome, length-scaled across the page. Stacked sub-tracks: base bar (with centromere overlay), gene density, repeat density, conserved-element density, cohort overlay (L2 envelopes + candidates from the Inversion Atlas). Mirrors scrubber width so the two atlases can be stacked. Future requires_layers: ['chromosome_map', 'gene_track', 'repeat_track', 'conserved_elements', 'centromere_telomere']. Future requires_slots: ['activeChrom', 'candidate'] (cross-atlas reads).",
+      "requires_layers": [],
+      "requires_operations": [],
+      "requires_slots": [],
+      "preloads": []
+    },
+    "page4": {
+      "_label": "assembly methods — documentation",
+      "_doc": "Pure documentation page describing the HiFi + Hi-C + ONT haplotype-resolved assembly pipeline. Five stages from raw reads to curated FAI+AGP. No data layers, no renderer. Ships round 1 in its final shape; no phase B/C upgrade planned beyond text edits.",
+      "requires_layers": [],
+      "requires_operations": [],
+      "requires_slots": [],
+      "preloads": []
+    },
+    "page5": {
+      "_label": "genes — track, density, cargo",
+      "_doc": "Three views: (1) genome-wide gene-density bar chart, one bar per chrom; (2) per-chrom gene track (boxes + introns) on a length-scaled axis driven by activeChrom; (3) gene cargo per inversion candidate — for every promoted candidate, list genes inside the span, sorted by SnpEff impact when variant_annotations is loaded. Bridges the assembly paper to the Inversion Atlas. Future requires_layers: ['gene_track', 'chromosome_map', 'variant_annotations']. Future requires_slots: ['activeChrom', 'candidateList'].",
+      "requires_layers": [],
+      "requires_operations": [],
+      "requires_slots": [],
+      "preloads": []
+    },
+    "page6": {
+      "_label": "repeats / TE — landscape and breakpoint enrichment",
+      "_doc": "Three views: per-class composition (LTR / LINE / SINE / DNA / simple / unclassified), per-chrom density heatmap, breakpoint enrichment per inversion candidate using the Spalax-style focal-vs-bg widget (same widget the Inversion Atlas uses on page16). Future requires_layers: ['repeat_track', 'chromosome_map']. Future requires_slots: ['candidateList'].",
+      "requires_layers": [],
+      "requires_operations": [],
+      "requires_slots": [],
+      "preloads": []
+    },
+    "page7": {
+      "_label": "variant annotations — SnpEff / VEP overlay",
+      "_doc": "Phase E (final piece of the Genome Atlas). SnpEff / VEP impact category overlay per inversion candidate. Three views: per-candidate impact tally table, compact impact bar (HIGH/MODERATE/LOW/MODIFIER), expandable HIGH-impact variant list. Depends on MODULE_CONSERVATION cluster-side deliverables (VESM / SIFT4G / SnpEff / GERP++). Future requires_layers: ['variant_annotations', 'gene_track']. Future requires_slots: ['candidateList'].",
+      "requires_layers": [],
+      "requires_operations": [],
+      "requires_slots": [],
+      "preloads": []
+    },
+    "page8": {
+      "_label": "conserved elements — UCE / phastCons overlay",
+      "_doc": "Phase C–D. UCE + phastCons regulatory-disruption overlay per inversion candidate. Three views: per-chrom element tick strip, per-candidate UCE overlap table, continuous phastCons score profile. Complements page5 (gene cargo) by counting regulatory hits. Future requires_layers: ['conserved_elements', 'synteny_blocks']. Future requires_slots: ['activeChrom', 'candidateList'].",
+      "requires_layers": [],
+      "requires_operations": [],
+      "requires_slots": [],
+      "preloads": []
+    },
+    "page9": {
+      "_label": "synteny — Cactus pairwise blocks",
+      "_doc": "Phase D. Cross-species collinearity for Cgar vs related Siluriformes (Cmac, I. punctatus, plus 7-9 more via catfish-synteny-toolkit wfmash). Three views: pairwise ribbon (one species pair), multi-species ribbon stack, per-chrom dotplot. Inversions render as anti-parallel polygons; translocations as chrom-jumping polygons. Ties to Inversion Atlas page16 cross-species breakpoint catalogue. Future requires_layers: ['synteny_blocks', 'chromosome_map']. Future requires_slots: ['activeChrom'].",
+      "requires_layers": [],
+      "requires_operations": [],
+      "requires_slots": [],
+      "preloads": []
+    },
+    "page10": {
+      "_label": "ancestral karyotype — Siluriformes reconstruction",
+      "_doc": "Phase D. Ancestral karyotype panel + phylogeny-with-events + per-element descent map. Same Cactus output as page9, viewed phylogenetically rather than pairwise. Likely promoted to a Supplementary Note in the assembly paper. Future requires_layers: ['synteny_blocks', 'chromosome_map'].",
+      "requires_layers": [],
+      "requires_operations": [],
+      "requires_slots": [],
+      "preloads": []
+    }
+  }
+}

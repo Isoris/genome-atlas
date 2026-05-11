@@ -1,0 +1,6 @@
+{
+  "$schema": "../../../../core/registry_core.schema.json",
+  "_doc": "Static file inventory for the Genome Atlas. Round 1 is empty — page1's scaffold doesn't read any files. Phase B+ will populate this with the eight file_templates that back the eight planned layers (assembly_stats.json, chromosome_map.json, gene_track.gff, repeat_track.bed, conserved_elements.bed, synteny_blocks.json, centromere_telomere.json, variant_annotations.json).",
+  "_round1_status": "empty — no files needed yet.",
+  "files": {}
+}

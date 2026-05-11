@@ -1,0 +1,82 @@
+<div id="page8" class="page">
+  <div class="ga-content">
+      <div class="ga-title">
+        <span class="ga-title-bullet">▰</span> Conserved elements — UCEs / phastCons
+      </div>
+      <div class="ga-subtitle">
+        Stage: annotation · spec / phase C–D · driven by <code>conserved_elements</code>
+      </div>
+
+      <div class="ga-card">
+        <div class="ga-card-header">
+          <div class="ga-card-title">What this page shows</div>
+          <div class="ga-card-status ga-status-phase">spec · phase C–D</div>
+        </div>
+        <div class="ga-card-para">
+          Ultra-conserved elements (UCEs) and phastCons-derived conserved regions
+          rendered as a regulatory-disruption sub-track. Scores how much
+          conserved sequence each inversion candidate overlaps — a candidate
+          that disrupts a UCE has a different functional weight than one that
+          doesn't, independent of gene content.
+        </div>
+        <div class="ga-card-para ga-dim">
+          Complements page5 (gene cargo) by counting <i>regulatory</i> hits, not
+          just coding hits.
+        </div>
+      </div>
+
+      <div class="ga-card">
+        <div class="ga-card-header">
+          <div class="ga-card-title">Required data layers</div>
+          <div class="ga-card-status">phase C–D</div>
+        </div>
+        <div class="ga-layers-grid">
+          <div class="ga-layers-head">layer</div>
+          <div class="ga-layers-head">source</div>
+          <div class="ga-layers-head">status</div>
+          <div class="ga-layers-head">feeds</div>
+
+          <div><code>conserved_elements</code></div>
+          <div><code>Cactus / phastCons</code></div>
+          <div data-ga-layer="conserved_elements" class="ga-layer-status">⚪ not loaded</div>
+          <div class="ga-dim">element track · per-candidate overlap counts</div>
+
+          <div><code>synteny_blocks</code></div>
+          <div><code>Cactus pairwise</code></div>
+          <div data-ga-layer="synteny_blocks" class="ga-layer-status">⚪ not loaded</div>
+          <div class="ga-dim">defines the alignment from which phastCons is computed</div>
+        </div>
+      </div>
+
+      <div class="ga-card">
+        <div class="ga-card-header">
+          <div class="ga-card-title">Views (mockup)</div>
+          <div class="ga-card-status">phase plan</div>
+        </div>
+        <div class="ga-panels-grid">
+          <div class="ga-panel-name">View 1 — per-chrom element strip</div>
+          <div class="ga-panel-desc">Tick strip along the active chromosome; each tick = one conserved element. Width matches the Inversion Atlas scrubber.</div>
+
+          <div class="ga-panel-name">View 2 — per-candidate UCE overlap</div>
+          <div class="ga-panel-desc">Table: candidate id · UCE count inside span · summed conserved-bp · max phastCons score in span. Bubble up to the Inversion Atlas catalogue as a "regulatory disruption" badge.</div>
+
+          <div class="ga-panel-name">View 3 — phastCons score profile</div>
+          <div class="ga-panel-desc">Continuous score track (phastCons posterior probability) along the active chromosome. Highlights conserved peaks not annotated as UCEs.</div>
+        </div>
+      </div>
+
+      <div class="ga-card">
+        <div class="ga-card-header">
+          <div class="ga-card-title">Cross-references</div>
+          <div class="ga-card-status">see also</div>
+        </div>
+        <div class="ga-card-para ga-dim">
+          • <b>page3 (chromosome overview)</b> — conserved-density sub-track is a
+          summarized view of this page's strip.<br>
+          • <b>page9 (synteny)</b> — both pages consume the Cactus pairwise output.<br>
+          • <b>Cactus alignment pipeline</b> — cluster-side workflow producing
+          both <code>conserved_elements.bed</code> and <code>synteny_blocks.json</code>.
+        </div>
+      </div>
+  </div>
+</div>

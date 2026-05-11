@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../../core/registry_core.schema.json",
+  "_doc": "Layer inventory for the Genome Atlas. Round 1 stubs all eight planned layers as not-yet-implemented entries so the engine can boot and the page1 [data-ga-layer] chips have a registry to look up. Each layer's `tier` / `source` / `path` is the COMMITTED contract per SCHEMA §28; the actual files don't exist yet — they ship from the cluster-side genome-annotation pipeline (phase B+).",
+  "_tier_legend": {
+    "hot":  "RAM-pinned at trigger event; pages read state directly; <1ms",
+    "warm": "IndexedDB-cached at trigger event; first read async ~50ms; subsequent ~10ms",
+    "cold": "Fetched on demand; spinner allowed"
+  },
+  "_round1_status": "All eight layers are CONTRACT-ONLY (not-yet-loaded). page1's scaffold renders them as '⚪ not loaded' chips. Phase B turns on chromosome_map + gene_track + repeat_track; later phases turn on the rest.",
+  "layers": {
+
+    "assembly_stats": {
+      "tier": "warm",
+      "source": "file",
+      "path": "data/assembly/assembly_stats.json",
+      "_status": "not_loaded",
+      "_feeds": "page1 chromosome overview · QC banner (phase B)",
+      "_source_pipeline": "BUSCO + asmstats"
+    },
+
+    "chromosome_map": {
+      "tier": "warm",
+      "source": "file",
+      "path": "data/assembly/chromosome_map.json",
+      "_status": "not_loaded",
+      "_feeds": "karyotype strip · per-chrom navigation (phase B)",
+      "_source_pipeline": "FAI + AGP"
+    },
+
+    "gene_track": {
+      "tier": "cold",
+      "source": "file",
+      "path": "data/annotation/gene_track.gff",
+      "_status": "not_loaded",
+      "_feeds": "gene cargo per inversion · functional context (phase B/C)",
+      "_source_pipeline": "BRAKER / TOGA / RefSeq"
+    },
+
+    "repeat_track": {
+      "tier": "cold",
+      "source": "file",
+      "path": "data/annotation/repeat_track.bed",
+      "_status": "not_loaded",
+      "_feeds": "TE landscape · breakpoint repeat enrichment (phase B)",
+      "_source_pipeline": "RepeatMasker / EDTA"
+    },
+
+    "conserved_elements": {
+      "tier": "cold",
+      "source": "file",
+      "path": "data/conservation/conserved_elements.bed",
+      "_status": "not_loaded",
+      "_feeds": "UCEs · regulatory candidates (phase C/D)",
+      "_source_pipeline": "Cactus / phastCons"
+    },
+
+    "synteny_blocks": {
+      "tier": "cold",
+      "source": "file",
+      "path": "data/comparative/synteny_blocks.json",
+      "_status": "not_loaded",
+      "_feeds": "collinearity vs related Siluriformes · ancestral karyotype (phase D)",
+      "_source_pipeline": "Cactus pairwise"
+    },
+
+    "centromere_telomere": {
+      "tier": "warm",
+      "source": "file",
+      "path": "data/assembly/centromere_telomere.json",
+      "_status": "not_loaded",
+      "_feeds": "centromere bands · T2T completeness chip (phase B)",
+      "_source_pipeline": "tidk / centromics"
+    },
+
+    "variant_annotations": {
+      "tier": "cold",
+      "source": "file",
+      "path": "data/annotation/variant_annotations.json",
+      "_status": "not_loaded",
+      "_feeds": "deleterious-variant overlap with inversions (phase E)",
+      "_source_pipeline": "SnpEff + VEP"
+    }
+  }
+}

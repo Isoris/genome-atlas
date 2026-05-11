@@ -1,0 +1,86 @@
+<div id="page9" class="page">
+  <div class="ga-content">
+      <div class="ga-title">
+        <span class="ga-title-bullet">▰</span> Synteny — Cactus pairwise blocks
+      </div>
+      <div class="ga-subtitle">
+        Stage: comparative · spec / phase D · driven by <code>synteny_blocks</code>
+      </div>
+
+      <div class="ga-card">
+        <div class="ga-card-header">
+          <div class="ga-card-title">What this page shows</div>
+          <div class="ga-card-status ga-status-phase">spec · phase D</div>
+        </div>
+        <div class="ga-card-para">
+          Cross-species collinearity for the Gar haplotype against related
+          Siluriformes (<i>C. macrocephalus</i>, <i>I. punctatus</i>, plus 7-9
+          more catfish genomes via <code>catfish-synteny-toolkit</code>'s wfmash
+          1-to-1 alignments). Two views: <b>ribbon diagram</b> (one strip per
+          species pair, syntenic blocks rendered as polygons) and
+          <b>per-chrom dotplot</b> for a single Cgar↔Cmac pair.
+        </div>
+        <div class="ga-card-para ga-dim">
+          Where the Inversion Atlas's page16 surfaces cross-species breakpoint
+          coincidences with cohort candidates, this page is the genome-wide
+          context the breakpoints live in.
+        </div>
+      </div>
+
+      <div class="ga-card">
+        <div class="ga-card-header">
+          <div class="ga-card-title">Required data layers</div>
+          <div class="ga-card-status">phase D</div>
+        </div>
+        <div class="ga-layers-grid">
+          <div class="ga-layers-head">layer</div>
+          <div class="ga-layers-head">source</div>
+          <div class="ga-layers-head">status</div>
+          <div class="ga-layers-head">feeds</div>
+
+          <div><code>synteny_blocks</code></div>
+          <div><code>Cactus pairwise</code></div>
+          <div data-ga-layer="synteny_blocks" class="ga-layer-status">⚪ not loaded</div>
+          <div class="ga-dim">ribbon polygons · dotplot points · breakpoint catalogue</div>
+
+          <div><code>chromosome_map</code></div>
+          <div><code>FAI + AGP</code></div>
+          <div data-ga-layer="chromosome_map" class="ga-layer-status">⚪ not loaded</div>
+          <div class="ga-dim">ribbon row scaffold</div>
+        </div>
+      </div>
+
+      <div class="ga-card">
+        <div class="ga-card-header">
+          <div class="ga-card-title">Views (mockup)</div>
+          <div class="ga-card-status">phase plan</div>
+        </div>
+        <div class="ga-panels-grid">
+          <div class="ga-panel-name">View 1 — pairwise ribbon</div>
+          <div class="ga-panel-desc">Two horizontal strips (e.g. Cgar above, Cmac below); polygons connect homologous blocks. Inversions = anti-parallel polygons. Translocations = chrom-jumping polygons. Toggle which species is shown below.</div>
+
+          <div class="ga-panel-name">View 2 — multi-species ribbon stack</div>
+          <div class="ga-panel-desc">Cgar at the top; stacked below it, one strip per related Siluriformes genome. Side-by-side comparison of conserved vs lineage-specific rearrangements.</div>
+
+          <div class="ga-panel-name">View 3 — per-chrom dotplot</div>
+          <div class="ga-panel-desc">Click any chromosome in the ribbon to open a full dotplot (Cgar chrom × homolog chrom). Hover for block coordinates and identity.</div>
+        </div>
+      </div>
+
+      <div class="ga-card">
+        <div class="ga-card-header">
+          <div class="ga-card-title">Cross-references</div>
+          <div class="ga-card-status">see also</div>
+        </div>
+        <div class="ga-card-para ga-dim">
+          • <b>Inversion Atlas page16</b> — cross-species breakpoint catalogue.
+          <b>✪</b> markers indicate cohort candidates that coincide with a
+          synteny break shown here.<br>
+          • <b>page10 (ancestral karyotype)</b> — uses the same Cactus output to
+          reconstruct the ancestral state.<br>
+          • <b>catfish-synteny-toolkit</b> — analysis-pipeline repo producing
+          <code>synteny_blocks.json</code> (wfmash 1-to-1 + Cactus assembly).
+        </div>
+      </div>
+  </div>
+</div>

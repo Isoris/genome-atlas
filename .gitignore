@@ -1,0 +1,28 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+*~
+.vscode/local/
+.idea/
+
+# Python build artefacts (in case engines/analysis lands later)
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.mypy_cache/
+
+# Node build artefacts (in case shared/ ever needs npm)
+node_modules/
+
+# Atlas-workspace is a build output of atlas-core/build/assemble.sh —
+# never commit it from inside an atlas repo. The workspace lives at
+# ../atlas-workspace/ relative to atlas-core, NOT inside this repo.
+atlas-workspace/
+
+# Local data drops — atlases/genome/data/ is reserved for cluster-side
+# layer files (assembly_stats.json, gene_track.gff, …). Those land via
+# rsync from LANTA; don't commit the raw drops.
+atlases/genome/data/*
+!atlases/genome/data/.gitkeep

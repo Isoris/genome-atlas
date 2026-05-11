@@ -1,0 +1,6 @@
+{
+  "$schema": "../../../../core/registry_core.schema.json",
+  "_doc": "Backend operations for the Genome Atlas. Round 1 is empty — there is no Genome Atlas server. Phase D's synteny + ancestral-karyotype reconstruction may need server-side compute (Cactus is too heavy for the browser); when that lands, operations are added here pointing at endpoints in atlases/genome/server/genome_server.py (not yet created).",
+  "_round1_status": "empty — no server-side compute yet.",
+  "operations": {}
+}
