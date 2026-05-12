@@ -6,7 +6,7 @@
     "warm": "IndexedDB-cached at trigger event; first read async ~50ms; subsequent ~10ms",
     "cold": "Fetched on demand; spinner allowed"
   },
-  "_round1_status": "All eleven layers are CONTRACT-ONLY (not-yet-loaded). page1's scaffold renders them as '⚪ not loaded' chips. Phase B turns on chromosome_map + gene_track + repeat_track; later phases turn on the rest. The page11 trio (crossover_track + prdm9_motif + nco_gc_track) is scheduled for phase C; prdm9_motif and nco_gc_track are flagged _optional.",
+  "_round1_status": "All eleven layers are CONTRACT-ONLY (not-yet-loaded). page1's scaffold renders them as '⚪ not loaded' chips. Phase B turns on chromosome_map + gene_track + repeat_track + crossover_track (the last drives the new page3 CO-density sub-track too). Phase C turns on prdm9_motif (facultative, page11) + nco_gc_track (primary on page12). Layers carrying `_optional: true` are facultative — the consuming page hides the corresponding panel rather than erroring.",
   "layers": {
 
     "assembly_stats": {
@@ -84,33 +84,35 @@
     "crossover_track": {
       "tier": "cold",
       "source": "file",
-      "path": "data/annotation/crossovers/crossover_track.json",
+      "path": "data/annotation/crossovers/<candidate_id>.json",
+      "_path_doc": "Per-inversion-candidate file. The renderer interpolates `candidate_id` from shared.candidate; the layer registry never enumerates the directory.",
       "_status": "not_loaded",
-      "_feeds": "page11 sex-specific CO ideogram + CO-rate-vs-telomere-distance curve (phase C)",
-      "_source_pipeline": "pedigree CO calls (per-candidate JSON; one file per cohort)",
-      "_schema": "see page11 spec — { candidate_id, chroms[], events[{chrom,pos_bp,sex}], telomere_curve?, curve_params? }"
+      "_feeds": "page11 sex-specific CO ideogram + CO-rate-vs-telomere-distance curve (phase C); page3 CO-density sub-track on the chromosome strip (sex-collapsed, summarised across all candidates)",
+      "_source_pipeline": "pedigree CO calls (per-candidate JSON)",
+      "_schema": "see page11 spec — { candidate_id, candidate_span{chrom,start_bp,end_bp}, flank_bp?, events[{chrom,pos_bp,sex,indiv?,in_span?}], telomere_curve?, curve_params? }"
     },
 
     "prdm9_motif": {
       "tier": "cold",
       "source": "file",
-      "path": "data/annotation/crossovers/prdm9_motif.json",
+      "path": "data/annotation/crossovers/<candidate_id>.json",
+      "_path_doc": "Embedded as `prdm9_motif` on the same per-candidate crossover JSON — no separate file. The pointer here is kept for the layers-registry chip.",
       "_status": "not_loaded",
       "_optional": true,
       "_feeds": "page11 sequence-logo card — auto-hidden when pwm is null/missing",
-      "_source_pipeline": "MEME / STREME on CO ±2 kb hotspots",
+      "_source_pipeline": "MEME / STREME on CO ±2 kb hotspots in the candidate flank",
       "_schema": "{ pwm: N×4 ACGT PWM | null, tool, evalue, n_hotspots }"
     },
 
     "nco_gc_track": {
       "tier": "cold",
       "source": "file",
-      "path": "data/annotation/crossovers/nco_gc_track.json",
+      "path": "data/annotation/nco_gc/<candidate_id>.json",
+      "_path_doc": "Per-inversion-candidate file. Separate from crossover_track because the pedigree NCO/GC detector emits a distinct table.",
       "_status": "not_loaded",
-      "_optional": true,
-      "_feeds": "page11 green NCO + yellow gene-conversion overlays on the ideogram and the telomere curve",
-      "_source_pipeline": "pedigree NCO / gene-conversion calls (companion to crossover_track)",
-      "_schema": "[ { chrom, start_bp, end_bp, kind ∈ {nco, gc}, indiv? } ]"
+      "_feeds": "page12 tract ideogram + tract-rate-vs-telomere-distance curves (NCO green / GC yellow)",
+      "_source_pipeline": "pedigree NCO / gene-conversion calls",
+      "_schema": "see page12 spec — { candidate_id, candidate_span{chrom,start_bp,end_bp}, flank_bp?, tracts[{chrom,start_bp,end_bp,kind∈nco|gc,indiv?,in_span?}], telomere_curve?, curve_params? }"
     }
   }
 }

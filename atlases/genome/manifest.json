@@ -27,7 +27,7 @@
       "stage": "assembly",
       "fragment": "atlases/genome/pages/assembly/page3.html",
       "module": "atlases/genome/pages/assembly/page3.js",
-      "tooltip": "Length-scaled chromosome strip with stacked density sub-tracks (gene · repeat · conserved · cohort overlay). Genome-Atlas primary phase-B deliverable. Mirrors the Inversion Atlas scrubber width."
+      "tooltip": "Length-scaled chromosome strip with stacked density sub-tracks (gene · repeat · conserved · CO density · cohort overlay). Genome-Atlas primary phase-B deliverable. Mirrors the Inversion Atlas scrubber width."
     },
     {
       "id": "page4",
@@ -91,7 +91,15 @@
       "stage": "annotation",
       "fragment": "atlases/genome/pages/annotation/page11.html",
       "module": "atlases/genome/pages/annotation/page11.js",
-      "tooltip": "Crossover (CO) characteristics — pared-down adaptation of the aye-aye CO paper (Fig.1). Three panels: sex-specific per-chrom ideogram (red♀ / blue♂ dots), CO-rate vs. relative telomere distance (smoothed curve + CI band), optional PRDM9 motif logo (auto-hidden if absent). NCO + gene-conversion (NCO/GC) tracts overlay as green/yellow on the same ideogram + curve. Driven by crossover_track; prdm9_motif + nco_gc_track are facultative. Phase C+."
+      "tooltip": "Crossover (CO) characteristics, per inversion candidate. Three panels: sex-specific ideogram (red♀ / blue♂ dots with the candidate's inverted span as a translucent band), CO-rate vs. relative telomere distance (smoothed curve + 95% CI band), optional PRDM9 motif logo (auto-hidden if absent). Driven by crossover_track keyed by shared.candidate; prdm9_motif is facultative. NCO + gene-conversion live on page12. Phase C+."
+    },
+    {
+      "id": "page12",
+      "label": "NCO / gene conversion",
+      "stage": "annotation",
+      "fragment": "atlases/genome/pages/annotation/page12.html",
+      "module": "atlases/genome/pages/annotation/page12.js",
+      "tooltip": "Sister page to page11, same per-inversion-candidate keying. Green NCO + yellow gene-conversion tract ideogram and tract-rate vs. relative telomere distance curves. Driven by nco_gc_track. Phase C+."
     }
   ],
   "registries": {
