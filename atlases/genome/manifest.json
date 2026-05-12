@@ -84,6 +84,14 @@
       "fragment": "atlases/genome/pages/comparative/page10.html",
       "module": "atlases/genome/pages/comparative/page10.js",
       "tooltip": "Reconstructed Siluriformes ancestral karyotype + per-branch event annotations. Likely promoted to a Supplementary Note. Phase D."
+    },
+    {
+      "id": "page11",
+      "label": "crossovers",
+      "stage": "annotation",
+      "fragment": "atlases/genome/pages/annotation/page11.html",
+      "module": "atlases/genome/pages/annotation/page11.js",
+      "tooltip": "Crossover (CO) characteristics — pared-down adaptation of the aye-aye CO paper (Fig.1). Three panels: sex-specific per-chrom ideogram (red♀ / blue♂ dots), CO-rate vs. relative telomere distance (smoothed curve + CI band), optional PRDM9 motif logo (auto-hidden if absent). NCO + gene-conversion (NCO/GC) tracts overlay as green/yellow on the same ideogram + curve. Driven by crossover_track; prdm9_motif + nco_gc_track are facultative. Phase C+."
     }
   ],
   "registries": {
