@@ -567,7 +567,27 @@ html[data-theme="academic"] .ga-card {
   background: var(--panel-3);
   border: 1px solid var(--rule);
   border-radius: 3px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
+
+/* Per-haplotype panel — one alluvial panel each. */
+.ga-sankey-panel {
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  padding: 4px 6px 6px 6px;
+  background: var(--panel-2);
+}
+.ga-sankey-panel-head {
+  font-size: 10.5px;
+  font-family: var(--mono);
+  font-style: italic;
+  color: var(--ink);
+  padding: 2px 4px 4px 4px;
+  letter-spacing: 0.02em;
+}
+
 .ga-sankey-svg {
   display: block;
   width: 100%;
@@ -576,34 +596,34 @@ html[data-theme="academic"] .ga-card {
   user-select: none;
 }
 
-/* Nodes — small rounded rects, full-saturation fill per Class. */
+/* Nodes — wider rounded rects, soft per-branch fill. */
 .ga-sankey-node {
-  opacity: 0.92;
+  opacity: 0.95;
 }
 .ga-sankey-node.is-clickable {
   cursor: pointer;
 }
 .ga-sankey-node.is-clickable:hover {
   opacity: 1;
+  filter: brightness(1.08);
 }
 .ga-sankey-node.is-leaf {
-  opacity: 0.7;
+  opacity: 0.85;
 }
 
-/* Links — translucent ribbons in source-Class colour. No fill. */
+/* Ribbons — filled bands in soft per-branch colour (no stroke). The fill
+   already carries its own alpha (set by PALETTE.link). */
 .ga-sankey-link {
-  fill: none;
-  opacity: 0.32;
-  stroke-linecap: butt;
-  transition: opacity 120ms ease;
+  stroke: none;
+  transition: opacity 120ms ease, filter 120ms ease;
 }
 .ga-sankey-link:hover {
-  opacity: 0.55;
+  filter: brightness(0.9) saturate(1.25);
 }
 
-/* Labels. */
+/* Labels — inline %, anchored to whichever side the column lives on. */
 .ga-sankey-label {
-  font-size: 9.5px;
+  font-size: 10px;
   fill: var(--ink);
   pointer-events: none;
 }
@@ -615,11 +635,18 @@ html[data-theme="academic"] .ga-card {
   fill: var(--ink-dim);
   pointer-events: none;
 }
-.ga-sankey-header {
+
+/* Column headers — small index "0/1/2..." + human label below it. */
+.ga-sankey-header-num {
   font-size: 9px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  fill: var(--ink-dimmer);
+  letter-spacing: 0.05em;
+}
+.ga-sankey-header-name {
+  font-size: 8.5px;
   fill: var(--ink-dim);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 .ga-sankey-empty {
   font-size: 11px;
