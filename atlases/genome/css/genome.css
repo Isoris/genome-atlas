@@ -511,6 +511,171 @@ html[data-theme="academic"] .ga-card {
   letter-spacing: 0.02em;
 }
 
+/* ---------------------------------------------------------------------
+ * page6 — TE hierarchy Sankey (Class → Superfamily → Family).
+ *
+ * Self-contained SVG widget. The host is a positioned container so the
+ * tooltip can absolute-position itself relative to it. The SVG itself
+ * scales to the host width via the viewBox attribute (set in HTML).
+ * --------------------------------------------------------------------- */
+.ga-sankey-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin: 6px 0 8px 0;
+  font-size: 10px;
+  color: var(--ink-dim);
+}
+.ga-sankey-tool-label {
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-right: 4px;
+}
+.ga-sankey-tool-spacer {
+  flex: 1 1 auto;
+}
+.ga-sankey-btn {
+  font: inherit;
+  font-size: 10px;
+  color: var(--ink-dim);
+  background: var(--panel-3);
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  padding: 3px 8px;
+  cursor: pointer;
+  font-family: var(--mono);
+  letter-spacing: 0.02em;
+}
+.ga-sankey-btn:hover {
+  color: var(--ink);
+  border-color: #ff8c6e;
+}
+.ga-sankey-btn.is-active {
+  color: var(--ink);
+  border-color: #ff8c6e;
+  background: rgba(255, 140, 110, 0.10);
+}
+.ga-sankey-btn-ghost {
+  background: transparent;
+}
+
+.ga-sankey-host {
+  position: relative;
+  margin: 4px 0 6px 0;
+  padding: 6px 8px 8px 8px;
+  background: var(--panel-3);
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+}
+.ga-sankey-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  font-family: var(--mono);
+  user-select: none;
+}
+
+/* Nodes — small rounded rects, full-saturation fill per Class. */
+.ga-sankey-node {
+  opacity: 0.92;
+}
+.ga-sankey-node.is-clickable {
+  cursor: pointer;
+}
+.ga-sankey-node.is-clickable:hover {
+  opacity: 1;
+}
+.ga-sankey-node.is-leaf {
+  opacity: 0.7;
+}
+
+/* Links — translucent ribbons in source-Class colour. No fill. */
+.ga-sankey-link {
+  fill: none;
+  opacity: 0.32;
+  stroke-linecap: butt;
+  transition: opacity 120ms ease;
+}
+.ga-sankey-link:hover {
+  opacity: 0.55;
+}
+
+/* Labels. */
+.ga-sankey-label {
+  font-size: 9.5px;
+  fill: var(--ink);
+  pointer-events: none;
+}
+.ga-sankey-label.is-leaf {
+  fill: var(--ink-dim);
+}
+.ga-sankey-glyph {
+  font-size: 8.5px;
+  fill: var(--ink-dim);
+  pointer-events: none;
+}
+.ga-sankey-header {
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  fill: var(--ink-dim);
+}
+.ga-sankey-empty {
+  font-size: 11px;
+  fill: var(--ink-dim);
+}
+
+/* Tooltip — small absolutely-positioned chip. The widget translates this
+   to follow the cursor; CSS only gives it a stable size + styling. */
+.ga-sankey-tooltip {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  background: var(--panel-2);
+  border: 1px solid var(--rule);
+  border-left: 3px solid #ff8c6e;
+  border-radius: 3px;
+  padding: 6px 8px;
+  font-size: 10px;
+  font-family: var(--mono);
+  color: var(--ink);
+  min-width: 140px;
+  max-width: 260px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+  z-index: 5;
+}
+.ga-sankey-tooltip[hidden] {
+  display: none;
+}
+.ga-sankey-tip-kind {
+  font-size: 8.5px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+  margin-bottom: 2px;
+}
+.ga-sankey-tip-name {
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+.ga-sankey-tip-meta {
+  color: var(--ink-dim);
+  font-size: 9.5px;
+}
+
+/* Light-theme accent shift, matching the rest of the page. */
+html[data-theme="light"]    .ga-sankey-btn:hover,
+html[data-theme="light"]    .ga-sankey-btn.is-active,
+html[data-theme="light"]    .ga-sankey-tooltip {
+  border-left-color: #c2410c;
+  border-color: #c2410c;
+}
+html[data-theme="light"]    .ga-sankey-btn.is-active {
+  background: rgba(194, 65, 12, 0.10);
+}
+
 /* --- JSON-schema codeblock ------------------------------------------- */
 .ga-schema-block {
   margin: 4px 0;

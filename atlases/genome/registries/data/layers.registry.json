@@ -45,6 +45,17 @@
       "_source_pipeline": "RepeatMasker / EDTA"
     },
 
+    "te_hierarchy": {
+      "tier": "warm",
+      "source": "file",
+      "path": "data/annotation/te_hierarchy.json",
+      "_status": "not_loaded",
+      "_optional": true,
+      "_feeds": "page6 View 4 — Class → Superfamily → Family Sankey flow",
+      "_source_pipeline": "RepeatMasker / EDTA post-processing — group bp counts by (class, superfamily, family) per Wicker et al. 2007",
+      "_schema": "{ total_bp, classes: [{ id, name, superfamilies: [{ id, name, families: [{ id, name, bp }] }] }] }"
+    },
+
     "conserved_elements": {
       "tier": "cold",
       "source": "file",
