@@ -1,12 +1,12 @@
 {
   "$schema": "../../../../core/registry_core.schema.json",
-  "_doc": "Layer inventory for the Genome Atlas. Round 1 stubs all eight planned layers as not-yet-implemented entries so the engine can boot and the page1 [data-ga-layer] chips have a registry to look up. Each layer's `tier` / `source` / `path` is the COMMITTED contract per SCHEMA §28; the actual files don't exist yet — they ship from the cluster-side genome-annotation pipeline (phase B+).",
+  "_doc": "Layer inventory for the Genome Atlas. Round 1 stubs all planned layers as not-yet-implemented entries so the engine can boot and the [data-ga-layer] chips have a registry to look up. Each layer's `tier` / `source` / `path` is the COMMITTED contract per SCHEMA §28; the actual files don't exist yet — they ship from the cluster-side genome-annotation pipeline (phase B+). Layers carrying `_optional: true` are facultative: when absent, the consuming page hides the corresponding panel rather than erroring.",
   "_tier_legend": {
     "hot":  "RAM-pinned at trigger event; pages read state directly; <1ms",
     "warm": "IndexedDB-cached at trigger event; first read async ~50ms; subsequent ~10ms",
     "cold": "Fetched on demand; spinner allowed"
   },
-  "_round1_status": "All eight layers are CONTRACT-ONLY (not-yet-loaded). page1's scaffold renders them as '⚪ not loaded' chips. Phase B turns on chromosome_map + gene_track + repeat_track; later phases turn on the rest.",
+  "_round1_status": "All eleven layers are CONTRACT-ONLY (not-yet-loaded). page1's scaffold renders them as '⚪ not loaded' chips. Phase B turns on chromosome_map + gene_track + repeat_track; later phases turn on the rest. The page11 trio (crossover_track + prdm9_motif + nco_gc_track) is scheduled for phase C; prdm9_motif and nco_gc_track are flagged _optional.",
   "layers": {
 
     "assembly_stats": {
@@ -79,6 +79,38 @@
       "_status": "not_loaded",
       "_feeds": "deleterious-variant overlap with inversions (phase E)",
       "_source_pipeline": "SnpEff + VEP"
+    },
+
+    "crossover_track": {
+      "tier": "cold",
+      "source": "file",
+      "path": "data/annotation/crossovers/crossover_track.json",
+      "_status": "not_loaded",
+      "_feeds": "page11 sex-specific CO ideogram + CO-rate-vs-telomere-distance curve (phase C)",
+      "_source_pipeline": "pedigree CO calls (per-candidate JSON; one file per cohort)",
+      "_schema": "see page11 spec — { candidate_id, chroms[], events[{chrom,pos_bp,sex}], telomere_curve?, curve_params? }"
+    },
+
+    "prdm9_motif": {
+      "tier": "cold",
+      "source": "file",
+      "path": "data/annotation/crossovers/prdm9_motif.json",
+      "_status": "not_loaded",
+      "_optional": true,
+      "_feeds": "page11 sequence-logo card — auto-hidden when pwm is null/missing",
+      "_source_pipeline": "MEME / STREME on CO ±2 kb hotspots",
+      "_schema": "{ pwm: N×4 ACGT PWM | null, tool, evalue, n_hotspots }"
+    },
+
+    "nco_gc_track": {
+      "tier": "cold",
+      "source": "file",
+      "path": "data/annotation/crossovers/nco_gc_track.json",
+      "_status": "not_loaded",
+      "_optional": true,
+      "_feeds": "page11 green NCO + yellow gene-conversion overlays on the ideogram and the telomere curve",
+      "_source_pipeline": "pedigree NCO / gene-conversion calls (companion to crossover_track)",
+      "_schema": "[ { chrom, start_bp, end_bp, kind ∈ {nco, gc}, indiv? } ]"
     }
   }
 }

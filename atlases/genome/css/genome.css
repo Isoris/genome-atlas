@@ -315,3 +315,214 @@ html[data-theme="academic"] .ga-card {
   font-size: 0.95em;
 }
 
+/* ---------------------------------------------------------------------
+ * page11 — crossovers.
+ *
+ * Three mockups: sex-specific CO ideogram (dots beside vertical rods),
+ * CO-rate vs. relative telomere distance (smoothed curve + CI band),
+ * facultative PRDM9 sequence logo. NCO (green) + gene-conversion
+ * (yellow) overlays are optional.
+ *
+ * No glow / fluorescence. Flat fills only — the dot/curve colours
+ * stay legible on every theme.
+ * --------------------------------------------------------------------- */
+
+/* Sex + NCO/GC palette. Kept local to the page; if a future round adds
+   a shared CO palette these promote to CSS vars. */
+.ga-co-female,
+.ga-co-female-line { color: #c94f6b; }
+.ga-co-male,
+.ga-co-male-line   { color: #3a5f9f; }
+.ga-co-nco,
+.ga-co-nco-line    { color: #4f9e64; }    /* green */
+.ga-co-gc,
+.ga-co-gc-line     { color: #c9a23a; }    /* yellow / amber */
+
+.ga-co-female-bg { background: #c94f6b; }
+.ga-co-male-bg   { background: #3a5f9f; }
+.ga-co-nco-bg    { background: #4f9e64; }
+.ga-co-gc-bg     { background: #c9a23a; }
+
+/* "opt." pill used in the layers grid for facultative layers. */
+.ga-pill-opt {
+  display: inline-block;
+  margin-left: 4px;
+  padding: 0 4px;
+  font-size: 8.5px;
+  color: var(--ink-dim);
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* --- View 1: ideogram mockup ----------------------------------------- */
+.ga-ideogram-mockup {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--ink-dim);
+}
+.ga-ideogram-row {
+  display: grid;
+  grid-template-columns: 60px 1fr 80px;
+  gap: 8px;
+  align-items: stretch;
+  padding: 6px 0;
+}
+.ga-ideogram-label { align-self: center; }
+.ga-ideogram-len   { align-self: center; text-align: right; }
+.ga-ideogram-col {
+  position: relative;
+  height: 70px;
+}
+.ga-ideogram-rod {
+  position: absolute;
+  top: 4px; bottom: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 8px;
+  background: var(--panel-3);
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+}
+.ga-ideo-dot {
+  position: absolute;
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  opacity: 0.85;
+}
+.ga-ideo-tick {
+  position: absolute;
+  width: 6px; height: 2px;
+  opacity: 0.85;
+}
+
+/* --- View 2: CO-rate vs. telomere distance --------------------------- */
+.ga-co-curve-mockup {
+  position: relative;
+  height: 180px;
+  margin: 4px 0 6px 0;
+  padding: 12px 40px 22px 44px;
+  background: var(--panel-3);
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.ga-co-curve-axis-y,
+.ga-co-curve-axis-x {
+  position: absolute;
+  background: var(--rule);
+}
+.ga-co-curve-axis-y { left: 44px;  top: 12px; bottom: 22px; width: 1px; }
+.ga-co-curve-axis-x { left: 44px;  right: 40px; bottom: 22px; height: 1px; }
+
+.ga-co-curve-band,
+.ga-co-curve-line {
+  position: absolute;
+  left: 44px; right: 40px;
+  height: 60px;
+  pointer-events: none;
+}
+.ga-co-curve-band   { opacity: 0.15; border-radius: 4px; }
+.ga-co-curve-line   { height: 2px;   opacity: 0.95; border-radius: 1px; }
+
+/* Stylised positions — these stand in for a real curve render. They
+   read as: females (red) low near telomere, climbs across; males
+   (blue) flatter and a touch lower; NCO (green) and GC (yellow)
+   sit lower. */
+.ga-co-female-band  { top: 60px;  background: #c94f6b; height: 70px; clip-path: polygon(0 60%,15% 50%,40% 40%,70% 12%,100% 6%,100% 80%,70% 70%,40% 70%,15% 80%,0 90%); }
+.ga-co-female-line  { top: 88px;  background: #c94f6b; clip-path: polygon(0 0,15% 0,40% 0,70% 0,100% 0,100% 100%,70% 100%,40% 100%,15% 100%,0 100%); transform: translateY(-4px) skewY(-4deg); }
+.ga-co-male-band    { top: 80px;  background: #3a5f9f; height: 60px; clip-path: polygon(0 60%,25% 55%,55% 45%,85% 35%,100% 30%,100% 90%,85% 80%,55% 80%,25% 85%,0 95%); }
+.ga-co-male-line    { top: 108px; background: #3a5f9f; transform: translateY(-2px); }
+.ga-co-nco-line     { top: 130px; background: #4f9e64; opacity: 0.85; border-top: 2px dashed #4f9e64; height: 0; }
+.ga-co-gc-line      { top: 142px; background: #c9a23a; opacity: 0.85; border-top: 2px dashed #c9a23a; height: 0; }
+
+.ga-co-curve-legend {
+  position: absolute;
+  right: 8px; top: 8px;
+  font-size: 9.5px;
+  color: var(--ink-dim);
+  display: flex; gap: 6px; align-items: center;
+}
+.ga-co-leg-chip {
+  display: inline-block;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  margin: 0 2px 0 6px;
+}
+.ga-co-curve-xlabel {
+  position: absolute;
+  left: 44px; right: 40px; bottom: 4px;
+  text-align: center;
+  font-size: 9.5px;
+  color: var(--ink-dim);
+}
+.ga-co-curve-ylabel {
+  position: absolute;
+  left: 4px; top: 50%;
+  transform: translateY(-50%) rotate(-90deg);
+  transform-origin: left center;
+  font-size: 9.5px;
+  color: var(--ink-dim);
+  white-space: nowrap;
+}
+
+/* --- View 3: PRDM9 sequence-logo mockup ------------------------------ */
+.ga-logo-mockup {
+  display: grid;
+  grid-template-columns: 24px 1fr;
+  grid-template-rows: 90px auto;
+  gap: 4px 6px;
+  margin: 4px 0;
+  padding: 8px 10px;
+  background: var(--panel-3);
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+}
+.ga-logo-bits {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  font-size: 9px;
+  color: var(--ink-dim);
+}
+.ga-logo-cols {
+  display: grid;
+  grid-template-columns: repeat(15, 1fr);
+  align-items: end;
+  gap: 2px;
+  height: 90px;
+}
+.ga-logo-cols span {
+  display: inline-block;
+  text-align: center;
+  font-family: var(--mono);
+  font-weight: 700;
+  color: #3a5f9f;
+  line-height: 1;
+  font-size: calc(10px + 14px * var(--h, 0.5));
+  opacity: calc(0.35 + 0.65 * var(--h, 0.5));
+}
+.ga-logo-pos {
+  grid-column: 1 / -1;
+  text-align: center;
+  font-size: 9.5px;
+  color: var(--ink-dim);
+  letter-spacing: 0.02em;
+}
+
+/* --- JSON-schema codeblock ------------------------------------------- */
+.ga-schema-block {
+  margin: 4px 0;
+  padding: 10px 12px;
+  background: var(--panel-3);
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--ink-dim);
+  overflow-x: auto;
+  white-space: pre;
+}
+.ga-schema-block code { font-family: inherit; font-size: inherit; color: inherit; }
+

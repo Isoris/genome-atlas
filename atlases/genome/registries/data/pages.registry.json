@@ -82,6 +82,14 @@
       "requires_operations": [],
       "requires_slots": [],
       "preloads": []
+    },
+    "page11": {
+      "_label": "crossovers — sex-specific ideogram, telomere bias, optional PRDM9 logo",
+      "_doc": "Phase C. Three views over the recombination map of the F₁ hybrid, pared down from the aye-aye CO paper's Fig.1 (Versoza et al. GBE 2024): (1) sex-specific ideogram — one rod per chrom, red♀ dots on the left, blue♂ dots on the right, with optional green NCO ticks + yellow gene-conversion ticks from `nco_gc_track`; (2) CO rate vs. relative telomere distance — LOESS curve + 95% CI band per sex (lower-left panel of the source figure); (3) PRDM9 binding motif — sequence logo, FACULTATIVE (auto-hidden when `prdm9_motif.pwm` is null/missing). Dropped from the source figure: panel (c) AlphaFold complex (decorative) + panel (e) parental-age effect (F₁ data is single-generation). Future requires_layers: ['crossover_track', 'chromosome_map']. Optional future requires_layers: ['prdm9_motif', 'nco_gc_track']. JSON import contract: one `crossover_track.json` per candidate analysis with shape { candidate_id, chroms[], events[{chrom,pos_bp,sex}], telomere_curve?, curve_params?, prdm9_motif?{pwm,tool,evalue,n_hotspots}, nco_gc_track?[{chrom,start_bp,end_bp,kind∈nco|gc}] } — see the schema block on the page itself for the JSON-Schema draft-2020-12 definition.",
+      "requires_layers": [],
+      "requires_operations": [],
+      "requires_slots": [],
+      "preloads": []
     }
   }
 }

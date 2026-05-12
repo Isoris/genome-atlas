@@ -1,0 +1,338 @@
+<div id="page11" class="page">
+  <div class="ga-content">
+      <div class="ga-title">
+        <span class="ga-title-bullet">▰</span> Crossovers — sex-specific ideogram, telomere bias, optional PRDM9 motif
+      </div>
+      <div class="ga-subtitle">
+        Stage: annotation · spec / phase C · driven by <code>crossover_track</code>
+        <span class="ga-dim">· optional: <code>prdm9_motif</code>, <code>nco_gc_track</code></span>
+      </div>
+
+      <div class="ga-card">
+        <div class="ga-card-header">
+          <div class="ga-card-title">What this page shows</div>
+          <div class="ga-card-status ga-status-phase">spec · phase C</div>
+        </div>
+        <div class="ga-card-para">
+          Three views over the recombination map of the F₁ hybrid, pared down
+          from the aye-aye CO paper's Fig.1 (Versoza et al. <i>GBE</i> 2024).
+          We keep the panels that read well at a glance and drop the ones the
+          F₁ data can't support: no parental-age regression (single generation)
+          and no AlphaFold panel (decorative).
+        </div>
+        <div class="ga-card-para ga-dim">
+          The PRDM9 motif logo is <b>facultative</b>: when the
+          <code>prdm9_motif</code> layer is absent or its <code>pwm</code>
+          field is null, the renderer hides the logo card entirely (the spec
+          DOM keeps it as a placeholder).
+        </div>
+      </div>
+
+      <div class="ga-card">
+        <div class="ga-card-header">
+          <div class="ga-card-title">Required data layers</div>
+          <div class="ga-card-status">phase C</div>
+        </div>
+        <div class="ga-layers-grid">
+          <div class="ga-layers-head">layer</div>
+          <div class="ga-layers-head">source</div>
+          <div class="ga-layers-head">status</div>
+          <div class="ga-layers-head">feeds</div>
+
+          <div><code>crossover_track</code></div>
+          <div><code>pedigree CO calls (JSON)</code></div>
+          <div data-ga-layer="crossover_track" class="ga-layer-status">⚪ not loaded</div>
+          <div class="ga-dim">ideogram dots · telomere-bias curve</div>
+
+          <div><code>chromosome_map</code></div>
+          <div><code>FAI + AGP</code></div>
+          <div data-ga-layer="chromosome_map" class="ga-layer-status">⚪ not loaded</div>
+          <div class="ga-dim">chrom lengths · telomere positions</div>
+
+          <div><code>prdm9_motif</code> <span class="ga-pill-opt">opt.</span></div>
+          <div><code>MEME / STREME on CO ± hotspots</code></div>
+          <div data-ga-layer="prdm9_motif" class="ga-layer-status">⚪ not loaded</div>
+          <div class="ga-dim">logo card (hidden if absent)</div>
+
+          <div><code>nco_gc_track</code> <span class="ga-pill-opt">opt.</span></div>
+          <div><code>pedigree NCO / gene-conv. calls</code></div>
+          <div data-ga-layer="nco_gc_track" class="ga-layer-status">⚪ not loaded</div>
+          <div class="ga-dim">green NCO overlay · yellow GC tracts</div>
+        </div>
+      </div>
+
+      <div class="ga-card">
+        <div class="ga-card-header">
+          <div class="ga-card-title">View 1 — sex-specific CO ideogram</div>
+          <div class="ga-card-status">primary view</div>
+        </div>
+        <div class="ga-card-para ga-dim">
+          One vertical chromosome rod per LG; CO events as dots beside the rod,
+          jittered along the rod axis at their physical position. <b
+          class="ga-co-female">females</b> on the left side, <b
+          class="ga-co-male">males</b> on the right. Optional overlay (toggle):
+          <b class="ga-co-nco">NCO</b> as small green ticks,
+          <b class="ga-co-gc">gene conversion</b> as small yellow ticks (NCO/GC
+          tracts often co-locate with CO hotspots — green + yellow read as
+          complements next to red/blue).
+        </div>
+        <div class="ga-ideogram-mockup" aria-label="sex-specific CO ideogram mockup">
+          <div class="ga-ideogram-row">
+            <div class="ga-ideogram-label">LG01</div>
+            <div class="ga-ideogram-col">
+              <span class="ga-ideo-dot ga-co-female-bg" style="top:8%;left:18%"></span>
+              <span class="ga-ideo-dot ga-co-female-bg" style="top:24%;left:30%"></span>
+              <span class="ga-ideo-dot ga-co-female-bg" style="top:55%;left:14%"></span>
+              <span class="ga-ideo-dot ga-co-female-bg" style="top:80%;left:24%"></span>
+              <span class="ga-ideo-dot ga-co-male-bg"   style="top:12%;right:18%"></span>
+              <span class="ga-ideo-dot ga-co-male-bg"   style="top:45%;right:24%"></span>
+              <span class="ga-ideo-dot ga-co-male-bg"   style="top:72%;right:14%"></span>
+              <span class="ga-ideo-tick ga-co-nco-bg"   style="top:30%;right:42%"></span>
+              <span class="ga-ideo-tick ga-co-gc-bg"    style="top:62%;left:42%"></span>
+              <div class="ga-ideogram-rod"></div>
+            </div>
+            <div class="ga-ideogram-len">28.4 Mb</div>
+          </div>
+          <div class="ga-ideogram-row">
+            <div class="ga-ideogram-label">LG02</div>
+            <div class="ga-ideogram-col">
+              <span class="ga-ideo-dot ga-co-female-bg" style="top:14%;left:22%"></span>
+              <span class="ga-ideo-dot ga-co-female-bg" style="top:62%;left:32%"></span>
+              <span class="ga-ideo-dot ga-co-male-bg"   style="top:8%;right:20%"></span>
+              <span class="ga-ideo-dot ga-co-male-bg"   style="top:38%;right:16%"></span>
+              <span class="ga-ideo-dot ga-co-male-bg"   style="top:84%;right:28%"></span>
+              <div class="ga-ideogram-rod"></div>
+            </div>
+            <div class="ga-ideogram-len">31.2 Mb</div>
+          </div>
+          <div class="ga-ideogram-row">
+            <div class="ga-ideogram-label">…</div>
+            <div class="ga-chrom-ellipsis">25 more chromosomes</div>
+            <div></div>
+          </div>
+        </div>
+        <div class="ga-card-footnote">
+          Mockup colours; real renderer reads <code>crossover_track.events</code>
+          (one entry per CO, with <code>chrom · pos · sex</code>) and the
+          optional <code>nco_gc_track</code> entries
+          (<code>chrom · start · end · kind ∈ {"nco","gc"}</code>).
+        </div>
+      </div>
+
+      <div class="ga-card">
+        <div class="ga-card-header">
+          <div class="ga-card-title">View 2 — CO rate vs. relative telomere distance</div>
+          <div class="ga-card-status">primary view</div>
+        </div>
+        <div class="ga-card-para ga-dim">
+          x-axis: relative distance from telomere (0 = telomere, 1 = centre of
+          chromosome arm). y-axis: # COs per individual per bin. One smoothed
+          curve per sex (red / blue) with a 95% CI band. Optional NCO (green)
+          and GC (yellow) curves overlay on the same axes — toggle from the
+          legend.
+        </div>
+        <div class="ga-co-curve-mockup" aria-label="CO rate vs relative telomere distance mockup">
+          <div class="ga-co-curve-axis-y"></div>
+          <div class="ga-co-curve-axis-x"></div>
+          <div class="ga-co-curve-band   ga-co-female-band"></div>
+          <div class="ga-co-curve-line   ga-co-female-line"></div>
+          <div class="ga-co-curve-band   ga-co-male-band"></div>
+          <div class="ga-co-curve-line   ga-co-male-line"></div>
+          <div class="ga-co-curve-line   ga-co-nco-line"  data-optional="1"></div>
+          <div class="ga-co-curve-line   ga-co-gc-line"   data-optional="1"></div>
+          <div class="ga-co-curve-legend">
+            <span class="ga-co-leg-chip ga-co-female-bg"></span>females
+            <span class="ga-co-leg-chip ga-co-male-bg"></span>males
+            <span class="ga-co-leg-chip ga-co-nco-bg"></span>NCO
+            <span class="ga-co-leg-chip ga-co-gc-bg"></span>GC
+          </div>
+          <div class="ga-co-curve-xlabel">relative distance from telomere</div>
+          <div class="ga-co-curve-ylabel"># COs / bin</div>
+        </div>
+        <div class="ga-card-footnote">
+          Smoothing: LOESS, span 0.5 by default (overridable from
+          <code>crossover_track.curve_params</code>). CI band: 95% bootstrap
+          over individuals.
+        </div>
+      </div>
+
+      <div class="ga-card" data-ga-card="prdm9-motif" data-ga-optional="1">
+        <div class="ga-card-header">
+          <div class="ga-card-title">View 3 — PRDM9 binding motif <span class="ga-pill-opt">optional</span></div>
+          <div class="ga-card-status">hidden when no <code>pwm</code></div>
+        </div>
+        <div class="ga-card-para ga-dim">
+          When <code>prdm9_motif.pwm</code> is present (an N×4 ACGT
+          position-weight matrix), the renderer draws a sequence logo (bits on
+          y-axis, position on x-axis). When the field is null/missing the
+          renderer sets <code>display:none</code> on this card.
+        </div>
+        <div class="ga-logo-mockup" aria-label="sequence logo mockup">
+          <div class="ga-logo-bits">
+            <span>2</span><span>1</span><span>0</span>
+          </div>
+          <div class="ga-logo-cols">
+            <span style="--h:0.6">c</span>
+            <span style="--h:0.9">C</span>
+            <span style="--h:1.0">C</span>
+            <span style="--h:0.5">T</span>
+            <span style="--h:0.7">c</span>
+            <span style="--h:0.9">C</span>
+            <span style="--h:0.25">·</span>
+            <span style="--h:0.8">c</span>
+            <span style="--h:0.95">C</span>
+            <span style="--h:0.7">c</span>
+            <span style="--h:0.95">C</span>
+            <span style="--h:0.25">·</span>
+            <span style="--h:0.4">c</span>
+            <span style="--h:0.4">c</span>
+            <span style="--h:0.4">c</span>
+          </div>
+          <div class="ga-logo-pos">5′ ←  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15  → 3′</div>
+        </div>
+      </div>
+
+      <div class="ga-card">
+        <div class="ga-card-header">
+          <div class="ga-card-title">Import schema — <code>crossover_track.json</code></div>
+          <div class="ga-card-status">contract</div>
+        </div>
+        <div class="ga-card-para ga-dim">
+          One JSON per candidate analysis. <code>events</code> drives View 1;
+          per-bin sex curves drive View 2; <code>prdm9_motif</code> is
+          facultative; <code>nco_gc_track</code> is facultative. All optional
+          fields may be omitted entirely — the corresponding panel/overlay
+          self-hides.
+        </div>
+<pre class="ga-schema-block"><code>{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "crossover_track",
+  "type": "object",
+  "required": ["candidate_id", "chroms", "events"],
+  "properties": {
+    "candidate_id":  { "type": "string" },
+    "cohort":        { "type": "string" },
+    "individuals":   { "type": "integer", "minimum": 1 },
+
+    "chroms": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "length_bp"],
+        "properties": {
+          "id":          { "type": "string" },
+          "length_bp":   { "type": "integer", "minimum": 1 },
+          "telomere_L":  { "type": "integer" },
+          "telomere_R":  { "type": "integer" }
+        }
+      }
+    },
+
+    "events": {
+      "type": "array",
+      "description": "One entry per detected CO.",
+      "items": {
+        "type": "object",
+        "required": ["chrom", "pos_bp", "sex"],
+        "properties": {
+          "chrom":  { "type": "string" },
+          "pos_bp": { "type": "integer", "minimum": 0 },
+          "sex":    { "enum": ["F", "M"] },
+          "indiv":  { "type": "string" }
+        }
+      }
+    },
+
+    "telomere_curve": {
+      "description": "Pre-binned curve for View 2. If omitted, renderer bins `events` on the fly.",
+      "type": "object",
+      "properties": {
+        "bins":    { "type": "array", "items": { "type": "number", "minimum": 0, "maximum": 1 } },
+        "female":  { "$ref": "#/$defs/curve" },
+        "male":    { "$ref": "#/$defs/curve" },
+        "nco":     { "$ref": "#/$defs/curve" },
+        "gc":      { "$ref": "#/$defs/curve" }
+      }
+    },
+    "curve_params": {
+      "type": "object",
+      "properties": {
+        "smoother":      { "enum": ["loess", "spline", "none"] },
+        "span":          { "type": "number", "minimum": 0, "maximum": 1 },
+        "ci_bootstrap":  { "type": "integer", "minimum": 0 }
+      }
+    },
+
+    "prdm9_motif": {
+      "description": "Facultative. When omitted or `pwm` is null, View 3 hides itself.",
+      "type": ["object", "null"],
+      "properties": {
+        "pwm": {
+          "type": ["array", "null"],
+          "description": "N×4 position-weight matrix, ACGT.",
+          "items": {
+            "type": "array",
+            "minItems": 4, "maxItems": 4,
+            "items": { "type": "number", "minimum": 0, "maximum": 1 }
+          }
+        },
+        "tool":   { "enum": ["MEME", "STREME", "HOMER", "manual"] },
+        "evalue": { "type": "number" },
+        "n_hotspots": { "type": "integer", "minimum": 0 }
+      }
+    },
+
+    "nco_gc_track": {
+      "description": "Facultative NCO / gene-conversion tracts. Drives the green/yellow overlays.",
+      "type": ["array", "null"],
+      "items": {
+        "type": "object",
+        "required": ["chrom", "start_bp", "end_bp", "kind"],
+        "properties": {
+          "chrom":     { "type": "string" },
+          "start_bp":  { "type": "integer", "minimum": 0 },
+          "end_bp":    { "type": "integer", "minimum": 0 },
+          "kind":      { "enum": ["nco", "gc"] },
+          "indiv":     { "type": "string" }
+        }
+      }
+    }
+  },
+
+  "$defs": {
+    "curve": {
+      "type": "object",
+      "properties": {
+        "y":     { "type": "array", "items": { "type": "number" } },
+        "ci_lo": { "type": "array", "items": { "type": "number" } },
+        "ci_hi": { "type": "array", "items": { "type": "number" } }
+      }
+    }
+  }
+}</code></pre>
+        <div class="ga-card-footnote">
+          One file = one candidate (<code>candidate_id</code> namespaces it).
+          Drop multiple files into <code>data/annotation/crossovers/</code> to
+          flip between cohorts without re-binding the layer.
+        </div>
+      </div>
+
+      <div class="ga-card">
+        <div class="ga-card-header">
+          <div class="ga-card-title">Cross-references</div>
+          <div class="ga-card-status">see also</div>
+        </div>
+        <div class="ga-card-para ga-dim">
+          • <b>page3 (chromosome overview)</b> — CO density could be added as
+          a sixth sub-track once <code>crossover_track</code> lands.<br>
+          • <b>page6 (repeats / TE)</b> — PRDM9 hotspots tend to co-locate
+          with specific repeat classes; the optional logo here pairs with the
+          breakpoint-enrichment view there.<br>
+          • <b>Inversion Atlas (candidates)</b> — inversions are expected to
+          suppress CO inside the inverted span; a future overlay can shade
+          inverted regions on the ideogram (read from
+          <code>shared.candidateList</code>).
+        </div>
+      </div>
+  </div>
+</div>
