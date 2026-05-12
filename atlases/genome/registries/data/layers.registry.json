@@ -74,6 +74,17 @@
       "_source_pipeline": "Cactus pairwise"
     },
 
+    "macrosynteny_orthologs": {
+      "tier": "cold",
+      "source": "file",
+      "path": "data/comparative/macrosynteny_orthologs.json",
+      "_status": "not_loaded",
+      "_optional": true,
+      "_feeds": "page9 View 3 — MacrosyntR-style Oxford macro-synteny grid (and linear macro-synteny in later rounds)",
+      "_source_pipeline": "OrthoFinder + BUSCO single-copy orthologs (or wfmash 1-to-1 alignments distilled to gene-anchor positions) — one JSON per species pair",
+      "_schema": "{ pairs: [{ id, name, x: { id, name, chroms: [{ id, name, length_bp }] }, y: {…}, orthologs: [{ xc, xp, yc, yp }] }] }; positions in bp"
+    },
+
     "centromere_telomere": {
       "tier": "warm",
       "source": "file",
