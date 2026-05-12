@@ -51,9 +51,9 @@
       "path": "data/annotation/te_hierarchy.json",
       "_status": "not_loaded",
       "_optional": true,
-      "_feeds": "page6 View 4 — Class → Superfamily → Family Sankey flow",
-      "_source_pipeline": "RepeatMasker / EDTA post-processing — group bp counts by (class, superfamily, family) per Wicker et al. 2007",
-      "_schema": "{ total_bp, classes: [{ id, name, superfamilies: [{ id, name, families: [{ id, name, bp }] }] }] }"
+      "_feeds": "page6 View 4 — TE-hierarchy alluvial (per parental haplotype, N-level)",
+      "_source_pipeline": "RepeatMasker / EDTA post-processing — aggregate bp per (haplotype, repeat, te_category, class, order, family) tree per Wicker et al. 2007",
+      "_schema": "{ haplotypes: [ { id, name, label, column_headers?, nodes: [<node>] } ] }; <node> = { id, name, pct, palette?, children?: [<node>] }. pct = % of total genome; children sum ≤ parent.pct. Legacy { total_bp, classes:[...] } shape is auto-adapted by the renderer."
     },
 
     "conserved_elements": {
@@ -72,6 +72,17 @@
       "_status": "not_loaded",
       "_feeds": "collinearity vs related Siluriformes · ancestral karyotype (phase D)",
       "_source_pipeline": "Cactus pairwise"
+    },
+
+    "macrosynteny_orthologs": {
+      "tier": "cold",
+      "source": "file",
+      "path": "data/comparative/macrosynteny_orthologs.json",
+      "_status": "not_loaded",
+      "_optional": true,
+      "_feeds": "page9 View 3 — MacrosyntR-style Oxford macro-synteny grid (and linear macro-synteny in later rounds)",
+      "_source_pipeline": "OrthoFinder + BUSCO single-copy orthologs (or wfmash 1-to-1 alignments distilled to gene-anchor positions) — one JSON per species pair",
+      "_schema": "{ pairs: [{ id, name, x: { id, name, chroms: [{ id, name, length_bp }] }, y: {…}, orthologs: [{ xc, xp, yc, yp }] }] }; positions in bp"
     },
 
     "centromere_telomere": {

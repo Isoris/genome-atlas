@@ -72,22 +72,25 @@
 
       <div class="ga-card" data-ga-card="te-sankey">
         <div class="ga-card-header">
-          <div class="ga-card-title">View 4 — TE hierarchy (Class → Superfamily → Family)</div>
+          <div class="ga-card-title">View 4 — TE hierarchy alluvial (per parental haplotype)</div>
           <div class="ga-card-status" data-ga-te-source>sample data</div>
         </div>
         <div class="ga-card-para ga-dim">
-          Sankey-style flow widget — port of the <code>networkD3::sankeyNetwork</code>
-          look, but rendered with a small ESM renderer (no d3 dependency).
-          Bar height ∝ total bp; link width ∝ child bp share. Click any node to
-          toggle its sub-flows (Class folds away its Superfamilies; Superfamily
-          folds away its Families). The toolbar resets to a chosen depth.
+          Alluvial flow over the full repeat hierarchy: <b>Non-repetitive · Repetitive
+          → Interspersed_TEs · Tandem_repeats · Other_repeats → Class → Order →
+          Family</b>. One panel per parental haplotype — <b>(a) C. gariepinus</b>
+          and <b>(b) C. macrocephalus</b>. Bar height ∝ % of total genome;
+          labels carry the percentage inline. Click any non-leaf node to fold
+          / unfold its descendants, or reset the visible depth from the toolbar.
         </div>
 
-        <div class="ga-sankey-toolbar" role="toolbar" aria-label="TE hierarchy depth">
+        <div class="ga-sankey-toolbar" role="toolbar" aria-label="TE alluvial depth">
           <span class="ga-sankey-tool-label">depth</span>
-          <button type="button" class="ga-sankey-btn" data-ga-sankey-depth="1">Class</button>
-          <button type="button" class="ga-sankey-btn" data-ga-sankey-depth="2">Class → Superfamily</button>
-          <button type="button" class="ga-sankey-btn is-active" data-ga-sankey-depth="3">Class → Superfamily → Family</button>
+          <button type="button" class="ga-sankey-btn" data-ga-sankey-depth="1">Repeat / Non-rep</button>
+          <button type="button" class="ga-sankey-btn" data-ga-sankey-depth="2">+ TE category</button>
+          <button type="button" class="ga-sankey-btn" data-ga-sankey-depth="3">+ Class</button>
+          <button type="button" class="ga-sankey-btn" data-ga-sankey-depth="4">+ Order</button>
+          <button type="button" class="ga-sankey-btn is-active" data-ga-sankey-depth="5">+ Family</button>
           <span class="ga-sankey-tool-spacer"></span>
           <button type="button" class="ga-sankey-btn ga-sankey-btn-ghost" data-ga-sankey-action="expand-all">expand all</button>
           <button type="button" class="ga-sankey-btn ga-sankey-btn-ghost" data-ga-sankey-action="collapse-all">collapse all</button>
@@ -96,20 +99,25 @@
         <div class="ga-sankey-host"
              data-ga-sankey
              role="img"
-             aria-label="Transposable-element hierarchy Sankey: Class to Superfamily to Family flows.">
-          <svg class="ga-sankey-svg"
-               viewBox="0 0 960 520"
-               preserveAspectRatio="xMidYMid meet"
-               xmlns="http://www.w3.org/2000/svg"></svg>
+             aria-label="Transposable-element hierarchy alluvial: per parental haplotype.">
+          <!-- One .ga-sankey-panel per haplotype injected here by page6.js -->
           <div class="ga-sankey-tooltip" data-ga-sankey-tip role="tooltip" hidden></div>
         </div>
 
         <div class="ga-card-footnote">
+          <b>Figure X.</b> Transposable-element landscapes of parental
+          haplotypes in the F₁ hybrid catfish genome. Alluvial diagrams
+          summarising genome-wide repeat composition and hierarchical
+          classification of transposable elements in the parental haplotypes:
+          (a) <i>Clarias gariepinus</i> and (b) <i>C. macrocephalus</i>.
+          <br><br>
           Data contract: <code>te_hierarchy.json</code> —
-          <code>{ total_bp, classes: [{ id, name, superfamilies: [{ id, name, families: [{ id, name, bp }] }] }] }</code>.
-          Sums propagate upward (Class.bp = Σ Superfamily.bp = ΣΣ Family.bp).
-          Until the layer lands, the renderer falls back to a small example
-          dataset baked into <code>page6.js</code>.
+          <code>{ haplotypes: [{ id, name, label, nodes: [&hellip;] }] }</code>,
+          where each <code>node = { id, name, pct, palette?, children? }</code>
+          and <code>pct</code> is percent of the whole genome (children sum
+          ≤ parent.pct). The renderer auto-derives column index from depth in
+          the tree and is depth-agnostic. Until the layer lands it falls back
+          to a sample two-haplotype dataset baked into <code>page6.js</code>.
         </div>
       </div>
 
