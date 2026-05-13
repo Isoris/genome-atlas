@@ -396,6 +396,20 @@ html[data-theme="academic"] .ga-card {
   width: 6px; height: 2px;
   opacity: 0.85;
 }
+/* Translucent band marking the inverted span on the host rod. Drawn
+   underneath the dots/ticks so events read on top. */
+.ga-ideo-span {
+  position: absolute;
+  left: 50%;
+  width: 16px;
+  transform: translateX(-50%);
+  background: #ff8c6e;
+  opacity: 0.18;
+  border-top: 1px solid #ff8c6e;
+  border-bottom: 1px solid #ff8c6e;
+  border-radius: 2px;
+  pointer-events: none;
+}
 
 /* --- View 2: CO-rate vs. telomere distance --------------------------- */
 .ga-co-curve-mockup {
@@ -436,6 +450,12 @@ html[data-theme="academic"] .ga-card {
 .ga-co-male-line    { top: 108px; background: #3a5f9f; transform: translateY(-2px); }
 .ga-co-nco-line     { top: 130px; background: #4f9e64; opacity: 0.85; border-top: 2px dashed #4f9e64; height: 0; }
 .ga-co-gc-line      { top: 142px; background: #c9a23a; opacity: 0.85; border-top: 2px dashed #c9a23a; height: 0; }
+
+/* page12 NCO / GC band+line variants — analogous to female/male on page11. */
+.ga-co-nco-band  { top: 70px;  background: #4f9e64; height: 65px; clip-path: polygon(0 30%,20% 35%,50% 45%,80% 55%,100% 60%,100% 90%,80% 85%,50% 80%,20% 80%,0 85%); }
+.ga-co-nco-curve { top: 98px;  background: #4f9e64; height: 2px;  opacity: 0.95; border-radius: 1px; }
+.ga-co-gc-band   { top: 92px;  background: #c9a23a; height: 55px; clip-path: polygon(0 70%,20% 60%,45% 45%,75% 25%,100% 15%,100% 80%,75% 70%,45% 75%,20% 80%,0 85%); }
+.ga-co-gc-curve  { top: 118px; background: #c9a23a; height: 2px;  opacity: 0.95; border-radius: 1px; }
 
 .ga-co-curve-legend {
   position: absolute;

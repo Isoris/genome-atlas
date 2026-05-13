@@ -58,6 +58,11 @@
           <div><code>Cactus / phastCons</code></div>
           <div data-ga-layer="conserved_elements" class="ga-layer-status">⚪ not loaded</div>
           <div class="ga-dim">conserved-element-density sub-track</div>
+
+          <div><code>crossover_track</code></div>
+          <div><code>pedigree CO calls</code></div>
+          <div data-ga-layer="crossover_track" class="ga-layer-status">⚪ not loaded</div>
+          <div class="ga-dim">CO-density sub-track (sex-collapsed; pivots to page11)</div>
         </div>
       </div>
 
@@ -118,7 +123,10 @@
           <div class="ga-panel-name">4. conserved density</div>
           <div class="ga-panel-desc">Dot strip — UCE positions as ticks.</div>
 
-          <div class="ga-panel-name">5. cohort overlay</div>
+          <div class="ga-panel-name">5. CO density</div>
+          <div class="ga-panel-desc">Sex-collapsed CO-event density (per-chrom, 100 kbp bins). Single-line heatmap stripe from <code>crossover_track</code>; clicking pivots to page11 filtered to the corresponding candidate (or all-genome view when no candidate is hovered).</div>
+
+          <div class="ga-panel-name">6. cohort overlay</div>
           <div class="ga-panel-desc">L2 envelope rectangles + candidate markers from the Inversion Atlas. Hidden when activeChrom is null.</div>
         </div>
       </div>
@@ -135,7 +143,12 @@
           chrom on the gene-track view.<br>
           • <b>page6 (repeats / TE)</b> — same for the repeat-density stripe.<br>
           • <b>page9 (synteny)</b> — ribbon-ties between Cgar and Cmac
-          chromosomes appear on hover.
+          chromosomes appear on hover.<br>
+          • <b>page11 (crossovers)</b> — the CO-density sub-track here is a
+          chrom-summarised view of page11's per-candidate data; click the
+          stripe to drill into the candidate-keyed ideogram + telomere curve.<br>
+          • <b>page12 (NCO / gene conversion)</b> — sibling page with the
+          green/yellow analogue tracks.
         </div>
       </div>
   </div>
