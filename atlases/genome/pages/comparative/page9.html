@@ -1,10 +1,10 @@
 <div id="page9" class="page">
   <div class="ga-content">
       <div class="ga-title">
-        <span class="ga-title-bullet">▰</span> Synteny — Cactus pairwise blocks
+        <span class="ga-title-bullet">▰</span> Synteny — Cactus pairwise + MacrosyntR Oxford grid
       </div>
       <div class="ga-subtitle">
-        Stage: comparative · spec / phase D · driven by <code>synteny_blocks</code>
+        Stage: comparative · spec / phase D · driven by <code>synteny_blocks</code> + <code>macrosynteny_orthologs</code>
       </div>
 
       <div class="ga-card">
@@ -16,9 +16,10 @@
           Cross-species collinearity for the Gar haplotype against related
           Siluriformes (<i>C. macrocephalus</i>, <i>I. punctatus</i>, plus 7-9
           more catfish genomes via <code>catfish-synteny-toolkit</code>'s wfmash
-          1-to-1 alignments). Two views: <b>ribbon diagram</b> (one strip per
-          species pair, syntenic blocks rendered as polygons) and
-          <b>per-chrom dotplot</b> for a single Cgar↔Cmac pair.
+          1-to-1 alignments). Four views: <b>pairwise ribbon</b>,
+          <b>multi-species ribbon stack</b>, a <b>MacrosyntR-style Oxford
+          macro-synteny grid</b> (orthologs as dots, chromosomes reordered for
+          best diagonal), and a <b>per-chrom dotplot</b>.
         </div>
         <div class="ga-card-para ga-dim">
           Where the Inversion Atlas's page16 surfaces cross-species breakpoint
@@ -43,10 +44,15 @@
           <div data-ga-layer="synteny_blocks" class="ga-layer-status">⚪ not loaded</div>
           <div class="ga-dim">ribbon polygons · dotplot points · breakpoint catalogue</div>
 
+          <div><code>macrosynteny_orthologs</code></div>
+          <div><code>OrthoFinder + BUSCO / wfmash 1-to-1</code></div>
+          <div data-ga-layer="macrosynteny_orthologs" class="ga-layer-status">⚪ not loaded</div>
+          <div class="ga-dim">MacrosyntR Oxford grid · linear macro-synteny</div>
+
           <div><code>chromosome_map</code></div>
           <div><code>FAI + AGP</code></div>
           <div data-ga-layer="chromosome_map" class="ga-layer-status">⚪ not loaded</div>
-          <div class="ga-dim">ribbon row scaffold</div>
+          <div class="ga-dim">ribbon row scaffold · axis lengths</div>
         </div>
       </div>
 
@@ -62,8 +68,62 @@
           <div class="ga-panel-name">View 2 — multi-species ribbon stack</div>
           <div class="ga-panel-desc">Cgar at the top; stacked below it, one strip per related Siluriformes genome. Side-by-side comparison of conserved vs lineage-specific rearrangements.</div>
 
-          <div class="ga-panel-name">View 3 — per-chrom dotplot</div>
+          <div class="ga-panel-name">View 3 — MacrosyntR Oxford grid</div>
+          <div class="ga-panel-desc">Whole-genome Oxford dotplot — x-axis = chroms of species A, y-axis = chroms of species B, length-scaled and reordered so the strongest pairwise matches sit on the diagonal. Each dot is one ortholog gene pair; colour encodes the y-chromosome. Direct port of <code>macrosyntR::plot_oxford_grid</code>.</div>
+
+          <div class="ga-panel-name">View 4 — per-chrom dotplot</div>
           <div class="ga-panel-desc">Click any chromosome in the ribbon to open a full dotplot (Cgar chrom × homolog chrom). Hover for block coordinates and identity.</div>
+        </div>
+      </div>
+
+      <div class="ga-card" data-ga-card="oxford-grid">
+        <div class="ga-card-header">
+          <div class="ga-card-title">View 3 — MacrosyntR Oxford macro-synteny grid</div>
+          <div class="ga-card-status" data-ga-oxford-source>sample data</div>
+        </div>
+        <div class="ga-card-para ga-dim">
+          Whole-genome Oxford grid. Rows + columns are length-scaled
+          chromosomes, reordered greedily so the strongest pairwise hits
+          straighten to a diagonal (MacrosyntR's <code>reorder=TRUE</code>
+          default). Each dot is one orthologous gene pair; colour encodes the
+          row chromosome (y-axis identity) — the same colouring
+          <code>plot_oxford_grid()</code> uses out of the box. Hover any dot
+          for ortholog coordinates.
+        </div>
+
+        <div class="ga-oxford-toolbar" role="toolbar" aria-label="Oxford-grid controls">
+          <span class="ga-oxford-tool-label">pair</span>
+          <select class="ga-oxford-select" data-ga-oxford-pair></select>
+          <span class="ga-oxford-tool-spacer"></span>
+          <label class="ga-oxford-toggle">
+            <input type="checkbox" data-ga-oxford-grid checked>
+            <span>chrom grid</span>
+          </label>
+          <label class="ga-oxford-toggle">
+            <input type="checkbox" data-ga-oxford-reorder checked>
+            <span>reorder for diagonal</span>
+          </label>
+          <label class="ga-oxford-toggle">
+            <input type="checkbox" data-ga-oxford-color-by-x>
+            <span>colour by x-chrom</span>
+          </label>
+        </div>
+
+        <div class="ga-oxford-host" data-ga-oxford
+             role="img" aria-label="MacrosyntR-style Oxford macro-synteny dotplot.">
+          <svg class="ga-oxford-svg"
+               viewBox="0 0 1000 760"
+               preserveAspectRatio="xMidYMid meet"
+               xmlns="http://www.w3.org/2000/svg"></svg>
+          <div class="ga-oxford-tooltip" data-ga-oxford-tip role="tooltip" hidden></div>
+        </div>
+
+        <div class="ga-card-footnote">
+          Data contract: <code>macrosynteny_orthologs.json</code> —
+          <code>{ pairs: [{ id, name, x: { id, name, chroms: [{ id, name, length_bp }] }, y: {…}, orthologs: [{ xc, xp, yc, yp }] }] }</code>.
+          <code>xc</code>/<code>yc</code> are chrom ids; <code>xp</code>/<code>yp</code>
+          are positions in bp. Until the layer lands, the renderer falls back
+          to a baked-in 28×27 example pair (<i>fClaHyb_Gar</i> × <i>C. fuscus</i>).
         </div>
       </div>
 
@@ -79,7 +139,10 @@
           • <b>page10 (ancestral karyotype)</b> — uses the same Cactus output to
           reconstruct the ancestral state.<br>
           • <b>catfish-synteny-toolkit</b> — analysis-pipeline repo producing
-          <code>synteny_blocks.json</code> (wfmash 1-to-1 + Cactus assembly).
+          <code>synteny_blocks.json</code> (wfmash 1-to-1 + Cactus assembly).<br>
+          • <b>MacrosyntR</b> (<i>El Hilali &amp; Copley, BMC Bioinformatics
+          2024</i>) — upstream R package whose Oxford-grid layout this renderer
+          ports to ESM.
         </div>
       </div>
   </div>

@@ -396,6 +396,20 @@ html[data-theme="academic"] .ga-card {
   width: 6px; height: 2px;
   opacity: 0.85;
 }
+/* Translucent band marking the inverted span on the host rod. Drawn
+   underneath the dots/ticks so events read on top. */
+.ga-ideo-span {
+  position: absolute;
+  left: 50%;
+  width: 16px;
+  transform: translateX(-50%);
+  background: #ff8c6e;
+  opacity: 0.18;
+  border-top: 1px solid #ff8c6e;
+  border-bottom: 1px solid #ff8c6e;
+  border-radius: 2px;
+  pointer-events: none;
+}
 
 /* --- View 2: CO-rate vs. telomere distance --------------------------- */
 .ga-co-curve-mockup {
@@ -436,6 +450,12 @@ html[data-theme="academic"] .ga-card {
 .ga-co-male-line    { top: 108px; background: #3a5f9f; transform: translateY(-2px); }
 .ga-co-nco-line     { top: 130px; background: #4f9e64; opacity: 0.85; border-top: 2px dashed #4f9e64; height: 0; }
 .ga-co-gc-line      { top: 142px; background: #c9a23a; opacity: 0.85; border-top: 2px dashed #c9a23a; height: 0; }
+
+/* page12 NCO / GC band+line variants — analogous to female/male on page11. */
+.ga-co-nco-band  { top: 70px;  background: #4f9e64; height: 65px; clip-path: polygon(0 30%,20% 35%,50% 45%,80% 55%,100% 60%,100% 90%,80% 85%,50% 80%,20% 80%,0 85%); }
+.ga-co-nco-curve { top: 98px;  background: #4f9e64; height: 2px;  opacity: 0.95; border-radius: 1px; }
+.ga-co-gc-band   { top: 92px;  background: #c9a23a; height: 55px; clip-path: polygon(0 70%,20% 60%,45% 45%,75% 25%,100% 15%,100% 80%,75% 70%,45% 75%,20% 80%,0 85%); }
+.ga-co-gc-curve  { top: 118px; background: #c9a23a; height: 2px;  opacity: 0.95; border-radius: 1px; }
 
 .ga-co-curve-legend {
   position: absolute;
@@ -567,7 +587,27 @@ html[data-theme="academic"] .ga-card {
   background: var(--panel-3);
   border: 1px solid var(--rule);
   border-radius: 3px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
+
+/* Per-haplotype panel — one alluvial panel each. */
+.ga-sankey-panel {
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  padding: 4px 6px 6px 6px;
+  background: var(--panel-2);
+}
+.ga-sankey-panel-head {
+  font-size: 10.5px;
+  font-family: var(--mono);
+  font-style: italic;
+  color: var(--ink);
+  padding: 2px 4px 4px 4px;
+  letter-spacing: 0.02em;
+}
+
 .ga-sankey-svg {
   display: block;
   width: 100%;
@@ -576,34 +616,34 @@ html[data-theme="academic"] .ga-card {
   user-select: none;
 }
 
-/* Nodes — small rounded rects, full-saturation fill per Class. */
+/* Nodes — wider rounded rects, soft per-branch fill. */
 .ga-sankey-node {
-  opacity: 0.92;
+  opacity: 0.95;
 }
 .ga-sankey-node.is-clickable {
   cursor: pointer;
 }
 .ga-sankey-node.is-clickable:hover {
   opacity: 1;
+  filter: brightness(1.08);
 }
 .ga-sankey-node.is-leaf {
-  opacity: 0.7;
+  opacity: 0.85;
 }
 
-/* Links — translucent ribbons in source-Class colour. No fill. */
+/* Ribbons — filled bands in soft per-branch colour (no stroke). The fill
+   already carries its own alpha (set by PALETTE.link). */
 .ga-sankey-link {
-  fill: none;
-  opacity: 0.32;
-  stroke-linecap: butt;
-  transition: opacity 120ms ease;
+  stroke: none;
+  transition: opacity 120ms ease, filter 120ms ease;
 }
 .ga-sankey-link:hover {
-  opacity: 0.55;
+  filter: brightness(0.9) saturate(1.25);
 }
 
-/* Labels. */
+/* Labels — inline %, anchored to whichever side the column lives on. */
 .ga-sankey-label {
-  font-size: 9.5px;
+  font-size: 10px;
   fill: var(--ink);
   pointer-events: none;
 }
@@ -615,11 +655,18 @@ html[data-theme="academic"] .ga-card {
   fill: var(--ink-dim);
   pointer-events: none;
 }
-.ga-sankey-header {
+
+/* Column headers — small index "0/1/2..." + human label below it. */
+.ga-sankey-header-num {
   font-size: 9px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  fill: var(--ink-dimmer);
+  letter-spacing: 0.05em;
+}
+.ga-sankey-header-name {
+  font-size: 8.5px;
   fill: var(--ink-dim);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 .ga-sankey-empty {
   font-size: 11px;
@@ -675,6 +722,136 @@ html[data-theme="light"]    .ga-sankey-tooltip {
 html[data-theme="light"]    .ga-sankey-btn.is-active {
   background: rgba(194, 65, 12, 0.10);
 }
+
+/* ---------------------------------------------------------------------
+ * page9 — MacrosyntR Oxford macro-synteny grid.
+ *
+ * Dotplot with length-cumulative axes, chrom-cell grid lines, dots coloured
+ * by row (y-chrom) — the colour contract MacrosyntR's plot_oxford_grid()
+ * uses by default. Self-contained SVG widget; the host positions the
+ * tooltip absolutely relative to itself.
+ * --------------------------------------------------------------------- */
+.ga-oxford-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 6px 0 8px 0;
+  font-size: 10px;
+  color: var(--ink-dim);
+}
+.ga-oxford-tool-label {
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.ga-oxford-tool-spacer { flex: 1 1 auto; }
+.ga-oxford-select {
+  font: inherit;
+  font-size: 10px;
+  font-family: var(--mono);
+  color: var(--ink);
+  background: var(--panel-3);
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  padding: 2px 4px;
+  letter-spacing: 0.02em;
+}
+.ga-oxford-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--ink-dim);
+}
+.ga-oxford-toggle input { cursor: pointer; }
+
+.ga-oxford-host {
+  position: relative;
+  margin: 4px 0 6px 0;
+  padding: 6px 8px 8px 8px;
+  background: var(--panel-3);
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+}
+.ga-oxford-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  font-family: var(--mono);
+  user-select: none;
+}
+
+.ga-oxford-plot-bg {
+  fill: var(--panel-2);
+}
+.ga-oxford-frame {
+  fill: none;
+  stroke: var(--rule);
+  stroke-width: 1;
+}
+.ga-oxford-gridline {
+  stroke: var(--rule);
+  stroke-width: 0.5;
+  opacity: 0.7;
+}
+.ga-oxford-dot {
+  stroke: none;
+  opacity: 0.85;
+}
+.ga-oxford-xlabel,
+.ga-oxford-ylabel {
+  font-size: 8.5px;
+  fill: var(--ink-dim);
+  letter-spacing: 0.02em;
+}
+.ga-oxford-axis-title {
+  font-size: 11px;
+  font-style: italic;
+  fill: var(--ink);
+  letter-spacing: 0.02em;
+}
+.ga-oxford-status {
+  font-size: 9.5px;
+  fill: var(--ink-dimmer);
+  letter-spacing: 0.04em;
+}
+.ga-oxford-empty {
+  font-size: 12px;
+  fill: var(--ink-dim);
+}
+
+.ga-oxford-tooltip {
+  position: absolute;
+  top: 0; left: 0;
+  pointer-events: none;
+  background: var(--panel-2);
+  border: 1px solid var(--rule);
+  border-left: 3px solid #ff8c6e;
+  border-radius: 3px;
+  padding: 6px 8px;
+  font-size: 10px;
+  font-family: var(--mono);
+  color: var(--ink);
+  min-width: 160px;
+  max-width: 280px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+  z-index: 5;
+}
+.ga-oxford-tooltip[hidden] { display: none; }
+.ga-oxford-tip-kind {
+  font-size: 8.5px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+  margin-bottom: 2px;
+}
+.ga-oxford-tip-name {
+  margin-bottom: 1px;
+}
+
+html[data-theme="light"] .ga-oxford-tooltip { border-left-color: #c2410c; }
 
 /* --- JSON-schema codeblock ------------------------------------------- */
 .ga-schema-block {

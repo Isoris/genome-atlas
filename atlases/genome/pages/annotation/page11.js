@@ -1,15 +1,19 @@
 // atlases/genome/pages/annotation/page11.js
 // =============================================================================
-// page11 — Crossovers (stage: annotation)
+// page11 — Crossovers, per inversion candidate (stage: annotation)
 //
-// Three views: sex-specific CO ideogram (red♀ / blue♂ dots, optional green NCO
-// + yellow GC overlays), CO rate vs. relative telomere distance (LOESS curve
-// + 95% CI band per sex), optional PRDM9 sequence logo.
+// Three views over the recombination map around one inversion candidate at a
+// time: sex-specific CO ideogram (red♀ / blue♂ dots with the candidate's
+// inverted span as a translucent band), CO rate vs. relative telomere
+// distance (LOESS + 95% CI band per sex), optional PRDM9 sequence logo.
 //
-// Round-1 status: spec only. The phase-C renderer reads `crossover_track`
-// (required) + `prdm9_motif` (facultative) + `nco_gc_track` (facultative).
-// The PRDM9 motif card auto-hides when `prdm9_motif.pwm` is null/missing —
-// see _maybeHideOptionalCards() below for the toggle hook used at render time.
+// The active candidate is read from shared.candidate; the renderer fetches
+// data/annotation/crossovers/<candidate_id>.json. NCO / gene-conversion
+// lives on page12.
+//
+// Round-1 status: spec only. _maybeHideOptionalCards() is the toggle hook
+// used at render time to hide the PRDM9 logo card when prdm9_motif.pwm is
+// null / missing.
 // =============================================================================
 
 import { _pageState, _setActiveState } from './page11/_state.js';
