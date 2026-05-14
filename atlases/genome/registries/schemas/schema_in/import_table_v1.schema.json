@@ -1,0 +1,29 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "import_table_v1.schema.json",
+  "title": "import_table_v1 — manifest contract for genome-atlas table imports",
+  "description": "Validates POST /api/actions when type='import_table'. Pure file-IO action: reads a tabular file (TSV/CSV/JSON) from the workspace and emits a staging_genome_table_v0 envelope. Used for assembly metrics, BRAKER summaries, TE-density tracks, synteny block tables — anywhere the producer is an external pipeline and the atlas just needs the result indexed.",
+  "type": "object",
+  "required": ["target"],
+  "additionalProperties": true,
+  "properties": {
+    "target": {
+      "type": "object",
+      "required": ["path"],
+      "additionalProperties": true,
+      "properties": {
+        "path":     { "type": "string", "minLength": 1, "description": "Workspace-relative path to the file to import." },
+        "subject":  { "type": "string", "description": "Short tag for what this table is (e.g. 'assembly_metrics', 'braker_summary', 'te_density')." }
+      }
+    },
+    "params": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "format":     { "type": "string", "enum": ["tsv", "csv", "json"], "default": "tsv" },
+        "has_header": { "type": "boolean", "default": true },
+        "max_rows":   { "type": "integer", "minimum": 1 }
+      }
+    }
+  }
+}
