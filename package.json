@@ -1,0 +1,7 @@
+{
+  "name": "genome-atlas",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "genome-atlas — ES-module flag so 'node atlases/genome/shared/test_*.js' can load the page modules under test. There is no npm dependency graph; the browser imports atlases/genome/**/*.js directly."
+}
