@@ -27,7 +27,7 @@
       "stage": "assembly",
       "fragment": "atlases/genome/pages/assembly/page3.html",
       "module": "atlases/genome/pages/assembly/page3.js",
-      "tooltip": "Length-scaled chromosome strip with stacked density sub-tracks (gene · repeat · conserved · CO density · cohort overlay). Genome-Atlas primary phase-B deliverable. Mirrors the Inversion Atlas scrubber width."
+      "tooltip": "Length-scaled chromosome strip with stacked density sub-tracks (gene · repeat · conserved · CO density · cohort overlay). Genome-Atlas primary phase-B deliverable. Mirrors the Inversion Atlas scrubber width. CO-density sub-track reads crossover_track cross-atlas from meiosis-atlas (the layer moved there 2026-05-19); clicking the stripe pivots to meiosis's crossovers_per_candidate page for the active candidate."
     },
     {
       "id": "page4",
@@ -84,24 +84,9 @@
       "fragment": "atlases/genome/pages/comparative/page10.html",
       "module": "atlases/genome/pages/comparative/page10.js",
       "tooltip": "Reconstructed Siluriformes ancestral karyotype + per-branch event annotations. Likely promoted to a Supplementary Note. Phase D."
-    },
-    {
-      "id": "page11",
-      "label": "crossovers",
-      "stage": "annotation",
-      "fragment": "atlases/genome/pages/annotation/page11.html",
-      "module": "atlases/genome/pages/annotation/page11.js",
-      "tooltip": "Crossover (CO) characteristics, per inversion candidate. Three panels: sex-specific ideogram (red♀ / blue♂ dots with the candidate's inverted span as a translucent band), CO-rate vs. relative telomere distance (smoothed curve + 95% CI band), optional PRDM9 motif logo (auto-hidden if absent). Driven by crossover_track keyed by shared.candidate; prdm9_motif is facultative. NCO + gene-conversion live on page12. Phase C+."
-    },
-    {
-      "id": "page12",
-      "label": "NCO / gene conversion",
-      "stage": "annotation",
-      "fragment": "atlases/genome/pages/annotation/page12.html",
-      "module": "atlases/genome/pages/annotation/page12.js",
-      "tooltip": "Sister page to page11, same per-inversion-candidate keying. Green NCO + yellow gene-conversion tract ideogram and tract-rate vs. relative telomere distance curves. Driven by nco_gc_track. Phase C+."
     }
   ],
+  "_pages_migration_note_2026_05_19": "page11 (crossovers) + page12 (NCO/GC) migrated to meiosis-atlas on 2026-05-19 as crossovers_per_candidate + nco_per_candidate (meiosis 'hub' stage). These per-inversion-candidate meiosis views never belonged in the genome-assembly atlas; they describe meiosis events. The Genome Atlas's page3 chromosome-overview CO-density sub-track still reads crossover_track for visualisation — now a cross-atlas read from meiosis-atlas's layers registry. The old page numbers (11, 12) are deliberately not reused on the genome side; future genome pages start at 13+ to keep the migration audit clear.",
   "registries": {
     "layers": "atlases/genome/registries/data/layers.registry.json",
     "files": "atlases/genome/registries/data/files.registry.json",

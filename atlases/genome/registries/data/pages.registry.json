@@ -1,7 +1,7 @@
 {
   "$schema": "../../../../core/registry_core.schema.json",
   "_doc": "Per-page data and slot requirements for the Genome Atlas. Round 1 declares all ten planned pages (one per major spec); requires_layers / requires_slots / preloads are stubbed empty because none of the pages has a renderer yet — they're scaffold specs. Each pageN's _doc captures what the page will read once its phase ships.",
-  "_round1_status": "All ten pages declared as scaffolds. Real requires_* are added per page as renderers wire in (phase B+).",
+  "_round1_status": "Ten pages declared as scaffolds (post-2026-05-19 meiosis migration). Real requires_* are added per page as renderers wire in (phase B+). The former page11/page12 entries moved to meiosis-atlas (see _migration_note below).",
   "pages": {
     "page1": {
       "_label": "scaffold — landing / phase A preview",
@@ -21,7 +21,7 @@
     },
     "page3": {
       "_label": "chromosome overview — length-scaled strip",
-      "_doc": "Primary phase-B deliverable. One row per chromosome, length-scaled across the page. Stacked sub-tracks: base bar (with centromere overlay), gene density, repeat density, conserved-element density, CO density (sex-collapsed, from crossover_track; clicking pivots to page11 for the active candidate), cohort overlay (L2 envelopes + candidates from the Inversion Atlas). Mirrors scrubber width so the two atlases can be stacked. Future requires_layers: ['chromosome_map', 'gene_track', 'repeat_track', 'conserved_elements', 'centromere_telomere', 'crossover_track']. Future requires_slots: ['activeChrom', 'candidate'] (cross-atlas reads).",
+      "_doc": "Primary phase-B deliverable. One row per chromosome, length-scaled across the page. Stacked sub-tracks: base bar (with centromere overlay), gene density, repeat density, conserved-element density, CO density (sex-collapsed, from crossover_track which lives in meiosis-atlas post-2026-05-19 — cross-atlas read; clicking pivots to meiosis-atlas/crossovers_per_candidate for the active candidate), cohort overlay (L2 envelopes + candidates from the Inversion Atlas). Mirrors scrubber width so the two atlases can be stacked. Future requires_layers: ['chromosome_map', 'gene_track', 'repeat_track', 'conserved_elements', 'centromere_telomere'] (locally-owned) + ['crossover_track'] (cross-atlas, owned by meiosis-atlas). Future requires_slots: ['activeChrom', 'candidate'] (cross-atlas reads).",
       "requires_layers": [],
       "requires_operations": [],
       "requires_slots": [],
@@ -83,21 +83,6 @@
       "requires_slots": [],
       "preloads": []
     },
-    "page11": {
-      "_label": "crossovers — per-inversion-candidate ideogram, telomere bias, optional PRDM9 logo",
-      "_doc": "Phase C. Three views over the recombination map AROUND ONE INVERSION CANDIDATE AT A TIME, pared down from the aye-aye CO paper's Fig.1 (Versoza et al. GBE 2024): (1) sex-specific ideogram of CO events inside candidate_span + flank_bp (red♀ dots left, blue♂ dots right, candidate span as translucent band); (2) CO rate vs. relative telomere distance — LOESS curve + 95% CI band per sex (lower-left panel of the source figure); (3) PRDM9 binding motif sequence logo, FACULTATIVE (auto-hidden when `prdm9_motif.pwm` is null/missing). Dropped from the source figure: panel (c) AlphaFold complex (decorative) + panel (e) parental-age effect (F₁ data is single-generation). NCO + gene conversion live on the sister page12. Future requires_layers: ['crossover_track', 'chromosome_map']. Optional future requires_layers: ['prdm9_motif']. Future requires_slots: ['candidate'] (read from the Inversion Atlas's candidates_registry). JSON import contract: one `crossover_track.json` per INVERSION CANDIDATE, file path `data/annotation/crossovers/<candidate_id>.json`, shape { candidate_id, candidate_span{chrom,start_bp,end_bp}, flank_bp?, events[{chrom,pos_bp,sex,indiv?,in_span?}], telomere_curve?, curve_params?, prdm9_motif?{pwm,tool,evalue,n_hotspots} } — see the schema block on the page itself for the JSON-Schema draft-2020-12 definition.",
-      "requires_layers": [],
-      "requires_operations": [],
-      "requires_slots": [],
-      "preloads": []
-    },
-    "page12": {
-      "_label": "NCO / gene conversion — per-inversion-candidate tract ideogram + tract-rate telomere bias",
-      "_doc": "Phase C. Sister page to page11, same per-inversion-candidate keying. Two views: (1) tract ideogram — green NCO ticks on the left, yellow GC ticks on the right, candidate inverted span as translucent band; (2) tract rate vs. relative telomere distance — LOESS curve + 95% CI band per kind (nco / gc). Future requires_layers: ['nco_gc_track', 'chromosome_map']. Future requires_slots: ['candidate']. JSON import contract: one `nco_gc_track.json` per INVERSION CANDIDATE, file path `data/annotation/nco_gc/<candidate_id>.json`, shape { candidate_id, candidate_span{chrom,start_bp,end_bp}, flank_bp?, tracts[{chrom,start_bp,end_bp,kind∈nco|gc,indiv?,in_span?}], telomere_curve?, curve_params? } — see the schema block on the page itself.",
-      "requires_layers": [],
-      "requires_operations": [],
-      "requires_slots": [],
-      "preloads": []
-    }
+    "_migration_note_2026_05_19": "page11 (crossovers) and page12 (NCO / gene conversion) moved to meiosis-atlas as `crossovers_per_candidate` and `nco_per_candidate` (both under the meiosis hub stage). Per-candidate meiosis views belong in the Meiosis Atlas; the Genome Atlas page3 CO-density sub-track now reads the meiosis-owned crossover_track layer cross-atlas."
   }
 }

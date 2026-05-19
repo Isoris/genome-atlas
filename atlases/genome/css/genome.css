@@ -316,7 +316,15 @@ html[data-theme="academic"] .ga-card {
 }
 
 /* ---------------------------------------------------------------------
- * page11 — crossovers.
+ * crossovers — migrated to meiosis-atlas (was: page11 — crossovers).
+ *
+ * These rules now style meiosis-atlas/atlases/meiosis/pages/hub/
+ * crossovers_per_candidate.html and nco_per_candidate.html — both
+ * declare this stylesheet via their page entry's `stylesheet` field
+ * so the router loads it on mount. Kept in this file (rather than
+ * copied into meiosis-atlas) because the .ga-* namespace stays here.
+ * Migration: 2026-05-19. See HANDOFF_2026-05-19_meiosis_migration_from_genome.md
+ * in meiosis-atlas/.
  *
  * Three mockups: sex-specific CO ideogram (dots beside vertical rods),
  * CO-rate vs. relative telomere distance (smoothed curve + CI band),
@@ -451,7 +459,10 @@ html[data-theme="academic"] .ga-card {
 .ga-co-nco-line     { top: 130px; background: #4f9e64; opacity: 0.85; border-top: 2px dashed #4f9e64; height: 0; }
 .ga-co-gc-line      { top: 142px; background: #c9a23a; opacity: 0.85; border-top: 2px dashed #c9a23a; height: 0; }
 
-/* page12 NCO / GC band+line variants — analogous to female/male on page11. */
+/* nco_per_candidate (meiosis) NCO / GC band+line variants — analogous to
+ * female/male on the crossovers_per_candidate page. Both pages migrated
+ * out of genome-atlas on 2026-05-19; see comment-block above + the
+ * meiosis HANDOFF doc. */
 .ga-co-nco-band  { top: 70px;  background: #4f9e64; height: 65px; clip-path: polygon(0 30%,20% 35%,50% 45%,80% 55%,100% 60%,100% 90%,80% 85%,50% 80%,20% 80%,0 85%); }
 .ga-co-nco-curve { top: 98px;  background: #4f9e64; height: 2px;  opacity: 0.95; border-radius: 1px; }
 .ga-co-gc-band   { top: 92px;  background: #c9a23a; height: 55px; clip-path: polygon(0 70%,20% 60%,45% 45%,75% 25%,100% 15%,100% 80%,75% 70%,45% 75%,20% 80%,0 85%); }
