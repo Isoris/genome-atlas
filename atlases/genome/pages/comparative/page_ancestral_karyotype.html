@@ -319,6 +319,25 @@
 
       <div class="ga-card">
         <div class="ga-card-header">
+          <div class="ga-card-title">Chromosome palette key</div>
+          <div class="ga-card-status">reference</div>
+        </div>
+        <div class="ga-card-para ga-dim">
+          The ALG-coloured rods above draw from the atlas-wide chrom palette.
+          Slots 1&ndash;11 step by 30&deg; around the colour wheel; slots
+          12&ndash;13 are 15&deg;-step infills for karyotypes with &gt;11
+          chroms. Tokens live in <code>atlases/genome/css/genome.css</code>
+          under <code>:root</code>; paint a <code>&lt;rect&gt;</code> with the
+          matching <code>.ga-chrom-N</code> utility class.
+        </div>
+        <iframe class="ga-chrom-palette-frame"
+                src="../../_partials/_chrom-palette-swatches.html"
+                title="Chromosome palette swatches"
+                loading="lazy"></iframe>
+      </div>
+
+      <div class="ga-card">
+        <div class="ga-card-header">
           <div class="ga-card-title">Cross-references</div>
           <div class="ga-card-status">see also</div>
         </div>
