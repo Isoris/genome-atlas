@@ -1,0 +1,70 @@
+{
+  "_doc": "Mock example for crossover_track. Validates the page_crossovers JSON-Schema. Drop the real per-candidate file here under the same name pattern: <candidate_id>.json.",
+  "candidate_id": "cgar_inv_example_01",
+  "cohort": "Cgar F1xF1 progeny (mock, n=42)",
+  "individuals": 42,
+  "candidate_span": {
+    "chrom": "LG28",
+    "start_bp": 4800000,
+    "end_bp": 12300000
+  },
+  "flank_bp": 5000000,
+  "chroms": [
+    { "id": "LG28", "length_bp": 19700000, "telomere_L": 0, "telomere_R": 19700000 },
+    { "id": "LG02", "length_bp": 31200000, "telomere_L": 0, "telomere_R": 31200000 }
+  ],
+  "events": [
+    { "chrom": "LG28", "pos_bp":  1400000, "sex": "F", "indiv": "fam01.p07", "in_span": false },
+    { "chrom": "LG28", "pos_bp":  2380000, "sex": "F", "indiv": "fam03.p11", "in_span": false },
+    { "chrom": "LG28", "pos_bp":  4120000, "sex": "M", "indiv": "fam02.p03", "in_span": false },
+    { "chrom": "LG28", "pos_bp":  5900000, "sex": "F", "indiv": "fam05.p02", "in_span": true  },
+    { "chrom": "LG28", "pos_bp":  8420000, "sex": "M", "indiv": "fam01.p09", "in_span": true  },
+    { "chrom": "LG28", "pos_bp": 11200000, "sex": "F", "indiv": "fam04.p06", "in_span": true  },
+    { "chrom": "LG28", "pos_bp": 13900000, "sex": "F", "indiv": "fam06.p01", "in_span": false },
+    { "chrom": "LG28", "pos_bp": 15800000, "sex": "M", "indiv": "fam02.p08", "in_span": false },
+    { "chrom": "LG28", "pos_bp": 17600000, "sex": "F", "indiv": "fam03.p04", "in_span": false },
+    { "chrom": "LG28", "pos_bp": 18900000, "sex": "M", "indiv": "fam05.p07", "in_span": false },
+    { "chrom": "LG02", "pos_bp":  3100000, "sex": "F", "indiv": "fam01.p07", "in_span": false },
+    { "chrom": "LG02", "pos_bp": 12700000, "sex": "M", "indiv": "fam04.p06", "in_span": false }
+  ],
+  "telomere_curve": {
+    "bins":   [0.05, 0.15, 0.25, 0.35, 0.45, 0.55, 0.65, 0.75, 0.85, 0.95],
+    "female": {
+      "y":     [22.1, 19.8, 18.2, 16.4, 15.1, 17.5, 21.2, 25.6, 28.4, 30.2],
+      "ci_lo": [18.9, 16.8, 15.2, 13.9, 12.8, 14.6, 17.8, 21.7, 24.2, 25.9],
+      "ci_hi": [25.3, 22.8, 21.2, 18.9, 17.4, 20.4, 24.6, 29.5, 32.6, 34.5]
+    },
+    "male": {
+      "y":     [16.2, 17.4, 18.6, 19.1, 19.4, 19.6, 19.8, 20.0, 19.6, 19.3],
+      "ci_lo": [13.7, 14.8, 15.9, 16.4, 16.8, 17.0, 17.2, 17.4, 17.0, 16.6],
+      "ci_hi": [18.7, 20.0, 21.3, 21.8, 22.0, 22.2, 22.4, 22.6, 22.2, 22.0]
+    }
+  },
+  "curve_params": {
+    "smoother": "loess",
+    "span": 0.5,
+    "ci_bootstrap": 1000
+  },
+  "prdm9_motif": {
+    "tool": "STREME",
+    "evalue": 2.4e-12,
+    "n_hotspots": 314,
+    "pwm": [
+      [0.12, 0.62, 0.12, 0.14],
+      [0.08, 0.78, 0.06, 0.08],
+      [0.04, 0.86, 0.04, 0.06],
+      [0.18, 0.18, 0.10, 0.54],
+      [0.12, 0.64, 0.10, 0.14],
+      [0.08, 0.72, 0.08, 0.12],
+      [0.22, 0.32, 0.22, 0.24],
+      [0.10, 0.68, 0.10, 0.12],
+      [0.06, 0.80, 0.06, 0.08],
+      [0.12, 0.66, 0.10, 0.12],
+      [0.06, 0.78, 0.08, 0.08],
+      [0.22, 0.32, 0.22, 0.24],
+      [0.18, 0.48, 0.16, 0.18],
+      [0.18, 0.48, 0.16, 0.18],
+      [0.20, 0.46, 0.16, 0.18]
+    ]
+  }
+}

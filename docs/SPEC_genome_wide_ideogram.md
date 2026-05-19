@@ -4,8 +4,8 @@
 > (`state.chromSummary`, tier-coloured candidates, the L2 sweep cross-
 > reference). It is parked here in the **Genome Atlas** repo because the
 > two atlases share the candidate vocabulary and the chromosome-strip
-> visual — Genome-Atlas `page3` ("chromosome overview — length-scaled
-> strip") is the closest sibling, and Genome-Atlas `page11`/`page12`
+> visual — Genome-Atlas `page_chromosome_overview` ("chromosome overview — length-scaled
+> strip") is the closest sibling, and Genome-Atlas `page_crossovers`/`page_nco_gc`
 > already key off the same inversion-candidate ids via
 > `shared.candidate`. Port to the inversion-atlas repo before
 > implementing.
@@ -128,15 +128,15 @@ The ideogram should export as SVG with:
 When this spec is implemented in the Inversion Atlas, the Genome Atlas
 already carries the matching candidate-keyed surfaces:
 
-- **`page3` (chromosome overview — length-scaled strip)** — same row-
+- **`page_chromosome_overview` (chromosome overview — length-scaled strip)** — same row-
   per-chrom width contract. Clicking a candidate segment in the
   Inversion-Atlas ideogram should set `shared.candidate` so the Genome
   Atlas can stack alongside.
-- **`page11` (crossovers — per inversion candidate)** — reads
+- **`page_crossovers` (crossovers — per inversion candidate)** — reads
   `shared.candidate` and fetches
   `data/annotation/crossovers/<candidate_id>.json`. Becomes the natural
   jump target for a candidate-click in the new Inversion-Atlas ideogram.
-- **`page12` (NCO / gene conversion)** — same per-candidate keying,
+- **`page_nco_gc` (NCO / gene conversion)** — same per-candidate keying,
   same jump-target contract.
 
 Keep `candidate_id` strings byte-identical between the two atlases

@@ -3,7 +3,7 @@
  * Genome Atlas — atlas-wide stylesheet.
  *
  * Round-1 bundle: orange/coral accent rules + the .ga-card section
- * styling used by page1 (the scaffold landing page). Mirrors the
+ * styling used by page_scaffold (the scaffold landing page). Mirrors the
  * Inversion Atlas's per-atlas stylesheet pattern (atlases/inversion/css/
  * inversion.css), but tiny — the Genome Atlas is a scaffold today.
  *
@@ -36,12 +36,81 @@
 /* ---------------------------------------------------------------------
  * Scoping note (round-2 extension).
  *
- * Round 1 scoped every rule under #page1 because there was only one
- * page in the Genome Atlas. Round 2 added page2..page10; the same
- * .ga-* class set is now reused across all of them, so the #page1
+ * Round 1 scoped every rule under #page_scaffold because there was only one
+ * page in the Genome Atlas. Round 2 added page_assembly_stats..page_ancestral_karyotype; the same
+ * .ga-* class set is now reused across all of them, so the #page_scaffold
  * prefix has been dropped and the rules apply atlas-wide. The .ga-*
  * namespace itself is the scope guard — no other atlas uses it.
  * --------------------------------------------------------------------- */
+
+/* ---------------------------------------------------------------------
+ * Chromosome palette tokens.
+ *
+ * One categorical hue per chromosome, used wherever the spec needs to
+ * say "this is chrom N" — ideogram strips on page_synteny V1-V3, syntenic
+ * blocks on page_ancestral_karyotype, the categorical row/col colouring on the page_synteny V4
+ * Oxford grid. Hues step by 30° around the colour wheel for the first
+ * 11 chroms; karyotypes with 12-13 chroms get the 15°/45° infill
+ * slots; the 135° half-step is reserved for "fused/transition" blocks
+ * (page_synteny V3). Saturation and lightness are factored out so the whole
+ * palette can be retuned in one place.
+ *
+ * Pre-existing pattern: .ga-syn-cell computes a hue dynamically from
+ * the cell's --cr/--cc indices and feeds it to hsl() — that mechanism
+ * is preserved, but now consumes the shared sat/light tokens too so
+ * the dynamic + static palettes stay coherent.
+ *
+ * SVG usage: <rect> and <polygon> in the spec pages reference these
+ * via the .ga-chrom-N utility classes (presentation attributes don't
+ * reliably resolve var()).
+ * --------------------------------------------------------------------- */
+:root {
+  --ga-chrom-sat: 55%;
+  --ga-chrom-light: 55%;
+
+  --ga-chrom-1:  hsl( 30, var(--ga-chrom-sat), var(--ga-chrom-light));
+  --ga-chrom-2:  hsl( 60, var(--ga-chrom-sat), var(--ga-chrom-light));
+  --ga-chrom-3:  hsl( 90, var(--ga-chrom-sat), var(--ga-chrom-light));
+  --ga-chrom-4:  hsl(120, var(--ga-chrom-sat), var(--ga-chrom-light));
+  --ga-chrom-5:  hsl(150, var(--ga-chrom-sat), var(--ga-chrom-light));
+  --ga-chrom-6:  hsl(180, var(--ga-chrom-sat), var(--ga-chrom-light));
+  --ga-chrom-7:  hsl(210, var(--ga-chrom-sat), var(--ga-chrom-light));
+  --ga-chrom-8:  hsl(240, var(--ga-chrom-sat), var(--ga-chrom-light));
+  --ga-chrom-9:  hsl(270, var(--ga-chrom-sat), var(--ga-chrom-light));
+  --ga-chrom-10: hsl(300, var(--ga-chrom-sat), var(--ga-chrom-light));
+  --ga-chrom-11: hsl(330, var(--ga-chrom-sat), var(--ga-chrom-light));
+  --ga-chrom-12: hsl( 15, var(--ga-chrom-sat), var(--ga-chrom-light));
+  --ga-chrom-13: hsl( 45, var(--ga-chrom-sat), var(--ga-chrom-light));
+  --ga-chrom-fused: hsl(135, var(--ga-chrom-sat), var(--ga-chrom-light));
+}
+
+/* Utility classes — paint an SVG <rect>/<polygon> in a chrom hue. */
+.ga-chrom-1     { fill: var(--ga-chrom-1);     }
+.ga-chrom-2     { fill: var(--ga-chrom-2);     }
+.ga-chrom-3     { fill: var(--ga-chrom-3);     }
+.ga-chrom-4     { fill: var(--ga-chrom-4);     }
+.ga-chrom-5     { fill: var(--ga-chrom-5);     }
+.ga-chrom-6     { fill: var(--ga-chrom-6);     }
+.ga-chrom-7     { fill: var(--ga-chrom-7);     }
+.ga-chrom-8     { fill: var(--ga-chrom-8);     }
+.ga-chrom-9     { fill: var(--ga-chrom-9);     }
+.ga-chrom-10    { fill: var(--ga-chrom-10);    }
+.ga-chrom-11    { fill: var(--ga-chrom-11);    }
+.ga-chrom-12    { fill: var(--ga-chrom-12);    }
+.ga-chrom-13    { fill: var(--ga-chrom-13);    }
+.ga-chrom-fused { fill: var(--ga-chrom-fused); }
+
+/* Iframe wrapper for the chrom-palette swatch sheet. Spec pages embed
+   `atlases/genome/_partials/_chrom-palette-swatches.html` as an <iframe
+   class="ga-chrom-palette-frame">; this rule gives it a sensible
+   default height + no border so the iframe doesn't need inline style. */
+.ga-chrom-palette-frame {
+  display: block;
+  width: 100%;
+  height: 260px;
+  border: 0;
+  background: transparent;
+}
 
 /* Content wrapper — replaces the inline-styled #genomeAtlasContent. */
 .ga-content {
@@ -71,7 +140,7 @@
   letter-spacing: 0.02em;
 }
 
-/* Card — the boxed section primitive used by every section on page1. */
+/* Card — the boxed section primitive used by every section on page_scaffold. */
 .ga-card {
   background: var(--panel-2);
   border: 1px solid var(--rule);
@@ -140,7 +209,7 @@
 /* When a layer is loaded, future rounds set [data-ga-layer-loaded="1"]
    on the chip and this rule turns it green. Kept here so the wiring
    only has to flip an attribute. */
-#page1 [data-ga-layer][data-ga-layer-loaded="1"] {
+#page_scaffold [data-ga-layer][data-ga-layer-loaded="1"] {
   color: var(--good);
 }
 
@@ -259,7 +328,7 @@ html[data-theme="academic"] .ga-card {
 }
 
 /* ---------------------------------------------------------------------
- * QC tile grid (page2 — assembly stats banner).
+ * QC tile grid (page_assembly_stats — assembly stats banner).
  *
  * Six tiles in a responsive grid. Each tile = small label on top,
  * big-number value in the middle, small sub-label at the bottom.
@@ -316,7 +385,7 @@ html[data-theme="academic"] .ga-card {
 }
 
 /* ---------------------------------------------------------------------
- * page11 — crossovers.
+ * page_crossovers — crossovers.
  *
  * Three mockups: sex-specific CO ideogram (dots beside vertical rods),
  * CO-rate vs. relative telomere distance (smoothed curve + CI band),
@@ -451,7 +520,7 @@ html[data-theme="academic"] .ga-card {
 .ga-co-nco-line     { top: 130px; background: #4f9e64; opacity: 0.85; border-top: 2px dashed #4f9e64; height: 0; }
 .ga-co-gc-line      { top: 142px; background: #c9a23a; opacity: 0.85; border-top: 2px dashed #c9a23a; height: 0; }
 
-/* page12 NCO / GC band+line variants — analogous to female/male on page11. */
+/* page_nco_gc NCO / GC band+line variants — analogous to female/male on page_crossovers. */
 .ga-co-nco-band  { top: 70px;  background: #4f9e64; height: 65px; clip-path: polygon(0 30%,20% 35%,50% 45%,80% 55%,100% 60%,100% 90%,80% 85%,50% 80%,20% 80%,0 85%); }
 .ga-co-nco-curve { top: 98px;  background: #4f9e64; height: 2px;  opacity: 0.95; border-radius: 1px; }
 .ga-co-gc-band   { top: 92px;  background: #c9a23a; height: 55px; clip-path: polygon(0 70%,20% 60%,45% 45%,75% 25%,100% 15%,100% 80%,75% 70%,45% 75%,20% 80%,0 85%); }
@@ -530,6 +599,476 @@ html[data-theme="academic"] .ga-card {
   color: var(--ink-dim);
   letter-spacing: 0.02em;
 }
+
+/* ---------------------------------------------------------------------
+ * page_synteny View 4 — macrosyntR-style Oxford grid.
+ *
+ * Grid of N_A × N_B cells (genome A on rows, genome B on cols). Each
+ * cell contains a circle whose diameter + colour encode shared-
+ * ortholog count + BH-q. Flat fills, no glow. The two dot states are
+ * `data-syn="hi"` (large blue, q ≤ q_hi) and `data-syn="lo"` (small
+ * yellow, q ≤ q_lo); cells without `data-syn` render empty.
+ * --------------------------------------------------------------------- */
+.ga-syn-hi { color: #3a5f9f; }
+.ga-syn-lo { color: #c9a23a; }
+
+/* Focal-pair toggle row. */
+.ga-syn-toggle {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 10px;
+  font-size: 10.5px;
+  color: var(--ink-dim);
+  margin: 4px 0 8px 0;
+}
+.ga-syn-toggle label {
+  color: var(--ink-dim);
+  letter-spacing: 0.02em;
+}
+.ga-syn-toggle select {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  background: var(--panel-3);
+  color: var(--ink);
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  padding: 2px 4px;
+}
+.ga-syn-swap {
+  font-family: var(--mono);
+  font-size: 12px;
+  background: var(--panel-3);
+  color: var(--ink);
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  padding: 0 8px;
+  cursor: pointer;
+}
+.ga-syn-swap:hover { color: #ff8c6e; border-color: #ff8c6e; }
+
+/* Grid wrapper + the 12×12 mockup. The real renderer sets
+   --ga-syn-cols / --ga-syn-rows from data. */
+.ga-syn-grid-wrap {
+  margin: 4px 0;
+  padding: 8px 10px 10px 10px;
+  background: var(--panel-3);
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  overflow-x: auto;
+}
+.ga-syn-grid {
+  --ga-syn-cols: 12;
+  --ga-syn-rows: 12;
+  display: grid;
+  grid-template-columns: 48px 1fr;
+  grid-template-rows: 22px 1fr;
+  gap: 4px;
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--ink-dim);
+}
+.ga-syn-col-axis {
+  grid-column: 2;
+  grid-row: 1;
+  display: grid;
+  grid-template-columns: repeat(var(--ga-syn-cols), 1fr);
+  align-items: end;
+  gap: 0;
+  text-align: center;
+  letter-spacing: 0.02em;
+}
+.ga-syn-row-axis {
+  grid-column: 1;
+  grid-row: 2;
+  display: grid;
+  grid-template-rows: repeat(var(--ga-syn-rows), 1fr);
+  align-items: center;
+  justify-items: end;
+  padding-right: 4px;
+  gap: 0;
+}
+/* Axis labels are clickable in round 1 — single-click pre-filters
+   page_orthologues's orthologue tables by that chromosome. */
+.ga-syn-col-axis span[data-chrom],
+.ga-syn-row-axis span[data-chrom] {
+  cursor: pointer;
+  padding: 1px 2px;
+  border-radius: 2px;
+}
+.ga-syn-col-axis span[data-chrom]:hover,
+.ga-syn-row-axis span[data-chrom]:hover {
+  color: #ff8c6e;
+  background: var(--panel-3);
+}
+.ga-syn-cells {
+  grid-column: 2;
+  grid-row: 2;
+  display: grid;
+  grid-template-columns: repeat(var(--ga-syn-cols), 1fr);
+  grid-template-rows: repeat(var(--ga-syn-rows), 22px);
+  gap: 1px;
+  background: var(--rule);     /* shows as faint cell borders */
+  border: 1px solid var(--rule);
+}
+.ga-syn-cell {
+  position: relative;
+  background: var(--panel-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: default;
+}
+/* The dot: drawn as a ::before so the cell can still receive the
+   native title= hover tooltip + the click handler. Cells carry --cr
+   (row chrom index, 1-based) and --cc (col chrom index). A categorical
+   hue is computed via HSL — 12 cycled hues, generous saturation, so
+   chrom structure is visible at a glance and reads distinct from the
+   continuous identity ramps the user wants to avoid. */
+.ga-syn-cell {
+  --ga-syn-hue-row: calc(var(--cr, 1) * 30deg);
+  --ga-syn-hue-col: calc(var(--cc, 1) * 30deg);
+}
+.ga-syn-cell::before {
+  content: "";
+  display: block;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: transparent;
+  transition: transform 80ms ease-out;
+}
+/* Dot size by significance bucket (unchanged from before). */
+.ga-syn-cell[data-syn="hi"]::before { width: 14px; height: 14px; opacity: 0.9; }
+.ga-syn-cell[data-syn="lo"]::before { width: 7px;  height: 7px;  opacity: 0.85; }
+
+/* Colour-by mode: significance → blue / yellow (original behaviour). */
+.ga-syn-grid[data-color-by="sig"] .ga-syn-cell[data-syn="hi"]::before { background: #3a5f9f; }
+.ga-syn-grid[data-color-by="sig"] .ga-syn-cell[data-syn="lo"]::before { background: #c9a23a; }
+
+/* Colour-by mode: row chrom (categorical, default). All cells in a row
+   share a hue → a clean diagonal reads as one colour per row; a trans-
+   location to a different column still shares the row colour. */
+.ga-syn-grid[data-color-by="row"] .ga-syn-cell[data-syn]::before {
+  background: hsl(var(--ga-syn-hue-row), var(--ga-chrom-sat), var(--ga-chrom-light));
+}
+
+/* Colour-by mode: col chrom. */
+.ga-syn-grid[data-color-by="col"] .ga-syn-cell[data-syn]::before {
+  background: hsl(var(--ga-syn-hue-col), var(--ga-chrom-sat), var(--ga-chrom-light));
+}
+
+/* Populated cells are clickable — small affordance + hover ring. */
+.ga-syn-cell[data-syn] {
+  cursor: pointer;
+}
+.ga-syn-cell[data-syn]:hover {
+  background: var(--panel-3);
+  outline: 1px solid #ff8c6e;
+  outline-offset: -1px;
+}
+.ga-syn-cell[data-syn]:hover::before {
+  transform: scale(1.15);
+}
+
+/* Legend: show only the group that matches the active colour mode. */
+.ga-syn-legend[data-color-by="sig"] [data-leg-for="chrom"],
+.ga-syn-legend:not([data-color-by]) [data-leg-for="chrom"] { display: none; }
+.ga-syn-legend[data-color-by="row"]   [data-leg-for="sig"],
+.ga-syn-legend[data-color-by="col"]   [data-leg-for="sig"] { display: none; }
+.ga-syn-leg-group {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px 6px;
+}
+
+/* Legend strip below the grid. */
+.ga-syn-legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 14px;
+  margin-top: 8px;
+  font-size: 9.5px;
+  color: var(--ink-dim);
+}
+.ga-syn-leg {
+  width: 18px;
+  height: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--panel-2);
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+}
+.ga-syn-leg-label {
+  margin-right: 6px;
+}
+
+/* Drilled-pair badge in the View 3 card header. */
+.ga-syn-drill-badge {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
+  margin-left: 10px;
+  font-size: 10px;
+  color: var(--ink-dim);
+}
+.ga-syn-drill-badge code {
+  font-size: 10.5px;
+  color: #ff8c6e;
+}
+
+/* --- View 3: chr A × chr B dotplot mockup ---------------------------- *
+ * One categorical hue per syntenic block — explicit so the spec page
+ * reads even when no data has loaded. Flat fills, no glow. The block
+ * hues reuse the shared chrom palette so the cell colour you clicked
+ * carries semantically into the drilled view.
+ * -------------------------------------------------------------------- */
+.ga-syn-block-1 { background: var(--ga-chrom-1); }
+.ga-syn-block-2 { background: var(--ga-chrom-2); }
+.ga-syn-block-3 { background: var(--ga-chrom-3); }
+.ga-syn-block-4 { background: var(--ga-chrom-4); }
+
+.ga-syn-dot-mockup {
+  position: relative;
+  height: 220px;
+  margin: 4px 0 6px 0;
+  padding: 12px 14px 22px 44px;
+  background: var(--panel-3);
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.ga-syn-dot-axis-y,
+.ga-syn-dot-axis-x { position: absolute; background: var(--rule); }
+.ga-syn-dot-axis-y { left: 44px;  top: 12px; bottom: 22px; width: 1px; }
+.ga-syn-dot-axis-x { left: 44px;  right: 14px; bottom: 22px; height: 1px; }
+.ga-syn-dot {
+  position: absolute;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  opacity: 0.9;
+}
+.ga-syn-dot-xlabel {
+  position: absolute;
+  left: 44px; right: 14px; bottom: 4px;
+  text-align: center;
+  font-size: 9.5px;
+  color: var(--ink-dim);
+}
+.ga-syn-dot-ylabel {
+  position: absolute;
+  left: 4px; top: 50%;
+  transform: translateY(-50%) rotate(-90deg);
+  transform-origin: left center;
+  font-size: 9.5px;
+  color: var(--ink-dim);
+  white-space: nowrap;
+}
+
+.ga-syn-dot-legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 14px;
+  margin-top: 6px;
+  font-size: 9.5px;
+  color: var(--ink-dim);
+}
+.ga-syn-block-chip {
+  display: inline-block;
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  margin-right: 4px;
+  opacity: 0.9;
+}
+
+/* ---------------------------------------------------------------------
+ * page_ancestral_karyotype — ancestral karyotype (WGDI-style painting).
+ *
+ * Visual contract borrowed from WGDI's karyotype / ancestral_karyotype
+ * modules (Sun et al. Molecular Plant 2022, BSD-2-Clause): flat fills
+ * with alpha, capsule-shaped chrom outlines (rect rx/ry = half-height),
+ * one hue per ancestral linkage group. No code is copied — only the
+ * visual style. The hue palette steps in 30° increments (HSL S=55%,
+ * L=55%) so 12 + a wraparound covers a 13-ALG genome and keeps adjacent
+ * groups visually separable. Same palette as page_synteny Views 1/2/4.
+ * --------------------------------------------------------------------- */
+.ga-kary-wrap {
+  margin: 4px 0;
+  padding: 6px 8px;
+  background: var(--panel-3);
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  overflow-x: auto;
+}
+.ga-kary-svg {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  font-family: var(--mono);
+  font-size: 9px;
+}
+.ga-kary-svg text { fill: var(--ink-dim); font-size: 9px; }
+.ga-kary-glabel  { font-size: 10px; font-weight: 600; fill: var(--ink); }
+.ga-kary-clabel  { font-size: 9.5px; fill: var(--ink-dim); }
+.ga-kary-chrom rect {
+  opacity: 0.78;
+  stroke: rgba(0, 0, 0, 0.18);
+  stroke-width: 0.5;
+  transition: opacity 80ms ease-out;
+}
+.ga-kary-chrom:hover rect { opacity: 0.95; cursor: pointer; }
+
+/* Phylogeny: trunk = mid-grey, leaf branches = slightly darker.
+   Kept thin so the event annotations dominate visually. */
+.ga-kary-tree-trunk {
+  stroke: var(--rule);
+  stroke-width: 1.2;
+  fill: none;
+}
+.ga-kary-tree-branch {
+  stroke: var(--ink-dim);
+  stroke-width: 1.2;
+  fill: none;
+}
+.ga-kary-tip { font-size: 10px; fill: var(--ink); }
+.ga-kary-tip-n { fill: var(--ink-dim); font-size: 9px; }
+.ga-kary-evt { font-size: 9.5px; fill: var(--ink-dim); }
+
+/* Event-tally colour codes — same palette family as the rest of the
+   atlas (red / amber / green) but mapped to event kinds. */
+.ga-evt-fis { fill: #c94f6b; color: #c94f6b; font-weight: 600; }   /* fission   — red    */
+.ga-evt-fus { fill: #4f9e64; color: #4f9e64; font-weight: 600; }   /* fusion    — green  */
+.ga-evt-inv { fill: #c9a23a; color: #c9a23a; font-weight: 600; }   /* inversion — amber  */
+
+/* --- Views 1 + 2 — SVG ribbon mockups -------------------------------- *
+ * Strip rects = chromosomes (12-hue palette, matched to View 4 cells).
+ * Polygons = syntenic blocks. .ga-syn-poly-inv hatches the anti-parallel
+ * "inversion" polygon at a steeper opacity so the X-crossing reads;
+ * .ga-syn-poly-tx draws the chrom-jumping translocation with a dashed
+ * outline. Flat fills, no glow.
+ * -------------------------------------------------------------------- */
+.ga-syn-ribbon-wrap {
+  margin: 4px 0;
+  padding: 6px 8px;
+  background: var(--panel-3);
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  overflow-x: auto;
+}
+.ga-syn-ribbon {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  font-family: var(--mono);
+  font-size: 9px;
+}
+.ga-syn-ribbon text {
+  fill: var(--ink-dim);
+  font-size: 9px;
+}
+.ga-syn-ribbon .ga-syn-ribbon-glabel {
+  font-size: 10px;
+  font-weight: 600;
+  fill: var(--ink);
+}
+.ga-syn-ribbon-strip rect {
+  stroke: rgba(0, 0, 0, 0.15);
+  stroke-width: 0.5;
+}
+.ga-syn-poly {
+  opacity: 0.32;
+  transition: opacity 80ms ease-out;
+}
+.ga-syn-poly:hover { opacity: 0.55; cursor: pointer; }
+.ga-syn-poly-inv  { opacity: 0.38; }              /* inversion reads a touch stronger */
+.ga-syn-poly-tx   { opacity: 0.22; stroke: rgba(0,0,0,0.35); stroke-width: 0.5; stroke-dasharray: 3 2; }
+
+/* --- Oxford-grid cell popover ---------------------------------------- *
+ * Anchored to the clicked cell by page_synteny.js (sets inline left/top).
+ * Lives inside the grid card so the card's relative positioning frames
+ * it. Dismiss-on-outside-click and Escape are wired in JS.
+ * -------------------------------------------------------------------- */
+.ga-card { position: relative; }
+.ga-syn-popover {
+  position: absolute;
+  z-index: 5;
+  min-width: 280px;
+  max-width: 360px;
+  background: var(--panel-2);
+  border: 1px solid var(--rule);
+  border-left: 3px solid #ff8c6e;
+  border-radius: 3px;
+  padding: 8px 10px 10px 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+  font-size: 10.5px;
+  color: var(--ink);
+}
+.ga-syn-popover[hidden] { display: none; }
+.ga-syn-popover-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.ga-syn-popover-close {
+  background: none;
+  border: none;
+  color: var(--ink-dim);
+  font-size: 14px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 2px;
+}
+.ga-syn-popover-close:hover { color: #ff8c6e; }
+.ga-syn-popover-meta {
+  font-size: 9.5px;
+  color: var(--ink-dim);
+  margin-bottom: 6px;
+}
+.ga-syn-popover-table {
+  display: grid;
+  grid-template-columns: 1.2fr 1.2fr 0.6fr;
+  gap: 2px 8px;
+  margin-bottom: 6px;
+  font-size: 10px;
+}
+.ga-syn-popover-row {
+  display: contents;
+}
+.ga-syn-popover-row > * {
+  padding: 2px 0;
+  border-bottom: 1px dashed var(--rule);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ga-syn-popover-row--head {
+  font-weight: 600;
+  color: var(--ink-dim);
+}
+.ga-syn-popover-row--head > * {
+  border-bottom: 1px solid var(--rule);
+}
+.ga-syn-popover-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 10px;
+}
+.ga-syn-popover-actions a {
+  color: #ff8c6e;
+  text-decoration: none;
+}
+.ga-syn-popover-actions a:hover { text-decoration: underline; }
 
 /* ---------------------------------------------------------------------
  * page6 — TE hierarchy Sankey (Class → Superfamily → Family).
@@ -724,134 +1263,149 @@ html[data-theme="light"]    .ga-sankey-btn.is-active {
 }
 
 /* ---------------------------------------------------------------------
- * page9 — MacrosyntR Oxford macro-synteny grid.
+ * page_orthologues — orthologue tables (focal vs. non-focal).
  *
- * Dotplot with length-cumulative axes, chrom-cell grid lines, dots coloured
- * by row (y-chrom) — the colour contract MacrosyntR's plot_oxford_grid()
- * uses by default. Self-contained SVG widget; the host positions the
- * tooltip absolutely relative to itself.
+ * Three table layouts share .ga-num (right-aligned, mono) and the
+ * .ga-ortho-good / -mid / -warn colour ramp. All grids; no <table>.
  * --------------------------------------------------------------------- */
-.ga-oxford-toolbar {
+.ga-ortho-good { color: #4f9e64; }
+.ga-ortho-mid  { color: #c9a23a; }
+.ga-ortho-warn { color: #c94f6b; }
+
+.ga-num {
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  font-family: var(--mono);
+}
+
+/* --- View 1: summary table (focal × non-focals) ---------------------- */
+.ga-ortho-summary {
+  display: grid;
+  grid-template-columns: 1.4fr repeat(7, 1fr);
+  gap: 4px 12px;
+  font-size: 10.5px;
+  margin: 4px 0 2px 0;
+}
+.ga-ortho-summary-head {
+  display: contents;
+  font-weight: 600;
+  color: var(--ink-dim);
+}
+.ga-ortho-summary-head > * {
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 4px;
+}
+.ga-ortho-summary-row {
+  display: contents;
+}
+.ga-ortho-summary-row > * {
+  padding: 4px 0;
+  border-bottom: 1px dashed var(--rule);
+}
+.ga-ortho-summary-row:hover > * {
+  background: var(--panel-3);
+}
+
+/* Incoming highlight from page_synteny. page_orthologues.js applies .ga-ortho-flash to
+   the matching row's cells; this animation runs once and fades. */
+@keyframes ga-ortho-flash-kf {
+  0%   { background: rgba(255, 140, 110, 0.35); }
+  100% { background: transparent; }
+}
+.ga-ortho-flash > * {
+  animation: ga-ortho-flash-kf 1500ms ease-out 1;
+}
+
+/* --- View 2: per focal-chrom breakdown ------------------------------- */
+.ga-ortho-perchrom {
+  display: grid;
+  grid-template-columns: 0.8fr 0.9fr repeat(4, 1fr);
+  gap: 4px 12px;
+  font-size: 10.5px;
+  margin: 4px 0 2px 0;
+}
+.ga-ortho-perchrom-head {
+  display: contents;
+  font-weight: 600;
+  color: var(--ink-dim);
+}
+.ga-ortho-perchrom-head > * {
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 4px;
+}
+.ga-ortho-perchrom-row {
+  display: contents;
+}
+.ga-ortho-perchrom-row > * {
+  padding: 3px 0;
+  border-bottom: 1px dashed var(--rule);
+}
+
+/* --- View 3: gene-level explorer ------------------------------------- */
+.ga-ortho-search {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 8px;
-  margin: 6px 0 8px 0;
-  font-size: 10px;
+  gap: 6px 10px;
+  font-size: 10.5px;
   color: var(--ink-dim);
+  margin: 4px 0 8px 0;
 }
-.ga-oxford-tool-label {
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-.ga-oxford-tool-spacer { flex: 1 1 auto; }
-.ga-oxford-select {
-  font: inherit;
-  font-size: 10px;
+.ga-ortho-search input[type="search"] {
+  flex: 1 1 240px;
+  min-width: 200px;
   font-family: var(--mono);
-  color: var(--ink);
+  font-size: 10.5px;
   background: var(--panel-3);
+  color: var(--ink);
   border: 1px solid var(--rule);
   border-radius: 2px;
-  padding: 2px 4px;
-  letter-spacing: 0.02em;
+  padding: 3px 6px;
 }
-.ga-oxford-toggle {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  cursor: pointer;
-  font-family: var(--mono);
+.ga-ortho-search input[type="search"]:focus {
+  outline: none;
+  border-color: #ff8c6e;
+}
+.ga-ortho-genes {
+  display: grid;
+  grid-template-columns: 1.4fr 1.0fr repeat(4, 1fr);
+  gap: 4px 12px;
   font-size: 10px;
+  margin: 4px 0 2px 0;
+}
+.ga-ortho-genes-head {
+  display: contents;
+  font-weight: 600;
   color: var(--ink-dim);
 }
-.ga-oxford-toggle input { cursor: pointer; }
-
-.ga-oxford-host {
-  position: relative;
-  margin: 4px 0 6px 0;
-  padding: 6px 8px 8px 8px;
-  background: var(--panel-3);
-  border: 1px solid var(--rule);
-  border-radius: 3px;
+.ga-ortho-genes-head > * {
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 4px;
 }
-.ga-oxford-svg {
-  display: block;
-  width: 100%;
-  height: auto;
+.ga-ortho-genes-row {
+  display: contents;
+}
+.ga-ortho-genes-row > * {
+  padding: 3px 0;
+  border-bottom: 1px dashed var(--rule);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ga-ortho-genes-row code {
+  font-size: 0.95em;
+}
+.ga-ortho-orphan {
+  color: var(--ink-dimmer);
   font-family: var(--mono);
-  user-select: none;
+  text-align: center;
 }
-
-.ga-oxford-plot-bg {
-  fill: var(--panel-2);
-}
-.ga-oxford-frame {
-  fill: none;
-  stroke: var(--rule);
-  stroke-width: 1;
-}
-.ga-oxford-gridline {
-  stroke: var(--rule);
-  stroke-width: 0.5;
-  opacity: 0.7;
-}
-.ga-oxford-dot {
-  stroke: none;
-  opacity: 0.85;
-}
-.ga-oxford-xlabel,
-.ga-oxford-ylabel {
-  font-size: 8.5px;
-  fill: var(--ink-dim);
-  letter-spacing: 0.02em;
-}
-.ga-oxford-axis-title {
-  font-size: 11px;
-  font-style: italic;
-  fill: var(--ink);
-  letter-spacing: 0.02em;
-}
-.ga-oxford-status {
-  font-size: 9.5px;
-  fill: var(--ink-dimmer);
-  letter-spacing: 0.04em;
-}
-.ga-oxford-empty {
-  font-size: 12px;
-  fill: var(--ink-dim);
-}
-
-.ga-oxford-tooltip {
-  position: absolute;
-  top: 0; left: 0;
-  pointer-events: none;
-  background: var(--panel-2);
-  border: 1px solid var(--rule);
-  border-left: 3px solid #ff8c6e;
-  border-radius: 3px;
-  padding: 6px 8px;
-  font-size: 10px;
-  font-family: var(--mono);
-  color: var(--ink);
-  min-width: 160px;
-  max-width: 280px;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
-  z-index: 5;
-}
-.ga-oxford-tooltip[hidden] { display: none; }
-.ga-oxford-tip-kind {
-  font-size: 8.5px;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
+.ga-ortho-sup {
+  font-size: 0.78em;
   color: var(--ink-dim);
-  margin-bottom: 2px;
+  margin-left: 2px;
+  vertical-align: super;
 }
-.ga-oxford-tip-name {
-  margin-bottom: 1px;
-}
-
-html[data-theme="light"] .ga-oxford-tooltip { border-left-color: #c2410c; }
 
 /* --- JSON-schema codeblock ------------------------------------------- */
 .ga-schema-block {

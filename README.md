@@ -8,9 +8,9 @@ Assembly + annotation lens for the haplotype-resolved F₁ hybrid (*C. gariepinu
 atlases/genome/                — atlas package (paired with atlas-core)
   manifest.json                — atlas declaration: pages, registries, stages, stylesheet
   pages/
-    assembly/                  — page1 scaffold · page2 stats · page3 chromosome overview · page4 methods
-    annotation/                — page5 genes · page6 repeats/TE · page7 variant annotations · page8 conserved elements
-    comparative/               — page9 synteny · page10 ancestral karyotype
+    assembly/                  — page_scaffold scaffold · page_assembly_stats stats · page_chromosome_overview chromosome overview · page_assembly_methods methods
+    annotation/                — page_genes genes · page_repeats_te repeats/TE · page_variant_annotations variant annotations · page_conserved_elements conserved elements
+    comparative/               — page_synteny synteny · page_ancestral_karyotype ancestral karyotype
   registries/data/             — pages / layers / slots / files / operations registries
   css/genome.css               — atlas-wide stylesheet (orange/coral accent)
   shared/, data/               — reserved for phase B+
@@ -28,7 +28,7 @@ _handoff_docs/, _tooling/, tests/, legacy/  — convention from inversion-atlas
 bash build/assemble.sh
 cd ../atlas-workspace/
 bash start.sh
-# then open http://localhost:8000/#/genome/page1
+# then open http://localhost:8000/#/genome/page_scaffold
 ```
 
 `atlas-core/build/atlas.config` already lists this atlas as `atlas_genome = ../../genome-atlas`.

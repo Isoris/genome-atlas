@@ -23,9 +23,8 @@ Cross-links inside the file already point at the other three:
 `Inversion_atlas.html`, `Population_atlas.html`,
 `Diversity_atlas.html` (rename done in chat 07759823).
 
-Beyond the scaffold, there is **no real content yet** — no page1
-through pageN, no per-page modules, no registries, no tests, no
-handoff docs.
+Beyond the scaffold, there is **no real content yet** — no per-page
+modules, no registries, no tests, no handoff docs.
 
 ---
 
@@ -165,11 +164,11 @@ Steps:
    per Q3.
 3. **Carve out one page** from `Genome_atlas.html` into
    `pages/<stage>/page<N>.html` + `page<N>.js` + `page<N>/_state.js`
-   following the **page7 template** (the simplest possible
+   following the **page_variant_annotations template** (the simplest possible
    migrated page in the Inversion Atlas; see references below).
 4. **Write the unit test + smoke test** for that page (~15 unit
    assertions, ~25 smoke assertions). Reuse the synthetic-DOM
-   helper from `inversion-atlas/tests/smoke_review_page7_round5.mjs`.
+   helper from `inversion-atlas/tests/smoke_review_page_variant_annotations_round5.mjs`.
 5. **Add `_tooling/run_migrated_tests.sh`** with the one page in
    `UNITS` + `SMOKES`.
 6. **Verify**: harness passes, single page renders in browser via
@@ -194,11 +193,11 @@ The Inversion Atlas tree is the canonical template. Specifically:
 |---|---|
 | Atlas manifest shape | `inversion-atlas/atlases/inversion/manifest.json` |
 | Page registry shape | `inversion-atlas/atlases/inversion/registries/data/pages.registry.json` |
-| Simplest possible migrated page (template for Genome Atlas pages without complex renderers) | `inversion-atlas/atlases/inversion/pages/review/page7.{html,js}` + `page7/_state.js` |
+| Simplest possible migrated page (template for Genome Atlas pages without complex renderers) | `inversion-atlas/atlases/inversion/pages/review/page_variant_annotations.{html,js}` + `page_variant_annotations/_state.js` |
 | Migrated page WITH a real DOM helper | `inversion-atlas/atlases/inversion/pages/discovery/page15.{html,js}` + `page15/_state.js` |
-| Big page with sub-modules | `inversion-atlas/atlases/inversion/pages/discovery/page1.{html,js}` + `page1/_data.js,_state.js,*_panel.js` |
-| Unit-test shape | `inversion-atlas/tests/test_review_page7.js` |
-| Smoke-test shape (with synthetic DOM + global renderer + counter) | `inversion-atlas/tests/smoke_review_page7_round5.mjs` |
+| Big page with sub-modules | `inversion-atlas/atlases/inversion/pages/discovery/page_scaffold.{html,js}` + `page_scaffold/_data.js,_state.js,*_panel.js` |
+| Unit-test shape | `inversion-atlas/tests/test_review_page_variant_annotations.js` |
+| Smoke-test shape (with synthetic DOM + global renderer + counter) | `inversion-atlas/tests/smoke_review_page_variant_annotations_round5.mjs` |
 | Test harness | `inversion-atlas/_tooling/run_migrated_tests.sh` |
 | Migration recipe | `handoff/PAGE_MIGRATION_RECIPE.md` (the whole file; rounds-5-step-17 + step-18 are the most recent worked examples) |
 | Architectural-discipline rule (registry content out-of-scope) | `handoff/HANDOFF_2026-05-07_chat38_round5_step17_done.md` |
