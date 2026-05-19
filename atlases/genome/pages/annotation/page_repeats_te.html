@@ -1,0 +1,139 @@
+<div id="page_repeats_te" class="page">
+  <div class="ga-content">
+      <div class="ga-title">
+        <span class="ga-title-bullet">▰</span> Repeats / TE landscape
+      </div>
+      <div class="ga-subtitle">
+        Stage: annotation · spec / phase B · driven by <code>repeat_track</code>
+      </div>
+
+      <div class="ga-card">
+        <div class="ga-card-header">
+          <div class="ga-card-title">What this page shows</div>
+          <div class="ga-card-status ga-status-phase">spec · phase B</div>
+        </div>
+        <div class="ga-card-para">
+          Genome-wide TE / repeat composition for both parental haplotypes
+          (Gar: 28 chroms, Mac: 27 chroms). Three views: <b>per-class composition</b>
+          (LTR / LINE / SINE / DNA / simple / unclassified), <b>per-chromosome
+          density</b> (heatmap, chrom × class), and <b>breakpoint enrichment</b>
+          — for every promoted inversion candidate, test whether the flank
+          repeat density exceeds the per-chromosome mean (Spalax-style
+          <code>all_TE</code> flag).
+        </div>
+        <div class="ga-card-para ga-dim">
+          The breakpoint enrichment view ties this annotation page directly to
+          the inversion-evolution mechanism the manuscript argues for.
+        </div>
+      </div>
+
+      <div class="ga-card">
+        <div class="ga-card-header">
+          <div class="ga-card-title">Required data layers</div>
+          <div class="ga-card-status">phase B</div>
+        </div>
+        <div class="ga-layers-grid">
+          <div class="ga-layers-head">layer</div>
+          <div class="ga-layers-head">source</div>
+          <div class="ga-layers-head">status</div>
+          <div class="ga-layers-head">feeds</div>
+
+          <div><code>repeat_track</code></div>
+          <div><code>RepeatMasker / EDTA</code></div>
+          <div data-ga-layer="repeat_track" class="ga-layer-status">⚪ not loaded</div>
+          <div class="ga-dim">composition · density heatmap · breakpoint flank test</div>
+
+          <div><code>chromosome_map</code></div>
+          <div><code>FAI + AGP</code></div>
+          <div data-ga-layer="chromosome_map" class="ga-layer-status">⚪ not loaded</div>
+          <div class="ga-dim">heatmap row scaffold</div>
+        </div>
+      </div>
+
+      <div class="ga-card">
+        <div class="ga-card-header">
+          <div class="ga-card-title">Three views (mockup)</div>
+          <div class="ga-card-status">phase plan</div>
+        </div>
+        <div class="ga-panels-grid">
+          <div class="ga-panel-name">View 1 — per-class composition</div>
+          <div class="ga-panel-desc">Stacked bar per haplotype: LTR · LINE · SINE · DNA · simple · unclassified. Shows whether Gar and Mac differ in TE class balance — relevant for the inversion-mechanism story.</div>
+
+          <div class="ga-panel-name">View 2 — per-chrom density heatmap</div>
+          <div class="ga-panel-desc">Rows = chromosomes (Gar then Mac), columns = TE classes, cells = density. Sort rows by total repeat fraction. Hover for raw bp counts.</div>
+
+          <div class="ga-panel-name">View 3 — breakpoint enrichment</div>
+          <div class="ga-panel-desc">For each Inversion-Atlas candidate, run the focal-vs-background widget (Spalax method) on the inversion flank (~2 Mb). Surface a <b>●</b> badge when flank density ≥1.5× chrom mean; bubble up the badge to the catalogue table on the Inversion Atlas.</div>
+
+          <div class="ga-panel-name">View 4 — TE hierarchy Sankey</div>
+          <div class="ga-panel-desc">Interactive flow diagram: <b>Class → Superfamily → Family</b>. Each Class is unfoldable — click a node to collapse / expand its descendants, or toggle the global depth from the toolbar. Renders directly below from <code>te_hierarchy</code>; falls back to a sample dataset while the layer is not loaded.</div>
+        </div>
+      </div>
+
+      <div class="ga-card" data-ga-card="te-sankey">
+        <div class="ga-card-header">
+          <div class="ga-card-title">View 4 — TE hierarchy alluvial (per parental haplotype)</div>
+          <div class="ga-card-status" data-ga-te-source>sample data</div>
+        </div>
+        <div class="ga-card-para ga-dim">
+          Alluvial flow over the full repeat hierarchy: <b>Non-repetitive · Repetitive
+          → Interspersed_TEs · Tandem_repeats · Other_repeats → Class → Order →
+          Family</b>. One panel per parental haplotype — <b>(a) C. gariepinus</b>
+          and <b>(b) C. macrocephalus</b>. Bar height ∝ % of total genome;
+          labels carry the percentage inline. Click any non-leaf node to fold
+          / unfold its descendants, or reset the visible depth from the toolbar.
+        </div>
+
+        <div class="ga-sankey-toolbar" role="toolbar" aria-label="TE alluvial depth">
+          <span class="ga-sankey-tool-label">depth</span>
+          <button type="button" class="ga-sankey-btn" data-ga-sankey-depth="1">Repeat / Non-rep</button>
+          <button type="button" class="ga-sankey-btn" data-ga-sankey-depth="2">+ TE category</button>
+          <button type="button" class="ga-sankey-btn" data-ga-sankey-depth="3">+ Class</button>
+          <button type="button" class="ga-sankey-btn" data-ga-sankey-depth="4">+ Order</button>
+          <button type="button" class="ga-sankey-btn is-active" data-ga-sankey-depth="5">+ Family</button>
+          <span class="ga-sankey-tool-spacer"></span>
+          <button type="button" class="ga-sankey-btn ga-sankey-btn-ghost" data-ga-sankey-action="expand-all">expand all</button>
+          <button type="button" class="ga-sankey-btn ga-sankey-btn-ghost" data-ga-sankey-action="collapse-all">collapse all</button>
+        </div>
+
+        <div class="ga-sankey-host"
+             data-ga-sankey
+             role="img"
+             aria-label="Transposable-element hierarchy alluvial: per parental haplotype.">
+          <!-- One .ga-sankey-panel per haplotype injected here by page6.js -->
+          <div class="ga-sankey-tooltip" data-ga-sankey-tip role="tooltip" hidden></div>
+        </div>
+
+        <div class="ga-card-footnote">
+          <b>Figure X.</b> Transposable-element landscapes of parental
+          haplotypes in the F₁ hybrid catfish genome. Alluvial diagrams
+          summarising genome-wide repeat composition and hierarchical
+          classification of transposable elements in the parental haplotypes:
+          (a) <i>Clarias gariepinus</i> and (b) <i>C. macrocephalus</i>.
+          <br><br>
+          Data contract: <code>te_hierarchy.json</code> —
+          <code>{ haplotypes: [{ id, name, label, nodes: [&hellip;] }] }</code>,
+          where each <code>node = { id, name, pct, palette?, children? }</code>
+          and <code>pct</code> is percent of the whole genome (children sum
+          ≤ parent.pct). The renderer auto-derives column index from depth in
+          the tree and is depth-agnostic. Until the layer lands it falls back
+          to a sample two-haplotype dataset baked into <code>page6.js</code>.
+        </div>
+      </div>
+
+      <div class="ga-card">
+        <div class="ga-card-header">
+          <div class="ga-card-title">Cross-references</div>
+          <div class="ga-card-status">see also</div>
+        </div>
+        <div class="ga-card-para ga-dim">
+          • <b>Inversion Atlas page16</b> — same focal-vs-background widget,
+          used for cross-species breakpoints.<br>
+          • <b>page_chromosome_overview (chromosome overview)</b> — repeat-density sub-track there
+          is a summarized view of this page's data.<br>
+          • <b>EDTA pipeline</b> — cluster-side workflow producing
+          <code>repeat_track.bed</code>.
+        </div>
+      </div>
+  </div>
+</div>

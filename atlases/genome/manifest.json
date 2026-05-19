@@ -4,89 +4,97 @@
   "atlas_version": "2026-05-11-round1",
   "atlas_description": "Assembly + annotation lens for the F₁ hybrid (C. gariepinus × C. macrocephalus). Chromosome architecture, gene tracks, repeat / TE landscape, synteny against related Siluriformes, and variant annotations that contextualize Inversion Atlas candidates.",
   "_cohort": "F₁ hybrid (C. gariepinus × C. macrocephalus) — NOT the 226-sample hatchery cohort. See KICKOFF_genome_atlas.md.",
+  "_pages_migration_note_2026_05_19": "page_crossovers + page_nco_gc moved to meiosis-atlas on 2026-05-19 (per KICKOFF_meiosis_atlas.md). Per-inversion-candidate meiosis views run on the F₁×F₁ progeny cohort, not the F₁ hybrid cohort that the rest of this atlas describes — cohort discipline requires the carve-out. page_chromosome_overview's CO-density sub-track still reads crossover_track for visualisation, now a cross-atlas read from meiosis-atlas's layers registry.",
   "pages": [
     {
-      "id": "page1",
+      "id": "page_scaffold",
       "label": "scaffold",
       "stage": "assembly",
-      "fragment": "atlases/genome/pages/assembly/page1.html",
-      "module": "atlases/genome/pages/assembly/page1.js",
+      "fragment": "atlases/genome/pages/assembly/page_scaffold.html",
+      "module": "atlases/genome/pages/assembly/page_scaffold.js",
       "tooltip": "Genome Atlas landing / scaffold preview. Vision, required data layers, chromosome-overview mockup, panel inventory, phasing roadmap, cross-references. Layout-only; per-page renderers ship as cluster-side genome layers land (SCHEMA §28, phase A)."
     },
     {
-      "id": "page2",
+      "id": "page_assembly_stats",
       "label": "assembly stats",
       "stage": "assembly",
-      "fragment": "atlases/genome/pages/assembly/page2.html",
-      "module": "atlases/genome/pages/assembly/page2.js",
+      "fragment": "atlases/genome/pages/assembly/page_assembly_stats.html",
+      "module": "atlases/genome/pages/assembly/page_assembly_stats.js",
       "tooltip": "Headline assembly QC for the F₁ hybrid: BUSCO single-copy %, contig/scaffold N50, gap rate, T2T completeness. Global tiles + per-chromosome QC table. Phase B."
     },
     {
-      "id": "page3",
+      "id": "page_chromosome_overview",
       "label": "chromosome overview",
       "stage": "assembly",
-      "fragment": "atlases/genome/pages/assembly/page3.html",
-      "module": "atlases/genome/pages/assembly/page3.js",
-      "tooltip": "Length-scaled chromosome strip with stacked density sub-tracks (gene · repeat · conserved · CO density · cohort overlay). Genome-Atlas primary phase-B deliverable. Mirrors the Inversion Atlas scrubber width. CO-density sub-track reads crossover_track cross-atlas from meiosis-atlas (the layer moved there 2026-05-19); clicking the stripe pivots to meiosis's crossovers_per_candidate page for the active candidate."
+      "fragment": "atlases/genome/pages/assembly/page_chromosome_overview.html",
+      "module": "atlases/genome/pages/assembly/page_chromosome_overview.js",
+      "tooltip": "Length-scaled chromosome strip with stacked density sub-tracks (gene · repeat · conserved · CO density · cohort overlay). Genome-Atlas primary phase-B deliverable. Mirrors the Inversion Atlas scrubber width."
     },
     {
-      "id": "page4",
+      "id": "page_assembly_methods",
       "label": "assembly methods",
       "stage": "assembly",
-      "fragment": "atlases/genome/pages/assembly/page4.html",
-      "module": "atlases/genome/pages/assembly/page4.js",
+      "fragment": "atlases/genome/pages/assembly/page_assembly_methods.html",
+      "module": "atlases/genome/pages/assembly/page_assembly_methods.js",
       "tooltip": "HiFi + Hi-C + ONT pipeline walkthrough. Pure documentation; no layer dependencies. Stays useful as long as the assembly paper is in review."
     },
     {
-      "id": "page5",
+      "id": "page_genes",
       "label": "genes",
       "stage": "annotation",
-      "fragment": "atlases/genome/pages/annotation/page5.html",
-      "module": "atlases/genome/pages/annotation/page5.js",
+      "fragment": "atlases/genome/pages/annotation/page_genes.html",
+      "module": "atlases/genome/pages/annotation/page_genes.js",
       "tooltip": "Gene track, density, and cargo-per-inversion views. Bridges the assembly paper to the Inversion Atlas's manuscript. Phase B–C."
     },
     {
-      "id": "page6",
+      "id": "page_repeats_te",
       "label": "repeats / TE",
       "stage": "annotation",
-      "fragment": "atlases/genome/pages/annotation/page6.html",
-      "module": "atlases/genome/pages/annotation/page6.js",
+      "fragment": "atlases/genome/pages/annotation/page_repeats_te.html",
+      "module": "atlases/genome/pages/annotation/page_repeats_te.js",
       "tooltip": "TE landscape: per-class composition, per-chrom density heatmap, breakpoint enrichment per candidate (Spalax focal-vs-bg). Phase B."
     },
     {
-      "id": "page7",
+      "id": "page_variant_annotations",
       "label": "variant annotations",
       "stage": "annotation",
-      "fragment": "atlases/genome/pages/annotation/page7.html",
-      "module": "atlases/genome/pages/annotation/page7.js",
+      "fragment": "atlases/genome/pages/annotation/page_variant_annotations.html",
+      "module": "atlases/genome/pages/annotation/page_variant_annotations.js",
       "tooltip": "SnpEff / VEP impact overlay per inversion candidate. Final piece of the Genome Atlas (phase E). Depends on MODULE_CONSERVATION cluster-side outputs."
     },
     {
-      "id": "page8",
+      "id": "page_conserved_elements",
       "label": "conserved elements",
       "stage": "annotation",
-      "fragment": "atlases/genome/pages/annotation/page8.html",
-      "module": "atlases/genome/pages/annotation/page8.js",
-      "tooltip": "UCE + phastCons regulatory-disruption overlay per candidate. Complements the gene-cargo view (page5) by counting regulatory hits, not coding hits. Phase C–D."
+      "fragment": "atlases/genome/pages/annotation/page_conserved_elements.html",
+      "module": "atlases/genome/pages/annotation/page_conserved_elements.js",
+      "tooltip": "UCE + phastCons regulatory-disruption overlay per candidate. Complements the gene-cargo view (page_genes) by counting regulatory hits, not coding hits. Phase C–D."
     },
     {
-      "id": "page9",
+      "id": "page_synteny",
       "label": "synteny",
       "stage": "comparative",
-      "fragment": "atlases/genome/pages/comparative/page9.html",
-      "module": "atlases/genome/pages/comparative/page9.js",
-      "tooltip": "Cactus pairwise synteny: ribbon diagram (Cgar vs Cmac and other Siluriformes) + per-chrom dotplot. Phase D."
+      "fragment": "atlases/genome/pages/comparative/page_synteny.html",
+      "module": "atlases/genome/pages/comparative/page_synteny.js",
+      "tooltip": "Cactus pairwise synteny: ribbon diagram (Cgar vs Cmac and other Siluriformes) + per-chrom dotplot + macrosyntR-style Oxford grid (aggregated chrom-pair view, focal-pair selector, hover tooltips). Phase D."
     },
     {
-      "id": "page10",
+      "id": "page_ancestral_karyotype",
       "label": "ancestral karyotype",
       "stage": "comparative",
-      "fragment": "atlases/genome/pages/comparative/page10.html",
-      "module": "atlases/genome/pages/comparative/page10.js",
+      "fragment": "atlases/genome/pages/comparative/page_ancestral_karyotype.html",
+      "module": "atlases/genome/pages/comparative/page_ancestral_karyotype.js",
       "tooltip": "Reconstructed Siluriformes ancestral karyotype + per-branch event annotations. Likely promoted to a Supplementary Note. Phase D."
+    },
+    {
+      "id": "page_orthologues",
+      "label": "orthologues",
+      "stage": "comparative",
+      "fragment": "atlases/genome/pages/comparative/page_orthologues.html",
+      "module": "atlases/genome/pages/comparative/page_orthologues.js",
+      "tooltip": "Orthologue tables — focal genome vs. each non-focal. Three views: per-non-focal summary (1:1 / 1:n / m:1 / m:n / orphan counts), per-chrom breakdown for the focal genome, gene-level explorer with search. Focal genome is selectable and shares vocabulary with page_synteny's Oxford-grid focal pair. Driven by ortholog_tables; optional ortholog_pairs layer feeds the deep-dive per-pair gene rows. Phase D."
     }
   ],
-  "_pages_migration_note_2026_05_19": "page11 (crossovers) + page12 (NCO/GC) migrated to meiosis-atlas on 2026-05-19 as crossovers_per_candidate + nco_per_candidate (meiosis 'hub' stage). These per-inversion-candidate meiosis views never belonged in the genome-assembly atlas; they describe meiosis events. The Genome Atlas's page3 chromosome-overview CO-density sub-track still reads crossover_track for visualisation — now a cross-atlas read from meiosis-atlas's layers registry. The old page numbers (11, 12) are deliberately not reused on the genome side; future genome pages start at 13+ to keep the migration audit clear.",
   "registries": {
     "layers": "atlases/genome/registries/data/layers.registry.json",
     "files": "atlases/genome/registries/data/files.registry.json",
@@ -94,14 +102,17 @@
     "pages": "atlases/genome/registries/data/pages.registry.json",
     "slots": "atlases/genome/registries/data/slots.registry.json"
   },
-  "shared_modules": {},
+  "shared_modules": {
+    "router_bridge": "atlases/genome/shared/_router_bridge.js"
+  },
+  "_shared_modules_doc": "router_bridge listens on window for ga:navigate / ga:filter-page CustomEvents emitted by atlas pages (currently page_synteny's Oxford-grid click gestures) and forwards them to the shell router. Falls back to setting atlasState.shared.pendingPage + drilledPair + drilledChrom slots, which any receiving page consumes at mount() time. The shell should call install(atlasState) at atlas-register time; pages defensively call ensureInstalled(atlasState) too so the bridge works even without shell registration. The bridge is idempotent — repeated installs return the same handle.",
   "engines_dir": "atlases/genome/engines/",
   "analysis_dir": "atlases/genome/analysis/",
   "css_dir": "atlases/genome/css/",
   "stylesheets": [
     "atlases/genome/css/genome.css"
   ],
-  "_stylesheets_doc": "Atlas-wide stylesheet for the Genome Atlas. Round 1 ships a minimal bundle: orange/coral accent overrides + the .ga-card section style used by the page1 scaffold. Future rounds add per-page stylesheets and reference them from each page entry's `stylesheet` field.",
+  "_stylesheets_doc": "Atlas-wide stylesheet for the Genome Atlas. Round 1 ships a minimal bundle: orange/coral accent overrides + the .ga-card section style used by the page_scaffold scaffold. Future rounds add per-page stylesheets and reference them from each page entry's `stylesheet` field.",
   "scope_pickers": [],
   "_scope_pickers_doc": "No scope pickers in round 1. When chromosome_map + gene_track layers land (phase B), add an activeChrom picker analogous to the Inversion Atlas's.",
   "stages": [

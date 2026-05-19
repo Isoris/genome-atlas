@@ -6,7 +6,8 @@
     "warm": "IndexedDB-cached at trigger event; first read async ~50ms; subsequent ~10ms",
     "cold": "Fetched on demand; spinner allowed"
   },
-  "_round1_status": "Eight layers (post-2026-05-19 meiosis migration) are CONTRACT-ONLY (not-yet-loaded). page1's scaffold renders them as '⚪ not loaded' chips. Phase B turns on chromosome_map + gene_track + repeat_track. The page3 CO-density sub-track reads crossover_track cross-atlas from meiosis-atlas (where it now lives). Layers carrying `_optional: true` are facultative — the consuming page hides the corresponding panel rather than erroring.",
+  "_round1_status": "Eleven layers (post-2026-05-19 meiosis carve-out) are CONTRACT-ONLY (not-yet-loaded). page_scaffold's scaffold renders them as '⚪ not loaded' chips. Phase B turns on chromosome_map + gene_track + repeat_track. The page_chromosome_overview CO-density sub-track reads crossover_track cross-atlas from meiosis-atlas (where the layer now lives). Phase D turns on synteny_blocks + synteny_oxford_grid (page_synteny ribbon + macrosyntR-style Oxford-grid views) + ortholog_tables (page_orthologues summary + per-chrom) + ortholog_pairs (page_orthologues View 3, lazy). Layers carrying `_optional: true` are facultative — the consuming page hides the corresponding panel rather than erroring.",
+  "_migration_note_2026_05_19": "crossover_track, prdm9_motif, and nco_gc_track moved to meiosis-atlas on 2026-05-19 (per KICKOFF_meiosis_atlas.md). They describe meiosis events keyed by inversion candidate, not assembly/annotation features. page_chromosome_overview still consumes crossover_track for its CO-density sub-track, but reads it cross-atlas from meiosis-atlas's layers registry rather than declaring it here.",
   "layers": {
 
     "assembly_stats": {
@@ -14,7 +15,7 @@
       "source": "file",
       "path": "data/assembly/assembly_stats.json",
       "_status": "not_loaded",
-      "_feeds": "page1 chromosome overview · QC banner (phase B)",
+      "_feeds": "page_scaffold chromosome overview · QC banner (phase B)",
       "_source_pipeline": "BUSCO + asmstats"
     },
 
@@ -103,6 +104,40 @@
       "_source_pipeline": "SnpEff + VEP"
     },
 
-    "_migration_note_2026_05_19": "crossover_track, prdm9_motif, and nco_gc_track moved to meiosis-atlas on 2026-05-19. They describe meiosis events keyed by inversion candidate, not assembly/annotation features. The Genome Atlas page3 (chromosome overview) still consumes crossover_track for its CO-density sub-track, but reads it cross-atlas from meiosis-atlas's layers registry rather than declaring it here."
+    "_meiosis_layers_moved": "crossover_track, prdm9_motif, nco_gc_track — see _migration_note_2026_05_19 at top of file. Owned by meiosis-atlas from 2026-05-19.",
+
+    "synteny_oxford_grid": {
+      "tier": "cold",
+      "source": "file",
+      "path": "data/comparative/oxford/<a_id>_<b_id>.json",
+      "_path_doc": "Per ordered focal pair (genome A × genome B). Renderer fetches the file matching the active selection from the page_synteny toggle; never enumerates the directory.",
+      "_status": "not_loaded",
+      "_feeds": "page_synteny View 4 — macrosyntR-style Oxford grid (aggregated; one dot per chrom-pair, sized by ortholog count, coloured by BH-q)",
+      "_source_pipeline": "OrthoFinder → macrosyntR (SamiLhll/macrosyntR) chrom-pair Fisher exact + BH",
+      "_schema": "see page_synteny spec — { pair_id, method, ortholog_source, genome_a{id,label,chroms[]}, genome_b{...}, cells[{chrom_a,chrom_b,n_orthologs,fisher_p?,fisher_q?,significant?}], thresholds?{q_hi,q_lo} }"
+    },
+
+    "ortholog_tables": {
+      "tier": "warm",
+      "source": "file",
+      "path": "data/comparative/orthologs/<focal_id>.json",
+      "_path_doc": "One file per focal genome. Renderer interpolates focal_id from shared.focalGenome (set on page_orthologues, mirrored from page_synteny Oxford grid).",
+      "_status": "not_loaded",
+      "_feeds": "page_orthologues Views 1 + 2 — focal × non-focal summary table and per focal-chrom %1:1 breakdown",
+      "_source_pipeline": "OrthoFinder summary tables",
+      "_schema": "see page_orthologues spec — { focal{id,label,assembly,gene_count,chroms[{id,gene_count}]}, non_focal[{id,label,assembly,gene_count,summary{one_to_one,one_to_many,many_to_one,many_to_many,focal_orphans,nonfocal_orphans},per_focal_chrom?[{chrom,pct_one_to_one}]}], thresholds?{pct_good,pct_mid}, source_pipeline? }"
+    },
+
+    "ortholog_pairs": {
+      "tier": "cold",
+      "source": "file",
+      "path": "data/comparative/orthologs/pairs/<focal>_<nonfocal>.json",
+      "_path_doc": "Per (focal, non-focal) pair. Lazy-loaded on column reveal in page_orthologues View 3; never fetched if View 3 stays collapsed.",
+      "_status": "not_loaded",
+      "_optional": true,
+      "_feeds": "page_orthologues View 3 — gene-level explorer (one column per non-focal, hydrated on reveal)",
+      "_source_pipeline": "OrthoFinder per-pair tables",
+      "_schema": "see page_orthologues spec — { focal_id, non_focal_id, rows[{focal_gene,chrom,pos_bp,orthologs[{id,chrom?,pos_bp?,kind∈1:1|1:n|m:1|m:n}]}] }"
+    }
   }
 }

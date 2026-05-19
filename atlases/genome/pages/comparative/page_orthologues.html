@@ -1,0 +1,458 @@
+<div id="page_orthologues" class="page">
+  <div class="ga-content">
+      <div class="ga-title">
+        <span class="ga-title-bullet">▰</span> Orthologues — focal vs. non-focal genomes
+      </div>
+      <div class="ga-subtitle">
+        Stage: comparative · spec / phase D · driven by <code>ortholog_tables</code>
+        <span class="ga-dim">· optional deep-dive: <code>ortholog_pairs</code> · shares focal selection with page_synteny</span>
+      </div>
+
+      <div class="ga-card">
+        <div class="ga-card-header">
+          <div class="ga-card-title">What this page shows</div>
+          <div class="ga-card-status ga-status-phase">spec · phase D</div>
+        </div>
+        <div class="ga-card-para">
+          Three tables comparing one <b>focal</b> genome against every other
+          non-focal genome in the comparison set: (1) a <b>summary table</b> with one
+          row per non-focal — counts of 1:1, 1:<i>n</i>, <i>m</i>:1, <i>m</i>:<i>n</i> orthology and orphans;
+          (2) a <b>per-chrom breakdown</b> of the focal genome showing how its
+          chromosomes are accounted for in each non-focal; (3) a <b>gene-level
+          explorer</b> — one row per focal gene with its ortholog in each
+          non-focal (or "—" for an orphan), filterable by gene id.
+        </div>
+        <div class="ga-card-para ga-dim">
+          The focal genome is selectable below. The selector mirrors page_synteny's
+          "genome A" dropdown — flipping it here also flips the Oxford grid's
+          row axis if both pages are mounted.
+        </div>
+      </div>
+
+      <div class="ga-card">
+        <div class="ga-card-header">
+          <div class="ga-card-title">Required data layers</div>
+          <div class="ga-card-status">phase D</div>
+        </div>
+        <div class="ga-layers-grid">
+          <div class="ga-layers-head">layer</div>
+          <div class="ga-layers-head">source</div>
+          <div class="ga-layers-head">status</div>
+          <div class="ga-layers-head">feeds</div>
+
+          <div><code>ortholog_tables</code></div>
+          <div><code>OrthoFinder summary (per focal)</code></div>
+          <div data-ga-layer="ortholog_tables" class="ga-layer-status">⚪ not loaded</div>
+          <div class="ga-dim">summary table · per-chrom breakdown</div>
+
+          <div><code>ortholog_pairs</code> <span class="ga-pill-opt">opt.</span></div>
+          <div><code>OrthoFinder per-pair gene table</code></div>
+          <div data-ga-layer="ortholog_pairs" class="ga-layer-status">⚪ not loaded</div>
+          <div class="ga-dim">gene-level explorer (lazy, per non-focal)</div>
+
+          <div><code>chromosome_map</code></div>
+          <div><code>FAI + AGP</code></div>
+          <div data-ga-layer="chromosome_map" class="ga-layer-status">⚪ not loaded</div>
+          <div class="ga-dim">focal-chrom row labels in View 2</div>
+        </div>
+      </div>
+
+      <div class="ga-card">
+        <div class="ga-card-header">
+          <div class="ga-card-title">Focal genome</div>
+          <div class="ga-card-status">selector</div>
+        </div>
+        <div class="ga-syn-toggle" role="toolbar" aria-label="Orthologue page focal genome">
+          <label for="ga-ortho-focal">focal</label>
+          <select id="ga-ortho-focal" data-ga-ortho-focal>
+            <option value="cgar" selected>C. gariepinus (Cgar)</option>
+            <option value="cmac">C. macrocephalus (Cmac)</option>
+            <option value="ipun">I. punctatus (Ipun)</option>
+          </select>
+          <span class="ga-dim">non-focal: every other genome in the comparison set.</span>
+        </div>
+        <div class="ga-card-footnote">
+          Slot read/write: <code>shared.focalGenome</code>. When set elsewhere
+          (page_synteny Oxford grid, future scope picker) the selector pre-fills to
+          match; when changed here it writes the slot so other pages follow.
+        </div>
+      </div>
+
+      <div class="ga-card">
+        <div class="ga-card-header">
+          <div class="ga-card-title">View 1 — focal × non-focal summary</div>
+          <div class="ga-card-status">primary table</div>
+        </div>
+        <div class="ga-card-para ga-dim">
+          One row per non-focal genome. Counts are gene counts on the focal
+          side except where noted. <b class="ga-ortho-good">1:1</b> = single
+          ortholog both ways; <b class="ga-ortho-warn">1:<i>n</i></b> /
+          <b class="ga-ortho-warn"><i>m</i>:1</b> = duplications;
+          <b class="ga-ortho-mid"><i>m</i>:<i>n</i></b> = complex; orphans =
+          focal genes with no ortholog in that non-focal.
+        </div>
+        <div class="ga-ortho-summary" role="table" aria-label="Focal × non-focal summary">
+          <div class="ga-ortho-summary-head">
+            <span>non-focal</span>
+            <span class="ga-num">1:1</span>
+            <span class="ga-num">1:n</span>
+            <span class="ga-num">m:1</span>
+            <span class="ga-num">m:n</span>
+            <span class="ga-num">focal orph.</span>
+            <span class="ga-num">non-foc. orph.</span>
+            <span class="ga-num">% mapped</span>
+          </div>
+          <!-- Mock rows for the spec; real renderer fills from
+               ortholog_tables[focal].nonFocal[i]. -->
+          <div class="ga-ortho-summary-row">
+            <span><b>C. macrocephalus</b> <span class="ga-dim">(Cmac)</span></span>
+            <span class="ga-num">17 842</span>
+            <span class="ga-num">612</span>
+            <span class="ga-num">418</span>
+            <span class="ga-num">94</span>
+            <span class="ga-num">1 503</span>
+            <span class="ga-num">1 711</span>
+            <span class="ga-num">92.5%</span>
+          </div>
+          <div class="ga-ortho-summary-row">
+            <span><b>I. punctatus</b> <span class="ga-dim">(Ipun)</span></span>
+            <span class="ga-num">14 091</span>
+            <span class="ga-num">774</span>
+            <span class="ga-num">696</span>
+            <span class="ga-num">142</span>
+            <span class="ga-num">4 759</span>
+            <span class="ga-num">5 022</span>
+            <span class="ga-num">77.0%</span>
+          </div>
+          <div class="ga-ortho-summary-row">
+            <span><b>P. hypophthalmus</b> <span class="ga-dim">(Phyp)</span></span>
+            <span class="ga-num">12 380</span>
+            <span class="ga-num">820</span>
+            <span class="ga-num">711</span>
+            <span class="ga-num">158</span>
+            <span class="ga-num">6 388</span>
+            <span class="ga-num">6 605</span>
+            <span class="ga-num">68.6%</span>
+          </div>
+          <div class="ga-ortho-summary-row">
+            <span><b>S. asotus</b> <span class="ga-dim">(Saso)</span></span>
+            <span class="ga-num">10 996</span>
+            <span class="ga-num">893</span>
+            <span class="ga-num">770</span>
+            <span class="ga-num">172</span>
+            <span class="ga-num">7 638</span>
+            <span class="ga-num">8 011</span>
+            <span class="ga-num">62.4%</span>
+          </div>
+        </div>
+        <div class="ga-card-footnote">
+          % mapped = (1:1 + 1:n + m:1 + m:n) / focal gene count. Hover any
+          row for genome metadata (assembly accession, gene-count source);
+          click to deep-dive into the gene-level explorer scoped to that
+          non-focal (View 3).
+        </div>
+      </div>
+
+      <div class="ga-card">
+        <div class="ga-card-header">
+          <div class="ga-card-title">View 2 — per focal-chrom breakdown</div>
+          <div class="ga-card-status">primary table</div>
+        </div>
+        <div class="ga-card-para ga-dim">
+          One row per focal chromosome. Each non-focal genome contributes one
+          column showing the % of focal-chrom genes that have a 1:1 ortholog
+          in that non-focal (the strict-conservation score).
+        </div>
+        <div class="ga-ortho-perchrom" role="table" aria-label="Per focal-chrom breakdown">
+          <div class="ga-ortho-perchrom-head">
+            <span>chrom</span>
+            <span class="ga-num">genes</span>
+            <span class="ga-num">Cmac %1:1</span>
+            <span class="ga-num">Ipun %1:1</span>
+            <span class="ga-num">Phyp %1:1</span>
+            <span class="ga-num">Saso %1:1</span>
+          </div>
+          <div class="ga-ortho-perchrom-row">
+            <span>LG01</span><span class="ga-num">1 412</span>
+            <span class="ga-num ga-ortho-good">94.1</span>
+            <span class="ga-num ga-ortho-mid">78.6</span>
+            <span class="ga-num ga-ortho-mid">71.2</span>
+            <span class="ga-num ga-ortho-warn">64.0</span>
+          </div>
+          <div class="ga-ortho-perchrom-row">
+            <span>LG02</span><span class="ga-num">1 298</span>
+            <span class="ga-num ga-ortho-good">93.4</span>
+            <span class="ga-num ga-ortho-mid">77.0</span>
+            <span class="ga-num ga-ortho-mid">69.8</span>
+            <span class="ga-num ga-ortho-warn">62.1</span>
+          </div>
+          <div class="ga-ortho-perchrom-row">
+            <span>LG03</span><span class="ga-num">1 105</span>
+            <span class="ga-num ga-ortho-good">91.8</span>
+            <span class="ga-num ga-ortho-mid">74.2</span>
+            <span class="ga-num ga-ortho-mid">66.9</span>
+            <span class="ga-num ga-ortho-warn">58.7</span>
+          </div>
+          <div class="ga-ortho-perchrom-row">
+            <span>LG04</span><span class="ga-num">1 088</span>
+            <span class="ga-num ga-ortho-good">92.5</span>
+            <span class="ga-num ga-ortho-mid">76.1</span>
+            <span class="ga-num ga-ortho-mid">68.4</span>
+            <span class="ga-num ga-ortho-warn">60.5</span>
+          </div>
+          <div class="ga-ortho-perchrom-row">
+            <span class="ga-dim">…</span>
+            <span class="ga-num ga-dim">24 more chroms</span>
+            <span class="ga-num"></span><span class="ga-num"></span>
+            <span class="ga-num"></span><span class="ga-num"></span>
+          </div>
+        </div>
+        <div class="ga-card-footnote">
+          Cell colour: <b class="ga-ortho-good">green</b> ≥ 90 %,
+          <b class="ga-ortho-mid">amber</b> 65 – 90 %,
+          <b class="ga-ortho-warn">red</b> &lt; 65 % (configurable via
+          <code>ortholog_tables.thresholds</code>).
+        </div>
+      </div>
+
+      <div class="ga-card">
+        <div class="ga-card-header">
+          <div class="ga-card-title">View 3 — gene-level explorer</div>
+          <div class="ga-card-status">filterable · paginated</div>
+        </div>
+        <div class="ga-card-para ga-dim">
+          One row per focal gene. Type a gene id (or prefix) to filter; the
+          renderer paginates 50 rows at a time. Cells hold the ortholog id
+          for the corresponding non-focal genome — or "—" for an orphan; a
+          superscript copy count appears when there is more than one
+          ortholog (1:<i>n</i>).
+        </div>
+        <div class="ga-ortho-search">
+          <label for="ga-ortho-search-q">filter</label>
+          <input type="search" id="ga-ortho-search-q" data-ga-ortho-search placeholder="gene id prefix, e.g. CGAR.LG01.g012…">
+          <span class="ga-dim" data-ga-ortho-count>showing 4 / 19 855</span>
+        </div>
+        <div class="ga-ortho-genes" role="table" aria-label="Gene-level explorer">
+          <div class="ga-ortho-genes-head">
+            <span>focal gene</span>
+            <span>chrom · pos</span>
+            <span>Cmac</span>
+            <span>Ipun</span>
+            <span>Phyp</span>
+            <span>Saso</span>
+          </div>
+          <div class="ga-ortho-genes-row">
+            <span><code>CGAR.LG01.g00012</code></span>
+            <span class="ga-dim">LG01 · 1.42 Mb</span>
+            <span><code>CMAC.LG01.g00018</code></span>
+            <span><code>IPUN.LG01.g00021</code></span>
+            <span><code>PHYP.s01.g00031</code><sup class="ga-ortho-sup">×2</sup></span>
+            <span class="ga-ortho-orphan">—</span>
+          </div>
+          <div class="ga-ortho-genes-row">
+            <span><code>CGAR.LG01.g00013</code></span>
+            <span class="ga-dim">LG01 · 1.46 Mb</span>
+            <span><code>CMAC.LG01.g00019</code></span>
+            <span><code>IPUN.LG01.g00022</code></span>
+            <span><code>PHYP.s01.g00032</code></span>
+            <span><code>SASO.s14.g00077</code></span>
+          </div>
+          <div class="ga-ortho-genes-row">
+            <span><code>CGAR.LG01.g00014</code></span>
+            <span class="ga-dim">LG01 · 1.51 Mb</span>
+            <span class="ga-ortho-orphan">—</span>
+            <span class="ga-ortho-orphan">—</span>
+            <span class="ga-ortho-orphan">—</span>
+            <span class="ga-ortho-orphan">—</span>
+          </div>
+          <div class="ga-ortho-genes-row">
+            <span><code>CGAR.LG01.g00015</code></span>
+            <span class="ga-dim">LG01 · 1.55 Mb</span>
+            <span><code>CMAC.LG01.g00020</code><sup class="ga-ortho-sup">×2</sup></span>
+            <span><code>IPUN.LG01.g00023</code></span>
+            <span><code>PHYP.s01.g00033</code></span>
+            <span><code>SASO.s14.g00078</code></span>
+          </div>
+        </div>
+        <div class="ga-card-footnote">
+          Lazy load: per-non-focal columns hydrate from
+          <code>data/comparative/orthologs/pairs/&lt;focal&gt;_&lt;nonfocal&gt;.json</code>
+          on first reveal. The summary + per-chrom views never need that file —
+          they read from the single <code>ortholog_tables</code> entry.
+        </div>
+      </div>
+
+      <div class="ga-card">
+        <div class="ga-card-header">
+          <div class="ga-card-title">Import schemas</div>
+          <div class="ga-card-status">contract</div>
+        </div>
+        <div class="ga-card-para ga-dim">
+          <code>ortholog_tables.json</code> is one file per focal genome and
+          carries everything needed for Views 1 + 2.
+          <code>ortholog_pairs.json</code> is one file per (focal, non-focal)
+          pair, loaded lazily only when View 3 reveals a column.
+        </div>
+<pre class="ga-schema-block"><code>// data/comparative/orthologs/&lt;focal_id&gt;.json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ortholog_tables (per focal genome)",
+  "type": "object",
+  "required": ["focal", "non_focal"],
+  "properties": {
+    "focal": {
+      "type": "object",
+      "required": ["id", "gene_count"],
+      "properties": {
+        "id":         { "type": "string" },
+        "label":      { "type": "string" },
+        "assembly":   { "type": "string", "description": "Accession or local id." },
+        "gene_count": { "type": "integer", "minimum": 0 },
+        "chroms": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["id", "gene_count"],
+            "properties": {
+              "id":         { "type": "string" },
+              "gene_count": { "type": "integer", "minimum": 0 }
+            }
+          }
+        }
+      }
+    },
+
+    "non_focal": {
+      "type": "array",
+      "description": "One entry per non-focal genome in the comparison set.",
+      "items": {
+        "type": "object",
+        "required": ["id", "summary"],
+        "properties": {
+          "id":       { "type": "string" },
+          "label":    { "type": "string" },
+          "assembly": { "type": "string" },
+          "gene_count": { "type": "integer", "minimum": 0 },
+
+          "summary": {
+            "type": "object",
+            "required": ["one_to_one", "one_to_many", "many_to_one", "many_to_many",
+                         "focal_orphans", "nonfocal_orphans"],
+            "properties": {
+              "one_to_one":       { "type": "integer", "minimum": 0 },
+              "one_to_many":      { "type": "integer", "minimum": 0 },
+              "many_to_one":      { "type": "integer", "minimum": 0 },
+              "many_to_many":     { "type": "integer", "minimum": 0 },
+              "focal_orphans":    { "type": "integer", "minimum": 0 },
+              "nonfocal_orphans": { "type": "integer", "minimum": 0 }
+            }
+          },
+
+          "per_focal_chrom": {
+            "description": "Optional per-focal-chrom %1:1 conservation score (drives View 2).",
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["chrom", "pct_one_to_one"],
+              "properties": {
+                "chrom":          { "type": "string" },
+                "pct_one_to_one": { "type": "number", "minimum": 0, "maximum": 100 }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "thresholds": {
+      "type": "object",
+      "properties": {
+        "pct_good": { "type": "number", "default": 90, "description": "≥ this → green." },
+        "pct_mid":  { "type": "number", "default": 65, "description": "between mid and good → amber; below mid → red." }
+      }
+    },
+
+    "source_pipeline": { "type": "string", "description": "e.g. 'OrthoFinder v2.5.5'." }
+  }
+}</code></pre>
+<pre class="ga-schema-block"><code>// data/comparative/orthologs/pairs/&lt;focal&gt;_&lt;nonfocal&gt;.json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ortholog_pairs (per focal × non-focal pair)",
+  "type": "object",
+  "required": ["focal_id", "non_focal_id", "rows"],
+  "properties": {
+    "focal_id":     { "type": "string" },
+    "non_focal_id": { "type": "string" },
+    "rows": {
+      "type": "array",
+      "description": "One row per focal gene. Orphans use orthologs:[].",
+      "items": {
+        "type": "object",
+        "required": ["focal_gene", "chrom", "pos_bp", "orthologs"],
+        "properties": {
+          "focal_gene": { "type": "string" },
+          "chrom":      { "type": "string" },
+          "pos_bp":     { "type": "integer", "minimum": 0 },
+          "orthologs":  {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["id"],
+              "properties": {
+                "id":        { "type": "string" },
+                "chrom":     { "type": "string" },
+                "pos_bp":    { "type": "integer", "minimum": 0 },
+                "kind":      { "enum": ["1:1", "1:n", "m:1", "m:n"] }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}</code></pre>
+      </div>
+
+      <div class="ga-card">
+        <div class="ga-card-header">
+          <div class="ga-card-title">Chromosome palette key</div>
+          <div class="ga-card-status">reference</div>
+        </div>
+        <div class="ga-card-para ga-dim">
+          Reserved for future views — the orthologue tables on this page
+          don&rsquo;t yet paint chrom-coloured cells, but a planned
+          per-focal-chrom visual breakdown will draw from the atlas-wide
+          palette. Slots 1&ndash;11 step by 30&deg; around the colour wheel;
+          slots 12&ndash;13 are 15&deg;-step infills for karyotypes with
+          &gt;11 chroms. Tokens live in <code>atlases/genome/css/genome.css</code>
+          under <code>:root</code>; the same swatches are visible on
+          <b>page_synteny</b> and <b>page_ancestral_karyotype</b> for
+          cross-page colour parity.
+        </div>
+        <iframe class="ga-chrom-palette-frame"
+                src="../../_partials/_chrom-palette-swatches.html"
+                title="Chromosome palette swatches"
+                loading="lazy"></iframe>
+      </div>
+
+      <div class="ga-card">
+        <div class="ga-card-header">
+          <div class="ga-card-title">Cross-references</div>
+          <div class="ga-card-status">see also</div>
+        </div>
+        <div class="ga-card-para ga-dim">
+          • <b>page_synteny (synteny)</b> — the Oxford grid in View 4 there is the
+          aggregated visual companion to this page's tables; both share
+          <code>shared.focalGenome</code>.<br>
+          • <b>page_genes (genes)</b> — gene cargo per inversion candidate; the
+          gene ids in View 3's first column resolve there with a click.<br>
+          • <b>page_ancestral_karyotype (ancestral karyotype)</b> — ancestral linkage groups
+          are derived from the same OrthoFinder output.<br>
+          • <b>OrthoFinder</b> — upstream pipeline; one run produces every
+          per-focal <code>ortholog_tables.json</code> + every per-pair
+          <code>ortholog_pairs.json</code> in one pass.
+        </div>
+      </div>
+  </div>
+</div>
