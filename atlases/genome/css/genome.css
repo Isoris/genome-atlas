@@ -43,6 +43,63 @@
  * namespace itself is the scope guard — no other atlas uses it.
  * --------------------------------------------------------------------- */
 
+/* ---------------------------------------------------------------------
+ * Chromosome palette tokens.
+ *
+ * One categorical hue per chromosome, used wherever the spec needs to
+ * say "this is chrom N" — ideogram strips on page9 V1-V3, syntenic
+ * blocks on page10, the categorical row/col colouring on the page9 V4
+ * Oxford grid. Hues step by 30° around the colour wheel for the first
+ * 11 chroms; karyotypes with 12-13 chroms get the 15°/45° infill
+ * slots; the 135° half-step is reserved for "fused/transition" blocks
+ * (page9 V3). Saturation and lightness are factored out so the whole
+ * palette can be retuned in one place.
+ *
+ * Pre-existing pattern: .ga-syn-cell computes a hue dynamically from
+ * the cell's --cr/--cc indices and feeds it to hsl() — that mechanism
+ * is preserved, but now consumes the shared sat/light tokens too so
+ * the dynamic + static palettes stay coherent.
+ *
+ * SVG usage: <rect> and <polygon> in the spec pages reference these
+ * via the .ga-chrom-N utility classes (presentation attributes don't
+ * reliably resolve var()).
+ * --------------------------------------------------------------------- */
+:root {
+  --ga-chrom-sat: 55%;
+  --ga-chrom-light: 55%;
+
+  --ga-chrom-1:  hsl( 30, var(--ga-chrom-sat), var(--ga-chrom-light));
+  --ga-chrom-2:  hsl( 60, var(--ga-chrom-sat), var(--ga-chrom-light));
+  --ga-chrom-3:  hsl( 90, var(--ga-chrom-sat), var(--ga-chrom-light));
+  --ga-chrom-4:  hsl(120, var(--ga-chrom-sat), var(--ga-chrom-light));
+  --ga-chrom-5:  hsl(150, var(--ga-chrom-sat), var(--ga-chrom-light));
+  --ga-chrom-6:  hsl(180, var(--ga-chrom-sat), var(--ga-chrom-light));
+  --ga-chrom-7:  hsl(210, var(--ga-chrom-sat), var(--ga-chrom-light));
+  --ga-chrom-8:  hsl(240, var(--ga-chrom-sat), var(--ga-chrom-light));
+  --ga-chrom-9:  hsl(270, var(--ga-chrom-sat), var(--ga-chrom-light));
+  --ga-chrom-10: hsl(300, var(--ga-chrom-sat), var(--ga-chrom-light));
+  --ga-chrom-11: hsl(330, var(--ga-chrom-sat), var(--ga-chrom-light));
+  --ga-chrom-12: hsl( 15, var(--ga-chrom-sat), var(--ga-chrom-light));
+  --ga-chrom-13: hsl( 45, var(--ga-chrom-sat), var(--ga-chrom-light));
+  --ga-chrom-fused: hsl(135, var(--ga-chrom-sat), var(--ga-chrom-light));
+}
+
+/* Utility classes — paint an SVG <rect>/<polygon> in a chrom hue. */
+.ga-chrom-1     { fill: var(--ga-chrom-1);     }
+.ga-chrom-2     { fill: var(--ga-chrom-2);     }
+.ga-chrom-3     { fill: var(--ga-chrom-3);     }
+.ga-chrom-4     { fill: var(--ga-chrom-4);     }
+.ga-chrom-5     { fill: var(--ga-chrom-5);     }
+.ga-chrom-6     { fill: var(--ga-chrom-6);     }
+.ga-chrom-7     { fill: var(--ga-chrom-7);     }
+.ga-chrom-8     { fill: var(--ga-chrom-8);     }
+.ga-chrom-9     { fill: var(--ga-chrom-9);     }
+.ga-chrom-10    { fill: var(--ga-chrom-10);    }
+.ga-chrom-11    { fill: var(--ga-chrom-11);    }
+.ga-chrom-12    { fill: var(--ga-chrom-12);    }
+.ga-chrom-13    { fill: var(--ga-chrom-13);    }
+.ga-chrom-fused { fill: var(--ga-chrom-fused); }
+
 /* Content wrapper — replaces the inline-styled #genomeAtlasContent. */
 .ga-content {
   padding: 40px 32px;
@@ -681,12 +738,12 @@ html[data-theme="academic"] .ga-card {
    share a hue → a clean diagonal reads as one colour per row; a trans-
    location to a different column still shares the row colour. */
 .ga-syn-grid[data-color-by="row"] .ga-syn-cell[data-syn]::before {
-  background: hsl(var(--ga-syn-hue-row), 55%, 55%);
+  background: hsl(var(--ga-syn-hue-row), var(--ga-chrom-sat), var(--ga-chrom-light));
 }
 
 /* Colour-by mode: col chrom. */
 .ga-syn-grid[data-color-by="col"] .ga-syn-cell[data-syn]::before {
-  background: hsl(var(--ga-syn-hue-col), 55%, 55%);
+  background: hsl(var(--ga-syn-hue-col), var(--ga-chrom-sat), var(--ga-chrom-light));
 }
 
 /* Populated cells are clickable — small affordance + hover ring. */
@@ -755,13 +812,13 @@ html[data-theme="academic"] .ga-card {
 /* --- View 3: chr A × chr B dotplot mockup ---------------------------- *
  * One categorical hue per syntenic block — explicit so the spec page
  * reads even when no data has loaded. Flat fills, no glow. The block
- * hues match the 12-cycle palette used by View 4 (--cr:1..4) so the
- * cell colour you clicked carries semantically into the drilled view.
+ * hues reuse the shared chrom palette so the cell colour you clicked
+ * carries semantically into the drilled view.
  * -------------------------------------------------------------------- */
-.ga-syn-block-1 { background: hsl(30deg,  55%, 55%); }
-.ga-syn-block-2 { background: hsl(60deg,  55%, 55%); }
-.ga-syn-block-3 { background: hsl(90deg,  55%, 55%); }
-.ga-syn-block-4 { background: hsl(120deg, 55%, 55%); }
+.ga-syn-block-1 { background: var(--ga-chrom-1); }
+.ga-syn-block-2 { background: var(--ga-chrom-2); }
+.ga-syn-block-3 { background: var(--ga-chrom-3); }
+.ga-syn-block-4 { background: var(--ga-chrom-4); }
 
 .ga-syn-dot-mockup {
   position: relative;

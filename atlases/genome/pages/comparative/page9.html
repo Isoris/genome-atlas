@@ -97,11 +97,11 @@
                preserveAspectRatio="xMidYMid meet">
             <!-- Top strip — Cgar — 5 chroms, sized roughly proportional. -->
             <g class="ga-syn-ribbon-strip" data-genome="cgar">
-              <rect x="20"  y="20" width="150" height="18" fill="hsl(30,55%,55%)"/>
-              <rect x="170" y="20" width="120" height="18" fill="hsl(60,55%,55%)"/>
-              <rect x="290" y="20" width="140" height="18" fill="hsl(90,55%,55%)"/>
-              <rect x="430" y="20" width="180" height="18" fill="hsl(120,55%,55%)"/>
-              <rect x="610" y="20" width="170" height="18" fill="hsl(150,55%,55%)"/>
+              <rect class="ga-chrom-1" x="20"  y="20" width="150" height="18" />
+              <rect class="ga-chrom-2" x="170" y="20" width="120" height="18" />
+              <rect class="ga-chrom-3" x="290" y="20" width="140" height="18" />
+              <rect class="ga-chrom-4" x="430" y="20" width="180" height="18" />
+              <rect class="ga-chrom-5" x="610" y="20" width="170" height="18" />
               <text x="95"  y="14" text-anchor="middle">LG01</text>
               <text x="230" y="14" text-anchor="middle">LG02</text>
               <text x="360" y="14" text-anchor="middle">LG03</text>
@@ -111,11 +111,11 @@
             </g>
             <!-- Bottom strip — Cmac. -->
             <g class="ga-syn-ribbon-strip" data-genome="cmac">
-              <rect x="20"  y="162" width="160" height="18" fill="hsl(30,55%,55%)"/>
-              <rect x="180" y="162" width="130" height="18" fill="hsl(60,55%,55%)"/>
-              <rect x="310" y="162" width="150" height="18" fill="hsl(90,55%,55%)"/>
-              <rect x="460" y="162" width="170" height="18" fill="hsl(120,55%,55%)"/>
-              <rect x="630" y="162" width="150" height="18" fill="hsl(150,55%,55%)"/>
+              <rect class="ga-chrom-1" x="20"  y="162" width="160" height="18" />
+              <rect class="ga-chrom-2" x="180" y="162" width="130" height="18" />
+              <rect class="ga-chrom-3" x="310" y="162" width="150" height="18" />
+              <rect class="ga-chrom-4" x="460" y="162" width="170" height="18" />
+              <rect class="ga-chrom-5" x="630" y="162" width="150" height="18" />
               <text x="100" y="196" text-anchor="middle">LG01</text>
               <text x="245" y="196" text-anchor="middle">LG02</text>
               <text x="385" y="196" text-anchor="middle">LG03</text>
@@ -125,32 +125,32 @@
             </g>
             <!-- Polygons. -->
             <!-- Block 1: LG01 forward (clean diagonal). -->
-            <polygon class="ga-syn-poly" fill="hsl(30,55%,55%)"
+            <polygon class="ga-syn-poly ga-chrom-1" 
                      points="20,38 170,38 180,162 20,162">
               <title>LG01 × LG01 · forward block · 12.4 Mb</title>
             </polygon>
             <!-- Block 2: LG02 INVERSION (anti-parallel polygon). -->
-            <polygon class="ga-syn-poly ga-syn-poly-inv" fill="hsl(60,55%,55%)"
+            <polygon class="ga-syn-poly ga-syn-poly-inv ga-chrom-2" 
                      points="170,38 290,38 180,162 310,162">
               <title>LG02 × LG02 · inversion · 6.1 Mb</title>
             </polygon>
             <!-- Block 3: LG03 forward. -->
-            <polygon class="ga-syn-poly" fill="hsl(90,55%,55%)"
+            <polygon class="ga-syn-poly ga-chrom-3" 
                      points="290,38 430,38 460,162 310,162">
               <title>LG03 × LG03 · forward block · 10.2 Mb</title>
             </polygon>
             <!-- Block 4: LG04 forward. -->
-            <polygon class="ga-syn-poly" fill="hsl(120,55%,55%)"
+            <polygon class="ga-syn-poly ga-chrom-4" 
                      points="430,38 610,38 630,162 460,162">
               <title>LG04 × LG04 · forward block · 14.8 Mb</title>
             </polygon>
             <!-- Block 5a: LG05 forward (most of it). -->
-            <polygon class="ga-syn-poly" fill="hsl(150,55%,55%)"
+            <polygon class="ga-syn-poly ga-chrom-5" 
                      points="610,38 720,38 780,162 630,162">
               <title>LG05 × LG05 · forward block · 9.0 Mb</title>
             </polygon>
             <!-- Block 5b: LG05 tail TRANSLOCATED to LG02 (chrom-jumping). -->
-            <polygon class="ga-syn-poly ga-syn-poly-tx" fill="hsl(150,55%,55%)"
+            <polygon class="ga-syn-poly ga-syn-poly-tx ga-chrom-5" 
                      points="720,38 780,38 310,162 180,162">
               <title>LG05 (tail) × LG02 · translocation · 2.4 Mb</title>
             </polygon>
@@ -184,53 +184,53 @@
                preserveAspectRatio="xMidYMid meet">
             <!-- Strip 1: Cgar. -->
             <g class="ga-syn-ribbon-strip" data-genome="cgar">
-              <rect x="20"  y="20" width="150" height="16" fill="hsl(30,55%,55%)"/>
-              <rect x="170" y="20" width="120" height="16" fill="hsl(60,55%,55%)"/>
-              <rect x="290" y="20" width="140" height="16" fill="hsl(90,55%,55%)"/>
-              <rect x="430" y="20" width="180" height="16" fill="hsl(120,55%,55%)"/>
-              <rect x="610" y="20" width="170" height="16" fill="hsl(150,55%,55%)"/>
+              <rect class="ga-chrom-1" x="20"  y="20" width="150" height="16" />
+              <rect class="ga-chrom-2" x="170" y="20" width="120" height="16" />
+              <rect class="ga-chrom-3" x="290" y="20" width="140" height="16" />
+              <rect class="ga-chrom-4" x="430" y="20" width="180" height="16" />
+              <rect class="ga-chrom-5" x="610" y="20" width="170" height="16" />
               <text x="0"   y="32" class="ga-syn-ribbon-glabel">Cgar</text>
             </g>
             <!-- Polygons Cgar → Cmac (rows 1 → 2). -->
-            <polygon class="ga-syn-poly" fill="hsl(30,55%,55%)"  points="20,36 170,36 180,114 20,114"/>
-            <polygon class="ga-syn-poly ga-syn-poly-inv" fill="hsl(60,55%,55%)"  points="170,36 290,36 180,114 310,114"/>
-            <polygon class="ga-syn-poly" fill="hsl(90,55%,55%)"  points="290,36 430,36 460,114 310,114"/>
-            <polygon class="ga-syn-poly" fill="hsl(120,55%,55%)" points="430,36 610,36 630,114 460,114"/>
-            <polygon class="ga-syn-poly" fill="hsl(150,55%,55%)" points="610,36 780,36 780,114 630,114"/>
+            <polygon class="ga-syn-poly ga-chrom-1"   points="20,36 170,36 180,114 20,114"/>
+            <polygon class="ga-syn-poly ga-syn-poly-inv ga-chrom-2"   points="170,36 290,36 180,114 310,114"/>
+            <polygon class="ga-syn-poly ga-chrom-3"   points="290,36 430,36 460,114 310,114"/>
+            <polygon class="ga-syn-poly ga-chrom-4"  points="430,36 610,36 630,114 460,114"/>
+            <polygon class="ga-syn-poly ga-chrom-5"  points="610,36 780,36 780,114 630,114"/>
             <!-- Strip 2: Cmac. -->
             <g class="ga-syn-ribbon-strip" data-genome="cmac">
-              <rect x="20"  y="114" width="160" height="16" fill="hsl(30,55%,55%)"/>
-              <rect x="180" y="114" width="130" height="16" fill="hsl(60,55%,55%)"/>
-              <rect x="310" y="114" width="150" height="16" fill="hsl(90,55%,55%)"/>
-              <rect x="460" y="114" width="170" height="16" fill="hsl(120,55%,55%)"/>
-              <rect x="630" y="114" width="150" height="16" fill="hsl(150,55%,55%)"/>
+              <rect class="ga-chrom-1" x="20"  y="114" width="160" height="16" />
+              <rect class="ga-chrom-2" x="180" y="114" width="130" height="16" />
+              <rect class="ga-chrom-3" x="310" y="114" width="150" height="16" />
+              <rect class="ga-chrom-4" x="460" y="114" width="170" height="16" />
+              <rect class="ga-chrom-5" x="630" y="114" width="150" height="16" />
               <text x="0"   y="126" class="ga-syn-ribbon-glabel">Cmac</text>
             </g>
             <!-- Polygons Cmac → Ipun (lineage-specific fusion: LG04+LG05 → single). -->
-            <polygon class="ga-syn-poly" fill="hsl(30,55%,55%)"  points="20,130 180,130 200,208 30,208"/>
-            <polygon class="ga-syn-poly" fill="hsl(60,55%,55%)"  points="180,130 310,130 320,208 200,208"/>
-            <polygon class="ga-syn-poly ga-syn-poly-inv" fill="hsl(90,55%,55%)" points="310,130 460,130 320,208 470,208"/>
-            <polygon class="ga-syn-poly ga-syn-poly-tx"  fill="hsl(120,55%,55%)" points="460,130 630,130 700,208 470,208"/>
-            <polygon class="ga-syn-poly ga-syn-poly-tx"  fill="hsl(150,55%,55%)" points="630,130 780,130 770,208 700,208"/>
+            <polygon class="ga-syn-poly ga-chrom-1"   points="20,130 180,130 200,208 30,208"/>
+            <polygon class="ga-syn-poly ga-chrom-2"   points="180,130 310,130 320,208 200,208"/>
+            <polygon class="ga-syn-poly ga-syn-poly-inv ga-chrom-3"  points="310,130 460,130 320,208 470,208"/>
+            <polygon class="ga-syn-poly ga-syn-poly-tx ga-chrom-4"   points="460,130 630,130 700,208 470,208"/>
+            <polygon class="ga-syn-poly ga-syn-poly-tx ga-chrom-5"   points="630,130 780,130 770,208 700,208"/>
             <!-- Strip 3: Ipun (fused LG04+LG05 → single big chrom). -->
             <g class="ga-syn-ribbon-strip" data-genome="ipun">
-              <rect x="30"  y="208" width="170" height="16" fill="hsl(30,55%,55%)"/>
-              <rect x="200" y="208" width="120" height="16" fill="hsl(60,55%,55%)"/>
-              <rect x="320" y="208" width="150" height="16" fill="hsl(90,55%,55%)"/>
-              <rect x="470" y="208" width="300" height="16" fill="hsl(135,55%,55%)"/>
+              <rect class="ga-chrom-1" x="30"  y="208" width="170" height="16" />
+              <rect class="ga-chrom-2" x="200" y="208" width="120" height="16" />
+              <rect class="ga-chrom-3" x="320" y="208" width="150" height="16" />
+              <rect class="ga-chrom-fused" x="470" y="208" width="300" height="16" />
               <text x="0"   y="220" class="ga-syn-ribbon-glabel">Ipun</text>
             </g>
             <!-- Polygons Ipun → Phyp. -->
-            <polygon class="ga-syn-poly" fill="hsl(30,55%,55%)"  points="30,224 200,224 200,302 50,302"/>
-            <polygon class="ga-syn-poly" fill="hsl(60,55%,55%)"  points="200,224 320,224 320,302 200,302"/>
-            <polygon class="ga-syn-poly" fill="hsl(90,55%,55%)"  points="320,224 470,224 470,302 320,302"/>
-            <polygon class="ga-syn-poly" fill="hsl(135,55%,55%)" points="470,224 770,224 760,302 470,302"/>
+            <polygon class="ga-syn-poly ga-chrom-1"   points="30,224 200,224 200,302 50,302"/>
+            <polygon class="ga-syn-poly ga-chrom-2"   points="200,224 320,224 320,302 200,302"/>
+            <polygon class="ga-syn-poly ga-chrom-3"   points="320,224 470,224 470,302 320,302"/>
+            <polygon class="ga-syn-poly ga-chrom-fused"  points="470,224 770,224 760,302 470,302"/>
             <!-- Strip 4: Phyp. -->
             <g class="ga-syn-ribbon-strip" data-genome="phyp">
-              <rect x="50"  y="302" width="150" height="16" fill="hsl(30,55%,55%)"/>
-              <rect x="200" y="302" width="120" height="16" fill="hsl(60,55%,55%)"/>
-              <rect x="320" y="302" width="150" height="16" fill="hsl(90,55%,55%)"/>
-              <rect x="470" y="302" width="290" height="16" fill="hsl(135,55%,55%)"/>
+              <rect class="ga-chrom-1" x="50"  y="302" width="150" height="16" />
+              <rect class="ga-chrom-2" x="200" y="302" width="120" height="16" />
+              <rect class="ga-chrom-3" x="320" y="302" width="150" height="16" />
+              <rect class="ga-chrom-fused" x="470" y="302" width="290" height="16" />
               <text x="0"   y="314" class="ga-syn-ribbon-glabel">Phyp</text>
             </g>
             <text x="20"  y="340" font-size="9" fill="#888">colour breaks across strips mark lineage-specific rearrangements; the LG04+LG05 fusion in Ipun + Phyp shows as a single wide block in their strips.</text>
