@@ -531,6 +531,164 @@ html[data-theme="academic"] .ga-card {
   letter-spacing: 0.02em;
 }
 
+/* ---------------------------------------------------------------------
+ * page9 View 4 — macrosyntR-style Oxford grid.
+ *
+ * Grid of N_A × N_B cells (genome A on rows, genome B on cols). Each
+ * cell contains a circle whose diameter + colour encode shared-
+ * ortholog count + BH-q. Flat fills, no glow. The two dot states are
+ * `data-syn="hi"` (large blue, q ≤ q_hi) and `data-syn="lo"` (small
+ * yellow, q ≤ q_lo); cells without `data-syn` render empty.
+ * --------------------------------------------------------------------- */
+.ga-syn-hi { color: #3a5f9f; }
+.ga-syn-lo { color: #c9a23a; }
+
+/* Focal-pair toggle row. */
+.ga-syn-toggle {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 10px;
+  font-size: 10.5px;
+  color: var(--ink-dim);
+  margin: 4px 0 8px 0;
+}
+.ga-syn-toggle label {
+  color: var(--ink-dim);
+  letter-spacing: 0.02em;
+}
+.ga-syn-toggle select {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  background: var(--panel-3);
+  color: var(--ink);
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  padding: 2px 4px;
+}
+.ga-syn-swap {
+  font-family: var(--mono);
+  font-size: 12px;
+  background: var(--panel-3);
+  color: var(--ink);
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  padding: 0 8px;
+  cursor: pointer;
+}
+.ga-syn-swap:hover { color: #ff8c6e; border-color: #ff8c6e; }
+
+/* Grid wrapper + the 12×12 mockup. The real renderer sets
+   --ga-syn-cols / --ga-syn-rows from data. */
+.ga-syn-grid-wrap {
+  margin: 4px 0;
+  padding: 8px 10px 10px 10px;
+  background: var(--panel-3);
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  overflow-x: auto;
+}
+.ga-syn-grid {
+  --ga-syn-cols: 12;
+  --ga-syn-rows: 12;
+  display: grid;
+  grid-template-columns: 48px 1fr;
+  grid-template-rows: 22px 1fr;
+  gap: 4px;
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--ink-dim);
+}
+.ga-syn-col-axis {
+  grid-column: 2;
+  grid-row: 1;
+  display: grid;
+  grid-template-columns: repeat(var(--ga-syn-cols), 1fr);
+  align-items: end;
+  gap: 0;
+  text-align: center;
+  letter-spacing: 0.02em;
+}
+.ga-syn-row-axis {
+  grid-column: 1;
+  grid-row: 2;
+  display: grid;
+  grid-template-rows: repeat(var(--ga-syn-rows), 1fr);
+  align-items: center;
+  justify-items: end;
+  padding-right: 4px;
+  gap: 0;
+}
+.ga-syn-cells {
+  grid-column: 2;
+  grid-row: 2;
+  display: grid;
+  grid-template-columns: repeat(var(--ga-syn-cols), 1fr);
+  grid-template-rows: repeat(var(--ga-syn-rows), 22px);
+  gap: 1px;
+  background: var(--rule);     /* shows as faint cell borders */
+  border: 1px solid var(--rule);
+}
+.ga-syn-cell {
+  position: relative;
+  background: var(--panel-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: default;
+}
+/* The dot: drawn as a ::before so the cell can still receive the
+   native title= hover tooltip. */
+.ga-syn-cell::before {
+  content: "";
+  display: block;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: transparent;
+  transition: transform 80ms ease-out;
+}
+.ga-syn-cell[data-syn="hi"]::before {
+  width: 14px; height: 14px;
+  background: #3a5f9f;          /* large blue */
+  opacity: 0.9;
+}
+.ga-syn-cell[data-syn="lo"]::before {
+  width: 7px; height: 7px;
+  background: #c9a23a;          /* small yellow */
+  opacity: 0.85;
+}
+.ga-syn-cell[data-syn]:hover::before {
+  transform: scale(1.15);
+}
+.ga-syn-cell[data-syn]:hover {
+  background: var(--panel-3);
+}
+
+/* Legend strip below the grid. */
+.ga-syn-legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 14px;
+  margin-top: 8px;
+  font-size: 9.5px;
+  color: var(--ink-dim);
+}
+.ga-syn-leg {
+  width: 18px;
+  height: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--panel-2);
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+}
+.ga-syn-leg-label {
+  margin-right: 6px;
+}
+
 /* --- JSON-schema codeblock ------------------------------------------- */
 .ga-schema-block {
   margin: 4px 0;

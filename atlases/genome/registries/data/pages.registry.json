@@ -68,8 +68,8 @@
       "preloads": []
     },
     "page9": {
-      "_label": "synteny — Cactus pairwise blocks",
-      "_doc": "Phase D. Cross-species collinearity for Cgar vs related Siluriformes (Cmac, I. punctatus, plus 7-9 more via catfish-synteny-toolkit wfmash). Three views: pairwise ribbon (one species pair), multi-species ribbon stack, per-chrom dotplot. Inversions render as anti-parallel polygons; translocations as chrom-jumping polygons. Ties to Inversion Atlas page16 cross-species breakpoint catalogue. Future requires_layers: ['synteny_blocks', 'chromosome_map']. Future requires_slots: ['activeChrom'].",
+      "_label": "synteny — Cactus pairwise blocks + macrosyntR Oxford grid",
+      "_doc": "Phase D. Cross-species collinearity for Cgar vs related Siluriformes (Cmac, I. punctatus, plus 7-9 more via catfish-synteny-toolkit wfmash). Four views: (1) pairwise ribbon (one species pair); (2) multi-species ribbon stack; (3) per-chrom dotplot; (4) macrosyntR-style Oxford grid — aggregated chrom-pair view, one dot per (chrom_a × chrom_b) cell, dot size ∝ shared-ortholog count, colour ∝ BH-q (large blue ≤ q_hi=0.01, small yellow ≤ q_lo=0.05, blank otherwise). Focal genomes A/B are toggleable from the page; on change the renderer fetches data/comparative/oxford/<a>_<b>.json. Hover surfaces chrom_a · chrom_b · n_orthologs · q. Inversions render as anti-parallel polygons in View 1; translocations as chrom-jumping polygons. Ties to Inversion Atlas page16 cross-species breakpoint catalogue. Future requires_layers: ['synteny_blocks', 'chromosome_map', 'synteny_oxford_grid']. Future requires_slots: ['activeChrom'].",
       "requires_layers": [],
       "requires_operations": [],
       "requires_slots": [],

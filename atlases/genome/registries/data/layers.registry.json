@@ -6,7 +6,7 @@
     "warm": "IndexedDB-cached at trigger event; first read async ~50ms; subsequent ~10ms",
     "cold": "Fetched on demand; spinner allowed"
   },
-  "_round1_status": "All eleven layers are CONTRACT-ONLY (not-yet-loaded). page1's scaffold renders them as '⚪ not loaded' chips. Phase B turns on chromosome_map + gene_track + repeat_track + crossover_track (the last drives the new page3 CO-density sub-track too). Phase C turns on prdm9_motif (facultative, page11) + nco_gc_track (primary on page12). Layers carrying `_optional: true` are facultative — the consuming page hides the corresponding panel rather than erroring.",
+  "_round1_status": "All twelve layers are CONTRACT-ONLY (not-yet-loaded). page1's scaffold renders them as '⚪ not loaded' chips. Phase B turns on chromosome_map + gene_track + repeat_track + crossover_track (the last drives the new page3 CO-density sub-track too). Phase C turns on prdm9_motif (facultative, page11) + nco_gc_track (primary on page12). Phase D turns on synteny_blocks + synteny_oxford_grid (page9 ribbon + macrosyntR-style Oxford-grid views). Layers carrying `_optional: true` are facultative — the consuming page hides the corresponding panel rather than erroring.",
   "layers": {
 
     "assembly_stats": {
@@ -113,6 +113,17 @@
       "_feeds": "page12 tract ideogram + tract-rate-vs-telomere-distance curves (NCO green / GC yellow)",
       "_source_pipeline": "pedigree NCO / gene-conversion calls",
       "_schema": "see page12 spec — { candidate_id, candidate_span{chrom,start_bp,end_bp}, flank_bp?, tracts[{chrom,start_bp,end_bp,kind∈nco|gc,indiv?,in_span?}], telomere_curve?, curve_params? }"
+    },
+
+    "synteny_oxford_grid": {
+      "tier": "cold",
+      "source": "file",
+      "path": "data/comparative/oxford/<a_id>_<b_id>.json",
+      "_path_doc": "Per ordered focal pair (genome A × genome B). Renderer fetches the file matching the active selection from the page9 toggle; never enumerates the directory.",
+      "_status": "not_loaded",
+      "_feeds": "page9 View 4 — macrosyntR-style Oxford grid (aggregated; one dot per chrom-pair, sized by ortholog count, coloured by BH-q)",
+      "_source_pipeline": "OrthoFinder → macrosyntR (SamiLhll/macrosyntR) chrom-pair Fisher exact + BH",
+      "_schema": "see page9 spec — { pair_id, method, ortholog_source, genome_a{id,label,chroms[]}, genome_b{...}, cells[{chrom_a,chrom_b,n_orthologs,fisher_p?,fisher_q?,significant?}], thresholds?{q_hi,q_lo} }"
     }
   }
 }

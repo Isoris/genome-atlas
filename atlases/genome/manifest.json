@@ -75,7 +75,7 @@
       "stage": "comparative",
       "fragment": "atlases/genome/pages/comparative/page9.html",
       "module": "atlases/genome/pages/comparative/page9.js",
-      "tooltip": "Cactus pairwise synteny: ribbon diagram (Cgar vs Cmac and other Siluriformes) + per-chrom dotplot. Phase D."
+      "tooltip": "Cactus pairwise synteny: ribbon diagram (Cgar vs Cmac and other Siluriformes) + per-chrom dotplot + macrosyntR-style Oxford grid (aggregated chrom-pair view, focal-pair selector, hover tooltips). Phase D."
     },
     {
       "id": "page10",

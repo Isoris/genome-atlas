@@ -47,6 +47,11 @@
           <div><code>FAI + AGP</code></div>
           <div data-ga-layer="chromosome_map" class="ga-layer-status">⚪ not loaded</div>
           <div class="ga-dim">ribbon row scaffold</div>
+
+          <div><code>synteny_oxford_grid</code></div>
+          <div><code>macrosyntR (SamiLhll) — aggregated</code></div>
+          <div data-ga-layer="synteny_oxford_grid" class="ga-layer-status">⚪ not loaded</div>
+          <div class="ga-dim">View 4 Oxford-grid cells (one dot per chrom-pair)</div>
         </div>
       </div>
 
@@ -64,7 +69,245 @@
 
           <div class="ga-panel-name">View 3 — per-chrom dotplot</div>
           <div class="ga-panel-desc">Click any chromosome in the ribbon to open a full dotplot (Cgar chrom × homolog chrom). Hover for block coordinates and identity.</div>
+
+          <div class="ga-panel-name">View 4 — macrosyntR-style Oxford grid</div>
+          <div class="ga-panel-desc">Aggregated chrom-pair view: genome A on rows, genome B on columns, one dot per cell. Dot <b>size</b> ∝ shared-ortholog count; <b class="ga-syn-hi">large blue</b> = significant (BH-q &lt; 0.01), <b class="ga-syn-lo">small yellow</b> = marginal (q &lt; 0.05), empty cell = no significant overlap. The focal pair (genome A / genome B) is selectable — see toggle below.</div>
         </div>
+      </div>
+
+      <div class="ga-card">
+        <div class="ga-card-header">
+          <div class="ga-card-title">View 4 — Oxford grid (mockup)</div>
+          <div class="ga-card-status">macrosyntR-style · phase D</div>
+        </div>
+        <div class="ga-syn-toggle" role="toolbar" aria-label="Oxford-grid focal pair">
+          <label for="ga-syn-a">genome A (rows)</label>
+          <select id="ga-syn-a" data-ga-syn-focal="a">
+            <option value="cgar" selected>C. gariepinus (Cgar)</option>
+            <option value="cmac">C. macrocephalus (Cmac)</option>
+            <option value="ipun">I. punctatus (Ipun)</option>
+          </select>
+          <label for="ga-syn-b">genome B (cols)</label>
+          <select id="ga-syn-b" data-ga-syn-focal="b">
+            <option value="cgar">C. gariepinus (Cgar)</option>
+            <option value="cmac" selected>C. macrocephalus (Cmac)</option>
+            <option value="ipun">I. punctatus (Ipun)</option>
+          </select>
+          <button type="button" class="ga-syn-swap" data-ga-syn-swap title="Swap A ↔ B">⇄</button>
+        </div>
+        <div class="ga-syn-grid-wrap">
+          <div class="ga-syn-grid" aria-label="macrosyntR-style Oxford grid mockup">
+            <!-- row labels (genome A) along the left, col labels (genome B) along the top.
+                 Mockup cells stand in for a real chrom×chrom matrix. Hover surfaces
+                 chrom_a · chrom_b · n_orthologs · BH-q. -->
+            <div class="ga-syn-col-axis">
+              <span>LG01</span><span>LG02</span><span>LG03</span><span>LG04</span>
+              <span>LG05</span><span>LG06</span><span>LG07</span><span>LG08</span>
+              <span>LG09</span><span>LG10</span><span>LG11</span><span>LG12</span>
+            </div>
+            <div class="ga-syn-row-axis">
+              <span>LG01</span><span>LG02</span><span>LG03</span><span>LG04</span>
+              <span>LG05</span><span>LG06</span><span>LG07</span><span>LG08</span>
+              <span>LG09</span><span>LG10</span><span>LG11</span><span>LG12</span>
+            </div>
+            <div class="ga-syn-cells">
+              <!-- 12 × 12 mockup. data-syn levels: "hi" (large blue), "lo" (small
+                   yellow), "" (empty). title= drives a native hover tooltip; the
+                   real renderer will replace it with a richer surface. -->
+              <!-- row 1 (chrom_a = LG01) -->
+              <span class="ga-syn-cell" data-syn="hi" title="LG01 × LG01 · 412 orth · q=2e-31"></span>
+              <span class="ga-syn-cell" data-syn="lo" title="LG01 × LG02 · 28 orth · q=2e-2"></span>
+              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
+              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
+              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
+              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
+              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
+              <!-- row 2 -->
+              <span class="ga-syn-cell" data-syn="lo" title="LG02 × LG01 · 31 orth · q=3e-2"></span>
+              <span class="ga-syn-cell" data-syn="hi" title="LG02 × LG02 · 388 orth · q=4e-29"></span>
+              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
+              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
+              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
+              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
+              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
+              <!-- row 3: split LG03_a ↔ LG03_b + LG07_b (translocation) -->
+              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
+              <span class="ga-syn-cell" data-syn="hi" title="LG03 × LG03 · 256 orth · q=6e-20"></span>
+              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
+              <span class="ga-syn-cell"></span>
+              <span class="ga-syn-cell" data-syn="lo" title="LG03 × LG07 · 47 orth · q=8e-4"></span>
+              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
+              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
+              <span class="ga-syn-cell"></span>
+              <!-- row 4 -->
+              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
+              <span class="ga-syn-cell"></span>
+              <span class="ga-syn-cell" data-syn="hi" title="LG04 × LG04 · 401 orth · q=1e-30"></span>
+              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
+              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
+              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
+              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
+              <!-- row 5 -->
+              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
+              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
+              <span class="ga-syn-cell" data-syn="hi" title="LG05 × LG05 · 333 orth · q=2e-25"></span>
+              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
+              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
+              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
+              <span class="ga-syn-cell"></span>
+              <!-- row 6 -->
+              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
+              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
+              <span class="ga-syn-cell"></span>
+              <span class="ga-syn-cell" data-syn="hi" title="LG06 × LG06 · 298 orth · q=1e-22"></span>
+              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
+              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
+              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
+              <!-- row 7 -->
+              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
+              <span class="ga-syn-cell" data-syn="lo" title="LG07 × LG03 · 39 orth · q=5e-3"></span>
+              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
+              <span class="ga-syn-cell"></span>
+              <span class="ga-syn-cell" data-syn="hi" title="LG07 × LG07 · 277 orth · q=9e-21"></span>
+              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
+              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
+              <span class="ga-syn-cell"></span>
+              <!-- row 8 -->
+              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
+              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
+              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
+              <span class="ga-syn-cell"></span>
+              <span class="ga-syn-cell" data-syn="hi" title="LG08 × LG08 · 244 orth · q=3e-18"></span>
+              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
+              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
+              <!-- row 9 -->
+              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
+              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
+              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
+              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
+              <span class="ga-syn-cell" data-syn="hi" title="LG09 × LG09 · 219 orth · q=2e-16"></span>
+              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
+              <span class="ga-syn-cell"></span>
+              <!-- row 10 -->
+              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
+              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
+              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
+              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
+              <span class="ga-syn-cell"></span>
+              <span class="ga-syn-cell" data-syn="hi" title="LG10 × LG10 · 198 orth · q=4e-15"></span>
+              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
+              <!-- row 11 -->
+              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
+              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
+              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
+              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
+              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
+              <span class="ga-syn-cell" data-syn="hi" title="LG11 × LG11 · 171 orth · q=8e-13"></span>
+              <span class="ga-syn-cell"></span>
+              <!-- row 12 -->
+              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
+              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
+              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
+              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
+              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
+              <span class="ga-syn-cell"></span>
+              <span class="ga-syn-cell" data-syn="hi" title="LG12 × LG12 · 156 orth · q=2e-11"></span>
+            </div>
+          </div>
+          <div class="ga-syn-legend">
+            <span class="ga-syn-cell ga-syn-leg" data-syn="hi"></span>
+            <span class="ga-syn-leg-label">significant (BH-q &lt; 0.01)</span>
+            <span class="ga-syn-cell ga-syn-leg" data-syn="lo"></span>
+            <span class="ga-syn-leg-label">marginal (q &lt; 0.05)</span>
+            <span class="ga-syn-cell ga-syn-leg"></span>
+            <span class="ga-syn-leg-label">no signal</span>
+          </div>
+        </div>
+        <div class="ga-card-footnote">
+          Method: macrosyntR's chrom-pair Fisher exact + BH (SamiLhll
+          <code>github.com/SamiLhll/macrosyntR</code>). The selectors above
+          switch the focal pair (genome A × genome B); the renderer fetches
+          <code>data/comparative/oxford/&lt;a&gt;_&lt;b&gt;.json</code> on
+          change. Hover surfaces <code>chrom_a · chrom_b · n_orthologs ·
+          q</code>; click drills into View 3 (per-chrom dotplot) for that
+          cell.
+        </div>
+      </div>
+
+      <div class="ga-card">
+        <div class="ga-card-header">
+          <div class="ga-card-title">Import schema — <code>synteny_oxford_grid.json</code> (per focal pair)</div>
+          <div class="ga-card-status">contract</div>
+        </div>
+        <div class="ga-card-para ga-dim">
+          One JSON per ordered (genome A, genome B) pair. File path:
+          <code>data/comparative/oxford/&lt;a_id&gt;_&lt;b_id&gt;.json</code>
+          (e.g. <code>cgar_cmac.json</code>). Cells are sparse — only those
+          with at least one ortholog need to appear; empty cells are inferred
+          and rendered blank.
+        </div>
+<pre class="ga-schema-block"><code>{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "synteny_oxford_grid",
+  "type": "object",
+  "required": ["pair_id", "genome_a", "genome_b", "cells"],
+  "properties": {
+    "pair_id":  { "type": "string", "description": "e.g. 'cgar_cmac'." },
+    "method":   { "enum": ["macrosyntR", "manual"], "default": "macrosyntR" },
+    "ortholog_source": { "type": "string", "description": "e.g. 'OrthoFinder v2.5.5'." },
+
+    "genome_a": { "$ref": "#/$defs/genome" },
+    "genome_b": { "$ref": "#/$defs/genome" },
+
+    "cells": {
+      "type": "array",
+      "description": "Sparse: include only chrom-pairs with ≥1 ortholog.",
+      "items": {
+        "type": "object",
+        "required": ["chrom_a", "chrom_b", "n_orthologs"],
+        "properties": {
+          "chrom_a":      { "type": "string" },
+          "chrom_b":      { "type": "string" },
+          "n_orthologs":  { "type": "integer", "minimum": 0 },
+          "fisher_p":     { "type": "number" },
+          "fisher_q":     { "type": "number", "description": "BH-adjusted." },
+          "significant":  { "type": "boolean", "description": "True if q < 0.05." }
+        }
+      }
+    },
+
+    "thresholds": {
+      "type": "object",
+      "properties": {
+        "q_hi": { "type": "number", "default": 0.01, "description": "Below = large blue." },
+        "q_lo": { "type": "number", "default": 0.05, "description": "Below = small yellow." }
+      }
+    }
+  },
+
+  "$defs": {
+    "genome": {
+      "type": "object",
+      "required": ["id", "chroms"],
+      "properties": {
+        "id":    { "type": "string" },
+        "label": { "type": "string" },
+        "chroms": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["id", "gene_count"],
+            "properties": {
+              "id":         { "type": "string" },
+              "gene_count": { "type": "integer", "minimum": 0 },
+              "length_bp":  { "type": "integer", "minimum": 1 }
+            }
+          }
+        }
+      }
+    }
+  }
+}</code></pre>
       </div>
 
       <div class="ga-card">
@@ -79,7 +322,10 @@
           • <b>page10 (ancestral karyotype)</b> — uses the same Cactus output to
           reconstruct the ancestral state.<br>
           • <b>catfish-synteny-toolkit</b> — analysis-pipeline repo producing
-          <code>synteny_blocks.json</code> (wfmash 1-to-1 + Cactus assembly).
+          <code>synteny_blocks.json</code> (wfmash 1-to-1 + Cactus assembly).<br>
+          • <b>macrosyntR</b> (Lhuillier-Akakpo &amp; Simakov, bioRxiv 2023) —
+          <code>github.com/SamiLhll/macrosyntR</code>, the upstream
+          ordering + Fisher/BH significance code for the View-4 Oxford grid.
         </div>
       </div>
   </div>
