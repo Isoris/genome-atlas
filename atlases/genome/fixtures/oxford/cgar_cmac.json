@@ -1,5 +1,5 @@
 {
-  "_doc": "Mock example for synteny_oxford_grid. Validates the page9 View 4 schema. Cells match the 12x12 mockup in atlases/genome/pages/comparative/page9.html so the renderer + the spec page render the same picture.",
+  "_doc": "Mock example for synteny_oxford_grid. Validates the page_synteny View 4 schema. Cells match the 12x12 mockup in atlases/genome/pages/comparative/page_synteny.html so the renderer + the spec page render the same picture.",
   "pair_id": "cgar_cmac",
   "method": "macrosyntR",
   "ortholog_source": "OrthoFinder v2.5.5 (mock run)",

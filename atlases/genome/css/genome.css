@@ -3,7 +3,7 @@
  * Genome Atlas — atlas-wide stylesheet.
  *
  * Round-1 bundle: orange/coral accent rules + the .ga-card section
- * styling used by page1 (the scaffold landing page). Mirrors the
+ * styling used by page_scaffold (the scaffold landing page). Mirrors the
  * Inversion Atlas's per-atlas stylesheet pattern (atlases/inversion/css/
  * inversion.css), but tiny — the Genome Atlas is a scaffold today.
  *
@@ -36,9 +36,9 @@
 /* ---------------------------------------------------------------------
  * Scoping note (round-2 extension).
  *
- * Round 1 scoped every rule under #page1 because there was only one
- * page in the Genome Atlas. Round 2 added page2..page10; the same
- * .ga-* class set is now reused across all of them, so the #page1
+ * Round 1 scoped every rule under #page_scaffold because there was only one
+ * page in the Genome Atlas. Round 2 added page_assembly_stats..page_ancestral_karyotype; the same
+ * .ga-* class set is now reused across all of them, so the #page_scaffold
  * prefix has been dropped and the rules apply atlas-wide. The .ga-*
  * namespace itself is the scope guard — no other atlas uses it.
  * --------------------------------------------------------------------- */
@@ -47,12 +47,12 @@
  * Chromosome palette tokens.
  *
  * One categorical hue per chromosome, used wherever the spec needs to
- * say "this is chrom N" — ideogram strips on page9 V1-V3, syntenic
- * blocks on page10, the categorical row/col colouring on the page9 V4
+ * say "this is chrom N" — ideogram strips on page_synteny V1-V3, syntenic
+ * blocks on page_ancestral_karyotype, the categorical row/col colouring on the page_synteny V4
  * Oxford grid. Hues step by 30° around the colour wheel for the first
  * 11 chroms; karyotypes with 12-13 chroms get the 15°/45° infill
  * slots; the 135° half-step is reserved for "fused/transition" blocks
- * (page9 V3). Saturation and lightness are factored out so the whole
+ * (page_synteny V3). Saturation and lightness are factored out so the whole
  * palette can be retuned in one place.
  *
  * Pre-existing pattern: .ga-syn-cell computes a hue dynamically from
@@ -140,7 +140,7 @@
   letter-spacing: 0.02em;
 }
 
-/* Card — the boxed section primitive used by every section on page1. */
+/* Card — the boxed section primitive used by every section on page_scaffold. */
 .ga-card {
   background: var(--panel-2);
   border: 1px solid var(--rule);
@@ -209,7 +209,7 @@
 /* When a layer is loaded, future rounds set [data-ga-layer-loaded="1"]
    on the chip and this rule turns it green. Kept here so the wiring
    only has to flip an attribute. */
-#page1 [data-ga-layer][data-ga-layer-loaded="1"] {
+#page_scaffold [data-ga-layer][data-ga-layer-loaded="1"] {
   color: var(--good);
 }
 
@@ -328,7 +328,7 @@ html[data-theme="academic"] .ga-card {
 }
 
 /* ---------------------------------------------------------------------
- * QC tile grid (page2 — assembly stats banner).
+ * QC tile grid (page_assembly_stats — assembly stats banner).
  *
  * Six tiles in a responsive grid. Each tile = small label on top,
  * big-number value in the middle, small sub-label at the bottom.
@@ -385,7 +385,7 @@ html[data-theme="academic"] .ga-card {
 }
 
 /* ---------------------------------------------------------------------
- * page11 — crossovers.
+ * page_crossovers — crossovers.
  *
  * Three mockups: sex-specific CO ideogram (dots beside vertical rods),
  * CO-rate vs. relative telomere distance (smoothed curve + CI band),
@@ -520,7 +520,7 @@ html[data-theme="academic"] .ga-card {
 .ga-co-nco-line     { top: 130px; background: #4f9e64; opacity: 0.85; border-top: 2px dashed #4f9e64; height: 0; }
 .ga-co-gc-line      { top: 142px; background: #c9a23a; opacity: 0.85; border-top: 2px dashed #c9a23a; height: 0; }
 
-/* page12 NCO / GC band+line variants — analogous to female/male on page11. */
+/* page_nco_gc NCO / GC band+line variants — analogous to female/male on page_crossovers. */
 .ga-co-nco-band  { top: 70px;  background: #4f9e64; height: 65px; clip-path: polygon(0 30%,20% 35%,50% 45%,80% 55%,100% 60%,100% 90%,80% 85%,50% 80%,20% 80%,0 85%); }
 .ga-co-nco-curve { top: 98px;  background: #4f9e64; height: 2px;  opacity: 0.95; border-radius: 1px; }
 .ga-co-gc-band   { top: 92px;  background: #c9a23a; height: 55px; clip-path: polygon(0 70%,20% 60%,45% 45%,75% 25%,100% 15%,100% 80%,75% 70%,45% 75%,20% 80%,0 85%); }
@@ -601,7 +601,7 @@ html[data-theme="academic"] .ga-card {
 }
 
 /* ---------------------------------------------------------------------
- * page9 View 4 — macrosyntR-style Oxford grid.
+ * page_synteny View 4 — macrosyntR-style Oxford grid.
  *
  * Grid of N_A × N_B cells (genome A on rows, genome B on cols). Each
  * cell contains a circle whose diameter + colour encode shared-
@@ -689,7 +689,7 @@ html[data-theme="academic"] .ga-card {
   gap: 0;
 }
 /* Axis labels are clickable in round 1 — single-click pre-filters
-   page13's orthologue tables by that chromosome. */
+   page_orthologues's orthologue tables by that chromosome. */
 .ga-syn-col-axis span[data-chrom],
 .ga-syn-row-axis span[data-chrom] {
   cursor: pointer;
@@ -887,7 +887,7 @@ html[data-theme="academic"] .ga-card {
 }
 
 /* ---------------------------------------------------------------------
- * page10 — ancestral karyotype (WGDI-style painting).
+ * page_ancestral_karyotype — ancestral karyotype (WGDI-style painting).
  *
  * Visual contract borrowed from WGDI's karyotype / ancestral_karyotype
  * modules (Sun et al. Molecular Plant 2022, BSD-2-Clause): flat fills
@@ -895,7 +895,7 @@ html[data-theme="academic"] .ga-card {
  * one hue per ancestral linkage group. No code is copied — only the
  * visual style. The hue palette steps in 30° increments (HSL S=55%,
  * L=55%) so 12 + a wraparound covers a 13-ALG genome and keeps adjacent
- * groups visually separable. Same palette as page9 Views 1/2/4.
+ * groups visually separable. Same palette as page_synteny Views 1/2/4.
  * --------------------------------------------------------------------- */
 .ga-kary-wrap {
   margin: 4px 0;
@@ -991,7 +991,7 @@ html[data-theme="academic"] .ga-card {
 .ga-syn-poly-tx   { opacity: 0.22; stroke: rgba(0,0,0,0.35); stroke-width: 0.5; stroke-dasharray: 3 2; }
 
 /* --- Oxford-grid cell popover ---------------------------------------- *
- * Anchored to the clicked cell by page9.js (sets inline left/top).
+ * Anchored to the clicked cell by page_synteny.js (sets inline left/top).
  * Lives inside the grid card so the card's relative positioning frames
  * it. Dismiss-on-outside-click and Escape are wired in JS.
  * -------------------------------------------------------------------- */
@@ -1071,7 +1071,7 @@ html[data-theme="academic"] .ga-card {
 .ga-syn-popover-actions a:hover { text-decoration: underline; }
 
 /* ---------------------------------------------------------------------
- * page13 — orthologue tables (focal vs. non-focal).
+ * page_orthologues — orthologue tables (focal vs. non-focal).
  *
  * Three table layouts share .ga-num (right-aligned, mono) and the
  * .ga-ortho-good / -mid / -warn colour ramp. All grids; no <table>.
@@ -1114,7 +1114,7 @@ html[data-theme="academic"] .ga-card {
   background: var(--panel-3);
 }
 
-/* Incoming highlight from page9. page13.js applies .ga-ortho-flash to
+/* Incoming highlight from page_synteny. page_orthologues.js applies .ga-ortho-flash to
    the matching row's cells; this animation runs once and fades. */
 @keyframes ga-ortho-flash-kf {
   0%   { background: rgba(255, 140, 110, 0.35); }

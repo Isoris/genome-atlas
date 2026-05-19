@@ -119,11 +119,11 @@ example of every one of those slots filled in.
 
 1. `inversion-atlas/atlases/inversion/manifest.json` — see the
    shape.
-2. `inversion-atlas/atlases/inversion/pages/discovery/page1.html` +
-   `page1.js` + `page1/` subdir — see a "big page" with sub-modules.
-3. `inversion-atlas/atlases/inversion/pages/review/page7.js` (220 LOC)
-   + `pages/review/page7/_state.js` (14 LOC) + `tests/test_review_page7.js`
-   (100 LOC) + `tests/smoke_review_page7_round5.mjs` (200 LOC) —
+2. `inversion-atlas/atlases/inversion/pages/discovery/page_scaffold.html` +
+   `page_scaffold.js` + `page_scaffold/` subdir — see a "big page" with sub-modules.
+3. `inversion-atlas/atlases/inversion/pages/review/page_variant_annotations.js` (220 LOC)
+   + `pages/review/page_variant_annotations/_state.js` (14 LOC) + `tests/test_review_page_variant_annotations.js`
+   (100 LOC) + `tests/smoke_review_page_variant_annotations_round5.mjs` (200 LOC) —
    see the **simplest possible migrated page** (pattern 4
    thin-loader-stub variant). This is the template every "external
    renderer" page should follow.

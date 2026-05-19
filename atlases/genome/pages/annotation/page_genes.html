@@ -1,0 +1,91 @@
+<div id="page_genes" class="page">
+  <div class="ga-content">
+      <div class="ga-title">
+        <span class="ga-title-bullet">▰</span> Genes — track, density, cargo
+      </div>
+      <div class="ga-subtitle">
+        Stage: annotation · spec / phase B–C · driven by <code>gene_track</code>
+      </div>
+
+      <div class="ga-card">
+        <div class="ga-card-header">
+          <div class="ga-card-title">What this page shows</div>
+          <div class="ga-card-status ga-status-phase">spec · phase B (track) → phase C (cargo)</div>
+        </div>
+        <div class="ga-card-para">
+          Three views over the gene annotation: (1) <b>genome-wide density</b> —
+          per-chromosome gene-count histogram; (2) <b>per-chromosome track</b> —
+          gene models on a length-scaled axis for one chrom at a time
+          (driven by <code>shared.activeChrom</code>); (3) <b>gene cargo
+          per inversion</b> — for every promoted candidate in the Inversion
+          Atlas, list the genes that fall inside the inversion span, sorted
+          by SnpEff impact when <code>variant_annotations</code> is loaded.
+        </div>
+        <div class="ga-card-para ga-dim">
+          The cargo view is the bridge between the assembly paper and the
+          Inversion Atlas's manuscript — it answers "what does this inversion
+          break?" without leaving the tool.
+        </div>
+      </div>
+
+      <div class="ga-card">
+        <div class="ga-card-header">
+          <div class="ga-card-title">Required data layers</div>
+          <div class="ga-card-status">phase B–C</div>
+        </div>
+        <div class="ga-layers-grid">
+          <div class="ga-layers-head">layer</div>
+          <div class="ga-layers-head">source</div>
+          <div class="ga-layers-head">status</div>
+          <div class="ga-layers-head">feeds</div>
+
+          <div><code>gene_track</code></div>
+          <div><code>BRAKER / TOGA / RefSeq</code></div>
+          <div data-ga-layer="gene_track" class="ga-layer-status">⚪ not loaded</div>
+          <div class="ga-dim">density histogram · per-chrom track · cargo table</div>
+
+          <div><code>chromosome_map</code></div>
+          <div><code>FAI + AGP</code></div>
+          <div data-ga-layer="chromosome_map" class="ga-layer-status">⚪ not loaded</div>
+          <div class="ga-dim">length axis · chrom names</div>
+
+          <div><code>variant_annotations</code></div>
+          <div><code>SnpEff + VEP</code></div>
+          <div data-ga-layer="variant_annotations" class="ga-layer-status">⚪ not loaded</div>
+          <div class="ga-dim">cargo impact column (phase E)</div>
+        </div>
+      </div>
+
+      <div class="ga-card">
+        <div class="ga-card-header">
+          <div class="ga-card-title">Three views (mockup)</div>
+          <div class="ga-card-status">phase plan</div>
+        </div>
+        <div class="ga-panels-grid">
+          <div class="ga-panel-name">View 1 — genome-wide density</div>
+          <div class="ga-panel-desc">Bar chart, one bar per chromosome, height = gene count. Sort by length or by count. Highlights cross-haplotype asymmetries (Gar vs Mac).</div>
+
+          <div class="ga-panel-name">View 2 — per-chrom gene track</div>
+          <div class="ga-panel-desc">Gene models drawn as boxes (exons) + lines (introns) along a length-scaled axis. Color by strand. Hover to surface gene name + functional annotation. Width matches the Inversion Atlas scrubber so two windows can be stacked.</div>
+
+          <div class="ga-panel-name">View 3 — gene cargo per inversion</div>
+          <div class="ga-panel-desc">Table: candidate id · chrom · span · gene count · gene list (truncated) · max impact (HIGH / MODERATE / LOW / MODIFIER). Reads cross-atlas from <code>shared.candidateList</code>.</div>
+        </div>
+      </div>
+
+      <div class="ga-card">
+        <div class="ga-card-header">
+          <div class="ga-card-title">Cross-references</div>
+          <div class="ga-card-status">see also</div>
+        </div>
+        <div class="ga-card-para ga-dim">
+          • <b>Inversion Atlas page_scaffold / page_assembly_stats</b> — candidate selection drives the
+          cargo view here.<br>
+          • <b>page_variant_annotations (variant annotations)</b> — supplies the impact column for
+          the cargo table.<br>
+          • <b>page_chromosome_overview (chromosome overview)</b> — clicking the gene-density
+          stripe there opens this page filtered to that chrom.
+        </div>
+      </div>
+  </div>
+</div>

@@ -26,7 +26,7 @@ This repo has no template engine, so "include" means one of:
 
 | Partial | What it shows | Used by |
 |---|---|---|
-| `_chrom-palette-swatches.html` | All 14 `--ga-chrom-*` palette tokens with utility-class names + hue degrees. Visual key for the chromosome palette tokens defined in `genome.css`. | Reference; spec authors can embed via `<iframe class="ga-chrom-palette-frame">` when a page benefits from a colour key (e.g. page9, page10, page13). |
+| `_chrom-palette-swatches.html` | All 14 `--ga-chrom-*` palette tokens with utility-class names + hue degrees. Visual key for the chromosome palette tokens defined in `genome.css`. | Reference; spec authors can embed via `<iframe class="ga-chrom-palette-frame">` when a page benefits from a colour key (e.g. page_synteny, page_ancestral_karyotype, page_orthologues). |
 
 ## Adding a partial
 

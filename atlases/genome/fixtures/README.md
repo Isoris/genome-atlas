@@ -4,7 +4,7 @@ Small, hand-written example files that exercise every JSON-Schema contract
 embedded on the spec pages. **Committed.** Their purpose is twofold:
 
 1. **Schema validation** — every file here parses cleanly against the schema
-   block on its matching spec page (page9 / page11 / page12 / page13).
+   block on its matching spec page (page_synteny / page_crossovers / page_nco_gc / page_orthologues).
 2. **Renderer test bed** — the round-1 renderers are no-ops, but once they
    wire in (phase B–D) these fixtures are the first thing they load.
 
@@ -48,11 +48,11 @@ matching the active state slot, so this is a clean, reversible setup.)
 
 | File | Layer | Spec page | Demonstrates |
 |---|---|---|---|
-| `crossovers/cgar_inv_example_01.json` | `crossover_track` | page11 | Per-inversion-candidate CO events, pre-binned telomere curve, populated `prdm9_motif.pwm` (View 3 logo renders) |
-| `nco_gc/cgar_inv_example_01.json` | `nco_gc_track` | page12 | Companion NCO + GC tracts for the same candidate; pre-binned curves for both kinds |
-| `oxford/cgar_cmac.json` | `synteny_oxford_grid` | page9 V4 | Cgar × Cmac chrom-pair counts; cells match the 12×12 page9 mockup exactly |
-| `orthologs/cgar.json` | `ortholog_tables` | page13 V1+V2 | Per-focal summary + per-chrom %1:1 for 4 non-focals (Cmac, Ipun, Phyp, Saso) |
-| `orthologs/pairs/cgar_cmac.json` | `ortholog_pairs` | page13 V3 | Per-pair gene rows including a 1:n duplication + an orphan |
+| `crossovers/cgar_inv_example_01.json` | `crossover_track` | page_crossovers | Per-inversion-candidate CO events, pre-binned telomere curve, populated `prdm9_motif.pwm` (View 3 logo renders) |
+| `nco_gc/cgar_inv_example_01.json` | `nco_gc_track` | page_nco_gc | Companion NCO + GC tracts for the same candidate; pre-binned curves for both kinds |
+| `oxford/cgar_cmac.json` | `synteny_oxford_grid` | page_synteny V4 | Cgar × Cmac chrom-pair counts; cells match the 12×12 page_synteny mockup exactly |
+| `orthologs/cgar.json` | `ortholog_tables` | page_orthologues V1+V2 | Per-focal summary + per-chrom %1:1 for 4 non-focals (Cmac, Ipun, Phyp, Saso) |
+| `orthologs/pairs/cgar_cmac.json` | `ortholog_pairs` | page_orthologues V3 | Per-pair gene rows including a 1:n duplication + an orphan |
 
 Each fixture carries a top-level `_doc` string — the renderers ignore
 underscore-prefixed keys, so this is the cheapest way to make a data file
@@ -61,10 +61,10 @@ self-documenting.
 ## Cross-checks
 
 - `crossovers/cgar_inv_example_01.json` and `nco_gc/cgar_inv_example_01.json`
-  share `candidate_id` + `candidate_span` so page11 and page12 stack
+  share `candidate_id` + `candidate_span` so page_crossovers and page_nco_gc stack
   cleanly on the same candidate.
 - The cells in `oxford/cgar_cmac.json` match the cell positions in
-  page9.html's mockup — clicking through the spec page and clicking a
+  page_synteny.html's mockup — clicking through the spec page and clicking a
   cell with this fixture loaded should surface the same numbers.
 - The genome ids (`cgar`, `cmac`, `ipun`, `phyp`, `saso`) are consistent
   across the orthologue + Oxford-grid fixtures.

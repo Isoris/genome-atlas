@@ -1,5 +1,5 @@
 {
-  "_doc": "Mock example for crossover_track. Validates the page11 JSON-Schema. Drop the real per-candidate file here under the same name pattern: <candidate_id>.json.",
+  "_doc": "Mock example for crossover_track. Validates the page_crossovers JSON-Schema. Drop the real per-candidate file here under the same name pattern: <candidate_id>.json.",
   "candidate_id": "cgar_inv_example_01",
   "cohort": "Cgar F1xF1 progeny (mock, n=42)",
   "individuals": 42,

@@ -1,5 +1,5 @@
 {
-  "_doc": "Mock example for ortholog_tables (per focal genome = cgar). Rows match the page13 View 1 mockup. Validates the JSON-Schema embedded on page13.",
+  "_doc": "Mock example for ortholog_tables (per focal genome = cgar). Rows match the page_orthologues View 1 mockup. Validates the JSON-Schema embedded on page_orthologues.",
   "focal": {
     "id": "cgar",
     "label": "C. gariepinus",

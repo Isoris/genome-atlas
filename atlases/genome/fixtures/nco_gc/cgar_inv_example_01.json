@@ -1,5 +1,5 @@
 {
-  "_doc": "Mock example for nco_gc_track. Companion to crossovers/cgar_inv_example_01.json — same candidate_id and span so the two pages stack cleanly. Validates the page12 JSON-Schema.",
+  "_doc": "Mock example for nco_gc_track. Companion to crossovers/cgar_inv_example_01.json — same candidate_id and span so the two pages stack cleanly. Validates the page_nco_gc JSON-Schema.",
   "candidate_id": "cgar_inv_example_01",
   "cohort": "Cgar F1xF1 progeny (mock, n=42)",
   "individuals": 42,

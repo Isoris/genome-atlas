@@ -1,5 +1,5 @@
 {
-  "_doc": "Mock example for ortholog_pairs (per focal x non-focal pair). Rows match the page13 View 3 gene-level explorer mockup. Lazy-loaded by page13.js on column reveal.",
+  "_doc": "Mock example for ortholog_pairs (per focal x non-focal pair). Rows match the page_orthologues View 3 gene-level explorer mockup. Lazy-loaded by page_orthologues.js on column reveal.",
   "focal_id": "cgar",
   "non_focal_id": "cmac",
   "rows": [
