@@ -619,6 +619,19 @@ html[data-theme="academic"] .ga-card {
   padding-right: 4px;
   gap: 0;
 }
+/* Axis labels are clickable in round 1 — single-click pre-filters
+   page13's orthologue tables by that chromosome. */
+.ga-syn-col-axis span[data-chrom],
+.ga-syn-row-axis span[data-chrom] {
+  cursor: pointer;
+  padding: 1px 2px;
+  border-radius: 2px;
+}
+.ga-syn-col-axis span[data-chrom]:hover,
+.ga-syn-row-axis span[data-chrom]:hover {
+  color: #ff8c6e;
+  background: var(--panel-3);
+}
 .ga-syn-cells {
   grid-column: 2;
   grid-row: 2;
@@ -804,6 +817,86 @@ html[data-theme="academic"] .ga-card {
   opacity: 0.9;
 }
 
+/* --- Oxford-grid cell popover ---------------------------------------- *
+ * Anchored to the clicked cell by page9.js (sets inline left/top).
+ * Lives inside the grid card so the card's relative positioning frames
+ * it. Dismiss-on-outside-click and Escape are wired in JS.
+ * -------------------------------------------------------------------- */
+.ga-card { position: relative; }
+.ga-syn-popover {
+  position: absolute;
+  z-index: 5;
+  min-width: 280px;
+  max-width: 360px;
+  background: var(--panel-2);
+  border: 1px solid var(--rule);
+  border-left: 3px solid #ff8c6e;
+  border-radius: 3px;
+  padding: 8px 10px 10px 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+  font-size: 10.5px;
+  color: var(--ink);
+}
+.ga-syn-popover[hidden] { display: none; }
+.ga-syn-popover-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.ga-syn-popover-close {
+  background: none;
+  border: none;
+  color: var(--ink-dim);
+  font-size: 14px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 2px;
+}
+.ga-syn-popover-close:hover { color: #ff8c6e; }
+.ga-syn-popover-meta {
+  font-size: 9.5px;
+  color: var(--ink-dim);
+  margin-bottom: 6px;
+}
+.ga-syn-popover-table {
+  display: grid;
+  grid-template-columns: 1.2fr 1.2fr 0.6fr;
+  gap: 2px 8px;
+  margin-bottom: 6px;
+  font-size: 10px;
+}
+.ga-syn-popover-row {
+  display: contents;
+}
+.ga-syn-popover-row > * {
+  padding: 2px 0;
+  border-bottom: 1px dashed var(--rule);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ga-syn-popover-row--head {
+  font-weight: 600;
+  color: var(--ink-dim);
+}
+.ga-syn-popover-row--head > * {
+  border-bottom: 1px solid var(--rule);
+}
+.ga-syn-popover-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 10px;
+}
+.ga-syn-popover-actions a {
+  color: #ff8c6e;
+  text-decoration: none;
+}
+.ga-syn-popover-actions a:hover { text-decoration: underline; }
+
 /* ---------------------------------------------------------------------
  * page13 — orthologue tables (focal vs. non-focal).
  *
@@ -846,6 +939,16 @@ html[data-theme="academic"] .ga-card {
 }
 .ga-ortho-summary-row:hover > * {
   background: var(--panel-3);
+}
+
+/* Incoming highlight from page9. page13.js applies .ga-ortho-flash to
+   the matching row's cells; this animation runs once and fades. */
+@keyframes ga-ortho-flash-kf {
+  0%   { background: rgba(255, 140, 110, 0.35); }
+  100% { background: transparent; }
+}
+.ga-ortho-flash > * {
+  animation: ga-ortho-flash-kf 1500ms ease-out 1;
 }
 
 /* --- View 2: per focal-chrom breakdown ------------------------------- */

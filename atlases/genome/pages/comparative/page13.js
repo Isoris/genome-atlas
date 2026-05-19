@@ -40,6 +40,7 @@ export async function mount(root, atlasState, registry) {
   catch (e) { console.warn('page13.mount: refreshPage13 threw —', e); }
   _wireFocalSelector(root, legacyState, atlasState);
   _wireSearchFilter(root, legacyState);
+  _applyIncomingFilter(root, legacyState, atlasState);
   if (atlasState.genome) atlasState.genome._page13State = legacyState;
 }
 
@@ -77,6 +78,66 @@ function _wireFocalSelector(root, state, atlasState) {
     // Phase D: fetch data/comparative/orthologs/<focal>.json and refresh
     // Views 1 + 2; View 3's per-pair caches are invalidated.
   });
+}
+
+// Read incoming pre-filter slots from shared (set by page9's Oxford-grid
+// gestures): drilledChrom (axis click) and drilledPair (cell dblclick or
+// the popover "open" link). When present:
+//   • Sync focal genome.
+//   • Pre-fill the gene-level explorer search box with a chrom prefix
+//     (e.g. "CGAR.LG01.") so View 3 narrows to that chrom.
+//   • Add data-ga-ortho-highlight = "<nonfocal_id>" on the summary table
+//     so a CSS rule can flash the matching row.
+// The slot is consumed (cleared) after applying so a later mount won't
+// re-apply stale state.
+function _applyIncomingFilter(root, state, atlasState) {
+  const shared = (atlasState && atlasState.shared) || {};
+  const dc = shared.drilledChrom;
+  const dp = shared.drilledPair;
+  if (!dc && !dp) return;
+
+  const chrom = (dc && dc.chrom_id) || (dp && dp.chrom_a);
+  const focal = (dc && dc.genome_id) || (dp && dp.a_id);
+  const nonFocal = dp && dp.b_id;
+
+  if (focal) {
+    state.focalGenome = focal;
+    const sel = root.querySelector('[data-ga-ortho-focal]');
+    if (sel) sel.value = focal;
+  }
+  if (chrom) {
+    const prefix = (focal ? focal.toUpperCase() : '') + '.' + chrom + '.';
+    const input = root.querySelector('[data-ga-ortho-search]');
+    if (input) {
+      input.value = prefix;
+      input.dispatchEvent(new Event('input'));
+    }
+  }
+  if (nonFocal) {
+    const summary = root.querySelector('.ga-ortho-summary');
+    if (summary) {
+      summary.setAttribute('data-ga-ortho-highlight', nonFocal);
+      // Phase-D will stamp data-ga-ortho-id="<nonfocal>" on each summary
+      // row; here we tag the matching row with .ga-ortho-flash to trigger
+      // the one-shot fade. In round 1 the mock rows carry no id, so this
+      // is a no-op on the spec page — kept here so the wiring is in place.
+      const match = summary.querySelector('.ga-ortho-summary-row[data-ga-ortho-id="' + nonFocal + '"]');
+      if (match) {
+        match.classList.add('ga-ortho-flash');
+        setTimeout(() => match.classList.remove('ga-ortho-flash'), 1600);
+      }
+    }
+  }
+
+  // Consume — don't replay on next mount.
+  if (atlasState && atlasState.shared) {
+    delete atlasState.shared.drilledChrom;
+    delete atlasState.shared.drilledPair;
+    delete atlasState.shared.pendingPage;
+  }
+  if (typeof console !== 'undefined') {
+    console.debug('page13 incoming filter applied', { focal: focal, chrom: chrom, nonFocal: nonFocal });
+  }
 }
 
 // View 3 filter input. Round-1 implementation walks the rows currently
