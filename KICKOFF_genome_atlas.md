@@ -23,9 +23,8 @@ Cross-links inside the file already point at the other three:
 `Inversion_atlas.html`, `Population_atlas.html`,
 `Diversity_atlas.html` (rename done in chat 07759823).
 
-Beyond the scaffold, there is **no real content yet** — no page_scaffold
-through pageN, no per-page modules, no registries, no tests, no
-handoff docs.
+Beyond the scaffold, there is **no real content yet** — no per-page
+modules, no registries, no tests, no handoff docs.
 
 ---
 

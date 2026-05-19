@@ -72,7 +72,9 @@ self-documenting.
 ## Adding a fixture
 
 1. Read the schema block on the matching spec page
-   (`atlases/genome/pages/.../pageN.html`, search for `ga-schema-block`).
+   (e.g. `atlases/genome/pages/comparative/page_synteny.html` — search for
+   `ga-schema-block`; every spec page that owns a layer embeds its
+   JSON-Schema inline there).
 2. Mirror the path layout of the canonical `data/` tree but rooted under
    `fixtures/` — per-candidate layers use `<candidate_id>.json`, per-pair
    layers use `<a_id>_<b_id>.json`, per-focal layers use `<focal_id>.json`.

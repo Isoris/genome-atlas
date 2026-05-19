@@ -1,7 +1,7 @@
 // pages/assembly/page_scaffold/_state.js
 //
 // State module for the Genome Atlas page_scaffold scaffold. Mirrors the Inversion
-// Atlas's pageN/_state.js shape exactly — same exports, same purpose. The
+// Atlas's per-page _state.js shape exactly — same exports, same purpose. The
 // _pageState is page_scaffold-private (separate ref from any other page's _state.js).
 //
 // Round 1 is a static scaffold so _pageState is degenerate — it just holds

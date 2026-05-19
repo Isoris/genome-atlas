@@ -1,6 +1,6 @@
 {
   "$schema": "../../../../core/registry_core.schema.json",
-  "_doc": "Per-page data and slot requirements for the Genome Atlas. Round 1 declares all ten planned pages (one per major spec); requires_layers / requires_slots / preloads are stubbed empty because none of the pages has a renderer yet — they're scaffold specs. Each pageN's _doc captures what the page will read once its phase ships.",
+  "_doc": "Per-page data and slot requirements for the Genome Atlas. Round 1 declares all ten planned pages (one per major spec); requires_layers / requires_slots / preloads are stubbed empty because none of the pages has a renderer yet — they're scaffold specs. Each page's _doc captures what the page will read once its phase ships.",
   "_round1_status": "All ten pages declared as scaffolds. Real requires_* are added per page as renderers wire in (phase B+).",
   "pages": {
     "page_scaffold": {
