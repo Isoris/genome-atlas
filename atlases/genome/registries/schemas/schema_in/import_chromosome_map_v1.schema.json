@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "import_chromosome_map_v1.schema.json",
+  "title": "import_chromosome_map_v1 — manifest contract for FAI/AGP-derived chrom inventory",
+  "description": "Validates POST /api/actions when type='import_chromosome_map'. Accepts a JSON chromosome inventory or a FAI text file (params.from_fai=true). Emits chromosome_map_v1.",
+  "type": "object",
+  "required": ["target"],
+  "additionalProperties": true,
+  "properties": {
+    "target": {
+      "type": "object",
+      "required": ["path"],
+      "additionalProperties": true,
+      "properties": {
+        "path":    { "type": "string", "minLength": 1 },
+        "subject": { "type": "string" }
+      }
+    },
+    "params": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "from_fai":  { "type": "boolean", "default": false, "description": "Parse target.path as a samtools FAI text file." },
+        "haplotype": { "type": "string" }
+      }
+    }
+  }
+}

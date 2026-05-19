@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "import_repeat_track_v1.schema.json",
+  "title": "import_repeat_track_v1 — manifest contract for RepeatMasker / EDTA BED imports",
+  "description": "Validates POST /api/actions when type='import_repeat_track'. Accepts a BED4+ file; the column-4 name is split on '/' into class/family when present. Emits repeat_track_v1.",
+  "type": "object",
+  "required": ["target"],
+  "additionalProperties": true,
+  "properties": {
+    "target": {
+      "type": "object",
+      "required": ["path"],
+      "additionalProperties": true,
+      "properties": {
+        "path":    { "type": "string", "minLength": 1 },
+        "subject": { "type": "string" }
+      }
+    },
+    "params": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "haplotype": { "type": "string" },
+        "max_rows":  { "type": "integer", "minimum": 1 }
+      }
+    }
+  }
+}

@@ -1,4 +1,5 @@
 {
+  "_doc": "Extractor inventory for the Genome Atlas. Each entry maps (layer_type, schema_version) to a parser module. Dispatcher matches manifest.expected_outputs[*] against this table; the matched parser is called with (raw_outputs, params) and must return a payload that validates against schemas/schema_out/<schema_version>.schema.json. Round-1 generic extractor (staging_genome_table_v0) is preserved alongside the 13 typed extractors added 2026-05-20.",
   "extractors": [
     {
       "extractor_id":   "extract_staging_genome_table_v0",
@@ -7,6 +8,110 @@
       "stage":          "staging",
       "parser":         "extractors.genome_table.extract",
       "input_format":   "tsv|csv|json"
+    },
+    {
+      "extractor_id":   "extract_assembly_stats_v1",
+      "layer_type":     "assembly_stats",
+      "schema_version": "assembly_stats_v1",
+      "stage":          "normalized",
+      "parser":         "extractors.assembly_stats.extract",
+      "input_format":   "json"
+    },
+    {
+      "extractor_id":   "extract_chromosome_map_v1",
+      "layer_type":     "chromosome_map",
+      "schema_version": "chromosome_map_v1",
+      "stage":          "normalized",
+      "parser":         "extractors.chromosome_map.extract",
+      "input_format":   "json|fai"
+    },
+    {
+      "extractor_id":   "extract_gene_track_v1",
+      "layer_type":     "gene_track",
+      "schema_version": "gene_track_v1",
+      "stage":          "normalized",
+      "parser":         "extractors.gene_track.extract",
+      "input_format":   "gff3|json"
+    },
+    {
+      "extractor_id":   "extract_repeat_track_v1",
+      "layer_type":     "repeat_track",
+      "schema_version": "repeat_track_v1",
+      "stage":          "normalized",
+      "parser":         "extractors.repeat_track.extract",
+      "input_format":   "bed"
+    },
+    {
+      "extractor_id":   "extract_te_hierarchy_v1",
+      "layer_type":     "te_hierarchy",
+      "schema_version": "te_hierarchy_v1",
+      "stage":          "normalized",
+      "parser":         "extractors.te_hierarchy.extract",
+      "input_format":   "json"
+    },
+    {
+      "extractor_id":   "extract_conserved_elements_v1",
+      "layer_type":     "conserved_elements",
+      "schema_version": "conserved_elements_v1",
+      "stage":          "normalized",
+      "parser":         "extractors.conserved_elements.extract",
+      "input_format":   "bed"
+    },
+    {
+      "extractor_id":   "extract_synteny_blocks_v1",
+      "layer_type":     "synteny_blocks",
+      "schema_version": "synteny_blocks_v1",
+      "stage":          "normalized",
+      "parser":         "extractors.synteny_blocks.extract",
+      "input_format":   "json"
+    },
+    {
+      "extractor_id":   "extract_macrosynteny_orthologs_v1",
+      "layer_type":     "macrosynteny_orthologs",
+      "schema_version": "macrosynteny_orthologs_v1",
+      "stage":          "normalized",
+      "parser":         "extractors.macrosynteny_orthologs.extract",
+      "input_format":   "json"
+    },
+    {
+      "extractor_id":   "extract_centromere_telomere_v1",
+      "layer_type":     "centromere_telomere",
+      "schema_version": "centromere_telomere_v1",
+      "stage":          "normalized",
+      "parser":         "extractors.centromere_telomere.extract",
+      "input_format":   "json"
+    },
+    {
+      "extractor_id":   "extract_variant_annotations_v1",
+      "layer_type":     "variant_annotations",
+      "schema_version": "variant_annotations_v1",
+      "stage":          "normalized",
+      "parser":         "extractors.variant_annotations.extract",
+      "input_format":   "json"
+    },
+    {
+      "extractor_id":   "extract_synteny_oxford_grid_v1",
+      "layer_type":     "synteny_oxford_grid",
+      "schema_version": "synteny_oxford_grid_v1",
+      "stage":          "normalized",
+      "parser":         "extractors.synteny_oxford_grid.extract",
+      "input_format":   "json"
+    },
+    {
+      "extractor_id":   "extract_ortholog_tables_v1",
+      "layer_type":     "ortholog_tables",
+      "schema_version": "ortholog_tables_v1",
+      "stage":          "normalized",
+      "parser":         "extractors.ortholog_tables.extract",
+      "input_format":   "json"
+    },
+    {
+      "extractor_id":   "extract_ortholog_pairs_v1",
+      "layer_type":     "ortholog_pairs",
+      "schema_version": "ortholog_pairs_v1",
+      "stage":          "normalized",
+      "parser":         "extractors.ortholog_pairs.extract",
+      "input_format":   "json"
     }
   ]
 }

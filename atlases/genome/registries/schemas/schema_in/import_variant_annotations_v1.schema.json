@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "import_variant_annotations_v1.schema.json",
+  "title": "import_variant_annotations_v1 — SnpEff / VEP per-candidate impact import",
+  "description": "Validates POST /api/actions when type='import_variant_annotations'. Accepts pre-tallied {impact_counts,high_impact:[…]} or raw {variants:[…]} (extractor tallies). Emits variant_annotations_v1.",
+  "type": "object",
+  "required": ["target"],
+  "additionalProperties": true,
+  "properties": {
+    "target": {
+      "type": "object",
+      "required": ["path"],
+      "additionalProperties": true,
+      "properties": {
+        "path":    { "type": "string", "minLength": 1 },
+        "subject": { "type": "string" }
+      }
+    },
+    "params": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": { "candidate_id": { "type": "string" } }
+    }
+  }
+}

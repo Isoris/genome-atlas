@@ -1,0 +1,44 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "te_hierarchy_v1.schema.json",
+  "title": "te_hierarchy_v1 — per-haplotype TE alluvial tree (Wicker 2007)",
+  "description": "Recursive nodes: {id,name,pct,palette?,children?}. pct = % of total genome; children sum <= parent.pct.",
+  "type": "object",
+  "required": ["haplotypes"],
+  "additionalProperties": true,
+  "properties": {
+    "haplotypes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "nodes"],
+        "additionalProperties": true,
+        "properties": {
+          "id":             { "type": "string" },
+          "name":           { "type": "string" },
+          "label":          { "type": "string" },
+          "column_headers": { "type": "array", "items": { "type": "string" } },
+          "nodes": {
+            "type": "array",
+            "items": { "$ref": "#/definitions/node" }
+          }
+        }
+      }
+    },
+    "source": { "type": "string" }
+  },
+  "definitions": {
+    "node": {
+      "type": "object",
+      "required": ["id", "name", "pct"],
+      "additionalProperties": true,
+      "properties": {
+        "id":       { "type": "string" },
+        "name":     { "type": "string" },
+        "pct":      { "type": "number", "minimum": 0 },
+        "palette":  { "type": "string" },
+        "children": { "type": "array", "items": { "$ref": "#/definitions/node" } }
+      }
+    }
+  }
+}

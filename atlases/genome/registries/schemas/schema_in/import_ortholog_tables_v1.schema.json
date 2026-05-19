@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "import_ortholog_tables_v1.schema.json",
+  "title": "import_ortholog_tables_v1 — OrthoFinder focal summary import",
+  "description": "Validates POST /api/actions when type='import_ortholog_tables'. Accepts {focal{…},non_focal[…],thresholds?,source_pipeline?}. Emits ortholog_tables_v1.",
+  "type": "object",
+  "required": ["target"],
+  "additionalProperties": true,
+  "properties": {
+    "target": {
+      "type": "object",
+      "required": ["path"],
+      "additionalProperties": true,
+      "properties": {
+        "path":    { "type": "string", "minLength": 1 },
+        "subject": { "type": "string" }
+      }
+    },
+    "params": { "type": "object", "additionalProperties": true }
+  }
+}

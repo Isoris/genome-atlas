@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "gene_track_v1.schema.json",
+  "title": "gene_track_v1 — flat gene-feature array from GFF3 / pre-normalised JSON",
+  "type": "object",
+  "required": ["features", "n_features"],
+  "additionalProperties": true,
+  "properties": {
+    "haplotype":  { "type": "string" },
+    "n_features": { "type": "integer", "minimum": 0 },
+    "features": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["chrom", "start_bp", "end_bp"],
+        "additionalProperties": true,
+        "properties": {
+          "chrom":      { "type": "string" },
+          "source":     { "type": "string" },
+          "type":       { "type": "string" },
+          "start_bp":   { "type": "integer", "minimum": 0 },
+          "end_bp":     { "type": "integer", "minimum": 0 },
+          "strand":     { "type": "string", "enum": ["+", "-", ".", "?"] },
+          "attributes": { "type": "object", "additionalProperties": true }
+        }
+      }
+    },
+    "source": { "type": "string" }
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "conserved_elements_v1.schema.json",
+  "title": "conserved_elements_v1 — phastCons / UCE interval array",
+  "type": "object",
+  "required": ["intervals", "n_intervals"],
+  "additionalProperties": true,
+  "properties": {
+    "method":      { "type": "string" },
+    "n_intervals": { "type": "integer", "minimum": 0 },
+    "intervals": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["chrom", "start_bp", "end_bp"],
+        "additionalProperties": true,
+        "properties": {
+          "chrom":    { "type": "string" },
+          "start_bp": { "type": "integer", "minimum": 0 },
+          "end_bp":   { "type": "integer", "minimum": 0 },
+          "name":     { "type": "string" },
+          "score":    { "type": "number" }
+        }
+      }
+    },
+    "source": { "type": "string" }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "import_macrosynteny_orthologs_v1.schema.json",
+  "title": "import_macrosynteny_orthologs_v1 — OrthoFinder / wfmash anchor-position JSON",
+  "description": "Validates POST /api/actions when type='import_macrosynteny_orthologs'. Accepts {pairs:[{id,name,x{…},y{…},orthologs:[{xc,xp,yc,yp}]}]}. Emits macrosynteny_orthologs_v1.",
+  "type": "object",
+  "required": ["target"],
+  "additionalProperties": true,
+  "properties": {
+    "target": {
+      "type": "object",
+      "required": ["path"],
+      "additionalProperties": true,
+      "properties": {
+        "path":    { "type": "string", "minLength": 1 },
+        "subject": { "type": "string" }
+      }
+    },
+    "params": { "type": "object", "additionalProperties": true }
+  }
+}

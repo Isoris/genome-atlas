@@ -1,9 +1,75 @@
 {
+  "_doc": "POST /api/actions dispatch table for the Genome Atlas. Each action maps an action `type` (manifest.type) to a runner module + a schema_in manifest validator. Round-1 generic `import_table` is preserved alongside the 13 per-layer typed pipelines added 2026-05-20 (assembly_stats, chromosome_map, gene_track, repeat_track, te_hierarchy, conserved_elements, synteny_blocks, macrosynteny_orthologs, centromere_telomere, variant_annotations, synteny_oxford_grid, ortholog_tables, ortholog_pairs). Mirrors inversion-atlas/atlases/inversion/registries/data/actions.registry.json shape.",
   "actions": {
     "import_table": {
       "runner":      "runners.import_table.import_table",
       "schema_in":   "import_table_v1",
       "description": "Read a tabular file (TSV/CSV/JSON) from the workspace and emit a staging_genome_table_v0 layer. Pure file-IO; no server engines invoked."
+    },
+    "import_assembly_stats": {
+      "runner":      "runners.assembly_stats.run",
+      "schema_in":   "import_assembly_stats_v1",
+      "description": "Ingest a BUSCO+asmstats summary JSON for one haplotype. Emits assembly_stats_v1."
+    },
+    "import_chromosome_map": {
+      "runner":      "runners.chromosome_map.run",
+      "schema_in":   "import_chromosome_map_v1",
+      "description": "Ingest a per-haplotype chromosome inventory (JSON or FAI). Emits chromosome_map_v1."
+    },
+    "import_gene_track": {
+      "runner":      "runners.gene_track.run",
+      "schema_in":   "import_gene_track_v1",
+      "description": "Ingest a BRAKER / TOGA / RefSeq GFF3 (or pre-normalised JSON) gene track. Emits gene_track_v1."
+    },
+    "import_repeat_track": {
+      "runner":      "runners.repeat_track.run",
+      "schema_in":   "import_repeat_track_v1",
+      "description": "Ingest a RepeatMasker / EDTA BED. Emits repeat_track_v1."
+    },
+    "import_te_hierarchy": {
+      "runner":      "runners.te_hierarchy.run",
+      "schema_in":   "import_te_hierarchy_v1",
+      "description": "Ingest the per-haplotype TE alluvial JSON (Wicker 2007 hierarchy). Emits te_hierarchy_v1."
+    },
+    "import_conserved_elements": {
+      "runner":      "runners.conserved_elements.run",
+      "schema_in":   "import_conserved_elements_v1",
+      "description": "Ingest a phastCons / UCE BED. Emits conserved_elements_v1."
+    },
+    "import_synteny_blocks": {
+      "runner":      "runners.synteny_blocks.run",
+      "schema_in":   "import_synteny_blocks_v1",
+      "description": "Ingest a Cactus pairwise syntenic-blocks JSON. Emits synteny_blocks_v1."
+    },
+    "import_macrosynteny_orthologs": {
+      "runner":      "runners.macrosynteny_orthologs.run",
+      "schema_in":   "import_macrosynteny_orthologs_v1",
+      "description": "Ingest an OrthoFinder / wfmash anchor-position JSON (gene anchors per species pair). Emits macrosynteny_orthologs_v1."
+    },
+    "import_centromere_telomere": {
+      "runner":      "runners.centromere_telomere.run",
+      "schema_in":   "import_centromere_telomere_v1",
+      "description": "Ingest a tidk / centromics per-chrom centromere+telomere summary. Emits centromere_telomere_v1."
+    },
+    "import_variant_annotations": {
+      "runner":      "runners.variant_annotations.run",
+      "schema_in":   "import_variant_annotations_v1",
+      "description": "Ingest a SnpEff / VEP impact tally per inversion candidate. Emits variant_annotations_v1."
+    },
+    "import_synteny_oxford_grid": {
+      "runner":      "runners.synteny_oxford_grid.run",
+      "schema_in":   "import_synteny_oxford_grid_v1",
+      "description": "Ingest a macrosyntR Oxford-grid JSON (per ordered focal pair). Emits synteny_oxford_grid_v1."
+    },
+    "import_ortholog_tables": {
+      "runner":      "runners.ortholog_tables.run",
+      "schema_in":   "import_ortholog_tables_v1",
+      "description": "Ingest an OrthoFinder focal-vs-non-focal summary JSON. Emits ortholog_tables_v1."
+    },
+    "import_ortholog_pairs": {
+      "runner":      "runners.ortholog_pairs.run",
+      "schema_in":   "import_ortholog_pairs_v1",
+      "description": "Ingest an OrthoFinder per-pair gene-level table (lazy-loaded by page_orthologues View 3). Emits ortholog_pairs_v1."
     }
   }
 }
