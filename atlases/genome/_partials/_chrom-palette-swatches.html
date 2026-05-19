@@ -1,0 +1,242 @@
+<!doctype html>
+<!--
+  atlases/genome/_partials/_chrom-palette-swatches.html
+
+  Visual reference for the Genome Atlas chromosome palette. Shows each
+  --ga-chrom-N token and its utility class, so spec authors don't have
+  to translate hue degrees in their head when picking a colour.
+
+  The leading underscore on the filename signals "partial / fragment,
+  not a routable page" — this repo has no template engine, so include
+  it the simplest way that fits:
+
+    A) Open standalone in a browser for a quick glance.
+    B) Embed in a spec page as <iframe>:
+
+         <iframe src="../../_partials/_chrom-palette-swatches.html"
+                 class="ga-chrom-palette-frame"
+                 title="Chromosome palette swatches"></iframe>
+
+         (the .ga-chrom-palette-frame rule in genome.css gives the
+         iframe a sensible default height + no border)
+
+    C) Copy-paste the <section> below into the spec page if you don't
+       want the iframe wrapper. The .ga-chrom-N utility classes are
+       atlas-wide so the copy renders identically wherever it lands.
+
+  Tokens are defined once in atlases/genome/css/genome.css under :root.
+  Updating sat/light/hue there ripples through this swatch sheet and
+  every spec page that paints with the same classes.
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Genome Atlas — chromosome palette</title>
+  <link rel="stylesheet" href="../css/genome.css" />
+  <style>
+    /* Standalone-only chrome — the embedding spec page brings its own
+       page-level styling. None of these rules touch the .ga-chrom-*
+       classes themselves. */
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: var(--panel-1, #1a1a1a);
+      color: var(--ink, #e8e8e8);
+      font-family: var(--mono, ui-monospace, "SF Mono", Menlo, monospace);
+      font-size: 11.5px;
+    }
+    .ga-chrom-swatch-sheet {
+      padding: 16px 18px;
+      max-width: 720px;
+      box-sizing: border-box;
+    }
+    .ga-chrom-swatch-sheet h2 {
+      font-size: 12.5px;
+      font-weight: 600;
+      margin: 0 0 4px 0;
+      color: var(--ink, #e8e8e8);
+    }
+    .ga-chrom-swatch-sheet p.lead {
+      font-size: 10.5px;
+      color: var(--ink-dim, #9a9a9a);
+      margin: 0 0 14px 0;
+      line-height: 1.55;
+    }
+    .ga-chrom-swatch-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 10px 8px;
+    }
+    @media (max-width: 520px) {
+      .ga-chrom-swatch-grid { grid-template-columns: repeat(4, 1fr); }
+    }
+    .ga-chrom-swatch {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 3px;
+      padding: 0;
+    }
+    .ga-chrom-swatch svg {
+      display: block;
+      width: 100%;
+      height: 22px;
+      border: 1px solid var(--rule, #333);
+      border-radius: 3px;
+      background: var(--panel-2, #222);
+    }
+    .ga-chrom-swatch-label {
+      font-size: 10px;
+      color: var(--ink, #e8e8e8);
+      line-height: 1.2;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .ga-chrom-swatch-hue {
+      font-size: 9.5px;
+      color: var(--ink-dim, #9a9a9a);
+      line-height: 1.2;
+    }
+    .ga-chrom-swatch-foot {
+      margin-top: 14px;
+      padding-top: 10px;
+      border-top: 1px solid var(--rule, #333);
+      font-size: 10px;
+      color: var(--ink-dim, #9a9a9a);
+      line-height: 1.55;
+    }
+    .ga-chrom-swatch-foot code {
+      font-size: 10px;
+      color: var(--ink, #e8e8e8);
+      background: var(--panel-2, #222);
+      padding: 1px 4px;
+      border-radius: 2px;
+    }
+  </style>
+</head>
+<body>
+
+<section class="ga-chrom-swatch-sheet" aria-label="Genome Atlas chromosome palette">
+  <h2>Chromosome palette — <code>--ga-chrom-1</code>&hellip;<code>--ga-chrom-13</code> + <code>--ga-chrom-fused</code></h2>
+  <p class="lead">
+    Categorical hue per chromosome. Slots 1&ndash;11 step by 30&deg; around the colour wheel;
+    slots 12&ndash;13 are 15&deg;-step infills for karyotypes with &gt;11 chroms; the
+    <code>fused</code> token is a half-step (135&deg;) reserved for fused/transition
+    blocks (used on page9 V3). Paint an SVG <code>&lt;rect&gt;</code> or <code>&lt;polygon&gt;</code>
+    with the matching <code>ga-chrom-N</code> utility class.
+  </p>
+
+  <div class="ga-chrom-swatch-grid" role="list">
+    <div class="ga-chrom-swatch" role="listitem">
+      <svg viewBox="0 0 100 22" preserveAspectRatio="none" aria-label="--ga-chrom-1 swatch (hue 30°)">
+        <rect class="ga-chrom-1" x="2" y="2" width="96" height="18" rx="9" ry="9"/>
+      </svg>
+      <div class="ga-chrom-swatch-label"><code>.ga-chrom-1</code></div>
+      <div class="ga-chrom-swatch-hue">hue 30&deg;</div>
+    </div>
+    <div class="ga-chrom-swatch" role="listitem">
+      <svg viewBox="0 0 100 22" preserveAspectRatio="none" aria-label="--ga-chrom-2 swatch (hue 60°)">
+        <rect class="ga-chrom-2" x="2" y="2" width="96" height="18" rx="9" ry="9"/>
+      </svg>
+      <div class="ga-chrom-swatch-label"><code>.ga-chrom-2</code></div>
+      <div class="ga-chrom-swatch-hue">hue 60&deg;</div>
+    </div>
+    <div class="ga-chrom-swatch" role="listitem">
+      <svg viewBox="0 0 100 22" preserveAspectRatio="none" aria-label="--ga-chrom-3 swatch (hue 90°)">
+        <rect class="ga-chrom-3" x="2" y="2" width="96" height="18" rx="9" ry="9"/>
+      </svg>
+      <div class="ga-chrom-swatch-label"><code>.ga-chrom-3</code></div>
+      <div class="ga-chrom-swatch-hue">hue 90&deg;</div>
+    </div>
+    <div class="ga-chrom-swatch" role="listitem">
+      <svg viewBox="0 0 100 22" preserveAspectRatio="none" aria-label="--ga-chrom-4 swatch (hue 120°)">
+        <rect class="ga-chrom-4" x="2" y="2" width="96" height="18" rx="9" ry="9"/>
+      </svg>
+      <div class="ga-chrom-swatch-label"><code>.ga-chrom-4</code></div>
+      <div class="ga-chrom-swatch-hue">hue 120&deg;</div>
+    </div>
+    <div class="ga-chrom-swatch" role="listitem">
+      <svg viewBox="0 0 100 22" preserveAspectRatio="none" aria-label="--ga-chrom-5 swatch (hue 150°)">
+        <rect class="ga-chrom-5" x="2" y="2" width="96" height="18" rx="9" ry="9"/>
+      </svg>
+      <div class="ga-chrom-swatch-label"><code>.ga-chrom-5</code></div>
+      <div class="ga-chrom-swatch-hue">hue 150&deg;</div>
+    </div>
+    <div class="ga-chrom-swatch" role="listitem">
+      <svg viewBox="0 0 100 22" preserveAspectRatio="none" aria-label="--ga-chrom-6 swatch (hue 180°)">
+        <rect class="ga-chrom-6" x="2" y="2" width="96" height="18" rx="9" ry="9"/>
+      </svg>
+      <div class="ga-chrom-swatch-label"><code>.ga-chrom-6</code></div>
+      <div class="ga-chrom-swatch-hue">hue 180&deg;</div>
+    </div>
+    <div class="ga-chrom-swatch" role="listitem">
+      <svg viewBox="0 0 100 22" preserveAspectRatio="none" aria-label="--ga-chrom-7 swatch (hue 210°)">
+        <rect class="ga-chrom-7" x="2" y="2" width="96" height="18" rx="9" ry="9"/>
+      </svg>
+      <div class="ga-chrom-swatch-label"><code>.ga-chrom-7</code></div>
+      <div class="ga-chrom-swatch-hue">hue 210&deg;</div>
+    </div>
+    <div class="ga-chrom-swatch" role="listitem">
+      <svg viewBox="0 0 100 22" preserveAspectRatio="none" aria-label="--ga-chrom-8 swatch (hue 240°)">
+        <rect class="ga-chrom-8" x="2" y="2" width="96" height="18" rx="9" ry="9"/>
+      </svg>
+      <div class="ga-chrom-swatch-label"><code>.ga-chrom-8</code></div>
+      <div class="ga-chrom-swatch-hue">hue 240&deg;</div>
+    </div>
+    <div class="ga-chrom-swatch" role="listitem">
+      <svg viewBox="0 0 100 22" preserveAspectRatio="none" aria-label="--ga-chrom-9 swatch (hue 270°)">
+        <rect class="ga-chrom-9" x="2" y="2" width="96" height="18" rx="9" ry="9"/>
+      </svg>
+      <div class="ga-chrom-swatch-label"><code>.ga-chrom-9</code></div>
+      <div class="ga-chrom-swatch-hue">hue 270&deg;</div>
+    </div>
+    <div class="ga-chrom-swatch" role="listitem">
+      <svg viewBox="0 0 100 22" preserveAspectRatio="none" aria-label="--ga-chrom-10 swatch (hue 300°)">
+        <rect class="ga-chrom-10" x="2" y="2" width="96" height="18" rx="9" ry="9"/>
+      </svg>
+      <div class="ga-chrom-swatch-label"><code>.ga-chrom-10</code></div>
+      <div class="ga-chrom-swatch-hue">hue 300&deg;</div>
+    </div>
+    <div class="ga-chrom-swatch" role="listitem">
+      <svg viewBox="0 0 100 22" preserveAspectRatio="none" aria-label="--ga-chrom-11 swatch (hue 330°)">
+        <rect class="ga-chrom-11" x="2" y="2" width="96" height="18" rx="9" ry="9"/>
+      </svg>
+      <div class="ga-chrom-swatch-label"><code>.ga-chrom-11</code></div>
+      <div class="ga-chrom-swatch-hue">hue 330&deg;</div>
+    </div>
+    <div class="ga-chrom-swatch" role="listitem">
+      <svg viewBox="0 0 100 22" preserveAspectRatio="none" aria-label="--ga-chrom-12 swatch (hue 15°)">
+        <rect class="ga-chrom-12" x="2" y="2" width="96" height="18" rx="9" ry="9"/>
+      </svg>
+      <div class="ga-chrom-swatch-label"><code>.ga-chrom-12</code></div>
+      <div class="ga-chrom-swatch-hue">hue 15&deg; (infill)</div>
+    </div>
+    <div class="ga-chrom-swatch" role="listitem">
+      <svg viewBox="0 0 100 22" preserveAspectRatio="none" aria-label="--ga-chrom-13 swatch (hue 45°)">
+        <rect class="ga-chrom-13" x="2" y="2" width="96" height="18" rx="9" ry="9"/>
+      </svg>
+      <div class="ga-chrom-swatch-label"><code>.ga-chrom-13</code></div>
+      <div class="ga-chrom-swatch-hue">hue 45&deg; (infill)</div>
+    </div>
+    <div class="ga-chrom-swatch" role="listitem">
+      <svg viewBox="0 0 100 22" preserveAspectRatio="none" aria-label="--ga-chrom-fused swatch (hue 135°)">
+        <rect class="ga-chrom-fused" x="2" y="2" width="96" height="18" rx="9" ry="9"/>
+      </svg>
+      <div class="ga-chrom-swatch-label"><code>.ga-chrom-fused</code></div>
+      <div class="ga-chrom-swatch-hue">hue 135&deg; (fused)</div>
+    </div>
+  </div>
+
+  <div class="ga-chrom-swatch-foot">
+    Tokens live in <code>atlases/genome/css/genome.css</code> under <code>:root</code>.
+    All 14 swatches share <code>--ga-chrom-sat</code> (55&percnt;) and
+    <code>--ga-chrom-light</code> (55&percnt;); changing either retunes the entire palette
+    in one place. The <code>.ga-syn-cell</code> Oxford-grid colouring on page9 V4
+    consumes the same sat/light values so the dynamic and static palettes stay
+    coherent.
+  </div>
+</section>
+
+</body>
+</html>

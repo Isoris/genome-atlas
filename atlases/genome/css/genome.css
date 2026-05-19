@@ -100,6 +100,18 @@
 .ga-chrom-13    { fill: var(--ga-chrom-13);    }
 .ga-chrom-fused { fill: var(--ga-chrom-fused); }
 
+/* Iframe wrapper for the chrom-palette swatch sheet. Spec pages embed
+   `atlases/genome/_partials/_chrom-palette-swatches.html` as an <iframe
+   class="ga-chrom-palette-frame">; this rule gives it a sensible
+   default height + no border so the iframe doesn't need inline style. */
+.ga-chrom-palette-frame {
+  display: block;
+  width: 100%;
+  height: 260px;
+  border: 0;
+  background: transparent;
+}
+
 /* Content wrapper — replaces the inline-styled #genomeAtlasContent. */
 .ga-content {
   padding: 40px 32px;
