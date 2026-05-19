@@ -1,0 +1,43 @@
+{
+  "_doc": "Mock example for nco_gc_track. Companion to crossovers/cgar_inv_example_01.json — same candidate_id and span so the two pages stack cleanly. Validates the page12 JSON-Schema.",
+  "candidate_id": "cgar_inv_example_01",
+  "cohort": "Cgar F1xF1 progeny (mock, n=42)",
+  "individuals": 42,
+  "candidate_span": {
+    "chrom": "LG28",
+    "start_bp": 4800000,
+    "end_bp": 12300000
+  },
+  "flank_bp": 5000000,
+  "chroms": [
+    { "id": "LG28", "length_bp": 19700000, "telomere_L": 0, "telomere_R": 19700000 }
+  ],
+  "tracts": [
+    { "chrom": "LG28", "start_bp":  1820000, "end_bp":  1824600, "kind": "nco", "indiv": "fam01.p07", "in_span": false },
+    { "chrom": "LG28", "start_bp":  2960000, "end_bp":  2962100, "kind": "gc",  "indiv": "fam03.p11", "in_span": false },
+    { "chrom": "LG28", "start_bp":  4220000, "end_bp":  4228800, "kind": "nco", "indiv": "fam02.p03", "in_span": false },
+    { "chrom": "LG28", "start_bp":  6100000, "end_bp":  6103400, "kind": "gc",  "indiv": "fam05.p02", "in_span": true  },
+    { "chrom": "LG28", "start_bp":  9400000, "end_bp":  9405200, "kind": "nco", "indiv": "fam01.p09", "in_span": true  },
+    { "chrom": "LG28", "start_bp": 10900000, "end_bp": 10907800, "kind": "nco", "indiv": "fam04.p06", "in_span": true  },
+    { "chrom": "LG28", "start_bp": 14600000, "end_bp": 14602900, "kind": "gc",  "indiv": "fam06.p01", "in_span": false },
+    { "chrom": "LG28", "start_bp": 17200000, "end_bp": 17206700, "kind": "nco", "indiv": "fam02.p08", "in_span": false }
+  ],
+  "telomere_curve": {
+    "bins": [0.05, 0.15, 0.25, 0.35, 0.45, 0.55, 0.65, 0.75, 0.85, 0.95],
+    "nco":  {
+      "y":     [3.2, 3.4, 3.6, 3.4, 3.2, 3.3, 3.5, 3.6, 3.7, 3.9],
+      "ci_lo": [2.5, 2.7, 2.9, 2.7, 2.5, 2.6, 2.7, 2.8, 2.9, 3.1],
+      "ci_hi": [4.0, 4.2, 4.4, 4.2, 4.0, 4.1, 4.3, 4.4, 4.5, 4.8]
+    },
+    "gc":   {
+      "y":     [1.2, 1.6, 2.0, 2.4, 2.8, 3.2, 3.6, 4.0, 4.4, 4.8],
+      "ci_lo": [0.8, 1.1, 1.4, 1.7, 2.0, 2.4, 2.7, 3.0, 3.3, 3.6],
+      "ci_hi": [1.6, 2.1, 2.6, 3.1, 3.7, 4.1, 4.6, 5.1, 5.6, 6.1]
+    }
+  },
+  "curve_params": {
+    "smoother": "loess",
+    "span": 0.5,
+    "ci_bootstrap": 1000
+  }
+}
