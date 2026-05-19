@@ -67,11 +67,11 @@
           <div class="ga-panel-name">View 2 — multi-species ribbon stack</div>
           <div class="ga-panel-desc">Cgar at the top; stacked below it, one strip per related Siluriformes genome. Side-by-side comparison of conserved vs lineage-specific rearrangements.</div>
 
-          <div class="ga-panel-name">View 3 — per-chrom dotplot</div>
-          <div class="ga-panel-desc">Click any chromosome in the ribbon to open a full dotplot (Cgar chrom × homolog chrom). Hover for block coordinates and identity.</div>
+          <div class="ga-panel-name">View 3 — per-chrom dotplot (drilled)</div>
+          <div class="ga-panel-desc">Reached by clicking a cell in the Oxford grid (View 4) or any chromosome in a ribbon. Full chr A × chr B dotplot for the selected pair. Dots are coloured <b>categorically by syntenic block</b> (one hue per block) rather than by a continuous identity ramp — adjacent blocks read as separate colour clusters, so inversions and translocations are visually distinct. Hover for block coordinates, identity, ortholog id.</div>
 
           <div class="ga-panel-name">View 4 — macrosyntR-style Oxford grid</div>
-          <div class="ga-panel-desc">Aggregated chrom-pair view: genome A on rows, genome B on columns, one dot per cell. Dot <b>size</b> ∝ shared-ortholog count; <b class="ga-syn-hi">large blue</b> = significant (BH-q &lt; 0.01), <b class="ga-syn-lo">small yellow</b> = marginal (q &lt; 0.05), empty cell = no significant overlap. The focal pair (genome A / genome B) is selectable — see toggle below.</div>
+          <div class="ga-panel-desc">Aggregated chrom-pair view: genome A on rows, genome B on columns, one dot per cell. Dot <b>size</b> ∝ shared-ortholog count. <b>Colour</b> is selectable: <i>row chrom</i> (categorical, one hue per row chrom A — the macrosyntR default), <i>column chrom</i> (categorical by chrom B), or <i>significance</i> (blue ≥ q_hi, yellow ≥ q_lo). Click any populated cell to zoom into the corresponding chr A × chr B dotplot in View 3.</div>
         </div>
       </div>
 
@@ -94,9 +94,15 @@
             <option value="ipun">I. punctatus (Ipun)</option>
           </select>
           <button type="button" class="ga-syn-swap" data-ga-syn-swap title="Swap A ↔ B">⇄</button>
+          <label for="ga-syn-color">colour by</label>
+          <select id="ga-syn-color" data-ga-syn-color>
+            <option value="row" selected>row chrom (categorical)</option>
+            <option value="col">column chrom (categorical)</option>
+            <option value="sig">significance (blue / yellow)</option>
+          </select>
         </div>
         <div class="ga-syn-grid-wrap">
-          <div class="ga-syn-grid" aria-label="macrosyntR-style Oxford grid mockup">
+          <div class="ga-syn-grid" data-color-by="row" aria-label="macrosyntR-style Oxford grid mockup">
             <!-- row labels (genome A) along the left, col labels (genome B) along the top.
                  Mockup cells stand in for a real chrom×chrom matrix. Hover surfaces
                  chrom_a · chrom_b · n_orthologs · BH-q. -->
@@ -111,116 +117,196 @@
               <span>LG09</span><span>LG10</span><span>LG11</span><span>LG12</span>
             </div>
             <div class="ga-syn-cells">
-              <!-- 12 × 12 mockup. data-syn levels: "hi" (large blue), "lo" (small
-                   yellow), "" (empty). title= drives a native hover tooltip; the
-                   real renderer will replace it with a richer surface. -->
+              <!-- 12 × 12 mockup. Each cell carries data-chrom-a / data-chrom-b
+                   for click-to-zoom, and --cr / --cc for the categorical chrom-
+                   colour CSS (one hue per row/col chrom). data-syn levels:
+                   "hi" (large dot, q≤q_hi), "lo" (small dot, q≤q_lo), absent
+                   (empty cell). title= drives a native hover tooltip; the real
+                   renderer will replace it with a richer surface. -->
               <!-- row 1 (chrom_a = LG01) -->
-              <span class="ga-syn-cell" data-syn="hi" title="LG01 × LG01 · 412 orth · q=2e-31"></span>
-              <span class="ga-syn-cell" data-syn="lo" title="LG01 × LG02 · 28 orth · q=2e-2"></span>
-              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
-              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
-              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
-              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
-              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
-              <!-- row 2 -->
-              <span class="ga-syn-cell" data-syn="lo" title="LG02 × LG01 · 31 orth · q=3e-2"></span>
-              <span class="ga-syn-cell" data-syn="hi" title="LG02 × LG02 · 388 orth · q=4e-29"></span>
-              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
-              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
-              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
-              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
-              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
-              <!-- row 3: split LG03_a ↔ LG03_b + LG07_b (translocation) -->
-              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
-              <span class="ga-syn-cell" data-syn="hi" title="LG03 × LG03 · 256 orth · q=6e-20"></span>
-              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
-              <span class="ga-syn-cell"></span>
-              <span class="ga-syn-cell" data-syn="lo" title="LG03 × LG07 · 47 orth · q=8e-4"></span>
-              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
-              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
-              <span class="ga-syn-cell"></span>
-              <!-- row 4 -->
-              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
-              <span class="ga-syn-cell"></span>
-              <span class="ga-syn-cell" data-syn="hi" title="LG04 × LG04 · 401 orth · q=1e-30"></span>
-              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
-              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
-              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
-              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
-              <!-- row 5 -->
-              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
-              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
-              <span class="ga-syn-cell" data-syn="hi" title="LG05 × LG05 · 333 orth · q=2e-25"></span>
-              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
-              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
-              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
-              <span class="ga-syn-cell"></span>
-              <!-- row 6 -->
-              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
-              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
-              <span class="ga-syn-cell"></span>
-              <span class="ga-syn-cell" data-syn="hi" title="LG06 × LG06 · 298 orth · q=1e-22"></span>
-              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
-              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
-              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
-              <!-- row 7 -->
-              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
-              <span class="ga-syn-cell" data-syn="lo" title="LG07 × LG03 · 39 orth · q=5e-3"></span>
-              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
-              <span class="ga-syn-cell"></span>
-              <span class="ga-syn-cell" data-syn="hi" title="LG07 × LG07 · 277 orth · q=9e-21"></span>
-              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
-              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
-              <span class="ga-syn-cell"></span>
-              <!-- row 8 -->
-              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
-              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
-              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
-              <span class="ga-syn-cell"></span>
-              <span class="ga-syn-cell" data-syn="hi" title="LG08 × LG08 · 244 orth · q=3e-18"></span>
-              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
-              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
-              <!-- row 9 -->
-              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
-              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
-              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
-              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
-              <span class="ga-syn-cell" data-syn="hi" title="LG09 × LG09 · 219 orth · q=2e-16"></span>
-              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
-              <span class="ga-syn-cell"></span>
-              <!-- row 10 -->
-              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
-              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
-              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
-              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
-              <span class="ga-syn-cell"></span>
-              <span class="ga-syn-cell" data-syn="hi" title="LG10 × LG10 · 198 orth · q=4e-15"></span>
-              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
-              <!-- row 11 -->
-              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
-              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
-              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
-              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
-              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
-              <span class="ga-syn-cell" data-syn="hi" title="LG11 × LG11 · 171 orth · q=8e-13"></span>
-              <span class="ga-syn-cell"></span>
-              <!-- row 12 -->
-              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
-              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
-              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
-              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
-              <span class="ga-syn-cell"></span><span class="ga-syn-cell"></span>
-              <span class="ga-syn-cell"></span>
-              <span class="ga-syn-cell" data-syn="hi" title="LG12 × LG12 · 156 orth · q=2e-11"></span>
+              <span class="ga-syn-cell" data-syn="hi" data-chrom-a="LG01" data-chrom-b="LG01" style="--cr:1; --cc:1" title="LG01 × LG01 · 412 orth · q=2e-31"></span>
+              <span class="ga-syn-cell" data-syn="lo" data-chrom-a="LG01" data-chrom-b="LG02" style="--cr:1; --cc:2" title="LG01 × LG02 · 28 orth · q=2e-2"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG01" data-chrom-b="LG03" style="--cr:1; --cc:3"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG01" data-chrom-b="LG04" style="--cr:1; --cc:4"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG01" data-chrom-b="LG05" style="--cr:1; --cc:5"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG01" data-chrom-b="LG06" style="--cr:1; --cc:6"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG01" data-chrom-b="LG07" style="--cr:1; --cc:7"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG01" data-chrom-b="LG08" style="--cr:1; --cc:8"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG01" data-chrom-b="LG09" style="--cr:1; --cc:9"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG01" data-chrom-b="LG10" style="--cr:1; --cc:10"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG01" data-chrom-b="LG11" style="--cr:1; --cc:11"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG01" data-chrom-b="LG12" style="--cr:1; --cc:12"></span>
+              <!-- row 2 (chrom_a = LG02) -->
+              <span class="ga-syn-cell" data-syn="lo" data-chrom-a="LG02" data-chrom-b="LG01" style="--cr:2; --cc:1" title="LG02 × LG01 · 31 orth · q=3e-2"></span>
+              <span class="ga-syn-cell" data-syn="hi" data-chrom-a="LG02" data-chrom-b="LG02" style="--cr:2; --cc:2" title="LG02 × LG02 · 388 orth · q=4e-29"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG02" data-chrom-b="LG03" style="--cr:2; --cc:3"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG02" data-chrom-b="LG04" style="--cr:2; --cc:4"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG02" data-chrom-b="LG05" style="--cr:2; --cc:5"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG02" data-chrom-b="LG06" style="--cr:2; --cc:6"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG02" data-chrom-b="LG07" style="--cr:2; --cc:7"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG02" data-chrom-b="LG08" style="--cr:2; --cc:8"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG02" data-chrom-b="LG09" style="--cr:2; --cc:9"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG02" data-chrom-b="LG10" style="--cr:2; --cc:10"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG02" data-chrom-b="LG11" style="--cr:2; --cc:11"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG02" data-chrom-b="LG12" style="--cr:2; --cc:12"></span>
+              <!-- row 3 (chrom_a = LG03) -->
+              <span class="ga-syn-cell" data-chrom-a="LG03" data-chrom-b="LG01" style="--cr:3; --cc:1"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG03" data-chrom-b="LG02" style="--cr:3; --cc:2"></span>
+              <span class="ga-syn-cell" data-syn="hi" data-chrom-a="LG03" data-chrom-b="LG03" style="--cr:3; --cc:3" title="LG03 × LG03 · 256 orth · q=6e-20"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG03" data-chrom-b="LG04" style="--cr:3; --cc:4"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG03" data-chrom-b="LG05" style="--cr:3; --cc:5"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG03" data-chrom-b="LG06" style="--cr:3; --cc:6"></span>
+              <span class="ga-syn-cell" data-syn="lo" data-chrom-a="LG03" data-chrom-b="LG07" style="--cr:3; --cc:7" title="LG03 × LG07 · 47 orth · q=8e-4"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG03" data-chrom-b="LG08" style="--cr:3; --cc:8"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG03" data-chrom-b="LG09" style="--cr:3; --cc:9"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG03" data-chrom-b="LG10" style="--cr:3; --cc:10"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG03" data-chrom-b="LG11" style="--cr:3; --cc:11"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG03" data-chrom-b="LG12" style="--cr:3; --cc:12"></span>
+              <!-- row 4 (chrom_a = LG04) -->
+              <span class="ga-syn-cell" data-chrom-a="LG04" data-chrom-b="LG01" style="--cr:4; --cc:1"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG04" data-chrom-b="LG02" style="--cr:4; --cc:2"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG04" data-chrom-b="LG03" style="--cr:4; --cc:3"></span>
+              <span class="ga-syn-cell" data-syn="hi" data-chrom-a="LG04" data-chrom-b="LG04" style="--cr:4; --cc:4" title="LG04 × LG04 · 401 orth · q=1e-30"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG04" data-chrom-b="LG05" style="--cr:4; --cc:5"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG04" data-chrom-b="LG06" style="--cr:4; --cc:6"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG04" data-chrom-b="LG07" style="--cr:4; --cc:7"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG04" data-chrom-b="LG08" style="--cr:4; --cc:8"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG04" data-chrom-b="LG09" style="--cr:4; --cc:9"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG04" data-chrom-b="LG10" style="--cr:4; --cc:10"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG04" data-chrom-b="LG11" style="--cr:4; --cc:11"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG04" data-chrom-b="LG12" style="--cr:4; --cc:12"></span>
+              <!-- row 5 (chrom_a = LG05) -->
+              <span class="ga-syn-cell" data-chrom-a="LG05" data-chrom-b="LG01" style="--cr:5; --cc:1"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG05" data-chrom-b="LG02" style="--cr:5; --cc:2"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG05" data-chrom-b="LG03" style="--cr:5; --cc:3"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG05" data-chrom-b="LG04" style="--cr:5; --cc:4"></span>
+              <span class="ga-syn-cell" data-syn="hi" data-chrom-a="LG05" data-chrom-b="LG05" style="--cr:5; --cc:5" title="LG05 × LG05 · 333 orth · q=2e-25"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG05" data-chrom-b="LG06" style="--cr:5; --cc:6"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG05" data-chrom-b="LG07" style="--cr:5; --cc:7"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG05" data-chrom-b="LG08" style="--cr:5; --cc:8"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG05" data-chrom-b="LG09" style="--cr:5; --cc:9"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG05" data-chrom-b="LG10" style="--cr:5; --cc:10"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG05" data-chrom-b="LG11" style="--cr:5; --cc:11"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG05" data-chrom-b="LG12" style="--cr:5; --cc:12"></span>
+              <!-- row 6 (chrom_a = LG06) -->
+              <span class="ga-syn-cell" data-chrom-a="LG06" data-chrom-b="LG01" style="--cr:6; --cc:1"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG06" data-chrom-b="LG02" style="--cr:6; --cc:2"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG06" data-chrom-b="LG03" style="--cr:6; --cc:3"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG06" data-chrom-b="LG04" style="--cr:6; --cc:4"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG06" data-chrom-b="LG05" style="--cr:6; --cc:5"></span>
+              <span class="ga-syn-cell" data-syn="hi" data-chrom-a="LG06" data-chrom-b="LG06" style="--cr:6; --cc:6" title="LG06 × LG06 · 298 orth · q=1e-22"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG06" data-chrom-b="LG07" style="--cr:6; --cc:7"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG06" data-chrom-b="LG08" style="--cr:6; --cc:8"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG06" data-chrom-b="LG09" style="--cr:6; --cc:9"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG06" data-chrom-b="LG10" style="--cr:6; --cc:10"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG06" data-chrom-b="LG11" style="--cr:6; --cc:11"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG06" data-chrom-b="LG12" style="--cr:6; --cc:12"></span>
+              <!-- row 7 (chrom_a = LG07) -->
+              <span class="ga-syn-cell" data-chrom-a="LG07" data-chrom-b="LG01" style="--cr:7; --cc:1"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG07" data-chrom-b="LG02" style="--cr:7; --cc:2"></span>
+              <span class="ga-syn-cell" data-syn="lo" data-chrom-a="LG07" data-chrom-b="LG03" style="--cr:7; --cc:3" title="LG07 × LG03 · 39 orth · q=5e-3"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG07" data-chrom-b="LG04" style="--cr:7; --cc:4"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG07" data-chrom-b="LG05" style="--cr:7; --cc:5"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG07" data-chrom-b="LG06" style="--cr:7; --cc:6"></span>
+              <span class="ga-syn-cell" data-syn="hi" data-chrom-a="LG07" data-chrom-b="LG07" style="--cr:7; --cc:7" title="LG07 × LG07 · 277 orth · q=9e-21"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG07" data-chrom-b="LG08" style="--cr:7; --cc:8"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG07" data-chrom-b="LG09" style="--cr:7; --cc:9"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG07" data-chrom-b="LG10" style="--cr:7; --cc:10"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG07" data-chrom-b="LG11" style="--cr:7; --cc:11"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG07" data-chrom-b="LG12" style="--cr:7; --cc:12"></span>
+              <!-- row 8 (chrom_a = LG08) -->
+              <span class="ga-syn-cell" data-chrom-a="LG08" data-chrom-b="LG01" style="--cr:8; --cc:1"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG08" data-chrom-b="LG02" style="--cr:8; --cc:2"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG08" data-chrom-b="LG03" style="--cr:8; --cc:3"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG08" data-chrom-b="LG04" style="--cr:8; --cc:4"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG08" data-chrom-b="LG05" style="--cr:8; --cc:5"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG08" data-chrom-b="LG06" style="--cr:8; --cc:6"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG08" data-chrom-b="LG07" style="--cr:8; --cc:7"></span>
+              <span class="ga-syn-cell" data-syn="hi" data-chrom-a="LG08" data-chrom-b="LG08" style="--cr:8; --cc:8" title="LG08 × LG08 · 244 orth · q=3e-18"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG08" data-chrom-b="LG09" style="--cr:8; --cc:9"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG08" data-chrom-b="LG10" style="--cr:8; --cc:10"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG08" data-chrom-b="LG11" style="--cr:8; --cc:11"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG08" data-chrom-b="LG12" style="--cr:8; --cc:12"></span>
+              <!-- row 9 (chrom_a = LG09) -->
+              <span class="ga-syn-cell" data-chrom-a="LG09" data-chrom-b="LG01" style="--cr:9; --cc:1"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG09" data-chrom-b="LG02" style="--cr:9; --cc:2"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG09" data-chrom-b="LG03" style="--cr:9; --cc:3"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG09" data-chrom-b="LG04" style="--cr:9; --cc:4"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG09" data-chrom-b="LG05" style="--cr:9; --cc:5"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG09" data-chrom-b="LG06" style="--cr:9; --cc:6"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG09" data-chrom-b="LG07" style="--cr:9; --cc:7"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG09" data-chrom-b="LG08" style="--cr:9; --cc:8"></span>
+              <span class="ga-syn-cell" data-syn="hi" data-chrom-a="LG09" data-chrom-b="LG09" style="--cr:9; --cc:9" title="LG09 × LG09 · 219 orth · q=2e-16"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG09" data-chrom-b="LG10" style="--cr:9; --cc:10"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG09" data-chrom-b="LG11" style="--cr:9; --cc:11"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG09" data-chrom-b="LG12" style="--cr:9; --cc:12"></span>
+              <!-- row 10 (chrom_a = LG10) -->
+              <span class="ga-syn-cell" data-chrom-a="LG10" data-chrom-b="LG01" style="--cr:10; --cc:1"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG10" data-chrom-b="LG02" style="--cr:10; --cc:2"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG10" data-chrom-b="LG03" style="--cr:10; --cc:3"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG10" data-chrom-b="LG04" style="--cr:10; --cc:4"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG10" data-chrom-b="LG05" style="--cr:10; --cc:5"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG10" data-chrom-b="LG06" style="--cr:10; --cc:6"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG10" data-chrom-b="LG07" style="--cr:10; --cc:7"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG10" data-chrom-b="LG08" style="--cr:10; --cc:8"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG10" data-chrom-b="LG09" style="--cr:10; --cc:9"></span>
+              <span class="ga-syn-cell" data-syn="hi" data-chrom-a="LG10" data-chrom-b="LG10" style="--cr:10; --cc:10" title="LG10 × LG10 · 198 orth · q=4e-15"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG10" data-chrom-b="LG11" style="--cr:10; --cc:11"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG10" data-chrom-b="LG12" style="--cr:10; --cc:12"></span>
+              <!-- row 11 (chrom_a = LG11) -->
+              <span class="ga-syn-cell" data-chrom-a="LG11" data-chrom-b="LG01" style="--cr:11; --cc:1"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG11" data-chrom-b="LG02" style="--cr:11; --cc:2"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG11" data-chrom-b="LG03" style="--cr:11; --cc:3"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG11" data-chrom-b="LG04" style="--cr:11; --cc:4"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG11" data-chrom-b="LG05" style="--cr:11; --cc:5"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG11" data-chrom-b="LG06" style="--cr:11; --cc:6"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG11" data-chrom-b="LG07" style="--cr:11; --cc:7"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG11" data-chrom-b="LG08" style="--cr:11; --cc:8"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG11" data-chrom-b="LG09" style="--cr:11; --cc:9"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG11" data-chrom-b="LG10" style="--cr:11; --cc:10"></span>
+              <span class="ga-syn-cell" data-syn="hi" data-chrom-a="LG11" data-chrom-b="LG11" style="--cr:11; --cc:11" title="LG11 × LG11 · 171 orth · q=8e-13"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG11" data-chrom-b="LG12" style="--cr:11; --cc:12"></span>
+              <!-- row 12 (chrom_a = LG12) -->
+              <span class="ga-syn-cell" data-chrom-a="LG12" data-chrom-b="LG01" style="--cr:12; --cc:1"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG12" data-chrom-b="LG02" style="--cr:12; --cc:2"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG12" data-chrom-b="LG03" style="--cr:12; --cc:3"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG12" data-chrom-b="LG04" style="--cr:12; --cc:4"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG12" data-chrom-b="LG05" style="--cr:12; --cc:5"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG12" data-chrom-b="LG06" style="--cr:12; --cc:6"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG12" data-chrom-b="LG07" style="--cr:12; --cc:7"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG12" data-chrom-b="LG08" style="--cr:12; --cc:8"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG12" data-chrom-b="LG09" style="--cr:12; --cc:9"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG12" data-chrom-b="LG10" style="--cr:12; --cc:10"></span>
+              <span class="ga-syn-cell" data-chrom-a="LG12" data-chrom-b="LG11" style="--cr:12; --cc:11"></span>
+              <span class="ga-syn-cell" data-syn="hi" data-chrom-a="LG12" data-chrom-b="LG12" style="--cr:12; --cc:12" title="LG12 × LG12 · 156 orth · q=2e-11"></span>
             </div>
           </div>
-          <div class="ga-syn-legend">
-            <span class="ga-syn-cell ga-syn-leg" data-syn="hi"></span>
-            <span class="ga-syn-leg-label">significant (BH-q &lt; 0.01)</span>
-            <span class="ga-syn-cell ga-syn-leg" data-syn="lo"></span>
-            <span class="ga-syn-leg-label">marginal (q &lt; 0.05)</span>
-            <span class="ga-syn-cell ga-syn-leg"></span>
-            <span class="ga-syn-leg-label">no signal</span>
+          <div class="ga-syn-legend" data-ga-syn-legend>
+            <!-- Significance legend (visible when colour-by = sig). -->
+            <span class="ga-syn-leg-group" data-leg-for="sig">
+              <span class="ga-syn-cell ga-syn-leg" data-syn="hi" style="--cr:1; --cc:1"></span>
+              <span class="ga-syn-leg-label">significant (BH-q &lt; 0.01)</span>
+              <span class="ga-syn-cell ga-syn-leg" data-syn="lo" style="--cr:1; --cc:1"></span>
+              <span class="ga-syn-leg-label">marginal (q &lt; 0.05)</span>
+              <span class="ga-syn-cell ga-syn-leg" style="--cr:1; --cc:1"></span>
+              <span class="ga-syn-leg-label">no signal</span>
+            </span>
+            <!-- Categorical chrom legend (visible when colour-by = row / col). -->
+            <span class="ga-syn-leg-group" data-leg-for="chrom">
+              <span class="ga-syn-leg-label">chrom (cycled):</span>
+              <span class="ga-syn-cell ga-syn-leg" data-syn="hi" style="--cr:1; --cc:1" title="LG01"></span>
+              <span class="ga-syn-cell ga-syn-leg" data-syn="hi" style="--cr:2; --cc:2" title="LG02"></span>
+              <span class="ga-syn-cell ga-syn-leg" data-syn="hi" style="--cr:3; --cc:3" title="LG03"></span>
+              <span class="ga-syn-cell ga-syn-leg" data-syn="hi" style="--cr:4; --cc:4" title="LG04"></span>
+              <span class="ga-syn-cell ga-syn-leg" data-syn="hi" style="--cr:5; --cc:5" title="LG05"></span>
+              <span class="ga-syn-cell ga-syn-leg" data-syn="hi" style="--cr:6; --cc:6" title="LG06"></span>
+              <span class="ga-syn-cell ga-syn-leg" data-syn="hi" style="--cr:7; --cc:7" title="LG07"></span>
+              <span class="ga-syn-cell ga-syn-leg" data-syn="hi" style="--cr:8; --cc:8" title="LG08"></span>
+              <span class="ga-syn-cell ga-syn-leg" data-syn="hi" style="--cr:9; --cc:9" title="LG09"></span>
+              <span class="ga-syn-cell ga-syn-leg" data-syn="hi" style="--cr:10; --cc:10" title="LG10"></span>
+              <span class="ga-syn-cell ga-syn-leg" data-syn="hi" style="--cr:11; --cc:11" title="LG11"></span>
+              <span class="ga-syn-cell ga-syn-leg" data-syn="hi" style="--cr:12; --cc:12" title="LG12"></span>
+            </span>
           </div>
         </div>
         <div class="ga-card-footnote">
@@ -228,9 +314,80 @@
           <code>github.com/SamiLhll/macrosyntR</code>). The selectors above
           switch the focal pair (genome A × genome B); the renderer fetches
           <code>data/comparative/oxford/&lt;a&gt;_&lt;b&gt;.json</code> on
-          change. Hover surfaces <code>chrom_a · chrom_b · n_orthologs ·
-          q</code>; click drills into View 3 (per-chrom dotplot) for that
-          cell.
+          change. <b>Colour-by row chrom</b> (the default) gives each row a
+          single hue, so a clean diagonal reads as one colour per row;
+          translocations show up as off-diagonal cells sharing the row's
+          colour. <b>Click any populated cell</b> to drill into View 3
+          below — chr A × chr B dotplot for that pair.
+        </div>
+      </div>
+
+      <div class="ga-card" data-ga-card="syn-drill">
+        <div class="ga-card-header">
+          <div class="ga-card-title">
+            View 3 — chr A × chr B dotplot
+            <span class="ga-syn-drill-badge" data-ga-syn-drill-badge>
+              <span class="ga-dim">drilled from grid:</span>
+              <code data-ga-syn-drill-pair>—</code>
+            </span>
+          </div>
+          <div class="ga-card-status">click a grid cell to populate</div>
+        </div>
+        <div class="ga-card-para ga-dim">
+          Per-chrom dotplot for the active drilled pair. Each dot is one
+          ortholog anchor (x = order on chrom A, y = order on chrom B). Dots
+          are coloured <b>categorically by syntenic block</b> — one hue per
+          contiguous block — so inversions read as anti-diagonal clusters
+          and translocations as off-diagonal clusters in distinct colours.
+          Continuous identity ramps (the usual minimap2 / nucmer default)
+          tend to wash structure out at chromosome scale.
+        </div>
+        <div class="ga-syn-dot-mockup" data-ga-syn-dot-mockup aria-label="chr × chr dotplot mockup">
+          <!-- Axes. -->
+          <div class="ga-syn-dot-axis-y"></div>
+          <div class="ga-syn-dot-axis-x"></div>
+          <!-- Block clusters; each block is a tight set of dots sharing a hue.
+               Block 1: forward diagonal. Block 2: anti-diagonal (inversion).
+               Block 3: forward, lower part. Block 4: small off-set cluster. -->
+          <span class="ga-syn-dot ga-syn-block-1" style="left:8%;top:8%"></span>
+          <span class="ga-syn-dot ga-syn-block-1" style="left:11%;top:11%"></span>
+          <span class="ga-syn-dot ga-syn-block-1" style="left:13%;top:14%"></span>
+          <span class="ga-syn-dot ga-syn-block-1" style="left:16%;top:18%"></span>
+          <span class="ga-syn-dot ga-syn-block-1" style="left:18%;top:21%"></span>
+          <span class="ga-syn-dot ga-syn-block-1" style="left:21%;top:24%"></span>
+          <span class="ga-syn-dot ga-syn-block-1" style="left:24%;top:28%"></span>
+          <span class="ga-syn-dot ga-syn-block-2" style="left:30%;top:60%"></span>
+          <span class="ga-syn-dot ga-syn-block-2" style="left:33%;top:57%"></span>
+          <span class="ga-syn-dot ga-syn-block-2" style="left:36%;top:54%"></span>
+          <span class="ga-syn-dot ga-syn-block-2" style="left:39%;top:51%"></span>
+          <span class="ga-syn-dot ga-syn-block-2" style="left:42%;top:48%"></span>
+          <span class="ga-syn-dot ga-syn-block-2" style="left:45%;top:45%"></span>
+          <span class="ga-syn-dot ga-syn-block-2" style="left:48%;top:42%"></span>
+          <span class="ga-syn-dot ga-syn-block-3" style="left:52%;top:65%"></span>
+          <span class="ga-syn-dot ga-syn-block-3" style="left:55%;top:68%"></span>
+          <span class="ga-syn-dot ga-syn-block-3" style="left:58%;top:71%"></span>
+          <span class="ga-syn-dot ga-syn-block-3" style="left:61%;top:74%"></span>
+          <span class="ga-syn-dot ga-syn-block-3" style="left:64%;top:77%"></span>
+          <span class="ga-syn-dot ga-syn-block-3" style="left:67%;top:80%"></span>
+          <span class="ga-syn-dot ga-syn-block-4" style="left:78%;top:34%"></span>
+          <span class="ga-syn-dot ga-syn-block-4" style="left:80%;top:36%"></span>
+          <span class="ga-syn-dot ga-syn-block-4" style="left:82%;top:38%"></span>
+          <span class="ga-syn-dot ga-syn-block-4" style="left:84%;top:40%"></span>
+          <div class="ga-syn-dot-xlabel">chrom A order →</div>
+          <div class="ga-syn-dot-ylabel">chrom B order →</div>
+        </div>
+        <div class="ga-syn-dot-legend">
+          <span class="ga-syn-block-chip ga-syn-block-1"></span><span>block 1 — forward</span>
+          <span class="ga-syn-block-chip ga-syn-block-2"></span><span>block 2 — inverted</span>
+          <span class="ga-syn-block-chip ga-syn-block-3"></span><span>block 3 — forward</span>
+          <span class="ga-syn-block-chip ga-syn-block-4"></span><span>block 4 — translocation</span>
+        </div>
+        <div class="ga-card-footnote">
+          Real renderer reads <code>synteny_blocks.json</code> for the active
+          pair and pulls per-block <code>block_id</code> + orientation.
+          Phase D adds a "fit-to-window" / "1:1 aspect" toggle, an export
+          button, and a click handler that opens the underlying ortholog id
+          in page13.
         </div>
       </div>
 

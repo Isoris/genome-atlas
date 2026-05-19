@@ -638,7 +638,15 @@ html[data-theme="academic"] .ga-card {
   cursor: default;
 }
 /* The dot: drawn as a ::before so the cell can still receive the
-   native title= hover tooltip. */
+   native title= hover tooltip + the click handler. Cells carry --cr
+   (row chrom index, 1-based) and --cc (col chrom index). A categorical
+   hue is computed via HSL — 12 cycled hues, generous saturation, so
+   chrom structure is visible at a glance and reads distinct from the
+   continuous identity ramps the user wants to avoid. */
+.ga-syn-cell {
+  --ga-syn-hue-row: calc(var(--cr, 1) * 30deg);
+  --ga-syn-hue-col: calc(var(--cc, 1) * 30deg);
+}
 .ga-syn-cell::before {
   content: "";
   display: block;
@@ -648,21 +656,49 @@ html[data-theme="academic"] .ga-card {
   background: transparent;
   transition: transform 80ms ease-out;
 }
-.ga-syn-cell[data-syn="hi"]::before {
-  width: 14px; height: 14px;
-  background: #3a5f9f;          /* large blue */
-  opacity: 0.9;
+/* Dot size by significance bucket (unchanged from before). */
+.ga-syn-cell[data-syn="hi"]::before { width: 14px; height: 14px; opacity: 0.9; }
+.ga-syn-cell[data-syn="lo"]::before { width: 7px;  height: 7px;  opacity: 0.85; }
+
+/* Colour-by mode: significance → blue / yellow (original behaviour). */
+.ga-syn-grid[data-color-by="sig"] .ga-syn-cell[data-syn="hi"]::before { background: #3a5f9f; }
+.ga-syn-grid[data-color-by="sig"] .ga-syn-cell[data-syn="lo"]::before { background: #c9a23a; }
+
+/* Colour-by mode: row chrom (categorical, default). All cells in a row
+   share a hue → a clean diagonal reads as one colour per row; a trans-
+   location to a different column still shares the row colour. */
+.ga-syn-grid[data-color-by="row"] .ga-syn-cell[data-syn]::before {
+  background: hsl(var(--ga-syn-hue-row), 55%, 55%);
 }
-.ga-syn-cell[data-syn="lo"]::before {
-  width: 7px; height: 7px;
-  background: #c9a23a;          /* small yellow */
-  opacity: 0.85;
+
+/* Colour-by mode: col chrom. */
+.ga-syn-grid[data-color-by="col"] .ga-syn-cell[data-syn]::before {
+  background: hsl(var(--ga-syn-hue-col), 55%, 55%);
+}
+
+/* Populated cells are clickable — small affordance + hover ring. */
+.ga-syn-cell[data-syn] {
+  cursor: pointer;
+}
+.ga-syn-cell[data-syn]:hover {
+  background: var(--panel-3);
+  outline: 1px solid #ff8c6e;
+  outline-offset: -1px;
 }
 .ga-syn-cell[data-syn]:hover::before {
   transform: scale(1.15);
 }
-.ga-syn-cell[data-syn]:hover {
-  background: var(--panel-3);
+
+/* Legend: show only the group that matches the active colour mode. */
+.ga-syn-legend[data-color-by="sig"] [data-leg-for="chrom"],
+.ga-syn-legend:not([data-color-by]) [data-leg-for="chrom"] { display: none; }
+.ga-syn-legend[data-color-by="row"]   [data-leg-for="sig"],
+.ga-syn-legend[data-color-by="col"]   [data-leg-for="sig"] { display: none; }
+.ga-syn-leg-group {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px 6px;
 }
 
 /* Legend strip below the grid. */
@@ -687,6 +723,85 @@ html[data-theme="academic"] .ga-card {
 }
 .ga-syn-leg-label {
   margin-right: 6px;
+}
+
+/* Drilled-pair badge in the View 3 card header. */
+.ga-syn-drill-badge {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
+  margin-left: 10px;
+  font-size: 10px;
+  color: var(--ink-dim);
+}
+.ga-syn-drill-badge code {
+  font-size: 10.5px;
+  color: #ff8c6e;
+}
+
+/* --- View 3: chr A × chr B dotplot mockup ---------------------------- *
+ * One categorical hue per syntenic block — explicit so the spec page
+ * reads even when no data has loaded. Flat fills, no glow. The block
+ * hues match the 12-cycle palette used by View 4 (--cr:1..4) so the
+ * cell colour you clicked carries semantically into the drilled view.
+ * -------------------------------------------------------------------- */
+.ga-syn-block-1 { background: hsl(30deg,  55%, 55%); }
+.ga-syn-block-2 { background: hsl(60deg,  55%, 55%); }
+.ga-syn-block-3 { background: hsl(90deg,  55%, 55%); }
+.ga-syn-block-4 { background: hsl(120deg, 55%, 55%); }
+
+.ga-syn-dot-mockup {
+  position: relative;
+  height: 220px;
+  margin: 4px 0 6px 0;
+  padding: 12px 14px 22px 44px;
+  background: var(--panel-3);
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.ga-syn-dot-axis-y,
+.ga-syn-dot-axis-x { position: absolute; background: var(--rule); }
+.ga-syn-dot-axis-y { left: 44px;  top: 12px; bottom: 22px; width: 1px; }
+.ga-syn-dot-axis-x { left: 44px;  right: 14px; bottom: 22px; height: 1px; }
+.ga-syn-dot {
+  position: absolute;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  opacity: 0.9;
+}
+.ga-syn-dot-xlabel {
+  position: absolute;
+  left: 44px; right: 14px; bottom: 4px;
+  text-align: center;
+  font-size: 9.5px;
+  color: var(--ink-dim);
+}
+.ga-syn-dot-ylabel {
+  position: absolute;
+  left: 4px; top: 50%;
+  transform: translateY(-50%) rotate(-90deg);
+  transform-origin: left center;
+  font-size: 9.5px;
+  color: var(--ink-dim);
+  white-space: nowrap;
+}
+
+.ga-syn-dot-legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 14px;
+  margin-top: 6px;
+  font-size: 9.5px;
+  color: var(--ink-dim);
+}
+.ga-syn-block-chip {
+  display: inline-block;
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  margin-right: 4px;
+  opacity: 0.9;
 }
 
 /* ---------------------------------------------------------------------
