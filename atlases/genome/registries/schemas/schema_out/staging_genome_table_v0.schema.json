@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "staging_genome_table_v0.schema.json",
+  "title": "staging_genome_table_v0 — loose capture of one tabular import",
+  "description": "Staging payload for tables imported by 'import_table'. Carries the raw rows + columns; normalize later once you know which downstream schema (assembly_metrics_v1, te_density_v1, …) this slot maps to.",
+  "type": "object",
+  "required": ["columns", "rows"],
+  "additionalProperties": true,
+  "properties": {
+    "columns": { "type": "array", "items": { "type": "string" } },
+    "rows":    { "type": "array", "items": { "type": "object", "additionalProperties": true } },
+    "source":  { "type": "string", "description": "Workspace-relative path of the imported file." },
+    "subject": { "type": "string" },
+    "n_rows":  { "type": "integer", "minimum": 0 },
+    "format":  { "type": "string" }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "actions": {
+    "import_table": {
+      "runner":      "runners.import_table.import_table",
+      "schema_in":   "import_table_v1",
+      "description": "Read a tabular file (TSV/CSV/JSON) from the workspace and emit a staging_genome_table_v0 layer. Pure file-IO; no server engines invoked."
+    }
+  }
+}

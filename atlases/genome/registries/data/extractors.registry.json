@@ -1,0 +1,12 @@
+{
+  "extractors": [
+    {
+      "extractor_id":   "extract_staging_genome_table_v0",
+      "layer_type":     "genome_table",
+      "schema_version": "staging_genome_table_v0",
+      "stage":          "staging",
+      "parser":         "extractors.genome_table.extract",
+      "input_format":   "tsv|csv|json"
+    }
+  ]
+}
