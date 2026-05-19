@@ -6,7 +6,7 @@
     "warm": "IndexedDB-cached at trigger event; first read async ~50ms; subsequent ~10ms",
     "cold": "Fetched on demand; spinner allowed"
   },
-  "_round1_status": "All twelve layers are CONTRACT-ONLY (not-yet-loaded). page1's scaffold renders them as '⚪ not loaded' chips. Phase B turns on chromosome_map + gene_track + repeat_track + crossover_track (the last drives the new page3 CO-density sub-track too). Phase C turns on prdm9_motif (facultative, page11) + nco_gc_track (primary on page12). Phase D turns on synteny_blocks + synteny_oxford_grid (page9 ribbon + macrosyntR-style Oxford-grid views). Layers carrying `_optional: true` are facultative — the consuming page hides the corresponding panel rather than erroring.",
+  "_round1_status": "All fourteen layers are CONTRACT-ONLY (not-yet-loaded). page1's scaffold renders them as '⚪ not loaded' chips. Phase B turns on chromosome_map + gene_track + repeat_track + crossover_track (the last drives the new page3 CO-density sub-track too). Phase C turns on prdm9_motif (facultative, page11) + nco_gc_track (primary on page12). Phase D turns on synteny_blocks + synteny_oxford_grid (page9 ribbon + macrosyntR-style Oxford-grid views) + ortholog_tables (page13 summary + per-chrom) + ortholog_pairs (page13 View 3, lazy). Layers carrying `_optional: true` are facultative — the consuming page hides the corresponding panel rather than erroring.",
   "layers": {
 
     "assembly_stats": {
@@ -124,6 +124,29 @@
       "_feeds": "page9 View 4 — macrosyntR-style Oxford grid (aggregated; one dot per chrom-pair, sized by ortholog count, coloured by BH-q)",
       "_source_pipeline": "OrthoFinder → macrosyntR (SamiLhll/macrosyntR) chrom-pair Fisher exact + BH",
       "_schema": "see page9 spec — { pair_id, method, ortholog_source, genome_a{id,label,chroms[]}, genome_b{...}, cells[{chrom_a,chrom_b,n_orthologs,fisher_p?,fisher_q?,significant?}], thresholds?{q_hi,q_lo} }"
+    },
+
+    "ortholog_tables": {
+      "tier": "warm",
+      "source": "file",
+      "path": "data/comparative/orthologs/<focal_id>.json",
+      "_path_doc": "One file per focal genome. Renderer interpolates focal_id from shared.focalGenome (set on page13, mirrored from page9 Oxford grid).",
+      "_status": "not_loaded",
+      "_feeds": "page13 Views 1 + 2 — focal × non-focal summary table and per focal-chrom %1:1 breakdown",
+      "_source_pipeline": "OrthoFinder summary tables",
+      "_schema": "see page13 spec — { focal{id,label,assembly,gene_count,chroms[{id,gene_count}]}, non_focal[{id,label,assembly,gene_count,summary{one_to_one,one_to_many,many_to_one,many_to_many,focal_orphans,nonfocal_orphans},per_focal_chrom?[{chrom,pct_one_to_one}]}], thresholds?{pct_good,pct_mid}, source_pipeline? }"
+    },
+
+    "ortholog_pairs": {
+      "tier": "cold",
+      "source": "file",
+      "path": "data/comparative/orthologs/pairs/<focal>_<nonfocal>.json",
+      "_path_doc": "Per (focal, non-focal) pair. Lazy-loaded on column reveal in page13 View 3; never fetched if View 3 stays collapsed.",
+      "_status": "not_loaded",
+      "_optional": true,
+      "_feeds": "page13 View 3 — gene-level explorer (one column per non-focal, hydrated on reveal)",
+      "_source_pipeline": "OrthoFinder per-pair tables",
+      "_schema": "see page13 spec — { focal_id, non_focal_id, rows[{focal_gene,chrom,pos_bp,orthologs[{id,chrom?,pos_bp?,kind∈1:1|1:n|m:1|m:n}]}] }"
     }
   }
 }

@@ -689,6 +689,141 @@ html[data-theme="academic"] .ga-card {
   margin-right: 6px;
 }
 
+/* ---------------------------------------------------------------------
+ * page13 — orthologue tables (focal vs. non-focal).
+ *
+ * Three table layouts share .ga-num (right-aligned, mono) and the
+ * .ga-ortho-good / -mid / -warn colour ramp. All grids; no <table>.
+ * --------------------------------------------------------------------- */
+.ga-ortho-good { color: #4f9e64; }
+.ga-ortho-mid  { color: #c9a23a; }
+.ga-ortho-warn { color: #c94f6b; }
+
+.ga-num {
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  font-family: var(--mono);
+}
+
+/* --- View 1: summary table (focal × non-focals) ---------------------- */
+.ga-ortho-summary {
+  display: grid;
+  grid-template-columns: 1.4fr repeat(7, 1fr);
+  gap: 4px 12px;
+  font-size: 10.5px;
+  margin: 4px 0 2px 0;
+}
+.ga-ortho-summary-head {
+  display: contents;
+  font-weight: 600;
+  color: var(--ink-dim);
+}
+.ga-ortho-summary-head > * {
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 4px;
+}
+.ga-ortho-summary-row {
+  display: contents;
+}
+.ga-ortho-summary-row > * {
+  padding: 4px 0;
+  border-bottom: 1px dashed var(--rule);
+}
+.ga-ortho-summary-row:hover > * {
+  background: var(--panel-3);
+}
+
+/* --- View 2: per focal-chrom breakdown ------------------------------- */
+.ga-ortho-perchrom {
+  display: grid;
+  grid-template-columns: 0.8fr 0.9fr repeat(4, 1fr);
+  gap: 4px 12px;
+  font-size: 10.5px;
+  margin: 4px 0 2px 0;
+}
+.ga-ortho-perchrom-head {
+  display: contents;
+  font-weight: 600;
+  color: var(--ink-dim);
+}
+.ga-ortho-perchrom-head > * {
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 4px;
+}
+.ga-ortho-perchrom-row {
+  display: contents;
+}
+.ga-ortho-perchrom-row > * {
+  padding: 3px 0;
+  border-bottom: 1px dashed var(--rule);
+}
+
+/* --- View 3: gene-level explorer ------------------------------------- */
+.ga-ortho-search {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 10px;
+  font-size: 10.5px;
+  color: var(--ink-dim);
+  margin: 4px 0 8px 0;
+}
+.ga-ortho-search input[type="search"] {
+  flex: 1 1 240px;
+  min-width: 200px;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  background: var(--panel-3);
+  color: var(--ink);
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  padding: 3px 6px;
+}
+.ga-ortho-search input[type="search"]:focus {
+  outline: none;
+  border-color: #ff8c6e;
+}
+.ga-ortho-genes {
+  display: grid;
+  grid-template-columns: 1.4fr 1.0fr repeat(4, 1fr);
+  gap: 4px 12px;
+  font-size: 10px;
+  margin: 4px 0 2px 0;
+}
+.ga-ortho-genes-head {
+  display: contents;
+  font-weight: 600;
+  color: var(--ink-dim);
+}
+.ga-ortho-genes-head > * {
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 4px;
+}
+.ga-ortho-genes-row {
+  display: contents;
+}
+.ga-ortho-genes-row > * {
+  padding: 3px 0;
+  border-bottom: 1px dashed var(--rule);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ga-ortho-genes-row code {
+  font-size: 0.95em;
+}
+.ga-ortho-orphan {
+  color: var(--ink-dimmer);
+  font-family: var(--mono);
+  text-align: center;
+}
+.ga-ortho-sup {
+  font-size: 0.78em;
+  color: var(--ink-dim);
+  margin-left: 2px;
+  vertical-align: super;
+}
+
 /* --- JSON-schema codeblock ------------------------------------------- */
 .ga-schema-block {
   margin: 4px 0;

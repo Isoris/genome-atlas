@@ -98,6 +98,14 @@
       "requires_operations": [],
       "requires_slots": [],
       "preloads": []
+    },
+    "page13": {
+      "_label": "orthologues — focal vs. non-focal tables",
+      "_doc": "Phase D. Three tables comparing one focal genome against every non-focal genome in the comparison set: (1) summary table — one row per non-focal, counts of 1:1 / 1:n / m:1 / m:n + focal-orphan + non-focal-orphan, % mapped; (2) per focal-chrom breakdown — one row per focal chrom, one column per non-focal with %1:1 conservation, cells green/amber/red on configurable thresholds (default ≥90 / 65–90 / <65); (3) gene-level explorer — one row per focal gene with ortholog ids (or '—') for each non-focal, copy count as superscript on 1:n, filterable by gene-id prefix, paginated. Focal genome is selectable and reads/writes shared.focalGenome (synced with page9's Oxford-grid row axis). Future requires_layers: ['ortholog_tables', 'chromosome_map']. Optional future requires_layers: ['ortholog_pairs']. Future requires_slots: ['focalGenome']. JSON import contract: one `ortholog_tables.json` per FOCAL genome at `data/comparative/orthologs/<focal_id>.json` carrying { focal{id,label,assembly,gene_count,chroms[]}, non_focal[{id,label,assembly,gene_count,summary{one_to_one,one_to_many,many_to_one,many_to_many,focal_orphans,nonfocal_orphans},per_focal_chrom[{chrom,pct_one_to_one}]}], thresholds?{pct_good,pct_mid}, source_pipeline? }. Optional companion `ortholog_pairs.json` per (focal × non-focal) at `data/comparative/orthologs/pairs/<focal>_<nonfocal>.json` for View 3 — lazy-loaded on column reveal. Both schemas embedded on the page.",
+      "requires_layers": [],
+      "requires_operations": [],
+      "requires_slots": [],
+      "preloads": []
     }
   }
 }

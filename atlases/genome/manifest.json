@@ -100,6 +100,14 @@
       "fragment": "atlases/genome/pages/annotation/page12.html",
       "module": "atlases/genome/pages/annotation/page12.js",
       "tooltip": "Sister page to page11, same per-inversion-candidate keying. Green NCO + yellow gene-conversion tract ideogram and tract-rate vs. relative telomere distance curves. Driven by nco_gc_track. Phase C+."
+    },
+    {
+      "id": "page13",
+      "label": "orthologues",
+      "stage": "comparative",
+      "fragment": "atlases/genome/pages/comparative/page13.html",
+      "module": "atlases/genome/pages/comparative/page13.js",
+      "tooltip": "Orthologue tables — focal genome vs. each non-focal. Three views: per-non-focal summary (1:1 / 1:n / m:1 / m:n / orphan counts), per-chrom breakdown for the focal genome, gene-level explorer with search. Focal genome is selectable and shares vocabulary with page9's Oxford-grid focal pair. Driven by ortholog_tables; optional ortholog_pairs layer feeds the deep-dive per-pair gene rows. Phase D."
     }
   ],
   "registries": {
