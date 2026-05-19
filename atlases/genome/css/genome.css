@@ -817,6 +817,50 @@ html[data-theme="academic"] .ga-card {
   opacity: 0.9;
 }
 
+/* --- Views 1 + 2 — SVG ribbon mockups -------------------------------- *
+ * Strip rects = chromosomes (12-hue palette, matched to View 4 cells).
+ * Polygons = syntenic blocks. .ga-syn-poly-inv hatches the anti-parallel
+ * "inversion" polygon at a steeper opacity so the X-crossing reads;
+ * .ga-syn-poly-tx draws the chrom-jumping translocation with a dashed
+ * outline. Flat fills, no glow.
+ * -------------------------------------------------------------------- */
+.ga-syn-ribbon-wrap {
+  margin: 4px 0;
+  padding: 6px 8px;
+  background: var(--panel-3);
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  overflow-x: auto;
+}
+.ga-syn-ribbon {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  font-family: var(--mono);
+  font-size: 9px;
+}
+.ga-syn-ribbon text {
+  fill: var(--ink-dim);
+  font-size: 9px;
+}
+.ga-syn-ribbon .ga-syn-ribbon-glabel {
+  font-size: 10px;
+  font-weight: 600;
+  fill: var(--ink);
+}
+.ga-syn-ribbon-strip rect {
+  stroke: rgba(0, 0, 0, 0.15);
+  stroke-width: 0.5;
+}
+.ga-syn-poly {
+  opacity: 0.32;
+  transition: opacity 80ms ease-out;
+}
+.ga-syn-poly:hover { opacity: 0.55; cursor: pointer; }
+.ga-syn-poly-inv  { opacity: 0.38; }              /* inversion reads a touch stronger */
+.ga-syn-poly-tx   { opacity: 0.22; stroke: rgba(0,0,0,0.35); stroke-width: 0.5; stroke-dasharray: 3 2; }
+
 /* --- Oxford-grid cell popover ---------------------------------------- *
  * Anchored to the clicked cell by page9.js (sets inline left/top).
  * Lives inside the grid card so the card's relative positioning frames
