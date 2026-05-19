@@ -27,6 +27,7 @@
 // =============================================================================
 
 import { _pageState, _setActiveState } from './page9/_state.js';
+import { ensureInstalled as ensureRouterBridge } from '../../shared/_router_bridge.js';
 
 const POPOVER_DEBOUNCE_MS = 200;
 
@@ -45,6 +46,12 @@ export function refreshPage9(state) {
 }
 
 export async function mount(root, atlasState, registry) {
+  // Defensive: even if the shell didn't register the router bridge from
+  // manifest.shared_modules, page9 emits cross-page events so the bridge
+  // must exist by the time the user clicks a cell.
+  try { ensureRouterBridge(atlasState); }
+  catch (e) { console.warn('page9.mount: ensureRouterBridge threw —', e); }
+
   const legacyState = _buildLegacyState(atlasState);
   legacyState.focalPair    = legacyState.focalPair    || { a: 'cgar', b: 'cmac' };
   legacyState.colorBy      = legacyState.colorBy      || 'row';

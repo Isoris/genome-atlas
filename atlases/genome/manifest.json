@@ -117,7 +117,10 @@
     "pages": "atlases/genome/registries/data/pages.registry.json",
     "slots": "atlases/genome/registries/data/slots.registry.json"
   },
-  "shared_modules": {},
+  "shared_modules": {
+    "router_bridge": "atlases/genome/shared/_router_bridge.js"
+  },
+  "_shared_modules_doc": "router_bridge listens on window for ga:navigate / ga:filter-page CustomEvents emitted by atlas pages (currently page9's Oxford-grid click gestures) and forwards them to the shell router. Falls back to setting atlasState.shared.pendingPage + drilledPair + drilledChrom slots, which any receiving page consumes at mount() time. The shell should call install(atlasState) at atlas-register time; pages defensively call ensureInstalled(atlasState) too so the bridge works even without shell registration. The bridge is idempotent — repeated installs return the same handle.",
   "engines_dir": "atlases/genome/engines/",
   "analysis_dir": "atlases/genome/analysis/",
   "css_dir": "atlases/genome/css/",

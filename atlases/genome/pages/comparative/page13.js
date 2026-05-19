@@ -12,6 +12,7 @@
 // =============================================================================
 
 import { _pageState, _setActiveState } from './page13/_state.js';
+import { ensureInstalled as ensureRouterBridge } from '../../shared/_router_bridge.js';
 
 export function renderPage13(/* state */) {
   // No-op. Phase D fetches data/comparative/orthologs/<focal>.json and
@@ -33,6 +34,11 @@ export function refreshPage13(state) {
 }
 
 export async function mount(root, atlasState, registry) {
+  // Same defensive install as page9 — guarantees the bridge is up
+  // before _applyIncomingFilter reads the slots it might have populated.
+  try { ensureRouterBridge(atlasState); }
+  catch (e) { console.warn('page13.mount: ensureRouterBridge threw —', e); }
+
   const legacyState = _buildLegacyState(atlasState);
   legacyState.focalGenome = legacyState.focalGenome || _readSharedFocal(atlasState) || 'cgar';
   _setActiveState(legacyState);
