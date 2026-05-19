@@ -817,6 +817,66 @@ html[data-theme="academic"] .ga-card {
   opacity: 0.9;
 }
 
+/* ---------------------------------------------------------------------
+ * page10 — ancestral karyotype (WGDI-style painting).
+ *
+ * Visual contract borrowed from WGDI's karyotype / ancestral_karyotype
+ * modules (Sun et al. Molecular Plant 2022, BSD-2-Clause): flat fills
+ * with alpha, capsule-shaped chrom outlines (rect rx/ry = half-height),
+ * one hue per ancestral linkage group. No code is copied — only the
+ * visual style. The hue palette steps in 30° increments (HSL S=55%,
+ * L=55%) so 12 + a wraparound covers a 13-ALG genome and keeps adjacent
+ * groups visually separable. Same palette as page9 Views 1/2/4.
+ * --------------------------------------------------------------------- */
+.ga-kary-wrap {
+  margin: 4px 0;
+  padding: 6px 8px;
+  background: var(--panel-3);
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  overflow-x: auto;
+}
+.ga-kary-svg {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  font-family: var(--mono);
+  font-size: 9px;
+}
+.ga-kary-svg text { fill: var(--ink-dim); font-size: 9px; }
+.ga-kary-glabel  { font-size: 10px; font-weight: 600; fill: var(--ink); }
+.ga-kary-clabel  { font-size: 9.5px; fill: var(--ink-dim); }
+.ga-kary-chrom rect {
+  opacity: 0.78;
+  stroke: rgba(0, 0, 0, 0.18);
+  stroke-width: 0.5;
+  transition: opacity 80ms ease-out;
+}
+.ga-kary-chrom:hover rect { opacity: 0.95; cursor: pointer; }
+
+/* Phylogeny: trunk = mid-grey, leaf branches = slightly darker.
+   Kept thin so the event annotations dominate visually. */
+.ga-kary-tree-trunk {
+  stroke: var(--rule);
+  stroke-width: 1.2;
+  fill: none;
+}
+.ga-kary-tree-branch {
+  stroke: var(--ink-dim);
+  stroke-width: 1.2;
+  fill: none;
+}
+.ga-kary-tip { font-size: 10px; fill: var(--ink); }
+.ga-kary-tip-n { fill: var(--ink-dim); font-size: 9px; }
+.ga-kary-evt { font-size: 9.5px; fill: var(--ink-dim); }
+
+/* Event-tally colour codes — same palette family as the rest of the
+   atlas (red / amber / green) but mapped to event kinds. */
+.ga-evt-fis { fill: #c94f6b; color: #c94f6b; font-weight: 600; }   /* fission   — red    */
+.ga-evt-fus { fill: #4f9e64; color: #4f9e64; font-weight: 600; }   /* fusion    — green  */
+.ga-evt-inv { fill: #c9a23a; color: #c9a23a; font-weight: 600; }   /* inversion — amber  */
+
 /* --- Views 1 + 2 — SVG ribbon mockups -------------------------------- *
  * Strip rects = chromosomes (12-hue palette, matched to View 4 cells).
  * Polygons = syntenic blocks. .ga-syn-poly-inv hatches the anti-parallel
