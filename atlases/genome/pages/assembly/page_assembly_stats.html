@@ -1,4 +1,12 @@
 <div id="page_assembly_stats" class="page">
+  <!-- Mode-B assembly-stats probe (2026-05-20). Resolves assembly_stats
+       (and optionally centromere_telomere) through the registry. Round-1
+       state: CONTRACT-ONLY layer per layers.registry.json — badge says
+       "○ data pending" until the cluster-side QC pipeline writes
+       data/assembly/assembly_stats.json. Fail-soft per
+       core/mode_b_badge.js. -->
+  <div id="pasModeBBadge" class="data-source-badge" style="margin: 4px 14px;"></div>
+
   <div class="ga-content">
       <div class="ga-title">
         <span class="ga-title-bullet">▰</span> Assembly stats — QC banner

@@ -13,6 +13,7 @@
 // =============================================================================
 
 import { _pageState, _setActiveState } from './page_assembly_stats/_state.js';
+import { probeModeB, renderModeBBadge } from '../../../../core/mode_b_badge.js';
 
 export function renderPage2(/* state */) {
   // No-op. Spec page. Phase-B wiring (assembly_stats + centromere_telomere
@@ -39,6 +40,40 @@ export async function mount(root, atlasState, registry) {
   try { refreshPage2(legacyState); }
   catch (e) { console.warn('page_assembly_stats.mount: refreshPage2 threw —', e); }
   if (atlasState.genome) atlasState.genome._page_assembly_statsState = legacyState;
+
+  // Mode-B probe — non-blocking. Round 1: assembly_stats is CONTRACT-ONLY
+  // → badge says "○ data pending" until the cluster QC pipeline ships.
+  _renderAssemblyStatsBadge(registry).catch((e) => {
+    console.warn('page_assembly_stats.mount: badge probe threw —', e);
+  });
+}
+
+async function _renderAssemblyStatsBadge(registry) {
+  const probe = await probeModeB(registry, 'assembly_stats', {}, {
+    extractRows: (p) => {
+      if (!p) return null;
+      // Either { per_chromosome: [...] } or a flat array; surface either.
+      if (Array.isArray(p.per_chromosome)) return p.per_chromosome;
+      if (Array.isArray(p.chromosomes))    return p.chromosomes;
+      if (Array.isArray(p))                return p;
+      return null;
+    },
+  });
+  renderModeBBadge('pasModeBBadge', probe, {
+    label:    'assembly stats',
+    layerKey: 'assembly_stats',
+    compare:  (probeResult) => {
+      const globals = probeResult.payload || {};
+      const busco = globals.busco_complete_pct ?? globals.busco ?? null;
+      const n50   = globals.scaffold_n50_mb    ?? globals.n50_mb ?? null;
+      const buscoTag = (busco != null) ? `BUSCO ${Number(busco).toFixed(1)}%` : 'no BUSCO';
+      const n50Tag   = (n50   != null) ? `N50 ${Number(n50).toFixed(1)} Mb` : 'no N50';
+      return {
+        pass: probeResult.n > 0,
+        summary: `${probeResult.n} chromosome rows · ${buscoTag} · ${n50Tag}`,
+      };
+    },
+  });
 }
 
 export async function unmount(root) {
