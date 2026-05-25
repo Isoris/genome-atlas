@@ -14,6 +14,18 @@
 import { _pageState, _setActiveState } from './page_orthologues/_state.js';
 import { ensureInstalled as ensureRouterBridge } from '../../shared/_router_bridge.js';
 
+// Host-atlas-aware state bucket. Router stamps atlasState.shared.currentPage.
+// atlas_id on every navigate so the module reads/writes _page_*State under
+// whichever atlas mounted it (genome at home; cross-species when mounted
+// from the manifest cross-reference). Defaults to 'genome' for back-compat.
+function _hostBucket(atlasState) {
+  if (!atlasState) return null;
+  const aid = (atlasState.shared && atlasState.shared.currentPage
+    && atlasState.shared.currentPage.atlas_id) || 'genome';
+  if (!atlasState[aid]) atlasState[aid] = {};
+  return atlasState[aid];
+}
+
 export function renderPage13(/* state */) {
   // No-op. Phase D fetches data/comparative/orthologs/<focal>.json and
   // populates Views 1+2; per-pair files hydrate View 3 column-by-column
@@ -47,7 +59,8 @@ export async function mount(root, atlasState, registry) {
   _wireFocalSelector(root, legacyState, atlasState);
   _wireSearchFilter(root, legacyState);
   _applyIncomingFilter(root, legacyState, atlasState);
-  if (atlasState.genome) atlasState.genome._page_orthologuesState = legacyState;
+  const bucket = _hostBucket(atlasState);
+  if (bucket) bucket._page_orthologuesState = legacyState;
 }
 
 export async function unmount(root) {
@@ -55,7 +68,7 @@ export async function unmount(root) {
 }
 
 function _buildLegacyState(atlasState) {
-  const ga = atlasState.genome || {};
+  const ga = _hostBucket(atlasState) || {};
   return Object.assign({}, ga);
 }
 

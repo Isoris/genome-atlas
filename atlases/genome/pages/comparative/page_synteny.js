@@ -31,6 +31,20 @@ import { ensureInstalled as ensureRouterBridge } from '../../shared/_router_brid
 
 const POPOVER_DEBOUNCE_MS = 200;
 
+// Host-atlas-aware state bucket. The router stamps atlasState.shared.
+// currentPage.atlas_id before calling mount(), so this module reads +
+// writes its _page_syntenyXxx slots under whichever atlas mounted it
+// (genome at home; cross-species when surfaced from there via the manifest
+// cross-reference, 2026-05-24). Autovivifies the bucket; defaults to
+// 'genome' for back-compat with non-router callers and unit tests.
+function _hostBucket(atlasState) {
+  if (!atlasState) return null;
+  const aid = (atlasState.shared && atlasState.shared.currentPage
+    && atlasState.shared.currentPage.atlas_id) || 'genome';
+  if (!atlasState[aid]) atlasState[aid] = {};
+  return atlasState[aid];
+}
+
 export function renderPage9(/* state */) { return; }
 
 export const PAGE9_META = {
@@ -55,11 +69,12 @@ export async function mount(root, atlasState, registry) {
   const legacyState = _buildLegacyState(atlasState);
   // 2026-05-23: restore persisted state from prior mounts so the user's
   // focal-pair / color-by / drill choices survive page navigation. Reads
-  // from atlasState.genome._page_syntenyFocalPair etc. — same keys the
-  // writers below set. Before this, the reads looked at the bare names
+  // from <hostAtlas>._page_syntenyFocalPair etc. — same keys the writers
+  // below set. Before this, reads looked at the bare names
   // (legacyState.focalPair) while writers used the underscore-prefixed
   // private slots; every remount silently reset to defaults.
-  const ga = (atlasState && atlasState.genome) || {};
+  // 2026-05-24: host-atlas bucket so cross-species mounts persist too.
+  const ga = _hostBucket(atlasState) || {};
   legacyState.focalPair    = ga._page_syntenyFocalPair    || { a: 'cgar', b: 'cmac' };
   legacyState.colorBy      = ga._page_syntenyColorBy      || 'row';
   legacyState.drilledPair  = ga._page_syntenyDrilledPair  || null;
@@ -72,7 +87,8 @@ export async function mount(root, atlasState, registry) {
   _wireCellGestures(root, legacyState, atlasState);
   _wireAxisLabels(root, legacyState, atlasState);
   _wirePopoverDismiss(root, legacyState);
-  if (atlasState.genome) atlasState.genome._page_syntenyState = legacyState;
+  const bucket = _hostBucket(atlasState);
+  if (bucket) bucket._page_syntenyState = legacyState;
 }
 
 export async function unmount(root) {
@@ -80,7 +96,7 @@ export async function unmount(root) {
 }
 
 function _buildLegacyState(atlasState) {
-  const ga = atlasState.genome || {};
+  const ga = _hostBucket(atlasState) || {};
   return Object.assign({}, ga);
 }
 
@@ -107,7 +123,8 @@ function _wireOxfordToggle(root, state, atlasState /* , registry */) {
 
   const onChange = () => {
     state.focalPair = { a: selA.value, b: selB.value };
-    if (atlasState && atlasState.genome) atlasState.genome._page_syntenyFocalPair = state.focalPair;
+    const bucket = _hostBucket(atlasState);
+    if (bucket) bucket._page_syntenyFocalPair = state.focalPair;
     if (typeof console !== 'undefined') {
       console.debug('page_synteny Oxford-grid focal pair →', selA.value, '×', selB.value);
     }
@@ -125,9 +142,11 @@ function _wireOxfordToggle(root, state, atlasState /* , registry */) {
 
 // ---------------------------------------------------------------------------
 // Colour-by selector. CSS handles the recolouring via [data-color-by].
-// 2026-05-23: also stashes the choice onto atlasState.genome._page_syntenyColorBy
+// 2026-05-23: also stashes the choice onto <hostBucket>._page_syntenyColorBy
 // so mount() can restore it on next remount (parity with focalPair /
 // drilledPair / drilledChrom persistence).
+// 2026-05-24: host bucket resolves per-mount via _hostBucket() so cross-
+// species mounts persist into atlasState['cross-species'] not atlasState.genome.
 function _wireColorByToggle(root, state, atlasState) {
   if (!root || !root.querySelector) return;
   const sel = root.querySelector('[data-ga-syn-color]');
@@ -139,7 +158,8 @@ function _wireColorByToggle(root, state, atlasState) {
   const apply = () => {
     const mode = sel.value || 'row';
     state.colorBy = mode;
-    if (atlasState && atlasState.genome) atlasState.genome._page_syntenyColorBy = mode;
+    const bucket = _hostBucket(atlasState);
+    if (bucket) bucket._page_syntenyColorBy = mode;
     grid.setAttribute('data-color-by', mode);
     if (legend) legend.setAttribute('data-color-by', mode);
   };
@@ -200,7 +220,8 @@ function _onCellSingleClick(root, state, atlasState, cell) {
   const a = state.focalPair && state.focalPair.a;
   const b = state.focalPair && state.focalPair.b;
   state.drilledPair = { a_id: a, b_id: b, chrom_a: chromA, chrom_b: chromB };
-  if (atlasState && atlasState.genome) atlasState.genome._page_syntenyDrilledPair = state.drilledPair;
+  const bucket = _hostBucket(atlasState);
+  if (bucket) bucket._page_syntenyDrilledPair = state.drilledPair;
 
   // Also reflect on the View 3 badge so a Shift+navigate keeps the context.
   const badge = root.querySelector('[data-ga-syn-drill-pair]');
@@ -219,7 +240,8 @@ function _onCellDoubleClick(root, state, atlasState, cell) {
   const b = state.focalPair && state.focalPair.b;
   state.drilledPair = { a_id: a, b_id: b, chrom_a: chromA, chrom_b: chromB };
   // 2026-05-23: persist for remount restoration (parity with single-click writer).
-  if (atlasState && atlasState.genome) atlasState.genome._page_syntenyDrilledPair = state.drilledPair;
+  const bucket = _hostBucket(atlasState);
+  if (bucket) bucket._page_syntenyDrilledPair = state.drilledPair;
   _writeShared(atlasState, {
     drilledPair: state.drilledPair,
     focalGenome: a,
@@ -256,7 +278,8 @@ function _wireAxisLabels(root, state, atlasState) {
       : (state.focalPair && state.focalPair.b);
     state.drilledChrom = { genome_id: genome, chrom_id: chrom, side: side };
     // 2026-05-23: persist for remount restoration (parity with focalPair / drilledPair).
-    if (atlasState && atlasState.genome) atlasState.genome._page_syntenyDrilledChrom = state.drilledChrom;
+    const bucket = _hostBucket(atlasState);
+    if (bucket) bucket._page_syntenyDrilledChrom = state.drilledChrom;
     _writeShared(atlasState, {
       drilledChrom: state.drilledChrom,
       focalGenome: genome,
