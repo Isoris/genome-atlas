@@ -53,15 +53,22 @@ export async function mount(root, atlasState, registry) {
   catch (e) { console.warn('page_synteny.mount: ensureRouterBridge threw —', e); }
 
   const legacyState = _buildLegacyState(atlasState);
-  legacyState.focalPair    = legacyState.focalPair    || { a: 'cgar', b: 'cmac' };
-  legacyState.colorBy      = legacyState.colorBy      || 'row';
-  legacyState.drilledPair  = legacyState.drilledPair  || null;
-  legacyState.drilledChrom = legacyState.drilledChrom || null;
+  // 2026-05-23: restore persisted state from prior mounts so the user's
+  // focal-pair / color-by / drill choices survive page navigation. Reads
+  // from atlasState.genome._page_syntenyFocalPair etc. — same keys the
+  // writers below set. Before this, the reads looked at the bare names
+  // (legacyState.focalPair) while writers used the underscore-prefixed
+  // private slots; every remount silently reset to defaults.
+  const ga = (atlasState && atlasState.genome) || {};
+  legacyState.focalPair    = ga._page_syntenyFocalPair    || { a: 'cgar', b: 'cmac' };
+  legacyState.colorBy      = ga._page_syntenyColorBy      || 'row';
+  legacyState.drilledPair  = ga._page_syntenyDrilledPair  || null;
+  legacyState.drilledChrom = ga._page_syntenyDrilledChrom || null;
   _setActiveState(legacyState);
   try { refreshPage9(legacyState); }
   catch (e) { console.warn('page_synteny.mount: refreshPage9 threw —', e); }
   _wireOxfordToggle(root, legacyState, atlasState, registry);
-  _wireColorByToggle(root, legacyState);
+  _wireColorByToggle(root, legacyState, atlasState);
   _wireCellGestures(root, legacyState, atlasState);
   _wireAxisLabels(root, legacyState, atlasState);
   _wirePopoverDismiss(root, legacyState);
@@ -118,7 +125,10 @@ function _wireOxfordToggle(root, state, atlasState /* , registry */) {
 
 // ---------------------------------------------------------------------------
 // Colour-by selector. CSS handles the recolouring via [data-color-by].
-function _wireColorByToggle(root, state) {
+// 2026-05-23: also stashes the choice onto atlasState.genome._page_syntenyColorBy
+// so mount() can restore it on next remount (parity with focalPair /
+// drilledPair / drilledChrom persistence).
+function _wireColorByToggle(root, state, atlasState) {
   if (!root || !root.querySelector) return;
   const sel = root.querySelector('[data-ga-syn-color]');
   const grid = root.querySelector('.ga-syn-grid');
@@ -129,6 +139,7 @@ function _wireColorByToggle(root, state) {
   const apply = () => {
     const mode = sel.value || 'row';
     state.colorBy = mode;
+    if (atlasState && atlasState.genome) atlasState.genome._page_syntenyColorBy = mode;
     grid.setAttribute('data-color-by', mode);
     if (legend) legend.setAttribute('data-color-by', mode);
   };
@@ -207,6 +218,8 @@ function _onCellDoubleClick(root, state, atlasState, cell) {
   const a = state.focalPair && state.focalPair.a;
   const b = state.focalPair && state.focalPair.b;
   state.drilledPair = { a_id: a, b_id: b, chrom_a: chromA, chrom_b: chromB };
+  // 2026-05-23: persist for remount restoration (parity with single-click writer).
+  if (atlasState && atlasState.genome) atlasState.genome._page_syntenyDrilledPair = state.drilledPair;
   _writeShared(atlasState, {
     drilledPair: state.drilledPair,
     focalGenome: a,
@@ -242,6 +255,8 @@ function _wireAxisLabels(root, state, atlasState) {
       ? (state.focalPair && state.focalPair.a)
       : (state.focalPair && state.focalPair.b);
     state.drilledChrom = { genome_id: genome, chrom_id: chrom, side: side };
+    // 2026-05-23: persist for remount restoration (parity with focalPair / drilledPair).
+    if (atlasState && atlasState.genome) atlasState.genome._page_syntenyDrilledChrom = state.drilledChrom;
     _writeShared(atlasState, {
       drilledChrom: state.drilledChrom,
       focalGenome: genome,
