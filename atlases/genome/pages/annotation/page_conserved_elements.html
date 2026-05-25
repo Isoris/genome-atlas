@@ -4,7 +4,53 @@
         <span class="ga-title-bullet">▰</span> Conserved elements — UCEs / phastCons
       </div>
       <div class="ga-subtitle">
-        Stage: annotation · spec / phase C–D · driven by <code>conserved_elements</code>
+        Stage: annotation · driven by <code>conserved_elements</code>. Live views render
+        when the layer loads; spec cards below describe the design contract.
+      </div>
+
+      <div id="pageConsElBadge" class="data-source-badge"></div>
+      <div class="ga-stat-strip" id="pageConsElStats"></div>
+
+      <!-- View 1: per-chromosome element count + total covered bp. -->
+      <div class="ga-card" id="pageConsElDensityCard" hidden>
+        <div class="ga-card-header">
+          <div class="ga-card-title">View 1 — per-chromosome conserved-element density</div>
+          <div class="ga-card-status ga-status-live">live</div>
+        </div>
+        <div class="ga-toolbar">
+          <label>sort:
+            <select id="pageConsElDensitySort">
+              <option value="count" selected>by element count</option>
+              <option value="covered_bp">by covered bp</option>
+              <option value="chrom">by chrom</option>
+            </select>
+          </label>
+          <span class="ga-count" id="pageConsElDensityCount"></span>
+          <button id="pageConsElDensityExportBtn" type="button" class="ga-btn">export density TSV</button>
+        </div>
+        <div id="pageConsElDensitySlot" class="ga-svg-slot"></div>
+      </div>
+
+      <!-- View 2: per-inversion overlap with conserved elements. -->
+      <div class="ga-card" id="pageConsElOverlapCard" hidden>
+        <div class="ga-card-header">
+          <div class="ga-card-title">View 2 — per-inversion conserved-element overlap</div>
+          <div class="ga-card-status ga-status-live">live (gated on inversion.candidates_v1)</div>
+        </div>
+        <div class="ga-toolbar">
+          <input id="pageConsElOverlapSearch" type="search" placeholder="filter by candidate id..." />
+          <label>sort:
+            <select id="pageConsElOverlapSort">
+              <option value="n_elements" selected>by element count</option>
+              <option value="covered_bp">by covered bp</option>
+              <option value="frac">by fraction</option>
+              <option value="candidate_id">by candidate</option>
+            </select>
+          </label>
+          <span class="ga-count" id="pageConsElOverlapCount"></span>
+          <button id="pageConsElOverlapExportBtn" type="button" class="ga-btn">export overlap TSV</button>
+        </div>
+        <div id="pageConsElOverlapSlot" class="ga-table-slot"></div>
       </div>
 
       <div class="ga-card">

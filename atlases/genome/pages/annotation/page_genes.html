@@ -4,7 +4,51 @@
         <span class="ga-title-bullet">▰</span> Genes — track, density, cargo
       </div>
       <div class="ga-subtitle">
-        Stage: annotation · spec / phase B–C · driven by <code>gene_track</code>
+        Stage: annotation · driven by <code>gene_track</code>. Live views below render
+        when the layer loads; spec cards further down describe the design contract.
+      </div>
+
+      <!-- Live data-source badge — populated by probeModeB(registry, 'gene_track').
+           When the layer is unloaded, surfaces the reason inline and the live-view
+           cards below stay hidden. -->
+      <div id="pageGenesBadge" class="data-source-badge"></div>
+
+      <!-- Cohort-level stat strip pulled from gene_track. -->
+      <div class="ga-stat-strip" id="pageGenesStats"></div>
+
+      <!-- View 1: genome-wide density. One bar per chromosome, height = gene count. -->
+      <div class="ga-card" id="pageGenesDensityCard" hidden>
+        <div class="ga-card-header">
+          <div class="ga-card-title">View 1 — genome-wide gene density</div>
+          <div class="ga-card-status ga-status-live">live</div>
+        </div>
+        <div class="ga-toolbar">
+          <label>sort:
+            <select id="pageGenesDensitySort">
+              <option value="chrom">by chrom</option>
+              <option value="count" selected>by gene count</option>
+              <option value="length">by chrom length</option>
+            </select>
+          </label>
+          <span class="ga-count" id="pageGenesDensityCount"></span>
+          <button id="pageGenesExportBtn" type="button" class="ga-btn">export per-chrom TSV</button>
+        </div>
+        <div id="pageGenesDensitySlot" class="ga-svg-slot"></div>
+      </div>
+
+      <!-- View 3: gene cargo per inversion candidate. Cross-atlas read of
+           inversion.candidates_v1; for each candidate, count overlapping genes. -->
+      <div class="ga-card" id="pageGenesCargoCard" hidden>
+        <div class="ga-card-header">
+          <div class="ga-card-title">View 3 — gene cargo per inversion candidate</div>
+          <div class="ga-card-status ga-status-live">live (gated on inversion.candidates_v1)</div>
+        </div>
+        <div class="ga-toolbar">
+          <input id="pageGenesCargoSearch" type="search" placeholder="filter by candidate id..." />
+          <span class="ga-count" id="pageGenesCargoCount"></span>
+          <button id="pageGenesCargoExportBtn" type="button" class="ga-btn">export cargo TSV</button>
+        </div>
+        <div id="pageGenesCargoSlot" class="ga-table-slot"></div>
       </div>
 
       <div class="ga-card">

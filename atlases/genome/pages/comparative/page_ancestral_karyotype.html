@@ -7,6 +7,53 @@
         Stage: comparative · spec / phase D · supp note candidate
       </div>
 
+      <div id="pageAncestralBadge" class="data-source-badge"></div>
+      <div id="pageAncestralStats" class="ga-stat-strip"></div>
+
+      <div id="pageAncestralAlgCard" class="ga-card" hidden>
+        <div class="ga-card-header">
+          <div class="ga-card-title">View 1 — ancestral karyotype (live)</div>
+          <div class="ga-card-status"><span id="pageAncestralAlgCount">—</span>
+            <button id="pageAncestralAlgExportBtn" type="button" class="ga-btn-mini" title="Export ALG table as TSV">TSV</button>
+          </div>
+        </div>
+        <div class="ga-kary-wrap" id="pageAncestralAlgSlot"></div>
+        <div class="ga-card-footnote">
+          Bars sized by <code>synteny_blocks.ancestral.lens.length_bp</code>
+          when present, otherwise uniform. Colours from the genome-atlas
+          chrom palette (see swatch panel at the bottom of this page).
+        </div>
+      </div>
+
+      <div id="pageAncestralExtantCard" class="ga-card" hidden>
+        <div class="ga-card-header">
+          <div class="ga-card-title">View 2 — extant chroms painted by ALG descent (live)</div>
+          <div class="ga-card-status"><span id="pageAncestralExtantCount">—</span></div>
+        </div>
+        <div class="ga-kary-wrap" id="pageAncestralExtantSlot"></div>
+        <div class="ga-card-footnote">
+          One row per extant chromosome, tiled by ALG-coloured segments
+          from <code>synteny_blocks.descent[].segments</code>. Fusion
+          products show two adjacent colours; fissioned chroms share an
+          ALG hue with their sibling fragment.
+        </div>
+      </div>
+
+      <div id="pageAncestralEventsCard" class="ga-card" hidden>
+        <div class="ga-card-header">
+          <div class="ga-card-title">View 3 — per-branch event tallies (live)</div>
+          <div class="ga-card-status"><span id="pageAncestralEventsCount">—</span>
+            <button id="pageAncestralEventsExportBtn" type="button" class="ga-btn-mini" title="Export events as TSV">TSV</button>
+          </div>
+        </div>
+        <div id="pageAncestralEventsSlot"></div>
+        <div class="ga-card-footnote">
+          Per-branch fission / fusion / inversion counts from
+          <code>synteny_blocks.events[]</code>. The phylogeny mockup below
+          shows where each branch sits in the Siluriformes tree.
+        </div>
+      </div>
+
       <div class="ga-card">
         <div class="ga-card-header">
           <div class="ga-card-title">What this page shows</div>

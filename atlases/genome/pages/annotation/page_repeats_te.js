@@ -36,6 +36,33 @@
 // =============================================================================
 
 import { _pageState, _setActiveState } from './page_repeats_te/_state.js';
+import { probeModeB, renderModeBBadge, distinctCount } from '../../../../core/mode_b_badge.js';
+
+// ─── Mode-B probe ────────────────────────────────────────────────────────
+// Resolves the repeat_track BED via the registry. Round-1 layer is
+// CONTRACT-ONLY (per layers.registry.json `_status: not_loaded`), so the
+// badge reports "○ data pending" today; flips to ● when RepeatMasker /
+// EDTA writes the file.
+function _extractRepeatRows(payload) {
+  if (!payload) return null;
+  if (Array.isArray(payload)) return payload;
+  // BED-derived shapes: { features: [...] } or { intervals: [...] }.
+  if (Array.isArray(payload.features))  return payload.features;
+  if (Array.isArray(payload.intervals)) return payload.intervals;
+  if (Array.isArray(payload.rows))      return payload.rows;
+  return null;
+}
+
+function _compareRepeats(probeResult) {
+  let nFamilies = distinctCount(probeResult.rows, 'family');
+  if (nFamilies === 0) nFamilies = distinctCount(probeResult.rows, 'class');
+  if (nFamilies === 0) nFamilies = distinctCount(probeResult.rows, 'repeat_family');
+  return {
+    pass: probeResult.n > 0,
+    summary: `${probeResult.n} repeat intervals` +
+             (nFamilies > 0 ? ` · ${nFamilies} families` : ''),
+  };
+}
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 
@@ -218,6 +245,18 @@ export async function mount(root, atlasState, registry) {
   try { refreshPage6(legacyState); }
   catch (e) { console.warn('page_repeats_te.mount: refreshPage6 threw —', e); }
   if (atlasState.genome) atlasState.genome._page_repeats_teState = legacyState;
+
+  // Mode-B probe — non-blocking. Round-1 layer is CONTRACT-ONLY so this
+  // routinely reports "○ data pending" until the repeat track ships.
+  probeModeB(registry, 'repeat_track', null, { extractRows: _extractRepeatRows })
+    .then((probe) => renderModeBBadge('prteModeBBadge', probe, {
+      label:    'repeat track',
+      layerKey: 'repeat_track',
+      compare:  _compareRepeats,
+    }))
+    .catch((e) => {
+      console.warn('page_repeats_te.mount: Mode-B probe threw —', e);
+    });
 }
 
 export async function unmount(root) {

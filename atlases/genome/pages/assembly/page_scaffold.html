@@ -1,4 +1,14 @@
 <div id="page_scaffold" class="page">
+  <!-- Mode-B probe (2026-05-20). Resolves chromosome_map through the
+       registry — the canonical assembly summary that feeds the
+       chromosome-overview chips on this landing page. Round-1 layer is
+       CONTRACT-ONLY (per layers.registry.json `_status: not_loaded`),
+       so the badge says "○ data pending" until FAI + AGP are emitted.
+       Distinct from the per-chip `[data-ga-layer]` wiring below, which
+       paints individual layer presence; this probes the central
+       chromosome-map summary directly. Fail-soft per core/mode_b_badge.js. -->
+  <div id="psModeBBadge" class="data-source-badge" style="margin: 4px 14px;"></div>
+
   <div id="genomeAtlasContent" class="ga-content">
       <div class="ga-title">
         <span class="ga-title-bullet">▰</span> Genome Atlas — landing / scaffold preview

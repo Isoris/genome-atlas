@@ -7,6 +7,29 @@
         Stage: assembly · spec / phase B · driven by <code>chromosome_map</code> + density layers
       </div>
 
+      <div id="pageChromOvBadge" class="data-source-badge"></div>
+      <div id="pageChromOvStats" class="ga-stat-strip"></div>
+
+      <div id="pageChromOvStripCard" class="ga-card" hidden>
+        <div class="ga-card-header">
+          <div class="ga-card-title">Chromosome strip (live)</div>
+          <div class="ga-card-status"><span id="pageChromOvStripCount">—</span>
+            <button id="pageChromOvExportBtn" type="button" class="ga-btn-mini" title="Export per-chrom stats as TSV">TSV</button>
+          </div>
+        </div>
+        <div class="ga-kary-wrap" id="pageChromOvStripSlot"></div>
+        <div class="ga-card-footnote">
+          Backbone sized by <code>chromosome_map.chroms[].length_bp</code>;
+          stripes are 100 kbp bins of <code>gene_track</code> (gene density),
+          <code>repeat_track</code> (repeat density) and
+          <code>conserved_elements</code> (UCE density). Cohort overlay
+          rectangles read <code>inversion.candidates_v1</code> cross-atlas.
+          Missing layers leave their stripe blank. crossover_track is
+          per-candidate and lives in meiosis-atlas — surfaced in
+          <code>meiosis / crossovers_per_candidate</code>.
+        </div>
+      </div>
+
       <div class="ga-card">
         <div class="ga-card-header">
           <div class="ga-card-title">What this page shows</div>

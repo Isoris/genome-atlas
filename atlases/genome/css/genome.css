@@ -1537,3 +1537,79 @@ html[data-theme="light"]    .ga-sankey-btn.is-active {
 }
 .ga-schema-block code { font-family: inherit; font-size: inherit; color: inherit; }
 
+/* ---------------------------------------------------------------------
+ * Live-view shared utilities — used by the data-driven cards on
+ * page_genes, page_variant_annotations, page_conserved_elements,
+ * page_ancestral_karyotype, page_chromosome_overview. Kept tight so any
+ * new live page picks them up automatically.
+ * --------------------------------------------------------------------- */
+.ga-stat-strip {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  margin: 6px 0 10px;
+}
+.ga-stat-strip:empty { display: none; }
+.ga-stat-cell {
+  flex: 0 0 auto;
+  padding: 6px 10px;
+  background: var(--panel-2);
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  min-width: 80px;
+}
+.ga-stat-lbl {
+  font-size: 10px;
+  color: var(--ink-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.ga-stat-val {
+  font-size: 14px;
+  font-family: var(--mono);
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.ga-btn-mini {
+  margin-left: 8px;
+  padding: 2px 8px;
+  font: 600 10px/1.4 var(--mono);
+  background: var(--panel-2);
+  color: var(--ink-dim);
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.ga-btn-mini:hover { color: var(--ink); border-color: var(--accent); }
+
+.ga-hint { font-size: 11px; color: var(--ink-dim); font-style: italic; }
+
+.ga-density-svg { width: 100%; height: auto; display: block; }
+.ga-density-bar  { fill: var(--accent); opacity: 0.78; }
+.ga-density-bar:hover { opacity: 1; }
+.ga-density-label,
+.ga-density-val {
+  font: 10px var(--mono);
+  fill: var(--ink-dim);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------------------------------------------------------------------
+ * page_chromosome_overview live strip.
+ * --------------------------------------------------------------------- */
+.ga-chromov-svg { width: 100%; height: auto; display: block; }
+.ga-chromov-label { font: 11px var(--mono); fill: var(--ink); }
+.ga-chromov-len   { font: 10px var(--mono); fill: var(--ink-dim); font-variant-numeric: tabular-nums; }
+.ga-chromov-bone  { fill: var(--panel-3); stroke: var(--rule); }
+.ga-chromov-stripe-gene   { fill: var(--accent); }
+.ga-chromov-stripe-repeat { fill: var(--bad, #d8645a); }
+.ga-chromov-stripe-uce    { fill: var(--ink); }
+.ga-chromov-cand {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 1.5;
+  opacity: 0.85;
+}
+.ga-chromov-cand:hover { fill: var(--accent); fill-opacity: 0.18; }
+

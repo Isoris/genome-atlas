@@ -26,6 +26,40 @@
 
 import { _pageState, _setActiveState } from './page_scaffold/_state.js';
 import { listLayers } from '../../shared/api_client.js';
+import { probeModeB, renderModeBBadge, distinctCount } from '../../../../core/mode_b_badge.js';
+
+// ─── Mode-B probe ────────────────────────────────────────────────────────
+// Resolves the chromosome_map summary via the registry. Round-1 layer is
+// CONTRACT-ONLY → "○ data pending" today; flips to ● when FAI + AGP are
+// emitted to data/assembly/chromosome_map.json. Complements the per-chip
+// [data-ga-layer] wiring in _lightUpLayerChips by checking the central
+// chromosome-map summary directly.
+function _extractChromMapRows(payload) {
+  if (!payload) return null;
+  if (Array.isArray(payload)) return payload;
+  if (Array.isArray(payload.chromosomes)) return payload.chromosomes;
+  if (Array.isArray(payload.chroms))      return payload.chroms;
+  if (Array.isArray(payload.rows))        return payload.rows;
+  return null;
+}
+
+function _compareChromMap(probeResult) {
+  // Total assembled length (Mb) is a useful headline statistic when the
+  // payload exposes per-chrom lengths under any of these common keys.
+  let totalMb = 0;
+  for (const r of probeResult.rows) {
+    const len = r && (r.length_bp ?? r.length ?? r.size_bp ?? r.size);
+    if (typeof len === 'number' && Number.isFinite(len)) totalMb += len / 1e6;
+  }
+  const nChroms = distinctCount(probeResult.rows, 'chrom') ||
+                  distinctCount(probeResult.rows, 'name') ||
+                  probeResult.n;
+  return {
+    pass: probeResult.n > 0,
+    summary: `${nChroms} chromosomes` +
+             (totalMb > 0 ? ` · ${totalMb.toFixed(1)} Mb assembled` : ''),
+  };
+}
 
 // ---------------------------------------------------------------------------
 // Render entry — no-op for the round-1 scaffold.
@@ -195,6 +229,19 @@ export async function mount(root, atlasState, registry) {
   _lightUpLayerChips(root).catch(
     (e) => console.warn('page_scaffold.mount: _lightUpLayerChips threw —', e),
   );
+
+  // Mode-B probe — non-blocking. Round-1 layer is CONTRACT-ONLY so this
+  // routinely reports "○ data pending" today; auto-flips to ● when the
+  // chromosome_map JSON ships.
+  probeModeB(registry, 'chromosome_map', null, { extractRows: _extractChromMapRows })
+    .then((probe) => renderModeBBadge('psModeBBadge', probe, {
+      label:    'chromosome map',
+      layerKey: 'chromosome_map',
+      compare:  _compareChromMap,
+    }))
+    .catch((e) => {
+      console.warn('page_scaffold.mount: Mode-B probe threw —', e);
+    });
 }
 
 /**

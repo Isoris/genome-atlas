@@ -1,4 +1,11 @@
 <div id="page_orthologues" class="page">
+  <!-- Mode-B probe (2026-05-20). Resolves ortholog_tables for the active
+       focalGenome through the registry; reports table row count + species
+       coverage. Round-1 state: CONTRACT-ONLY layer (per layers.registry.json
+       `_status: not_loaded`) → "○ data pending" until OrthoFinder summary
+       tables ship. Fail-soft per core/mode_b_badge.js. -->
+  <div id="poModeBBadge" class="data-source-badge" style="margin: 4px 14px;"></div>
+
   <div class="ga-content">
       <div class="ga-title">
         <span class="ga-title-bullet">▰</span> Orthologues — focal vs. non-focal genomes

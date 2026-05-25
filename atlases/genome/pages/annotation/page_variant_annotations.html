@@ -4,7 +4,45 @@
         <span class="ga-title-bullet">▰</span> Variant annotations — SnpEff / VEP overlay
       </div>
       <div class="ga-subtitle">
-        Stage: annotation · spec / phase E · driven by <code>variant_annotations</code>
+        Stage: annotation · driven by <code>variant_annotations</code>. Live views render
+        when the layer loads; spec cards below describe the design contract.
+      </div>
+
+      <div id="pageVarAnnBadge" class="data-source-badge"></div>
+      <div class="ga-stat-strip" id="pageVarAnnStats"></div>
+
+      <!-- View 1: impact distribution bar chart (HIGH / MODERATE / LOW / MODIFIER). -->
+      <div class="ga-card" id="pageVarAnnImpactCard" hidden>
+        <div class="ga-card-header">
+          <div class="ga-card-title">View 1 — variant counts by impact class</div>
+          <div class="ga-card-status ga-status-live">live</div>
+        </div>
+        <div class="ga-toolbar">
+          <span class="ga-count" id="pageVarAnnImpactCount"></span>
+          <button id="pageVarAnnImpactExportBtn" type="button" class="ga-btn">export impact TSV</button>
+        </div>
+        <div id="pageVarAnnImpactSlot" class="ga-svg-slot"></div>
+      </div>
+
+      <!-- View 2: per-candidate deleterious-burden table (cross-atlas). -->
+      <div class="ga-card" id="pageVarAnnBurdenCard" hidden>
+        <div class="ga-card-header">
+          <div class="ga-card-title">View 2 — per-inversion deleterious burden</div>
+          <div class="ga-card-status ga-status-live">live (gated on inversion.candidates_v1)</div>
+        </div>
+        <div class="ga-toolbar">
+          <input id="pageVarAnnBurdenSearch" type="search" placeholder="filter by candidate id..." />
+          <label>sort:
+            <select id="pageVarAnnBurdenSort">
+              <option value="n_high" selected>by HIGH count</option>
+              <option value="n_total">by total</option>
+              <option value="candidate_id">by candidate</option>
+            </select>
+          </label>
+          <span class="ga-count" id="pageVarAnnBurdenCount"></span>
+          <button id="pageVarAnnBurdenExportBtn" type="button" class="ga-btn">export burden TSV</button>
+        </div>
+        <div id="pageVarAnnBurdenSlot" class="ga-table-slot"></div>
       </div>
 
       <div class="ga-card">

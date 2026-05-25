@@ -13,6 +13,38 @@
 
 import { _pageState, _setActiveState } from './page_orthologues/_state.js';
 import { ensureInstalled as ensureRouterBridge } from '../../shared/_router_bridge.js';
+import { probeModeB, renderModeBBadge, distinctCount } from '../../../../core/mode_b_badge.js';
+
+// ─── Mode-B probe ────────────────────────────────────────────────────────
+// Resolves ortholog_tables for the active focalGenome (templated). Comparator
+// surfaces table row count + non-focal species coverage. Round-1 disk state
+// is empty → "○ data pending" until OrthoFinder summary tables ship.
+function _extractOrthologRows(payload) {
+  if (!payload) return null;
+  if (Array.isArray(payload)) return payload;
+  // OrthoFinder's per-focal JSON usually keys rows under `rows` / `pairs` /
+  // `by_species`; multi-key fallback covers the variants seen in the wild.
+  if (Array.isArray(payload.rows))        return payload.rows;
+  if (Array.isArray(payload.pairs))       return payload.pairs;
+  if (Array.isArray(payload.by_species))  return payload.by_species;
+  if (Array.isArray(payload.summary))     return payload.summary;
+  return null;
+}
+
+function _compareOrthologs(focalGenome) {
+  return (probeResult) => {
+    // Try a few common species-id column names — OrthoFinder, OMA, and
+    // ad-hoc exports each use different conventions.
+    let nSpecies = distinctCount(probeResult.rows, 'non_focal_id');
+    if (nSpecies === 0) nSpecies = distinctCount(probeResult.rows, 'species_id');
+    if (nSpecies === 0) nSpecies = distinctCount(probeResult.rows, 'genome_id');
+    return {
+      pass: probeResult.n > 0,
+      summary: `focal ${focalGenome} · ${probeResult.n} table rows` +
+               (nSpecies > 0 ? ` · ${nSpecies} non-focal species` : ''),
+    };
+  };
+}
 
 // Host-atlas-aware state bucket. Router stamps atlasState.shared.currentPage.
 // atlas_id on every navigate so the module reads/writes _page_*State under
@@ -61,6 +93,22 @@ export async function mount(root, atlasState, registry) {
   _applyIncomingFilter(root, legacyState, atlasState);
   const bucket = _hostBucket(atlasState);
   if (bucket) bucket._page_orthologuesState = legacyState;
+
+  // Mode-B probe — non-blocking. Round-1 layer is CONTRACT-ONLY so this
+  // routinely reports "○ data pending"; auto-flips to ● when OrthoFinder
+  // summary tables ship to data/comparative/orthologs/<focal_id>.json.
+  probeModeB(registry, 'ortholog_tables', { focal_id: legacyState.focalGenome }, {
+    extractRows: _extractOrthologRows,
+  })
+    .then((probe) => renderModeBBadge('poModeBBadge', probe, {
+      label:    'ortholog tables',
+      layerKey: 'ortholog_tables',
+      context:  legacyState.focalGenome,
+      compare:  _compareOrthologs(legacyState.focalGenome),
+    }))
+    .catch((e) => {
+      console.warn('page_orthologues.mount: Mode-B probe threw —', e);
+    });
 }
 
 export async function unmount(root) {
