@@ -17,6 +17,7 @@
 
 import { probeModeB, renderModeBBadge } from '../../../../core/mode_b_badge.js';
 import { _pageState, _setActiveState } from './page_ancestral_karyotype/_state.js';
+import { installPageIndex as _installPageIndex } from '../../shared/page-index.js';
 
 function _hostBucket(atlasState) {
   if (!atlasState) return null;
@@ -318,6 +319,7 @@ export async function mount(root, atlasState, registry) {
   _state.events = [];
   _state.registry = registry || null;
   _setActiveState(_state);
+  _installPageIndex(root, 'page_ancestral_karyotype');
   _wire();
 
   const probe = await probeModeB(registry, 'synteny_blocks');

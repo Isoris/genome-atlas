@@ -7,6 +7,7 @@
 // panel. Round-1 stub: static HTML already carries the rendered SVG; this
 // module is the place to swap in the live data when the renderer wires in.
 import { _pageState, _setActiveState } from './page_comparative_te/_state.js';
+import { installPageIndex as _installPageIndex } from '../../shared/page-index.js';
 
 export const PAGE_COMPARATIVE_TE_META = {
   id:    'page_comparative_te',
@@ -24,6 +25,7 @@ export function refreshPageComparativeTe(state) {
 export async function mount(root, atlasState, registry) {
   const legacyState = { atlasState, registry, root: root || document };
   _setActiveState(legacyState);
+  _installPageIndex(root, 'page_comparative_te');
   try { refreshPageComparativeTe(legacyState); }
   catch (e) { console.warn('page_comparative_te.mount: refreshPageComparativeTe threw —', e); }
   if (atlasState.genome) atlasState.genome._page_comparative_teState = legacyState;

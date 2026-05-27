@@ -27,6 +27,7 @@
 import { _pageState, _setActiveState } from './page_scaffold/_state.js';
 import { listLayers } from '../../shared/api_client.js';
 import { probeModeB, renderModeBBadge, distinctCount } from '../../../../core/mode_b_badge.js';
+import { installPageIndex as _installPageIndex } from '../../shared/page-index.js';
 
 // ─── Mode-B probe ────────────────────────────────────────────────────────
 // Resolves the chromosome_map summary via the registry. Round-1 layer is
@@ -219,6 +220,7 @@ function _subjectFromLayerId(layer_id) {
 export async function mount(root, atlasState, registry) {
   const legacyState = _buildLegacyState(atlasState);
   _setActiveState(legacyState);
+  _installPageIndex(root, 'page_scaffold');
 
   try { refreshPage1(legacyState); }
   catch (e) { console.warn('page_scaffold.mount: refreshPage1 threw —', e); }
