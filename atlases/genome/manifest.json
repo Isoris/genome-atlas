@@ -86,6 +86,14 @@
       "tooltip": "Reconstructed Siluriformes ancestral karyotype + per-branch event annotations. Likely promoted to a Supplementary Note. Phase D."
     },
     {
+      "id": "page_haplotype_synteny",
+      "label": "haplotype synteny",
+      "stage": "comparative",
+      "fragment": "atlases/genome/pages/comparative/page_haplotype_synteny.html",
+      "module": "atlases/genome/pages/comparative/page_haplotype_synteny.js",
+      "tooltip": "Focal Gar\u2194Mac whole-genome wfmash alignment. Five views: per-Gar-chrom synteny ribbons, focal Oxford dotplot, LG28\u2194(LG06+LG01) fusion/fission event (the n=28 vs n=27 karyotype-difference signature at sequence level), and strand-orientation summary. Driven by haplotype_synteny_blocks (focal-pair only \u2014 cross-species synteny lives on page_synteny and the separate cross-species atlas). Phase D."
+    },
+    {
       "id": "page_comparative_te",
       "label": "comparative TE",
       "stage": "comparative",

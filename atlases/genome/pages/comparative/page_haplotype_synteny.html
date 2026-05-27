@@ -1,0 +1,409 @@
+<div id="page_haplotype_synteny" class="page">
+  <div class="ga-content">
+      <div class="ga-title">
+        <span class="ga-title-bullet">▰</span> Haplotype synteny — fClaHyb_Gar ↔ fClaHyb_Mac
+      </div>
+      <div class="ga-subtitle">
+        Stage: comparative · phase D · driven by <code>haplotype_synteny_blocks</code>
+        layer (wfmash whole-genome alignment, focal pair)
+      </div>
+
+      <div class="ga-card">
+        <div class="ga-card-header">
+          <div class="ga-card-title">What this page shows</div>
+          <div class="ga-card-status ga-status-phase">phase D · focal Gar ↔ Mac only</div>
+        </div>
+        <div class="ga-card-para">
+          The whole-genome alignment-based synteny relationship between the two
+          F₁ haplotypes (<i>fClaHyb_Gar</i> = <i>C. gariepinus</i>, 28 chroms;
+          <i>fClaHyb_Mac</i> = <i>C. macrocephalus</i>, 27 chroms). Five views:
+          ribbon panels per Gar chrom, a focal Oxford dotplot, the headline
+          LG28↔(LG06+LG01) fusion/fission event panel (the n=28 vs n=27
+          karyotype difference at sequence level), strand-orientation
+          summary, and the schema contract.
+        </div>
+        <div class="ga-card-para ga-dim">
+          <b>Scope:</b> focal pair only. The cross-species panel (17 catfish
+          genomes, all-vs-all wfmash, ALG collinearity, mashmap triage) lives
+          in a separate cross-species atlas. <b>page_comparative_te</b> in
+          this atlas covers the cross-species TE landscape; this page covers
+          the within-focal-pair structural relationship.<br><br>
+          Source: <code>fixtures/haplotype_synteny/synteny_blocks.json</code>
+          (schema v2 from <code>STEP_CS01_extract_breakpoints.py</code>);
+          renderer helpers live alongside in
+          <code>fixtures/haplotype_synteny/synteny_figures/</code> (the
+          <code>synteny-figures</code> Python package that emits PDF/PNG figures
+          off the same JSON for the manuscript).
+        </div>
+      </div>
+
+      <div class="ga-card">
+        <div class="ga-card-header">
+          <div class="ga-card-title">Required data layers</div>
+          <div class="ga-card-status">focal-pair output</div>
+        </div>
+        <div class="ga-layers-grid">
+          <div class="ga-layers-head">layer</div>
+          <div class="ga-layers-head">source</div>
+          <div class="ga-layers-head">status</div>
+          <div class="ga-layers-head">feeds</div>
+
+          <div><code>haplotype_synteny_blocks</code></div>
+          <div><code>wfmash + STEP_CS01_extract_breakpoints.py</code></div>
+          <div data-ga-layer="haplotype_synteny_blocks" class="ga-layer-status">⚪ not loaded</div>
+          <div class="ga-dim">V1 ribbon panels · V2 Oxford dotplot · V3 fusion/fission event</div>
+
+          <div><code>chromosome_map</code> <span class="ga-pill-opt">opt.</span></div>
+          <div><code>FAI + AGP</code></div>
+          <div data-ga-layer="chromosome_map" class="ga-layer-status">⚪ not loaded</div>
+          <div class="ga-dim">V4 — orientation summary per chrom</div>
+        </div>
+      </div>
+
+      <!-- ── View 1: per-Gar-chrom ribbon panels ──────────────────────── -->
+      <div class="ga-card">
+        <div class="ga-card-header">
+          <div class="ga-card-title">View 1 — synteny ribbons (per Gar chrom)</div>
+          <div class="ga-card-status">42 blocks · 29 inverted · 13 same-strand</div>
+        </div>
+        <div class="ga-card-para ga-dim">
+          One panel per Gar chrom with at least one aligned block. Top bar =
+          Gar chrom (coral); bottom bar(s) = Mac partner chrom(s) (teal).
+          Ribbons connect aligned blocks; <b style="color:#3a5f9f">blue</b> =
+          same strand, <b style="color:#cc3333">coral</b> = inverted strand.
+          Width of each bar = chrom length; ribbon endpoints = block
+          start / end in each genome.
+        </div>
+        <div class="ga-syn-ribbon-grid">
+          <div class="ga-syn-ribbon-panel">
+            <div class="ga-syn-ribbon-head">
+              <span><b>LG15</b> → LG06</span>
+              <span class="ga-num">2 blocks · 0.9 Mb · 2 inverted</span>
+            </div>
+            <svg viewBox="0 0 760 130" preserveAspectRatio="none" class="ga-syn-ribbon-svg" aria-label="Gar LG15 → Mac ['LG06']">
+  <text x="30" y="15" font-size="10" fill="var(--ink-dim)">LG15 · 35.0 Mb</text>
+  <text x="30" y="124" font-size="10" fill="var(--ink-dim)">LG06 · 37.4 Mb</text>
+  <rect x="30" y="18" width="700.0" height="14" fill="rgba(255,140,110,0.4)" stroke="#ff8c6e" stroke-width="0.8" rx="2"/>
+  <rect x="30.0" y="98" width="700.0" height="14" fill="rgba(111, 184, 201, 0.4)" stroke="#6fb8c9" stroke-width="0.8" rx="2"/>
+  <polygon points="85.0,32 98.9,32 661.6,98 674.5,98" fill="#cc3333" fill-opacity="0.42" stroke="none"/>
+  <polygon points="106.1,32 110.7,32 651.0,98 655.6,98" fill="#cc3333" fill-opacity="0.42" stroke="none"/>
+</svg>
+          </div>
+
+          <div class="ga-syn-ribbon-panel">
+            <div class="ga-syn-ribbon-head">
+              <span><b>LG23</b> → LG01</span>
+              <span class="ga-num">16 blocks · 17.0 Mb · 16 inverted</span>
+            </div>
+            <svg viewBox="0 0 760 130" preserveAspectRatio="none" class="ga-syn-ribbon-svg" aria-label="Gar LG23 → Mac ['LG01']">
+  <text x="30" y="15" font-size="10" fill="var(--ink-dim)">LG23 · 26.1 Mb</text>
+  <text x="30" y="124" font-size="10" fill="var(--ink-dim)">LG01 · 50.1 Mb</text>
+  <rect x="30" y="18" width="700.0" height="14" fill="rgba(255,140,110,0.4)" stroke="#ff8c6e" stroke-width="0.8" rx="2"/>
+  <rect x="30.0" y="98" width="700.0" height="14" fill="rgba(111, 184, 201, 0.4)" stroke="#6fb8c9" stroke-width="0.8" rx="2"/>
+  <polygon points="60.9,32 74.2,32 711.7,98 718.4,98" fill="#cc3333" fill-opacity="0.42" stroke="none"/>
+  <polygon points="78.3,32 84.9,32 704.8,98 708.5,98" fill="#cc3333" fill-opacity="0.42" stroke="none"/>
+  <polygon points="121.2,32 212.0,32 642.8,98 690.5,98" fill="#cc3333" fill-opacity="0.42" stroke="none"/>
+  <polygon points="214.8,32 277.8,32 608.1,98 641.4,98" fill="#cc3333" fill-opacity="0.42" stroke="none"/>
+  <polygon points="280.5,32 289.1,32 602.6,98 606.9,98" fill="#cc3333" fill-opacity="0.42" stroke="none"/>
+  <polygon points="297.9,32 346.1,32 570.0,98 595.5,98" fill="#cc3333" fill-opacity="0.42" stroke="none"/>
+  <polygon points="350.1,32 375.6,32 555.1,98 568.0,98" fill="#cc3333" fill-opacity="0.42" stroke="none"/>
+  <polygon points="380.9,32 388.9,32 548.3,98 552.4,98" fill="#cc3333" fill-opacity="0.42" stroke="none"/>
+  <polygon points="411.8,32 431.8,32 529.2,98 539.3,98" fill="#cc3333" fill-opacity="0.42" stroke="none"/>
+  <polygon points="443.9,32 469.2,32 509.4,98 523.0,98" fill="#cc3333" fill-opacity="0.42" stroke="none"/>
+  <polygon points="473.4,32 482.7,32 502.5,98 507.5,98" fill="#cc3333" fill-opacity="0.42" stroke="none"/>
+  <polygon points="486.8,32 509.5,32 488.5,98 500.4,98" fill="#cc3333" fill-opacity="0.42" stroke="none"/>
+  <polygon points="523.0,32 532.2,32 478.6,98 483.4,98" fill="#cc3333" fill-opacity="0.42" stroke="none"/>
+  <polygon points="539.0,32 557.7,32 465.3,98 475.1,98" fill="#cc3333" fill-opacity="0.42" stroke="none"/>
+  <polygon points="560.4,32 631.2,32 426.9,98 464.4,98" fill="#cc3333" fill-opacity="0.42" stroke="none"/>
+  <polygon points="650.3,32 659.5,32 413.4,98 418.0,98" fill="#cc3333" fill-opacity="0.42" stroke="none"/>
+</svg>
+          </div>
+
+          <div class="ga-syn-ribbon-panel">
+            <div class="ga-syn-ribbon-head">
+              <span><b>LG27</b> → LG01</span>
+              <span class="ga-num">16 blocks · 14.9 Mb · 11 inverted</span>
+            </div>
+            <svg viewBox="0 0 760 130" preserveAspectRatio="none" class="ga-syn-ribbon-svg" aria-label="Gar LG27 → Mac ['LG01']">
+  <text x="30" y="15" font-size="10" fill="var(--ink-dim)">LG27 · 24.0 Mb</text>
+  <text x="30" y="124" font-size="10" fill="var(--ink-dim)">LG01 · 50.1 Mb</text>
+  <rect x="30" y="18" width="700.0" height="14" fill="rgba(255,140,110,0.4)" stroke="#ff8c6e" stroke-width="0.8" rx="2"/>
+  <rect x="30.0" y="98" width="700.0" height="14" fill="rgba(111, 184, 201, 0.4)" stroke="#6fb8c9" stroke-width="0.8" rx="2"/>
+  <polygon points="50.9,32 78.0,32 361.2,98 374.7,98" fill="#cc3333" fill-opacity="0.42" stroke="none"/>
+  <polygon points="89.7,32 117.3,32 341.4,98 355.1,98" fill="#cc3333" fill-opacity="0.42" stroke="none"/>
+  <polygon points="142.1,32 184.3,32 315.3,98 336.6,98" fill="#cc3333" fill-opacity="0.42" stroke="none"/>
+  <polygon points="194.6,32 265.7,32 277.0,98 311.4,98" fill="#cc3333" fill-opacity="0.42" stroke="none"/>
+  <polygon points="268.7,32 306.5,32 257.0,98 275.6,98" fill="#cc3333" fill-opacity="0.42" stroke="none"/>
+  <polygon points="326.9,32 389.3,32 220.2,98 250.0,98" fill="#cc3333" fill-opacity="0.42" stroke="none"/>
+  <polygon points="399.7,32 408.3,32 165.3,98 161.2,98" fill="#3a5f9f" fill-opacity="0.42" stroke="none"/>
+  <polygon points="411.4,32 425.8,32 173.8,98 166.5,98" fill="#3a5f9f" fill-opacity="0.42" stroke="none"/>
+  <polygon points="428.8,32 465.1,32 192.9,98 175.1,98" fill="#3a5f9f" fill-opacity="0.42" stroke="none"/>
+  <polygon points="476.8,32 486.9,32 203.3,98 198.8,98" fill="#3a5f9f" fill-opacity="0.42" stroke="none"/>
+  <polygon points="492.8,32 508.8,32 213.1,98 205.3,98" fill="#3a5f9f" fill-opacity="0.42" stroke="none"/>
+  <polygon points="511.8,32 532.0,32 144.8,98 154.7,98" fill="#cc3333" fill-opacity="0.42" stroke="none"/>
+  <polygon points="544.0,32 561.2,32 130.0,98 138.6,98" fill="#cc3333" fill-opacity="0.42" stroke="none"/>
+  <polygon points="568.5,32 583.0,32 118.9,98 126.0,98" fill="#cc3333" fill-opacity="0.42" stroke="none"/>
+  <polygon points="587.5,32 597.0,32 111.8,98 116.7,98" fill="#cc3333" fill-opacity="0.42" stroke="none"/>
+  <polygon points="600.5,32 609.2,32 106.0,98 110.3,98" fill="#cc3333" fill-opacity="0.42" stroke="none"/>
+</svg>
+          </div>
+
+          <div class="ga-syn-ribbon-panel">
+            <div class="ga-syn-ribbon-head">
+              <span><b>LG28</b> → LG01, LG06</span>
+              <span class="ga-num">8 blocks · 7.3 Mb · 0 inverted</span>
+            </div>
+            <svg viewBox="0 0 760 130" preserveAspectRatio="none" class="ga-syn-ribbon-svg" aria-label="Gar LG28 → Mac ['LG01', 'LG06']">
+  <text x="30" y="15" font-size="10" fill="var(--ink-dim)">LG28 · 20.3 Mb</text>
+  <text x="30" y="124" font-size="10" fill="var(--ink-dim)">LG01 · 50.1 Mb</text>
+  <text x="395.0" y="124" font-size="10" fill="var(--ink-dim)">LG06 · 37.4 Mb</text>
+  <rect x="30" y="18" width="700.0" height="14" fill="rgba(255,140,110,0.4)" stroke="#ff8c6e" stroke-width="0.8" rx="2"/>
+  <rect x="30.0" y="98" width="335.0" height="14" fill="rgba(111, 184, 201, 0.4)" stroke="#6fb8c9" stroke-width="0.8" rx="2"/>
+  <rect x="395.0" y="98" width="335.0" height="14" fill="rgba(111, 184, 201, 0.4)" stroke="#6fb8c9" stroke-width="0.8" rx="2"/>
+  <polygon points="199.4,32 211.4,32 435.5,98 432.6,98" fill="#3a5f9f" fill-opacity="0.42" stroke="none"/>
+  <polygon points="290.9,32 316.9,32 457.8,98 450.9,98" fill="#3a5f9f" fill-opacity="0.42" stroke="none"/>
+  <polygon points="319.0,32 444.7,32 491.6,98 459.2,98" fill="#3a5f9f" fill-opacity="0.42" stroke="none"/>
+  <polygon points="448.3,32 482.8,32 501.0,98 492.3,98" fill="#3a5f9f" fill-opacity="0.42" stroke="none"/>
+  <polygon points="487.9,32 500.0,32 505.3,98 502.2,98" fill="#3a5f9f" fill-opacity="0.42" stroke="none"/>
+  <polygon points="507.0,32 522.5,32 510.6,98 506.9,98" fill="#3a5f9f" fill-opacity="0.42" stroke="none"/>
+  <polygon points="614.1,32 627.5,32 35.5,98 32.8,98" fill="#3a5f9f" fill-opacity="0.42" stroke="none"/>
+  <polygon points="629.8,32 641.7,32 38.8,98 36.5,98" fill="#3a5f9f" fill-opacity="0.42" stroke="none"/>
+</svg>
+          </div>
+        </div>
+        <div class="ga-card-footnote">
+          The Gar haplotype's 4 chroms with synteny-block calls in this fixture
+          (LG15, LG23, LG27, LG28) cover the manuscript's headline events.
+          LG28 is the standout — it splits across <b>both</b> Mac LG06 and Mac
+          LG01 (see V3 below), which is the sequence-level signature of the
+          n=28 vs n=27 karyotype difference between the two species.
+        </div>
+      </div>
+
+      <!-- ── View 2: focal Oxford dotplot ─────────────────────────────── -->
+      <div class="ga-card">
+        <div class="ga-card-header">
+          <div class="ga-card-title">View 2 — focal Oxford dotplot</div>
+          <div class="ga-card-status">4 × 2 cells · dot ∝ block bp · colour by dominant strand</div>
+        </div>
+        <div class="ga-card-para ga-dim">
+          Each cell = (Gar chrom × Mac chrom). Dot radius scales with total
+          aligned bp; colour reflects the dominant strand (blue = collinear,
+          coral red = inverted, amber = mixed). Number inside each dot = block
+          count for that pair. Empty cells = no aligned blocks ≥ 50 kb in this
+          fixture. <b>LG28</b> is the only Gar chrom landing dots in two Mac
+          columns (LG06 + LG01) — the fusion/fission signature.
+        </div>
+        <div class="ga-syn-dotplot-wrap">
+          <svg viewBox="0 0 460 280" preserveAspectRatio="none" class="ga-syn-dotplot-svg" aria-label="Focal Gar × Mac Oxford grid">
+  <line x1="70" y1="30.0" x2="440" y2="30.0" stroke="var(--rule)" stroke-width="0.5"/>
+  <line x1="70" y1="85.0" x2="440" y2="85.0" stroke="var(--rule)" stroke-width="0.5"/>
+  <line x1="70" y1="140.0" x2="440" y2="140.0" stroke="var(--rule)" stroke-width="0.5"/>
+  <line x1="70" y1="195.0" x2="440" y2="195.0" stroke="var(--rule)" stroke-width="0.5"/>
+  <line x1="70" y1="250.0" x2="440" y2="250.0" stroke="var(--rule)" stroke-width="0.5"/>
+  <line x1="70.0" y1="30" x2="70.0" y2="250" stroke="var(--rule)" stroke-width="0.5"/>
+  <line x1="255.0" y1="30" x2="255.0" y2="250" stroke="var(--rule)" stroke-width="0.5"/>
+  <line x1="440.0" y1="30" x2="440.0" y2="250" stroke="var(--rule)" stroke-width="0.5"/>
+  <text x="255.0" y="14" font-size="10" fill="var(--ink-dim)" text-anchor="middle">Mac chrom (target)</text>
+  <text x="14" y="140.0" font-size="10" fill="var(--ink-dim)" text-anchor="middle" transform="rotate(-90 14 140.0)">Gar chrom (query)</text>
+  <text x="162.5" y="24" font-size="10" fill="var(--ink)" text-anchor="middle">LG01</text>
+  <text x="347.5" y="24" font-size="10" fill="var(--ink)" text-anchor="middle">LG06</text>
+  <text x="64" y="60.5" font-size="10" fill="var(--ink)" text-anchor="end">LG15</text>
+  <text x="64" y="115.5" font-size="10" fill="var(--ink)" text-anchor="end">LG23</text>
+  <text x="64" y="170.5" font-size="10" fill="var(--ink)" text-anchor="end">LG27</text>
+  <text x="64" y="225.5" font-size="10" fill="var(--ink)" text-anchor="end">LG28</text>
+  <circle cx="347.5" cy="57.5" r="6.9" fill="#cc3333" fill-opacity="0.55" stroke="#cc3333" stroke-width="1"/>
+  <text x="347.5" y="60.5" font-size="9" fill="var(--ink)" text-anchor="middle" font-family="var(--mono)">2</text>
+  <circle cx="162.5" cy="112.5" r="22.0" fill="#cc3333" fill-opacity="0.55" stroke="#cc3333" stroke-width="1"/>
+  <text x="162.5" y="115.5" font-size="9" fill="var(--ink)" text-anchor="middle" font-family="var(--mono)">16</text>
+  <circle cx="162.5" cy="167.5" r="20.1" fill="#cc3333" fill-opacity="0.55" stroke="#cc3333" stroke-width="1"/>
+  <text x="162.5" y="170.5" font-size="9" fill="var(--ink)" text-anchor="middle" font-family="var(--mono)">16</text>
+  <circle cx="162.5" cy="222.5" r="6.7" fill="#3a5f9f" fill-opacity="0.55" stroke="#3a5f9f" stroke-width="1"/>
+  <text x="162.5" y="225.5" font-size="9" fill="var(--ink)" text-anchor="middle" font-family="var(--mono)">2</text>
+  <circle cx="347.5" cy="222.5" r="12.2" fill="#3a5f9f" fill-opacity="0.55" stroke="#3a5f9f" stroke-width="1"/>
+  <text x="347.5" y="225.5" font-size="9" fill="var(--ink)" text-anchor="middle" font-family="var(--mono)">6</text>
+</svg>
+        </div>
+        <div class="ga-card-footnote">
+          Single-cell-dominant pairs (LG15→LG06, LG23→LG01, LG27→LG01) read as
+          1:1 conserved chromosome pairs in the focal alignment. LG28 → two
+          columns reads as the fission/fusion event.
+        </div>
+      </div>
+
+      <!-- ── View 3: headline event — LG28 → (LG06 + LG01) ───────────── -->
+      <div class="ga-card">
+        <div class="ga-card-header">
+          <div class="ga-card-title">View 3 — Headline event: LG28 ↔ (LG06 + LG01)</div>
+          <div class="ga-card-status">n=28 vs n=27 karyotype difference at sequence level</div>
+        </div>
+        <div class="ga-card-para ga-dim">
+          Gar LG28 splits its aligned content across <b>two</b> Mac chroms:
+          LG06 (the bulk, 6.6 Mb in
+          6 blocks) and LG01 (the lesser arm,
+          0.8 Mb in 2
+          blocks). This is the sequence-level signature of the karyotype
+          difference — Gar carries 28 chromosomes, Mac carries 27, and the
+          difference resolves to one ancestral chromosome that either fused in
+          the Mac lineage or fissioned in the Gar lineage.
+        </div>
+        <div class="ga-syn-headline-wrap">
+          <svg viewBox="0 0 760 220" preserveAspectRatio="none" class="ga-syn-headline-svg">
+  <text x="30" y="24" font-size="11" fill="#ff8c6e"><tspan font-weight="600">Gar LG28</tspan> · 20.3 Mb</text>
+  <rect x="30" y="30" width="700" height="18" fill="rgba(255,140,110,0.5)" stroke="#ff8c6e" stroke-width="1.2" rx="3"/>
+  <text x="30" y="204" font-size="11" fill="#6fb8c9"><tspan font-weight="600">Mac LG01</tspan> · 50.1 Mb · 2 blocks · 0.8 Mb</text>
+  <rect x="30.0" y="172" width="330.0" height="18" fill="rgba(111,184,201,0.5)" stroke="#6fb8c9" stroke-width="1.2" rx="3"/>
+  <text x="400.0" y="204" font-size="11" fill="#6fb8c9"><tspan font-weight="600">Mac LG06</tspan> · 37.4 Mb · 6 blocks · 6.6 Mb</text>
+  <rect x="400.0" y="172" width="330.0" height="18" fill="rgba(111,184,201,0.5)" stroke="#6fb8c9" stroke-width="1.2" rx="3"/>
+  <polygon points="199.4,48 211.4,48 439.9,172 437.0,172" fill="#3a5f9f" fill-opacity="0.50" stroke="#3a5f9f" stroke-width="0.4"/>
+  <polygon points="290.9,48 316.9,48 461.8,172 455.0,172" fill="#3a5f9f" fill-opacity="0.50" stroke="#3a5f9f" stroke-width="0.4"/>
+  <polygon points="319.0,48 444.7,48 495.2,172 463.3,172" fill="#3a5f9f" fill-opacity="0.50" stroke="#3a5f9f" stroke-width="0.4"/>
+  <polygon points="448.3,48 482.8,48 504.4,172 495.8,172" fill="#3a5f9f" fill-opacity="0.50" stroke="#3a5f9f" stroke-width="0.4"/>
+  <polygon points="487.9,48 500.0,48 508.7,172 505.6,172" fill="#3a5f9f" fill-opacity="0.50" stroke="#3a5f9f" stroke-width="0.4"/>
+  <polygon points="507.0,48 522.5,48 513.9,172 510.2,172" fill="#3a5f9f" fill-opacity="0.50" stroke="#3a5f9f" stroke-width="0.4"/>
+  <polygon points="614.1,48 627.5,48 35.4,172 32.7,172" fill="#3a5f9f" fill-opacity="0.50" stroke="#3a5f9f" stroke-width="0.4"/>
+  <polygon points="629.8,48 641.7,48 38.7,172 36.4,172" fill="#3a5f9f" fill-opacity="0.50" stroke="#3a5f9f" stroke-width="0.4"/>
+  <text x="380.0" y="218" font-size="9" fill="var(--ink-dim)" text-anchor="middle">Gar n=28 vs Mac n=27 karyotype difference · LG28↔LG06 is the canonical fission/fusion · LG28↔LG01 is the lesser arm</text>
+</svg>
+        </div>
+        <div class="ga-card-footnote">
+          Polarisation (which state is ancestral) needs an outgroup —
+          per the Chapter 5 mashmap triage, against <i>N. graeffei</i> Mac
+          LG06 also splits onto Gar (LG03 + LG28), suggesting the LG03/LG06
+          junction region is labile across this clade. The full polarisation
+          analysis lives in the cross-species atlas; this page just surfaces
+          the focal-pair signature.
+        </div>
+      </div>
+
+      <!-- ── View 4: strand / orientation summary ─────────────────────── -->
+      <div class="ga-card">
+        <div class="ga-card-header">
+          <div class="ga-card-title">View 4 — Strand orientation (per BP0 pre-pass)</div>
+          <div class="ga-card-status">16 FLIP / 12 KEEP · assembly-convention only</div>
+        </div>
+        <div class="ga-card-para ga-dim">
+          From <code>MODULE_BP0_orient/STEP_BP0a_detect_orientation.py</code>:
+          per Gar chrom, the bp-weighted minus-strand fraction against Mac.
+          A high minus-fraction (≥ 0.90) flags a chromosome that is almost
+          entirely <i>convention-flipped</i> — a strand-mirroring artefact of
+          how each assembly fixed its scaffolds, NOT a biological inversion.
+          <b>16 of 28 Gar chroms are FLIP (convention-mirrored)</b>;
+          <b>12 are KEEP</b>; <b>LG27 (~77% reverse) and LG04 (~87%) are mixed</b> —
+          they read mostly-reverse but carry a real internal inversion on an
+          otherwise-flipped chromosome (deliberately KEEP so the real inversion
+          survives in the breakpoint caller).
+        </div>
+        <div class="ga-syn-strand-grid">
+          <div class="ga-syn-strand-tile">
+            <div class="ga-syn-strand-num">16</div>
+            <div class="ga-syn-strand-label">FLIP — convention-mirrored</div>
+            <div class="ga-syn-strand-sub">≥ 90% bp reverse vs Mac</div>
+          </div>
+          <div class="ga-syn-strand-tile">
+            <div class="ga-syn-strand-num">12</div>
+            <div class="ga-syn-strand-label">KEEP — same convention</div>
+            <div class="ga-syn-strand-sub">&lt; 90% bp reverse</div>
+          </div>
+          <div class="ga-syn-strand-tile ga-syn-strand-mix">
+            <div class="ga-syn-strand-num">2</div>
+            <div class="ga-syn-strand-label">MIXED · real inversion</div>
+            <div class="ga-syn-strand-sub">LG27 (12.4 Mb) · LG04 (16.5 Mb)</div>
+          </div>
+        </div>
+        <div class="ga-card-footnote">
+          <b>Important:</b> the canonical breakpoint pipeline runs in
+          <i>native assembly coordinates with no reverse-complement</i> — the
+          caller reads strand per block and is orientation-agnostic, so
+          orientation is handled at <b>plot / display time only</b>. The
+          BP0 reorientation is a figure convenience, not part of the
+          breakpoint-calling path.
+        </div>
+      </div>
+
+      <!-- ── Schema block ─────────────────────────────────────────────── -->
+      <div class="ga-card">
+        <div class="ga-card-header">
+          <div class="ga-card-title">Import schema — <code>synteny_blocks.json</code></div>
+          <div class="ga-card-status">JSON Schema · v2 (matches CS01 output)</div>
+        </div>
+        <pre class="ga-schema-block"><code>{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "haplotype_synteny_blocks.schema.json",
+  "title": "Focal Gar↔Mac synteny blocks (wfmash whole-genome alignment)",
+  "description": "schema_version: 2 — emitted by STEP_CS01_extract_breakpoints.py for the focal F1-haplotype pair. Native assembly coordinates; no reverse-complement. Strand reflects the wfmash chain (+ / -).",
+  "type": "object",
+  "required": ["tool", "schema_version", "species_query", "species_target",
+               "chrom_lengths_query", "chrom_lengths_target",
+               "n_synteny_blocks", "synteny_blocks"],
+  "properties": {
+    "tool":            { "const": "wfmash_synteny" },
+    "schema_version":  { "const": 2 },
+
+    "species_query": {
+      "type": "object",
+      "required": ["name", "haplotype"],
+      "properties": {
+        "name":      { "type": "string", "description": "Species binomial, e.g. \"Clarias gariepinus\"." },
+        "haplotype": { "type": "string", "description": "Assembly id, e.g. \"fClaHyb_Gar_LG\"." }
+      }
+    },
+    "species_target": { "$ref": "#/properties/species_query" },
+
+    "chrom_lengths_query": {
+      "type": "object",
+      "description": "Chrom-id → length_bp for chroms present in the query genome that this fixture covers.",
+      "additionalProperties": { "type": "integer", "minimum": 0 }
+    },
+    "chrom_lengths_target": { "$ref": "#/properties/chrom_lengths_query" },
+
+    "n_synteny_blocks": { "type": "integer", "minimum": 0 },
+
+    "synteny_blocks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["gar_chr", "gar_start", "gar_end",
+                     "mac_chr", "mac_start", "mac_end",
+                     "strand", "block_size_bp", "mapping_quality"],
+        "properties": {
+          "gar_chr":          { "type": "string" },
+          "gar_start":        { "type": "integer", "minimum": 0 },
+          "gar_end":          { "type": "integer", "minimum": 0 },
+          "mac_chr":          { "type": "string" },
+          "mac_start":        { "type": "integer", "minimum": 0 },
+          "mac_end":          { "type": "integer", "minimum": 0 },
+          "strand":           { "enum": ["+", "-"] },
+          "block_size_bp":    { "type": "integer", "minimum": 0 },
+          "mapping_quality":  { "type": "integer", "minimum": 0, "maximum": 60 }
+        }
+      }
+    }
+  }
+}</code></pre>
+      </div>
+
+      <div class="ga-card">
+        <div class="ga-card-header">
+          <div class="ga-card-title">Cross-references</div>
+          <div class="ga-card-status">see also</div>
+        </div>
+        <div class="ga-card-para ga-dim">
+          • <b>page_synteny</b> — multi-species ribbons + Oxford grid; the
+          focal pair appears as one cell there.<br>
+          • <b>page_ancestral_karyotype</b> — same wfmash output viewed
+          phylogenetically rather than pairwise.<br>
+          • <b>page_comparative_te</b> — Chapter 5 TE landscape, also focal-
+          and-cross. The TE-at-breakpoints analysis there overlaps with the
+          fusion/fission event shown here.<br>
+          • <b>Cross-species atlas</b> — owns the 17-genome mashmap triage,
+          the all-vs-focal panel, the reciprocity catalogue, the per-method
+          consolidation. The focal-pair piece here is the only thing the
+          genome atlas carries from the BP_ATLAS pipeline.<br>
+          • <b>Chapter 5 supplementary tables S7-S10</b> (47 inv/inv-transloc
+          events, 13 interchrom events, 275 raw breakends, the zone tables) —
+          ingest only if the cross-species atlas needs the focal subset.
+        </div>
+      </div>
+  </div>
+</div>

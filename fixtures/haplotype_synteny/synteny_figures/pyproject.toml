@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "synteny-figures"
+version = "1.2.0"
+description = "Publication figures (ribbons, fusion/fission ribbons, event panels, dotplots, TE-flank charts) from cs_breakpoints_v1.json synteny/breakpoint data."
+readme = "README.md"
+requires-python = ">=3.8"
+license = { text = "MIT" }
+authors = [{ name = "Quentin Andres" }]
+keywords = ["genomics", "synteny", "breakpoints", "comparative", "catfish", "wfmash"]
+dependencies = [
+    "matplotlib>=3.4",
+    "numpy>=1.20",
+]
+
+[project.scripts]
+synteny-figures = "synteny_figures.cli:main"
+
+[project.optional-dependencies]
+multitrack = []   # bp_multitrack ships as a standalone script alongside the package
+
+[tool.setuptools]
+packages = ["synteny_figures"]
