@@ -19,6 +19,13 @@
 
 import { _pageState, _setActiveState } from './page_assembly_stats/_state.js';
 import { probeModeB, renderModeBBadge } from '../../../../core/mode_b_badge.js';
+import {
+  installRouter as _installCrossAtlasRouter,
+  onActiveChrom as _onActiveChrom,
+  getActiveChrom as _getActiveChrom,
+} from '../../shared/cross-atlas.js';
+import { installActivePill as _installActivePill } from '../../shared/active-pill.js';
+import { installPageIndex as _installPageIndex } from '../../shared/page-index.js';
 
 const _state = {
   payload: null,
@@ -127,7 +134,7 @@ function _renderTable() {
     return;
   }
   const html = _state.view.map(r =>
-    `<tr>` +
+    `<tr data-ga-qc-chrom="${_escapeHtml(r.chrom)}" class="ga-qc-row">` +
     `<td class="ga-cell-id">${_escapeHtml(r.chrom)}</td>` +
     `<td class="ga-cell-num">${_fmtMb(r.length_bp)}</td>` +
     `<td class="ga-cell-num">${_fmtMb(r.n50)}</td>` +
@@ -142,6 +149,45 @@ function _renderTable() {
   tbody.innerHTML = html;
   if (countSlot) countSlot.textContent = `${_state.view.length} rows`;
   _refreshSortArrows();
+  _wireRowClicks();
+  // Reapply highlight whenever the table redraws (e.g. after a sort) so the
+  // active row stays marked.
+  _applyActiveChromHighlight(_getActiveChrom());
+}
+
+// Click any per-chrom row → dispatch ga-qc-chrom-click. The cross-atlas
+// router translates that into an active-chrom update; sister pages react
+// via onActiveChrom (page_chromosome_overview scrolls to the strip row,
+// page_genes switches its gene-track dropdown, etc.).
+function _wireRowClicks() {
+  const tbody = document.querySelector('#pasChromTable tbody');
+  if (!tbody || tbody.__gaPasRowClicksWired) return;
+  tbody.addEventListener('click', (ev) => {
+    const tr = ev.target.closest('tr[data-ga-qc-chrom]');
+    if (!tr) return;
+    const chrom = tr.getAttribute('data-ga-qc-chrom');
+    if (!chrom) return;
+    tr.dispatchEvent(new CustomEvent('ga-qc-chrom-click', {
+      bubbles: true,
+      detail: { chrom, hap: _state.payload && _state.payload.haplotype },
+    }));
+  });
+  tbody.__gaPasRowClicksWired = true;
+}
+
+function _applyActiveChromHighlight(active) {
+  const tbody = document.querySelector('#pasChromTable tbody');
+  if (!tbody) return;
+  const id = active && active.chrom;
+  let target = null;
+  tbody.querySelectorAll('tr[data-ga-qc-chrom]').forEach((tr) => {
+    const match = id != null && tr.getAttribute('data-ga-qc-chrom') === id;
+    tr.classList.toggle('is-active', match);
+    if (match) target = tr;
+  });
+  if (target && target.scrollIntoView) {
+    target.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
 }
 
 function _refreshSortArrows() {
@@ -227,7 +273,23 @@ export async function mount(root, atlasState, registry) {
   _state.view = [];
   _state.sortKey = 'chrom';
   _state.sortDir = 1;
+
+  // Cross-atlas wiring — idempotent across pages.
+  _installCrossAtlasRouter();
+  _installActivePill();
+  _installPageIndex(root, 'page_assembly_stats');
+
   _wireTable();
+
+  // Subscribe once per mount. The router's setActiveChrom fires every time
+  // any page (this one, page_chromosome_overview, page_genes density bar)
+  // updates the active chrom; the handler re-applies the highlight on the
+  // QC table.
+  if (root && !root.__gaPasChromSub) {
+    root.__gaPasChromSub = _onActiveChrom(({ chrom, hap }) => {
+      _applyActiveChromHighlight(chrom ? { chrom, hap } : null);
+    });
+  }
 
   // Probe the layer. The Mode-B badge renderer surfaces a clean "data
   // pending" state when the cluster-side QC pipeline hasn't shipped
@@ -252,6 +314,10 @@ export async function unmount(root) {
   _state.payload = null;
   _state.perChrom = [];
   _state.view = [];
+  if (root && typeof root.__gaPasChromSub === 'function') {
+    try { root.__gaPasChromSub(); } catch (_) {}
+    root.__gaPasChromSub = null;
+  }
 }
 
 function _buildLegacyState(atlasState) {

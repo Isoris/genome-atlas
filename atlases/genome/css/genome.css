@@ -444,6 +444,15 @@
 .ga-table th.ga-sort-asc::after  { content: " \25B2"; color: var(--accent); }
 .ga-table th.ga-sort-desc::after { content: " \25BC"; color: var(--accent); }
 .ga-table tbody tr:hover { background: var(--panel-2); }
+.ga-table tbody tr.ga-qc-row { cursor: pointer; }
+.ga-table tbody tr.is-active {
+  background: rgba(255, 140, 110, 0.14);
+  box-shadow: inset 3px 0 0 0 #ff8c6e;
+}
+html[data-theme="light"] .ga-table tbody tr.is-active {
+  background: rgba(194, 65, 12, 0.12);
+  box-shadow: inset 3px 0 0 0 #c2410c;
+}
 .ga-table td.ga-cell-num  { font-variant-numeric: tabular-nums; }
 .ga-table td.ga-cell-id   { color: var(--ink); }
 .ga-table td.ga-cell-flag { text-align: center; color: var(--ink-dim); }
