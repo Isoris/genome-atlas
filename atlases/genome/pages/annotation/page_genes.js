@@ -67,6 +67,8 @@ const _state = {
   cargoView: [],
   cargoFilter: '',
   densitySort: 'count',
+  trackChrom: '',     // currently selected chrom for View 2
+  trackGenes: [],     // genes on trackChrom, sorted by start_bp
   registry: null,
 };
 
@@ -258,6 +260,90 @@ function _applyCargoFilter() {
     : _state.cargo.slice();
 }
 
+// ----- View 2 — per-chromosome gene track --------------------------------
+// SVG strip: length-scaled axis, one stripe per gene; strand colour
+// (+ blue, − red). Hover shows gene_name + Mb span.
+const TRACK_W = 880;
+const TRACK_PAD_L = 24;
+const TRACK_PAD_R = 24;
+const TRACK_AXIS_H = 22;
+const TRACK_BAR_H = 16;
+const TRACK_PAD_T = 18;
+const TRACK_PAD_B = 8;
+const TRACK_STRAND_COLOR = { '+': '#2563eb', '-': '#dc2626' };
+
+function _selectTrackChrom(chrom) {
+  _state.trackChrom = chrom || '';
+  _state.trackGenes = _state.trackChrom
+    ? _state.genes.filter(g => g.chrom === _state.trackChrom)
+                  .sort((a, b) => a.start_bp - b.start_bp)
+    : [];
+}
+
+function _populateChromSelector() {
+  const sel = document.getElementById('pageGenesTrackChromSel');
+  if (!sel) return;
+  const chroms = _state.perChrom.slice().sort((a, b) => b.count - a.count);
+  if (!chroms.length) { sel.innerHTML = ''; return; }
+  const def = _state.trackChrom || chroms[0].chrom;
+  sel.innerHTML = chroms
+    .map(c => `<option value="${_esc(c.chrom)}" ${c.chrom === def ? 'selected' : ''}>${_esc(c.chrom)} · ${_fmtInt(c.count)} genes</option>`)
+    .join('');
+  if (!_state.trackChrom) _selectTrackChrom(def);
+}
+
+function _renderTrack() {
+  const slot = document.getElementById('pageGenesTrackSlot');
+  const card = document.getElementById('pageGenesTrackCard');
+  const count = document.getElementById('pageGenesTrackCount');
+  if (!slot || !card) return;
+  if (!_state.genes.length) { card.hidden = true; return; }
+  card.hidden = false;
+  const genes = _state.trackGenes;
+  if (count) count.textContent = `${_fmtInt(genes.length)} genes on ${_state.trackChrom || '—'}`;
+  if (!genes.length) { slot.innerHTML = '<span class="ga-hint">no genes on this chrom.</span>'; return; }
+
+  const chromLen = genes.reduce((m, g) => Math.max(m, g.end_bp), 0) || 1;
+  const innerW = TRACK_W - TRACK_PAD_L - TRACK_PAD_R;
+  const H = TRACK_PAD_T + TRACK_BAR_H + TRACK_AXIS_H + TRACK_PAD_B;
+  const xFor = (bp) => TRACK_PAD_L + (bp / chromLen) * innerW;
+
+  const parts = [`<svg class="ga-density-svg" viewBox="0 0 ${TRACK_W} ${H}" preserveAspectRatio="xMinYMin meet">`];
+
+  // Axis baseline + Mb ticks every ~20 Mb (rounded).
+  const yAxis = TRACK_PAD_T + TRACK_BAR_H + 4;
+  parts.push(`<line x1="${TRACK_PAD_L}" y1="${yAxis}" x2="${TRACK_PAD_L + innerW}" y2="${yAxis}" stroke="#64748b" stroke-width="1"/>`);
+  const tickEveryMb = chromLen > 200e6 ? 50 : chromLen > 100e6 ? 20 : chromLen > 30e6 ? 10 : 5;
+  const tickEveryBp = tickEveryMb * 1e6;
+  for (let bp = 0; bp <= chromLen; bp += tickEveryBp) {
+    const x = xFor(bp);
+    parts.push(`<line x1="${x}" y1="${yAxis}" x2="${x}" y2="${yAxis + 4}" stroke="#64748b" stroke-width="1"/>`,
+               `<text class="ga-density-label" x="${x}" y="${yAxis + 14}" text-anchor="middle">${(bp / 1e6).toFixed(0)}</text>`);
+  }
+  // Mb unit label at far right
+  parts.push(`<text class="ga-density-label" x="${TRACK_PAD_L + innerW + 4}" y="${yAxis + 14}">Mb</text>`);
+
+  // Gene stripes
+  for (const g of genes) {
+    const x = xFor(g.start_bp);
+    const w = Math.max(1.2, xFor(g.end_bp) - x);
+    const color = TRACK_STRAND_COLOR[g.strand] || '#94a3b8';
+    const title = `${g.gene_name || g.gene_id || ''} · ${_fmtMb(g.start_bp)}–${_fmtMb(g.end_bp)} Mb · strand ${g.strand || '?'}`;
+    parts.push(`<rect x="${x.toFixed(2)}" y="${TRACK_PAD_T}" width="${w.toFixed(2)}" height="${TRACK_BAR_H}" fill="${color}" fill-opacity="0.7"><title>${_esc(title)}</title></rect>`);
+  }
+  parts.push('</svg>');
+  slot.innerHTML = parts.join('');
+}
+
+function _exportTrack() {
+  _exportTsv(
+    `gene_track_${_state.trackChrom}_${Date.now()}.tsv`,
+    ['chrom', 'start_bp', 'end_bp', 'strand', 'gene_id', 'gene_name', 'biotype'],
+    _state.trackGenes,
+    g => [g.chrom, g.start_bp, g.end_bp, g.strand, g.gene_id, g.gene_name, g.biotype],
+  );
+}
+
 // ----- TSV exports -------------------------------------------------------
 function _exportTsv(filename, header, rows, project) {
   const lines = [header.join('\t')];
@@ -309,6 +395,14 @@ function _wire() {
 
   const cargoExport = document.getElementById('pageGenesCargoExportBtn');
   if (cargoExport) cargoExport.addEventListener('click', _exportCargo);
+
+  const trackSel = document.getElementById('pageGenesTrackChromSel');
+  if (trackSel) trackSel.addEventListener('change', (e) => {
+    _selectTrackChrom(e.target.value || '');
+    _renderTrack();
+  });
+  const trackExport = document.getElementById('pageGenesTrackExportBtn');
+  if (trackExport) trackExport.addEventListener('click', _exportTrack);
 }
 
 function _compareGenes(probeResult) {
@@ -327,6 +421,8 @@ export async function mount(root, atlasState, registry) {
   _state.cargoView = [];
   _state.cargoFilter = '';
   _state.densitySort = 'count';
+  _state.trackChrom = '';
+  _state.trackGenes = [];
   _state.registry = registry || null;
   _setActiveState(_state);
   _wire();
@@ -345,6 +441,8 @@ export async function mount(root, atlasState, registry) {
   _applyDensitySort();
   _renderStatStrip();
   _renderDensity();
+  _populateChromSelector();
+  _renderTrack();
 
   // Cross-atlas: gene cargo per inversion candidate. Fail-soft when the
   // inversion atlas hasn't published candidates_v1 (most cases today).
@@ -371,6 +469,8 @@ export async function unmount(root) {
   _state.perChromView = [];
   _state.cargo = [];
   _state.cargoView = [];
+  _state.trackChrom = '';
+  _state.trackGenes = [];
 }
 
 // ----- Legacy compat (kept so anything that imported renderPage5 still works) ----
