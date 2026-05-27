@@ -230,6 +230,13 @@ export async function mount(root, atlasState, registry) {
     (e) => console.warn('page_scaffold.mount: _lightUpLayerChips threw —', e),
   );
 
+  // Live page-roster: fetch manifest.json relative to this module and
+  // render one row per page, grouped by stage. Fail-soft: card stays
+  // hidden when the manifest can't be fetched.
+  _renderPageRoster(root).catch(
+    (e) => console.warn('page_scaffold.mount: _renderPageRoster threw —', e),
+  );
+
   // Mode-B probe — non-blocking. Round-1 layer is CONTRACT-ONLY so this
   // routinely reports "○ data pending" today; auto-flips to ● when the
   // chromosome_map JSON ships.
@@ -242,6 +249,91 @@ export async function mount(root, atlasState, registry) {
     .catch((e) => {
       console.warn('page_scaffold.mount: Mode-B probe threw —', e);
     });
+}
+
+// ---------------------------------------------------------------------------
+// Live page-roster (added 2026-05-27).
+//
+// Fetches manifest.json at mount time and renders one row per page, grouped
+// by stage (assembly → annotation → comparative). Each row shows label,
+// page-id code, and tooltip excerpt. Card stays hidden when the manifest
+// fetch fails — page_scaffold then renders identically to its earlier shape.
+// ---------------------------------------------------------------------------
+
+const _STAGE_ORDER = ['assembly', 'annotation', 'comparative'];
+
+function _escHtml(s) {
+  return String(s ?? '')
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+async function _renderPageRoster(root) {
+  const card = (root && root.querySelector
+    ? root.querySelector('#pageScaffoldRosterCard')
+    : document.getElementById('pageScaffoldRosterCard'));
+  const slot = (root && root.querySelector
+    ? root.querySelector('#pageScaffoldRosterSlot')
+    : document.getElementById('pageScaffoldRosterSlot'));
+  if (!card || !slot) return;
+  let manifest;
+  try {
+    const url = new URL('../../manifest.json', import.meta.url);
+    const resp = await fetch(url);
+    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+    manifest = await resp.json();
+  } catch (_e) {
+    // Card stays hidden on fetch failure — landing page renders as before.
+    return;
+  }
+  const pages = Array.isArray(manifest && manifest.pages) ? manifest.pages : [];
+  if (!pages.length) return;
+
+  // Group by stage in canonical order; any unknown stage falls to the end.
+  const byStage = new Map();
+  for (const p of pages) {
+    const stage = String(p.stage || 'other');
+    let arr = byStage.get(stage);
+    if (!arr) { arr = []; byStage.set(stage, arr); }
+    arr.push(p);
+  }
+  const stages = Array.from(byStage.keys()).sort(
+    (a, b) => (_STAGE_ORDER.indexOf(a) + 1000 * (_STAGE_ORDER.indexOf(a) < 0)) -
+              (_STAGE_ORDER.indexOf(b) + 1000 * (_STAGE_ORDER.indexOf(b) < 0)),
+  );
+
+  const parts = [];
+  for (const stage of stages) {
+    parts.push(
+      `<div class="ga-roster-stage">`,
+      `<div class="ga-roster-stage-header">`,
+      `<span class="ga-roster-stage-tag" data-stage="${_escHtml(stage)}">${_escHtml(stage)}</span>`,
+      `<span class="ga-roster-stage-count">${byStage.get(stage).length} page${byStage.get(stage).length === 1 ? '' : 's'}</span>`,
+      `</div>`,
+      `<div class="ga-roster-grid">`,
+    );
+    for (const p of byStage.get(stage)) {
+      const id = _escHtml(p.id || '');
+      const label = _escHtml(p.label || p.id || '');
+      const tt = _escHtml(p.tooltip || '');
+      parts.push(
+        `<div class="ga-roster-row" data-page-id="${id}">`,
+        `<div class="ga-roster-label">${label}</div>`,
+        `<div class="ga-roster-id"><code>${id}</code></div>`,
+        `<div class="ga-roster-tt ga-dim">${tt}</div>`,
+        `</div>`,
+      );
+    }
+    parts.push(`</div>`, `</div>`);
+  }
+  slot.innerHTML = parts.join('');
+
+  const count = (root && root.querySelector
+    ? root.querySelector('#pageScaffoldRosterCount')
+    : document.getElementById('pageScaffoldRosterCount'));
+  if (count) count.textContent = `${pages.length} pages · ${stages.length} stages`;
+
+  card.hidden = false;
 }
 
 /**
