@@ -1388,6 +1388,164 @@ html[data-theme="light"] .ga-gene-btn.is-active {
 }
 html[data-theme="light"] .ga-gene-tooltip { border-left-color: #c2410c; }
 
+/* --------------------------------------------------------------------- */
+/* page7 — Variant annotations (tally · stacked bars · HIGH detail).     */
+/* --------------------------------------------------------------------- */
+
+.ga-impact-table-host {
+  overflow-x: auto;
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  background: var(--panel-3);
+}
+.ga-impact-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  color: var(--ink);
+}
+.ga-impact-table.is-detail { font-size: 10px; }
+.ga-impact-th,
+.ga-impact-td {
+  padding: 5px 9px;
+  text-align: left;
+  border-bottom: 1px solid var(--rule);
+  white-space: nowrap;
+}
+.ga-impact-th {
+  background: var(--panel-2);
+  color: var(--ink-dim);
+  font-weight: 600;
+  font-size: 9.5px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  user-select: none;
+}
+.ga-impact-th:hover { color: var(--ink); }
+.ga-impact-th.is-sorted { color: #ff8c6e; }
+.ga-impact-th.is-num,
+.ga-impact-td.is-num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.ga-impact-th.is-high { color: #c0392b; }
+.ga-impact-th.is-mod  { color: #d98c00; }
+.ga-impact-th.is-low  { color: #4f9e64; }
+.ga-impact-th.is-modf { color: #7a86a8; }
+.ga-impact-td.is-high { color: #c0392b; font-weight: 600; }
+.ga-impact-td.is-mod  { color: #d98c00; }
+.ga-impact-td.is-low  { color: var(--ink); }
+.ga-impact-td.is-modf { color: var(--ink-dim); }
+
+.ga-impact-tr { cursor: pointer; transition: background-color 80ms ease; }
+.ga-impact-tr:hover { background: rgba(255, 140, 110, 0.06); }
+.ga-impact-tr:last-child .ga-impact-td { border-bottom: none; }
+.ga-impact-genelist { color: var(--ink-dim); font-size: 10px; }
+
+/* Stacked bars */
+.ga-impact-bars-host {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px;
+  background: var(--panel-3);
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+}
+.ga-impact-bar-row {
+  display: grid;
+  grid-template-columns: 160px 1fr 80px;
+  align-items: center;
+  gap: 8px;
+}
+.ga-impact-bar-label {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  color: var(--ink);
+}
+.ga-impact-bar-total {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--ink-dim);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.ga-impact-bar {
+  display: flex;
+  align-items: stretch;
+  height: 18px;
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  overflow: hidden;
+  background: var(--panel-2);
+}
+.ga-impact-bar-seg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.04em;
+  color: #fff;
+  text-shadow: 0 0 2px rgba(0, 0, 0, 0.35);
+  overflow: hidden;
+  white-space: nowrap;
+}
+.ga-impact-bar-empty {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--ink-dim);
+}
+
+/* Per-candidate detail (expandable) */
+.ga-impact-detail-host {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.ga-impact-detail {
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  background: var(--panel-3);
+}
+.ga-impact-detail-summary {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 10px;
+  cursor: pointer;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  color: var(--ink);
+  user-select: none;
+}
+.ga-impact-detail-summary:hover { background: rgba(255, 140, 110, 0.04); }
+.ga-impact-detail-name { color: var(--ink-dim); }
+.ga-impact-chip {
+  display: inline-block;
+  padding: 1px 6px;
+  font-size: 9px;
+  letter-spacing: 0.04em;
+  border-radius: 2px;
+  font-weight: 600;
+  color: #fff;
+}
+.ga-impact-chip.is-high { background: #c0392b; }
+.ga-impact-chip.is-mod  { background: #d98c00; }
+.ga-impact-chip.is-low  { background: #4f9e64; }
+.ga-impact-chip.is-modf { background: #7a86a8; }
+.ga-impact-detail-empty {
+  padding: 10px 12px;
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--ink-dim);
+}
+
 /* --- JSON-schema codeblock ------------------------------------------- */
 .ga-schema-block {
   margin: 4px 0;

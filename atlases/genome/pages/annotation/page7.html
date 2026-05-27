@@ -51,7 +51,7 @@
 
       <div class="ga-card">
         <div class="ga-card-header">
-          <div class="ga-card-title">Views (mockup)</div>
+          <div class="ga-card-title">Three views (overview)</div>
           <div class="ga-card-status">phase plan</div>
         </div>
         <div class="ga-panels-grid">
@@ -64,6 +64,45 @@
           <div class="ga-panel-name">View 3 — HIGH-impact variant list</div>
           <div class="ga-panel-desc">Expandable per-candidate detail: gene · variant · consequence · SnpEff impact · VEP consequence · GERP++ score. Sortable.</div>
         </div>
+      </div>
+
+      <div class="ga-card" data-ga-card="impact-tally">
+        <div class="ga-card-header">
+          <div class="ga-card-title">View 1 — Impact tally per candidate</div>
+          <div class="ga-card-status" data-ga-impact-source>sample variants</div>
+        </div>
+        <div class="ga-card-para ga-dim">
+          One row per promoted candidate from <code>shared.candidates</code>.
+          Counts come from <code>variant_annotations.candidate_variants[*].counts</code>;
+          top-3 HIGH genes are the three highest-GERP++ HIGH-impact hits in
+          the candidate's span. Sortable headers.
+        </div>
+        <div class="ga-impact-table-host" data-ga-impact-tally></div>
+      </div>
+
+      <div class="ga-card" data-ga-card="impact-bars">
+        <div class="ga-card-header">
+          <div class="ga-card-title">View 2 — Impact composition (stacked bar)</div>
+          <div class="ga-card-status">colour: HIGH red · MODERATE amber · LOW green · MODIFIER grey</div>
+        </div>
+        <div class="ga-card-para ga-dim">
+          Per-candidate horizontal stacked bar, segments scaled to the
+          fraction of variants in each impact tier. Hover a segment for the
+          exact count.
+        </div>
+        <div class="ga-impact-bars-host" data-ga-impact-bars></div>
+      </div>
+
+      <div class="ga-card" data-ga-card="impact-detail">
+        <div class="ga-card-header">
+          <div class="ga-card-title">View 3 — HIGH-impact variant detail</div>
+          <div class="ga-card-status">per-candidate expandable</div>
+        </div>
+        <div class="ga-card-para ga-dim">
+          Expand any candidate to see its HIGH-impact variants: gene · pos ·
+          ref / alt · SnpEff consequence · VEP consequence · GERP++.
+        </div>
+        <div class="ga-impact-detail-host" data-ga-impact-detail></div>
       </div>
 
       <div class="ga-card">
