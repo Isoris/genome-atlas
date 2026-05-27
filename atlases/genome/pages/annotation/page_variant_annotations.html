@@ -24,6 +24,29 @@
         <div id="pageVarAnnImpactSlot" class="ga-svg-slot"></div>
       </div>
 
+      <!-- View 3: HIGH-impact variant list. Filtered slice of the same
+           variant_annotations layer — every row where impact === 'HIGH'.
+           Per-variant detail: chrom · pos · gene · effect. -->
+      <div class="ga-card" id="pageVarAnnHighCard" hidden>
+        <div class="ga-card-header">
+          <div class="ga-card-title">View 3 — HIGH-impact variant list</div>
+          <div class="ga-card-status ga-status-live">live</div>
+        </div>
+        <div class="ga-toolbar">
+          <input id="pageVarAnnHighSearch" type="search" placeholder="filter by gene / effect / chrom..." />
+          <label>sort:
+            <select id="pageVarAnnHighSort">
+              <option value="chrom_pos" selected>by chrom, position</option>
+              <option value="gene_name">by gene</option>
+              <option value="effect">by effect</option>
+            </select>
+          </label>
+          <span class="ga-count" id="pageVarAnnHighCount"></span>
+          <button id="pageVarAnnHighExportBtn" type="button" class="ga-btn">export HIGH-impact TSV</button>
+        </div>
+        <div id="pageVarAnnHighSlot" class="ga-table-slot"></div>
+      </div>
+
       <!-- View 2: per-candidate deleterious-burden table (cross-atlas). -->
       <div class="ga-card" id="pageVarAnnBurdenCard" hidden>
         <div class="ga-card-header">
@@ -100,7 +123,7 @@
           <div class="ga-panel-desc">Compact horizontal bar (HIGH = red, MODERATE = amber, LOW = neutral, MODIFIER = dim) showing the relative composition. Easy comparison across candidates.</div>
 
           <div class="ga-panel-name">View 3 — HIGH-impact variant list</div>
-          <div class="ga-panel-desc">Expandable per-candidate detail: gene · variant · consequence · SnpEff impact · VEP consequence · GERP++ score. Sortable.</div>
+          <div class="ga-panel-desc">Per-variant detail for every row where impact = HIGH. Columns: chrom · pos · gene · effect. Sortable, filterable, exportable as TSV. (When GERP++ / VEP consequence columns land in the upstream payload they'll surface automatically — the renderer reads whatever the extractor emits.)</div>
         </div>
       </div>
 

@@ -36,6 +36,26 @@
         <div id="pageGenesDensitySlot" class="ga-svg-slot"></div>
       </div>
 
+      <!-- View 2: per-chromosome gene track. Page-local chromosome selector
+           (defaults to the chrom with the most genes); SVG draws each gene
+           as a strand-coloured stripe along a length-scaled axis. Width
+           matches the Inversion Atlas scrubber so two windows can be
+           stacked. shared.activeChrom hookup is deferred to phase B. -->
+      <div class="ga-card" id="pageGenesTrackCard" hidden>
+        <div class="ga-card-header">
+          <div class="ga-card-title">View 2 — per-chromosome gene track</div>
+          <div class="ga-card-status ga-status-live">live</div>
+        </div>
+        <div class="ga-toolbar">
+          <label>chrom:
+            <select id="pageGenesTrackChromSel"></select>
+          </label>
+          <span class="ga-count" id="pageGenesTrackCount"></span>
+          <button id="pageGenesTrackExportBtn" type="button" class="ga-btn">export chrom TSV</button>
+        </div>
+        <div id="pageGenesTrackSlot" class="ga-svg-slot"></div>
+      </div>
+
       <!-- View 3: gene cargo per inversion candidate. Cross-atlas read of
            inversion.candidates_v1; for each candidate, count overlapping genes. -->
       <div class="ga-card" id="pageGenesCargoCard" hidden>

@@ -72,6 +72,10 @@ const _state = {
   burdenView: [],
   burdenFilter: '',
   burdenSort: 'n_high',
+  high: [],             // filtered slice — variants where impact === 'HIGH'
+  highView: [],
+  highFilter: '',
+  highSort: 'chrom_pos',
   registry: null,
 };
 
@@ -251,6 +255,56 @@ function _renderBurden() {
   slot.innerHTML = lines.join('');
 }
 
+// ----- View 3 — HIGH-impact variant list --------------------------------
+// Filter and sort the variants array on the impact='HIGH' subset. No new
+// data source — just a focused slice of what View 1's bar already counted.
+function _applyHigh() {
+  const q = _state.highFilter.toLowerCase();
+  let v = q
+    ? _state.high.filter(r =>
+        r.gene_name.toLowerCase().includes(q) ||
+        r.effect.toLowerCase().includes(q) ||
+        r.chrom.toLowerCase().includes(q))
+    : _state.high.slice();
+  const k = _state.highSort;
+  v.sort((a, b) => {
+    if (k === 'gene_name') return a.gene_name.localeCompare(b.gene_name);
+    if (k === 'effect')    return a.effect.localeCompare(b.effect);
+    // chrom_pos (default): chrom asc, then pos_bp asc
+    const c = String(a.chrom).localeCompare(String(b.chrom));
+    return c !== 0 ? c : a.pos_bp - b.pos_bp;
+  });
+  _state.highView = v;
+}
+
+function _renderHigh() {
+  const slot = document.getElementById('pageVarAnnHighSlot');
+  const card = document.getElementById('pageVarAnnHighCard');
+  const count = document.getElementById('pageVarAnnHighCount');
+  if (!slot || !card) return;
+  if (!_state.high.length) { card.hidden = true; return; }
+  card.hidden = false;
+  const rows = _state.highView;
+  if (count) count.textContent = `${rows.length} of ${_state.high.length}`;
+  if (!rows.length) {
+    slot.innerHTML = '<span class="ga-hint">no HIGH-impact variants match.</span>';
+    return;
+  }
+  const lines = ['<table class="ga-table"><thead><tr>',
+    '<th>chrom</th><th class="ga-num">pos (Mb)</th>',
+    '<th>gene</th><th>effect</th></tr></thead><tbody>'];
+  for (const r of rows) {
+    lines.push('<tr>' +
+      `<td>${_esc(r.chrom)}</td>` +
+      `<td class="ga-num">${_fmtMb(r.pos_bp)}</td>` +
+      `<td>${r.gene_name ? `<code>${_esc(r.gene_name)}</code>` : '<span class="ga-dim">—</span>'}</td>` +
+      `<td class="ga-dim">${_esc(r.effect) || '—'}</td>` +
+      '</tr>');
+  }
+  lines.push('</tbody></table>');
+  slot.innerHTML = lines.join('');
+}
+
 // ----- TSV exports -------------------------------------------------------
 function _exportTsv(filename, header, rows, project) {
   const lines = [header.join('\t')];
@@ -278,6 +332,14 @@ function _exportBurden() {
     r => [r.candidate_id, r.chrom, r.start_bp, r.end_bp, r.n_high, r.n_moderate, r.n_low, r.n_modifier, r.n_total],
   );
 }
+function _exportHigh() {
+  _exportTsv(
+    `variant_high_${Date.now()}.tsv`,
+    ['chrom', 'pos_bp', 'gene_name', 'effect'],
+    _state.highView,
+    r => [r.chrom, r.pos_bp, r.gene_name, r.effect],
+  );
+}
 
 // ----- Wiring ------------------------------------------------------------
 function _wire() {
@@ -297,6 +359,21 @@ function _wire() {
   if (ie) ie.addEventListener('click', _exportImpact);
   const be = document.getElementById('pageVarAnnBurdenExportBtn');
   if (be) be.addEventListener('click', _exportBurden);
+
+  const hSearch = document.getElementById('pageVarAnnHighSearch');
+  if (hSearch) hSearch.addEventListener('input', (e) => {
+    _state.highFilter = e.target.value || '';
+    _applyHigh();
+    _renderHigh();
+  });
+  const hSort = document.getElementById('pageVarAnnHighSort');
+  if (hSort) hSort.addEventListener('change', (e) => {
+    _state.highSort = e.target.value || 'chrom_pos';
+    _applyHigh();
+    _renderHigh();
+  });
+  const he = document.getElementById('pageVarAnnHighExportBtn');
+  if (he) he.addEventListener('click', _exportHigh);
 }
 
 function _compare(probeResult) {
@@ -329,8 +406,11 @@ export async function mount(root, atlasState, registry) {
 
   _state.variants = _normalizeVariants(probe.rows);
   _state.impactCounts = _aggregateImpacts(_state.variants);
+  _state.high = _state.variants.filter(v => v.impact === 'HIGH');
   _renderStatStrip();
   _renderImpactChart();
+  _applyHigh();
+  _renderHigh();
 
   try {
     const cands = await registry.resolve('inversion.candidates_v1');
@@ -354,6 +434,8 @@ export async function unmount(root) {
   _state.impactCounts = [];
   _state.burden = [];
   _state.burdenView = [];
+  _state.high = [];
+  _state.highView = [];
 }
 
 // ----- Legacy compat -----------------------------------------------------

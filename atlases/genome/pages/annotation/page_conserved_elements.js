@@ -68,6 +68,9 @@ const _state = {
   overlapView: [],
   overlapFilter: '',
   overlapSort: 'n_elements',
+  lengthBuckets: [],    // [{ lo, hi, count, label }]
+  lengthTopN: 20,
+  lengthTopView: [],    // longest N elements by length_bp
   registry: null,
 };
 
@@ -272,6 +275,108 @@ function _renderOverlap() {
   slot.innerHTML = lines.join('');
 }
 
+// ----- View 3 — length distribution + longest elements -----------------
+// Log-binned histogram of element lengths + a top-N table of the longest
+// elements. Pure derivation from _state.elements; no new data dep.
+const LENGTH_BUCKETS = [
+  { lo:     1, hi:    100, label: '<0.1 kb' },
+  { lo:   100, hi:   1000, label: '0.1–1 kb' },
+  { lo:  1000, hi:  10000, label: '1–10 kb' },
+  { lo: 10000, hi: 100000, label: '10–100 kb' },
+  { lo:100000, hi: Infinity, label: '≥100 kb' },
+];
+
+function _aggregateLengthBuckets(elements) {
+  const buckets = LENGTH_BUCKETS.map(b => ({ ...b, count: 0 }));
+  for (const e of elements) {
+    const L = e.length_bp;
+    if (!Number.isFinite(L) || L <= 0) continue;
+    for (const b of buckets) {
+      if (L >= b.lo && L < b.hi) { b.count++; break; }
+    }
+  }
+  return buckets;
+}
+
+function _topByLength(elements, n) {
+  return elements.slice()
+    .sort((a, b) => b.length_bp - a.length_bp)
+    .slice(0, n);
+}
+
+const LEN_W = 540;
+const LEN_BAR_H = 22;
+const LEN_PAD_L = 96;
+const LEN_PAD_R = 60;
+const LEN_PAD_T = 10;
+const LEN_PAD_B = 6;
+
+function _renderLengthHist() {
+  const slot = document.getElementById('pageConsElLengthHistSlot');
+  const card = document.getElementById('pageConsElLengthCard');
+  if (!slot || !card) return;
+  const rows = _state.lengthBuckets;
+  if (!rows.length) { slot.innerHTML = ''; return; }
+  const maxC = rows.reduce((m, r) => Math.max(m, r.count), 0) || 1;
+  const innerW = LEN_W - LEN_PAD_L - LEN_PAD_R;
+  const H = rows.length * LEN_BAR_H + LEN_PAD_T + LEN_PAD_B;
+  const xFor = (n) => LEN_PAD_L + (n / maxC) * innerW;
+  const parts = [`<svg class="ga-density-svg" viewBox="0 0 ${LEN_W} ${H}" preserveAspectRatio="xMinYMin meet">`];
+  rows.forEach((r, i) => {
+    const y = LEN_PAD_T + i * LEN_BAR_H + 3;
+    const xEnd = xFor(r.count);
+    const w = Math.max(1, xEnd - LEN_PAD_L);
+    parts.push(
+      `<text class="ga-density-label" x="${LEN_PAD_L - 6}" y="${y + (LEN_BAR_H - 6) / 2 + 5}" text-anchor="end">${_esc(r.label)}</text>`,
+      `<rect class="ga-density-bar" x="${LEN_PAD_L}" y="${y}" width="${w}" height="${LEN_BAR_H - 6}">` +
+        `<title>${_esc(r.label)}: ${_fmtInt(r.count)} elements</title>` +
+      `</rect>`,
+      `<text class="ga-density-val" x="${xEnd + 4}" y="${y + (LEN_BAR_H - 6) / 2 + 5}">${_fmtInt(r.count)}</text>`,
+    );
+  });
+  parts.push('</svg>');
+  slot.innerHTML = parts.join('');
+}
+
+function _renderLengthTop() {
+  const slot = document.getElementById('pageConsElLengthTopSlot');
+  const count = document.getElementById('pageConsElLengthCount');
+  if (!slot) return;
+  const rows = _state.lengthTopView;
+  if (count) count.textContent = `${rows.length} longest of ${_state.elements.length}`;
+  if (!rows.length) { slot.innerHTML = ''; return; }
+  const lines = ['<table class="ga-table"><thead><tr>',
+    '<th>chrom</th><th class="ga-num">start (Mb)</th>',
+    '<th class="ga-num">end (Mb)</th><th class="ga-num">length (kb)</th>',
+    '<th>element</th><th class="ga-num">score</th></tr></thead><tbody>'];
+  for (const r of rows) {
+    lines.push('<tr>' +
+      `<td>${_esc(r.chrom)}</td>` +
+      `<td class="ga-num">${_fmtMb(r.start_bp)}</td>` +
+      `<td class="ga-num">${_fmtMb(r.end_bp)}</td>` +
+      `<td class="ga-num">${_fmtKb(r.length_bp)}</td>` +
+      `<td>${r.element_id ? `<code>${_esc(r.element_id)}</code>` : '<span class="ga-dim">—</span>'}</td>` +
+      `<td class="ga-num ga-dim">${Number.isFinite(r.score) ? r.score : '—'}</td>` +
+      '</tr>');
+  }
+  lines.push('</tbody></table>');
+  slot.innerHTML = lines.join('');
+}
+
+function _applyLength() {
+  _state.lengthBuckets = _aggregateLengthBuckets(_state.elements);
+  _state.lengthTopView = _topByLength(_state.elements, _state.lengthTopN);
+}
+
+function _renderLength() {
+  const card = document.getElementById('pageConsElLengthCard');
+  if (!card) return;
+  if (!_state.elements.length) { card.hidden = true; return; }
+  card.hidden = false;
+  _renderLengthHist();
+  _renderLengthTop();
+}
+
 // ----- TSV exports -------------------------------------------------------
 function _exportTsv(filename, header, rows, project) {
   const lines = [header.join('\t')];
@@ -299,6 +404,23 @@ function _exportOverlap() {
     r => [r.candidate_id, r.chrom, r.start_bp, r.end_bp, r.n_elements, r.covered_bp, r.frac.toFixed(6)],
   );
 }
+function _exportLength() {
+  // Header section for the buckets, then a blank line, then the top-N table.
+  const lines = ['# length-bucket histogram',
+                 ['bucket', 'count'].join('\t')];
+  for (const b of _state.lengthBuckets) lines.push([b.label, b.count].join('\t'));
+  lines.push('', '# top longest elements',
+             ['chrom', 'start_bp', 'end_bp', 'length_bp', 'element_id', 'score'].join('\t'));
+  for (const r of _state.lengthTopView) {
+    lines.push([r.chrom, r.start_bp, r.end_bp, r.length_bp, r.element_id, r.score ?? ''].join('\t'));
+  }
+  const blob = new Blob([lines.join('\n') + '\n'], { type: 'text/tab-separated-values' });
+  const url  = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = `conserved_elements_length_${Date.now()}.tsv`;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(url), 1500);
+}
 
 // ----- Wiring ------------------------------------------------------------
 function _wire() {
@@ -324,6 +446,14 @@ function _wire() {
   });
   const oe = document.getElementById('pageConsElOverlapExportBtn');
   if (oe) oe.addEventListener('click', _exportOverlap);
+  const ltn = document.getElementById('pageConsElLengthTopN');
+  if (ltn) ltn.addEventListener('change', (e) => {
+    _state.lengthTopN = parseInt(e.target.value, 10) || 20;
+    _applyLength();
+    _renderLength();
+  });
+  const le = document.getElementById('pageConsElLengthExportBtn');
+  if (le) le.addEventListener('click', _exportLength);
 }
 
 function _compare(probeResult) {
@@ -343,6 +473,9 @@ export async function mount(root, atlasState, registry) {
   _state.overlapView = [];
   _state.overlapFilter = '';
   _state.overlapSort = 'n_elements';
+  _state.lengthBuckets = [];
+  _state.lengthTopN = 20;
+  _state.lengthTopView = [];
   _state.registry = registry || null;
   _setActiveState(_state);
   _wire();
@@ -361,6 +494,8 @@ export async function mount(root, atlasState, registry) {
   _applyDensitySort();
   _renderStatStrip();
   _renderDensity();
+  _applyLength();
+  _renderLength();
 
   try {
     const cands = await registry.resolve('inversion.candidates_v1');
@@ -385,6 +520,8 @@ export async function unmount(root) {
   _state.perChromView = [];
   _state.overlap = [];
   _state.overlapView = [];
+  _state.lengthBuckets = [];
+  _state.lengthTopView = [];
 }
 
 // ----- Legacy compat -----------------------------------------------------

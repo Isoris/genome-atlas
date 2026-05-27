@@ -53,6 +53,31 @@
         <div id="pageConsElOverlapSlot" class="ga-table-slot"></div>
       </div>
 
+      <!-- View 3: length-distribution histogram + top-N largest elements.
+           Uses the per-element intervals already in state — no new data
+           dependency. Highlights the biology: short UCEs vs longer
+           phastCons regions tend to fall into distinct length bands. -->
+      <div class="ga-card" id="pageConsElLengthCard" hidden>
+        <div class="ga-card-header">
+          <div class="ga-card-title">View 3 — element length distribution + longest elements</div>
+          <div class="ga-card-status ga-status-live">live</div>
+        </div>
+        <div class="ga-toolbar">
+          <label>show top:
+            <select id="pageConsElLengthTopN">
+              <option value="10">10</option>
+              <option value="20" selected>20</option>
+              <option value="50">50</option>
+              <option value="100">100</option>
+            </select>
+          </label>
+          <span class="ga-count" id="pageConsElLengthCount"></span>
+          <button id="pageConsElLengthExportBtn" type="button" class="ga-btn">export length TSV</button>
+        </div>
+        <div id="pageConsElLengthHistSlot" class="ga-svg-slot"></div>
+        <div id="pageConsElLengthTopSlot" class="ga-table-slot"></div>
+      </div>
+
       <div class="ga-card">
         <div class="ga-card-header">
           <div class="ga-card-title">What this page shows</div>
@@ -106,8 +131,8 @@
           <div class="ga-panel-name">View 2 — per-candidate UCE overlap</div>
           <div class="ga-panel-desc">Table: candidate id · UCE count inside span · summed conserved-bp · max phastCons score in span. Bubble up to the Inversion Atlas catalogue as a "regulatory disruption" badge.</div>
 
-          <div class="ga-panel-name">View 3 — phastCons score profile</div>
-          <div class="ga-panel-desc">Continuous score track (phastCons posterior probability) along the active chromosome. Highlights conserved peaks not annotated as UCEs.</div>
+          <div class="ga-panel-name">View 3 — element length distribution + longest elements</div>
+          <div class="ga-panel-desc">Length histogram (log-binned: 0.1–1, 1–10, 10–100 kb …) over every interval; below it a table of the top-N longest elements with their chrom and span. Surfaces the bi-modal mix of short UCEs and longer phastCons regions; conserved peaks above the typical length band are immediate candidates for follow-up. (A continuous phastCons score profile is deferred until the upstream `.wig` track lands — this view works from the BED intervals we already have.)</div>
         </div>
       </div>
 
