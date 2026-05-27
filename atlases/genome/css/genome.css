@@ -1895,6 +1895,92 @@ html[data-theme="light"] .ga-pipeline-stage:hover .ga-pipeline-stage-box {
 }
 
 /* --------------------------------------------------------------------- */
+/* Per-page mini-nav (shared/page-index.js).                              */
+/* --------------------------------------------------------------------- */
+
+.ga-page-index {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  align-items: center;
+  padding: 8px 10px;
+  margin: 0 0 10px 0;
+  background: var(--panel-3);
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  font-family: var(--mono);
+  font-size: 10px;
+}
+.ga-page-index-group {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  align-items: center;
+}
+.ga-page-index-stage {
+  font-size: 8.5px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+  margin-right: 4px;
+}
+.ga-page-index-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  text-decoration: none;
+  color: var(--ink-dim);
+  background: var(--panel-2);
+  border: 1px solid var(--rule);
+  border-radius: 12px;
+  font-size: 10px;
+  letter-spacing: 0.02em;
+  transition: color 80ms ease, border-color 80ms ease, background 80ms ease;
+}
+.ga-page-index-chip:hover {
+  color: var(--ink);
+  border-color: #ff8c6e;
+}
+.ga-page-index-chip.is-active {
+  color: var(--ink);
+  border-color: #ff8c6e;
+  background: rgba(255, 140, 110, 0.14);
+  box-shadow: 0 0 0 1px #ff8c6e;
+}
+.ga-page-index-num {
+  font-weight: 700;
+  color: var(--ink);
+  font-size: 10.5px;
+  font-variant-numeric: tabular-nums;
+  min-width: 1ch;
+}
+.ga-page-index-chip.is-active .ga-page-index-num { color: #ff8c6e; }
+.ga-page-index-label { color: inherit; }
+.ga-page-index-cap {
+  font-size: 8px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0 4px;
+  border-radius: 2px;
+  color: var(--ink-dim);
+  background: var(--panel-3);
+}
+.ga-page-index-cap.is-cand   { color: #ff8c6e; }
+.ga-page-index-cap.is-chrom  { color: #4f9e64; }
+.ga-page-index-cap.is-static { color: var(--ink-dimmer); }
+
+html[data-theme="light"] .ga-page-index-chip.is-active {
+  border-color: #c2410c;
+  background: rgba(194, 65, 12, 0.12);
+  box-shadow: 0 0 0 1px #c2410c;
+}
+html[data-theme="light"] .ga-page-index-chip.is-active .ga-page-index-num {
+  color: #c2410c;
+}
+html[data-theme="light"] .ga-page-index-cap.is-cand { color: #c2410c; }
+
+/* --------------------------------------------------------------------- */
 /* Atlas-wide active-selection pill (shared/active-pill.js).             */
 /* --------------------------------------------------------------------- */
 

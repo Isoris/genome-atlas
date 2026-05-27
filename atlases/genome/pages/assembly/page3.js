@@ -32,6 +32,7 @@ import { _pageState, _setActiveState } from './page3/_state.js';
 import { CANDIDATES_FALLBACK as _SHARED_CANDIDATES_FALLBACK, resolveCandidates as _resolveSharedCandidates } from '../../shared/candidates.js';
 import { installRouter as _installCrossAtlasRouter, onActiveChrom as _onActiveChrom, getActiveChrom as _getActiveChrom } from '../../shared/cross-atlas.js';
 import { installActivePill as _installActivePill } from '../../shared/active-pill.js';
+import { installPageIndex as _installPageIndex } from '../../shared/page-index.js';
 
 const N_BINS = 80;                 // density bin count per chrom in the fallback
 const COHORT_HIGHLIGHT_PALETTE = ['#ff8c6e', '#9b6fa3', '#4f9e64', '#3a5f9f'];
@@ -136,6 +137,7 @@ export async function mount(root, atlasState, registry) {
   _setActiveState(legacyState);
   _installCrossAtlasRouter();
   _installActivePill();
+  _installPageIndex(root, 'page3');
   try { renderPage3(legacyState); }
   catch (e) { console.warn('page3.mount: renderPage3 threw —', e); }
   // Active-chrom highlight: when the router reports a chrom, flag the

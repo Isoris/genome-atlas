@@ -39,6 +39,7 @@ import { _pageState, _setActiveState } from './page5/_state.js';
 import { CANDIDATES_FALLBACK, resolveCandidates as _resolveSharedCandidates, isFallback as _isFallbackCandidates } from '../../shared/candidates.js';
 import { installRouter as _installCrossAtlasRouter, onActiveCandidate as _onActiveCandidate, getActiveCandidate as _getActiveCandidate, setActiveCandidate as _setActiveCandidate, onActiveChrom as _onActiveChrom, getActiveChrom as _getActiveChrom } from '../../shared/cross-atlas.js';
 import { installActivePill as _installActivePill } from '../../shared/active-pill.js';
+import { installPageIndex as _installPageIndex } from '../../shared/page-index.js';
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 const IMPACT_COLORS = {
@@ -228,6 +229,7 @@ export async function mount(root, atlasState, registry) {
   _setActiveState(legacyState);
   _installCrossAtlasRouter();
   _installActivePill();
+  _installPageIndex(root, 'page5');
   try { renderPage5(legacyState); }
   catch (e) { console.warn('page5.mount: renderPage5 threw —', e); }
   // Highlight whichever candidate the cross-atlas router currently flags

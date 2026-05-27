@@ -14,6 +14,7 @@
 // =============================================================================
 
 import { _pageState, _setActiveState } from './page4/_state.js';
+import { installPageIndex as _installPageIndex } from '../../shared/page-index.js';
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 
@@ -138,6 +139,7 @@ export async function mount(root, atlasState, registry) {
   const legacyState = _buildLegacyState(atlasState);
   legacyState.root = root || document;
   _setActiveState(legacyState);
+  _installPageIndex(root, 'page4');
   try { renderPage4(legacyState); }
   catch (e) { console.warn('page4.mount: renderPage4 threw —', e); }
   if (atlasState.genome) atlasState.genome._page4State = legacyState;

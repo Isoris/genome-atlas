@@ -35,6 +35,7 @@
 import { _pageState, _setActiveState } from './page9/_state.js';
 import { installRouter as _installCrossAtlasRouter, onActiveChrom as _onActiveChrom, getActiveChrom as _getActiveChrom } from '../../shared/cross-atlas.js';
 import { installActivePill as _installActivePill } from '../../shared/active-pill.js';
+import { installPageIndex as _installPageIndex } from '../../shared/page-index.js';
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 
@@ -212,6 +213,7 @@ export async function mount(root, atlasState, registry) {
   _setActiveState(legacyState);
   _installCrossAtlasRouter();
   _installActivePill();
+  _installPageIndex(root, 'page9');
   try { renderPage9(legacyState); }
   catch (e) { console.warn('page9.mount: renderPage9 threw —', e); }
   // Auto-nav the per-chrom dotplot to whichever chrom the router has

@@ -13,6 +13,7 @@
 // =============================================================================
 
 import { _pageState, _setActiveState } from './page11/_state.js';
+import { installPageIndex as _installPageIndex } from '../../shared/page-index.js';
 
 export function renderPage11(/* state */) {
   // No-op. Phase C wires View 1 (ideogram) + View 2 (telomere curve) from
@@ -36,6 +37,7 @@ export function refreshPage11(state) {
 export async function mount(root, atlasState, registry) {
   const legacyState = _buildLegacyState(atlasState);
   _setActiveState(legacyState);
+  _installPageIndex(root, 'page11');
   try { refreshPage11(legacyState); }
   catch (e) { console.warn('page11.mount: refreshPage11 threw —', e); }
   _maybeHideOptionalCards(root, legacyState);

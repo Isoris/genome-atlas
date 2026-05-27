@@ -25,6 +25,7 @@
 // =============================================================================
 
 import { _pageState, _setActiveState } from './page1/_state.js';
+import { installPageIndex as _installPageIndex } from '../../shared/page-index.js';
 
 // ---------------------------------------------------------------------------
 // Render entry — no-op for the round-1 scaffold.
@@ -92,6 +93,7 @@ export function refreshPage1(state) {
 export async function mount(root, atlasState, registry) {
   const legacyState = _buildLegacyState(atlasState);
   _setActiveState(legacyState);
+  _installPageIndex(root, 'page1');
 
   try { refreshPage1(legacyState); }
   catch (e) { console.warn('page1.mount: refreshPage1 threw —', e); }

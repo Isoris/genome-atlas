@@ -20,6 +20,7 @@
 import { _pageState, _setActiveState } from './page2/_state.js';
 import { installRouter as _installCrossAtlasRouter, onActiveChrom as _onActiveChrom, getActiveChrom as _getActiveChrom } from '../../shared/cross-atlas.js';
 import { installActivePill as _installActivePill } from '../../shared/active-pill.js';
+import { installPageIndex as _installPageIndex } from '../../shared/page-index.js';
 
 // ---------------------------------------------------------------------------
 // Sample dataset (fallback). Deterministic per-chrom values.
@@ -120,6 +121,7 @@ export async function mount(root, atlasState, registry) {
   _setActiveState(legacyState);
   _installCrossAtlasRouter();
   _installActivePill();
+  _installPageIndex(root, 'page2');
   try { renderPage2(legacyState); }
   catch (e) { console.warn('page2.mount: renderPage2 threw —', e); }
   _applyActiveChromToQc(root, _getActiveChrom());

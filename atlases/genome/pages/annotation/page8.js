@@ -23,6 +23,7 @@ import { _pageState, _setActiveState } from './page8/_state.js';
 import { CANDIDATES_FALLBACK, resolveCandidates as _resolveSharedCandidates } from '../../shared/candidates.js';
 import { installRouter as _installCrossAtlasRouter, onActiveCandidate as _onActiveCandidate, getActiveCandidate as _getActiveCandidate, onActiveChrom as _onActiveChrom, getActiveChrom as _getActiveChrom } from '../../shared/cross-atlas.js';
 import { installActivePill as _installActivePill } from '../../shared/active-pill.js';
+import { installPageIndex as _installPageIndex } from '../../shared/page-index.js';
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 const N_BINS = 80;
@@ -146,6 +147,7 @@ export async function mount(root, atlasState, registry) {
   _setActiveState(legacyState);
   _installCrossAtlasRouter();
   _installActivePill();
+  _installPageIndex(root, 'page8');
   try { renderPage8(legacyState); }
   catch (e) { console.warn('page8.mount: renderPage8 threw —', e); }
   _applyActiveCandidateHighlight(root, _getActiveCandidate());
