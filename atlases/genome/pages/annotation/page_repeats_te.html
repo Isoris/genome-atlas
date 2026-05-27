@@ -14,6 +14,81 @@
         Stage: annotation · spec / phase B · driven by <code>repeat_track</code>
       </div>
 
+      <div class="ga-stat-strip" id="pageRepeatsStats"></div>
+
+      <!-- View 1: per-class composition — stacked horizontal bar (one per
+           haplotype when the layer carries `haplotype`; one global bar
+           otherwise). Cells are bp counts in each TE class. -->
+      <div class="ga-card" id="pageRepeatsCompCard" hidden>
+        <div class="ga-card-header">
+          <div class="ga-card-title">View 1 — per-class composition</div>
+          <div class="ga-card-status ga-status-live">live</div>
+        </div>
+        <div class="ga-toolbar">
+          <label>basis:
+            <select id="pageRepeatsCompBasis">
+              <option value="bp" selected>by covered bp</option>
+              <option value="count">by element count</option>
+            </select>
+          </label>
+          <span class="ga-count" id="pageRepeatsCompCount"></span>
+          <button id="pageRepeatsCompExportBtn" type="button" class="ga-btn">export composition TSV</button>
+        </div>
+        <div id="pageRepeatsCompSlot" class="ga-svg-slot"></div>
+      </div>
+
+      <!-- View 2: per-chrom × class density heatmap. Cells = bp per class
+           per chrom, log-normalised to a fill opacity. Rows sortable by
+           total repeat bp or by chrom. -->
+      <div class="ga-card" id="pageRepeatsHeatCard" hidden>
+        <div class="ga-card-header">
+          <div class="ga-card-title">View 2 — per-chromosome density heatmap</div>
+          <div class="ga-card-status ga-status-live">live</div>
+        </div>
+        <div class="ga-toolbar">
+          <label>sort rows:
+            <select id="pageRepeatsHeatSort">
+              <option value="total" selected>by total repeat bp</option>
+              <option value="chrom">by chrom</option>
+            </select>
+          </label>
+          <span class="ga-count" id="pageRepeatsHeatCount"></span>
+          <button id="pageRepeatsHeatExportBtn" type="button" class="ga-btn">export heatmap TSV</button>
+        </div>
+        <div id="pageRepeatsHeatSlot" class="ga-svg-slot"></div>
+      </div>
+
+      <!-- View 3: breakpoint enrichment. For each Inversion-Atlas candidate,
+           compare per-bp repeat coverage inside the flank window vs the
+           candidate's chromosome mean; flag candidates with enrichment ≥ 1.5×. -->
+      <div class="ga-card" id="pageRepeatsFlankCard" hidden>
+        <div class="ga-card-header">
+          <div class="ga-card-title">View 3 — breakpoint flank enrichment</div>
+          <div class="ga-card-status ga-status-live">live (gated on inversion.candidates_v1)</div>
+        </div>
+        <div class="ga-toolbar">
+          <input id="pageRepeatsFlankSearch" type="search" placeholder="filter by candidate id..." />
+          <label>flank:
+            <select id="pageRepeatsFlankWindow">
+              <option value="500000">±0.5 Mb</option>
+              <option value="1000000">±1 Mb</option>
+              <option value="2000000" selected>±2 Mb</option>
+              <option value="5000000">±5 Mb</option>
+            </select>
+          </label>
+          <label>sort:
+            <select id="pageRepeatsFlankSort">
+              <option value="enrich" selected>by enrichment</option>
+              <option value="flank_bp">by flank bp</option>
+              <option value="candidate_id">by candidate</option>
+            </select>
+          </label>
+          <span class="ga-count" id="pageRepeatsFlankCount"></span>
+          <button id="pageRepeatsFlankExportBtn" type="button" class="ga-btn">export flank TSV</button>
+        </div>
+        <div id="pageRepeatsFlankSlot" class="ga-table-slot"></div>
+      </div>
+
       <div class="ga-card">
         <div class="ga-card-header">
           <div class="ga-card-title">What this page shows</div>

@@ -525,6 +525,23 @@ html[data-theme="academic"] .ga-card {
 .ga-co-nco-bg    { background: #4f9e64; }
 .ga-co-gc-bg     { background: #c9a23a; }
 
+/* Generic table-row flag chip. Used on page_repeats_te View 3 (breakpoint
+   flank enrichment) for the ≥1.5× enrichment flag. */
+.ga-pill {
+  display: inline-block;
+  padding: 1px 6px;
+  font-size: 10px;
+  line-height: 1.2;
+  border-radius: 8px;
+  border: 1px solid var(--rule);
+  font-variant-numeric: tabular-nums;
+}
+.ga-pill-bad {
+  color: #fff;
+  background: var(--bad, #d8645a);
+  border-color: var(--bad, #d8645a);
+}
+
 /* "opt." pill used in the layers grid for facultative layers. */
 .ga-pill-opt {
   display: inline-block;
