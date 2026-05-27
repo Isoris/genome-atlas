@@ -51,19 +51,120 @@
 
       <div class="ga-card">
         <div class="ga-card-header">
-          <div class="ga-card-title">Views (mockup)</div>
-          <div class="ga-card-status">phase plan</div>
+          <div class="ga-card-title">View 1 — per-candidate impact tally</div>
+          <div class="ga-card-status">mockup · per inversion candidate</div>
         </div>
-        <div class="ga-panels-grid">
-          <div class="ga-panel-name">View 1 — per-candidate tally</div>
-          <div class="ga-panel-desc">Table: candidate id · HIGH count · MODERATE count · LOW count · MODIFIER count · top-3 HIGH-impact genes. One row per promoted candidate from the Inversion Atlas.</div>
-
-          <div class="ga-panel-name">View 2 — impact bar per candidate</div>
-          <div class="ga-panel-desc">Compact horizontal bar (HIGH = red, MODERATE = amber, LOW = neutral, MODIFIER = dim) showing the relative composition. Easy comparison across candidates.</div>
-
-          <div class="ga-panel-name">View 3 — HIGH-impact variant list</div>
-          <div class="ga-panel-desc">Expandable per-candidate detail: gene · variant · consequence · SnpEff impact · VEP consequence · GERP++ score. Sortable.</div>
+        <div class="ga-tally-table" role="table">
+          <div class="ga-tally-head"><span>candidate</span><span>chrom</span><span class="ga-num-h">HIGH</span><span class="ga-num-h">MOD</span><span class="ga-num-h">LOW</span><span class="ga-num-h">MODIFIER</span><span>top 3 HIGH-impact genes</span></div>
+          <div class="ga-tally-row"><span><code>cgar_inv_001</code></span><span>LG01</span><span class="ga-num">2</span> <span class="ga-num">14</span><span class="ga-num">112</span><span class="ga-num">410</span><span class="ga-dim">tubulin α, troponin C, MyoD</span></div>
+          <div class="ga-tally-row"><span><code>cgar_inv_002</code></span><span>LG03</span><span class="ga-num">5</span> <span class="ga-num">22</span><span class="ga-num">180</span><span class="ga-num">512</span><span class="ga-dim">collagen 1A1, MMP9, IGF1R</span></div>
+          <div class="ga-tally-row"><span><code>cgar_inv_003</code></span><span>LG07</span><span class="ga-num">0</span> <span class="ga-num">6</span> <span class="ga-num">48</span> <span class="ga-num">218</span><span class="ga-dim">—</span></div>
+          <div class="ga-tally-row"><span><code>cgar_inv_004</code></span><span>LG09</span><span class="ga-num">4</span> <span class="ga-num">31</span><span class="ga-num">204</span><span class="ga-num">604</span><span class="ga-dim">enolase 1, hsp70, β-actin</span></div>
+          <div class="ga-tally-row"><span><code>cgar_inv_005</code></span><span>LG12</span><span class="ga-num">1</span> <span class="ga-num">18</span><span class="ga-num">141</span><span class="ga-num">498</span><span class="ga-dim">talin 1</span></div>
+          <div class="ga-tally-row"><span><code>cgar_inv_006</code></span><span>LG18</span><span class="ga-num">0</span> <span class="ga-num">8</span> <span class="ga-num">62</span> <span class="ga-num">240</span><span class="ga-dim">—</span></div>
+          <div class="ga-tally-row"><span><code>cgar_inv_007</code></span><span>LG28</span><span class="ga-num">3</span> <span class="ga-num">19</span><span class="ga-num">168</span><span class="ga-num">552</span><span class="ga-dim">SRP14, PDH, RPL11</span></div>
         </div>
+        <div class="ga-card-footnote">
+          SnpEff impact classes: <b class="ga-impact-hi-text">HIGH</b> (frameshift,
+          start/stop lost) · <b class="ga-impact-mod-text">MODERATE</b> (missense,
+          in-frame indel) · <b>LOW</b> (synonymous) · <b class="ga-dim">MODIFIER</b>
+          (intronic, intergenic, UTR). Rows with HIGH ≥ 1 bubble a <span class="ga-bp-badge ga-bp-yes">● HI</span> badge to the Inversion-Atlas catalogue.
+        </div>
+      </div>
+
+      <div class="ga-card">
+        <div class="ga-card-header">
+          <div class="ga-card-title">View 2 — impact composition bar</div>
+          <div class="ga-card-status">mockup · per candidate</div>
+        </div>
+        <div class="ga-card-para ga-dim">
+          One bar per candidate, segments scale by count. HIGH segments are at
+          the left so the eye catches the size differential immediately.
+        </div>
+        <div class="ga-impact-bars">
+          <div class="ga-impact-bar-row"><div class="ga-impact-bar-label"><code>cgar_inv_001</code></div><div class="ga-impact-bar"><span class="ga-impact-hi" style="flex: 2">2</span><span class="ga-impact-mod" style="flex: 14">14</span><span class="ga-impact-low" style="flex: 112">112 LOW</span><span class="ga-impact-mfr" style="flex: 410">410 MODIFIER</span></div></div>
+          <div class="ga-impact-bar-row"><div class="ga-impact-bar-label"><code>cgar_inv_002</code></div><div class="ga-impact-bar"><span class="ga-impact-hi" style="flex: 5">5</span><span class="ga-impact-mod" style="flex: 22">22</span><span class="ga-impact-low" style="flex: 180">180 LOW</span><span class="ga-impact-mfr" style="flex: 512">512 MODIFIER</span></div></div>
+          <div class="ga-impact-bar-row"><div class="ga-impact-bar-label"><code>cgar_inv_003</code></div><div class="ga-impact-bar"><span class="ga-impact-mod" style="flex: 6">6</span><span class="ga-impact-low" style="flex: 48">48 LOW</span><span class="ga-impact-mfr" style="flex: 218">218 MODIFIER</span></div></div>
+          <div class="ga-impact-bar-row"><div class="ga-impact-bar-label"><code>cgar_inv_004</code></div><div class="ga-impact-bar"><span class="ga-impact-hi" style="flex: 4">4</span><span class="ga-impact-mod" style="flex: 31">31</span><span class="ga-impact-low" style="flex: 204">204 LOW</span><span class="ga-impact-mfr" style="flex: 604">604 MODIFIER</span></div></div>
+          <div class="ga-impact-bar-row"><div class="ga-impact-bar-label"><code>cgar_inv_007</code></div><div class="ga-impact-bar"><span class="ga-impact-hi" style="flex: 3">3</span><span class="ga-impact-mod" style="flex: 19">19</span><span class="ga-impact-low" style="flex: 168">168 LOW</span><span class="ga-impact-mfr" style="flex: 552">552 MODIFIER</span></div></div>
+        </div>
+      </div>
+
+      <div class="ga-card">
+        <div class="ga-card-header">
+          <div class="ga-card-title">View 3 — HIGH-impact variant list (cgar_inv_002 expanded)</div>
+          <div class="ga-card-status">mockup · per-candidate detail</div>
+        </div>
+        <div class="ga-var-table" role="table" aria-label="HIGH-impact variants for cgar_inv_002">
+          <div class="ga-var-head"><span>gene</span><span>variant</span><span>consequence</span><span class="ga-num-h">SnpEff</span><span>VEP</span><span class="ga-num-h">GERP++</span></div>
+          <div class="ga-var-row"><span><code>COL1A1</code></span><span><code>LG03:14721880 G&gt;A</code></span><span>stop gained</span><span><span class="ga-impact ga-impact-hi">HIGH</span></span><span class="ga-dim">stop_gained, NMD-triggering</span><span class="ga-num">5.42</span></div>
+          <div class="ga-var-row"><span><code>MMP9</code></span> <span><code>LG03:15102110 +1 frameshift</code></span><span>frameshift</span><span><span class="ga-impact ga-impact-hi">HIGH</span></span><span class="ga-dim">frameshift_variant</span><span class="ga-num">4.81</span></div>
+          <div class="ga-var-row"><span><code>IGF1R</code></span><span><code>LG03:15890420 splice</code></span><span>splice donor</span><span><span class="ga-impact ga-impact-hi">HIGH</span></span><span class="ga-dim">splice_donor_variant</span><span class="ga-num">5.71</span></div>
+          <div class="ga-var-row"><span><code>HSPB1</code></span><span><code>LG03:16410820 start</code></span><span>start lost</span><span><span class="ga-impact ga-impact-hi">HIGH</span></span><span class="ga-dim">start_lost</span><span class="ga-num">3.92</span></div>
+          <div class="ga-var-row"><span><code>RBM10</code></span><span><code>LG03:17820100 G&gt;A</code></span><span>stop gained</span><span><span class="ga-impact ga-impact-hi">HIGH</span></span><span class="ga-dim">stop_gained</span><span class="ga-num">4.20</span></div>
+        </div>
+        <div class="ga-card-footnote">
+          GERP++ scores ≥ 2 indicate conserved sites; HIGH-impact variants on
+          conserved sites (GERP++ ≥ 4) are the strongest functional candidates
+          and surface to the manuscript supplement. The full per-candidate
+          table is fetched on click from <code>variant_annotations</code>.
+        </div>
+      </div>
+
+      <div class="ga-card">
+        <div class="ga-card-header">
+          <div class="ga-card-title">Import schema — <code>variant_annotations.json</code></div>
+          <div class="ga-card-status">JSON Schema · draft-2020-12</div>
+        </div>
+        <pre class="ga-schema-block"><code>{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "variant_annotations.schema.json",
+  "title": "Per-candidate SnpEff + VEP impact overlay",
+  "description": "One file per candidate, keyed by candidate_id. Carries the impact tally + the HIGH-impact variant detail rows.",
+  "type": "object",
+  "required": ["candidate_id", "chrom", "span_bp", "tally", "high_impact_variants"],
+  "properties": {
+    "candidate_id":  { "type": "string" },
+    "chrom":         { "type": "string" },
+    "span_bp":       { "type": "object", "required": ["start", "end"], "properties": {
+      "start": { "type": "integer", "minimum": 0 },
+      "end":   { "type": "integer", "minimum": 0 }
+    }},
+    "tally": {
+      "type": "object",
+      "required": ["HIGH", "MODERATE", "LOW", "MODIFIER"],
+      "properties": {
+        "HIGH":     { "type": "integer", "minimum": 0 },
+        "MODERATE": { "type": "integer", "minimum": 0 },
+        "LOW":      { "type": "integer", "minimum": 0 },
+        "MODIFIER": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "top_high_impact_genes": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Up to 3 gene symbols, sorted by GERP++ score among HIGH-impact variants."
+    },
+    "high_impact_variants": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["gene", "chrom", "pos_bp", "consequence", "snpeff_impact"],
+        "properties": {
+          "gene":           { "type": "string" },
+          "chrom":          { "type": "string" },
+          "pos_bp":         { "type": "integer", "minimum": 0 },
+          "ref":            { "type": "string" },
+          "alt":            { "type": "string" },
+          "consequence":    { "type": "string", "description": "Human-readable short form, e.g. 'stop gained'." },
+          "snpeff_impact":  { "enum": ["HIGH", "MODERATE", "LOW", "MODIFIER"] },
+          "vep_consequence":{ "type": "string", "description": "Sequence Ontology term from VEP." },
+          "gerp_score":     { "type": "number", "description": "GERP++ RS score; sites with ≥ 4 are highly conserved." }
+        }
+      }
+    }
+  }
+}</code></pre>
       </div>
 
       <div class="ga-card">

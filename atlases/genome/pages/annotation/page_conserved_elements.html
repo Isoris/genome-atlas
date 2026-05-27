@@ -50,19 +50,172 @@
 
       <div class="ga-card">
         <div class="ga-card-header">
-          <div class="ga-card-title">Views (mockup)</div>
-          <div class="ga-card-status">phase plan</div>
+          <div class="ga-card-title">View 1 — per-chrom UCE tick strip</div>
+          <div class="ga-card-status">mockup · LG01 shown</div>
         </div>
-        <div class="ga-panels-grid">
-          <div class="ga-panel-name">View 1 — per-chrom element strip</div>
-          <div class="ga-panel-desc">Tick strip along the active chromosome; each tick = one conserved element. Width matches the Inversion Atlas scrubber.</div>
-
-          <div class="ga-panel-name">View 2 — per-candidate UCE overlap</div>
-          <div class="ga-panel-desc">Table: candidate id · UCE count inside span · summed conserved-bp · max phastCons score in span. Bubble up to the Inversion Atlas catalogue as a "regulatory disruption" badge.</div>
-
-          <div class="ga-panel-name">View 3 — phastCons score profile</div>
-          <div class="ga-panel-desc">Continuous score track (phastCons posterior probability) along the active chromosome. Highlights conserved peaks not annotated as UCEs.</div>
+        <div class="ga-card-para ga-dim">
+          Each tick = one ultra-conserved element (UCE) above the 200 bp / 95%-
+          identity cut. Width matches the Inversion Atlas scrubber.
         </div>
+        <div class="ga-uce-track-wrap" aria-label="LG01 UCE tick strip">
+          <svg viewBox="0 0 800 30" class="ga-uce-track-svg" preserveAspectRatio="none">
+            <line x1="20" y1="15" x2="780" y2="15" stroke="var(--rule)" stroke-width="1"/>
+            <text x="10" y="11" font-size="9" fill="var(--ink-dim)">LG01 · 312 UCEs above threshold</text>
+            <g stroke="#4f9e64" stroke-width="2">
+              <line x1="42"  y1="8" x2="42"  y2="22"/>
+              <line x1="55"  y1="8" x2="55"  y2="22"/>
+              <line x1="61"  y1="8" x2="61"  y2="22"/>
+              <line x1="78"  y1="8" x2="78"  y2="22"/>
+              <line x1="92"  y1="8" x2="92"  y2="22"/>
+              <line x1="104" y1="8" x2="104" y2="22"/>
+              <line x1="118" y1="8" x2="118" y2="22"/>
+              <line x1="129" y1="8" x2="129" y2="22"/>
+              <line x1="146" y1="8" x2="146" y2="22"/>
+              <line x1="155" y1="8" x2="155" y2="22"/>
+              <line x1="162" y1="8" x2="162" y2="22"/>
+              <line x1="184" y1="8" x2="184" y2="22"/>
+              <line x1="201" y1="8" x2="201" y2="22"/>
+              <line x1="218" y1="8" x2="218" y2="22"/>
+              <line x1="236" y1="8" x2="236" y2="22"/>
+              <line x1="248" y1="8" x2="248" y2="22"/>
+              <line x1="264" y1="8" x2="264" y2="22"/>
+              <line x1="278" y1="8" x2="278" y2="22"/>
+              <line x1="295" y1="8" x2="295" y2="22"/>
+              <line x1="312" y1="8" x2="312" y2="22"/>
+              <line x1="338" y1="8" x2="338" y2="22"/>
+              <line x1="354" y1="8" x2="354" y2="22"/>
+              <line x1="372" y1="8" x2="372" y2="22"/>
+              <line x1="388" y1="8" x2="388" y2="22"/>
+              <line x1="402" y1="8" x2="402" y2="22"/>
+              <line x1="421" y1="8" x2="421" y2="22"/>
+              <line x1="438" y1="8" x2="438" y2="22"/>
+              <line x1="452" y1="8" x2="452" y2="22"/>
+              <line x1="470" y1="8" x2="470" y2="22"/>
+              <line x1="487" y1="8" x2="487" y2="22"/>
+              <line x1="501" y1="8" x2="501" y2="22"/>
+              <line x1="518" y1="8" x2="518" y2="22"/>
+              <line x1="534" y1="8" x2="534" y2="22"/>
+              <line x1="556" y1="8" x2="556" y2="22"/>
+              <line x1="573" y1="8" x2="573" y2="22"/>
+              <line x1="588" y1="8" x2="588" y2="22"/>
+              <line x1="602" y1="8" x2="602" y2="22"/>
+              <line x1="624" y1="8" x2="624" y2="22"/>
+              <line x1="640" y1="8" x2="640" y2="22"/>
+              <line x1="656" y1="8" x2="656" y2="22"/>
+              <line x1="672" y1="8" x2="672" y2="22"/>
+              <line x1="688" y1="8" x2="688" y2="22"/>
+              <line x1="702" y1="8" x2="702" y2="22"/>
+              <line x1="720" y1="8" x2="720" y2="22"/>
+              <line x1="736" y1="8" x2="736" y2="22"/>
+              <line x1="752" y1="8" x2="752" y2="22"/>
+              <line x1="765" y1="8" x2="765" y2="22"/>
+            </g>
+          </svg>
+        </div>
+        <div class="ga-card-footnote">
+          UCE definition follows Bejerano et al. 2004 with the 200 bp / 95%
+          identity cut adapted to a teleost-internal alignment (anchor =
+          <i>Danio rerio</i> with Cgar / Cmac / Ipun in the alignment). The
+          full UCE set is in <code>conserved_elements.bed</code>; this view
+          paginates by <code>activeChrom</code>.
+        </div>
+      </div>
+
+      <div class="ga-card">
+        <div class="ga-card-header">
+          <div class="ga-card-title">View 2 — per-candidate UCE overlap</div>
+          <div class="ga-card-status">mockup · per inversion candidate</div>
+        </div>
+        <div class="ga-uce-cargo" role="table" aria-label="UCE overlap per inversion candidate">
+          <div class="ga-uce-cargo-head"><span>candidate</span><span>chrom</span><span class="ga-num-h">span (Mb)</span><span class="ga-num-h">UCEs in span</span><span class="ga-num-h">conserved bp</span><span class="ga-num-h">max phastCons</span><span>verdict</span></div>
+          <div class="ga-uce-cargo-row"><span><code>cgar_inv_001</code></span><span>LG01</span><span class="ga-num">4.8–9.2</span><span class="ga-num">38</span><span class="ga-num">12 410</span><span class="ga-num">0.998</span><span><span class="ga-bp-badge ga-bp-yes">● regulatory</span></span></div>
+          <div class="ga-uce-cargo-row"><span><code>cgar_inv_002</code></span><span>LG03</span><span class="ga-num">12.4–18.1</span><span class="ga-num">62</span><span class="ga-num">21 820</span><span class="ga-num">0.992</span><span><span class="ga-bp-badge ga-bp-yes">● regulatory</span></span></div>
+          <div class="ga-uce-cargo-row"><span><code>cgar_inv_003</code></span><span>LG07</span><span class="ga-num">22.1–24.0</span><span class="ga-num">9</span> <span class="ga-num">2 810</span><span class="ga-num">0.910</span><span><span class="ga-bp-badge">— neutral</span></span></div>
+          <div class="ga-uce-cargo-row"><span><code>cgar_inv_004</code></span><span>LG09</span><span class="ga-num">8.1–14.7</span><span class="ga-num">71</span><span class="ga-num">26 420</span><span class="ga-num">0.996</span><span><span class="ga-bp-badge ga-bp-yes">● regulatory</span></span></div>
+          <div class="ga-uce-cargo-row"><span><code>cgar_inv_005</code></span><span>LG12</span><span class="ga-num">2.4–6.8</span><span class="ga-num">42</span><span class="ga-num">14 820</span><span class="ga-num">0.988</span><span><span class="ga-bp-badge ga-bp-yes">● regulatory</span></span></div>
+          <div class="ga-uce-cargo-row"><span><code>cgar_inv_006</code></span><span>LG18</span><span class="ga-num">11.2–13.4</span><span class="ga-num">12</span><span class="ga-num">3 820</span><span class="ga-num">0.871</span><span><span class="ga-bp-badge">— neutral</span></span></div>
+          <div class="ga-uce-cargo-row"><span><code>cgar_inv_007</code></span><span>LG28</span><span class="ga-num">4.8–12.3</span><span class="ga-num">54</span><span class="ga-num">18 240</span><span class="ga-num">0.994</span><span><span class="ga-bp-badge ga-bp-yes">● regulatory</span></span></div>
+        </div>
+        <div class="ga-card-footnote">
+          Candidates with ≥ 20 UCEs OR phastCons max ≥ 0.95 light the regulatory
+          badge. The badge bubbles up to the Inversion Atlas catalogue table
+          alongside the gene-cargo and TE-enrichment badges to form the
+          "functional impact" composite call.
+        </div>
+      </div>
+
+      <div class="ga-card">
+        <div class="ga-card-header">
+          <div class="ga-card-title">View 3 — phastCons score profile</div>
+          <div class="ga-card-status">mockup · LG03 around cgar_inv_002</div>
+        </div>
+        <div class="ga-card-para ga-dim">
+          Continuous phastCons posterior probability (0–1) across a 5.7 Mb
+          window. Peaks above 0.95 are flagged as conserved regulatory
+          elements; the highest peaks usually overlap UCEs (downward-pointing
+          ticks in the strip above).
+        </div>
+        <div class="ga-phastcons-wrap" aria-label="phastCons profile around cgar_inv_002">
+          <svg viewBox="0 0 800 90" class="ga-phastcons-svg" preserveAspectRatio="none">
+            <line x1="20" y1="80" x2="780" y2="80" stroke="var(--rule)"/>
+            <line x1="20" y1="80" x2="20"  y2="20" stroke="var(--rule)"/>
+            <text x="14" y="22" font-size="9" fill="var(--ink-dim)" text-anchor="end">1.0</text>
+            <text x="14" y="48" font-size="9" fill="var(--ink-dim)" text-anchor="end">0.5</text>
+            <text x="14" y="82" font-size="9" fill="var(--ink-dim)" text-anchor="end">0</text>
+            <text x="400" y="86" font-size="9" fill="var(--ink-dim)" text-anchor="middle">LG03  12.4 Mb → 18.1 Mb</text>
+            <line x1="20" y1="32" x2="780" y2="32" stroke="#4f9e64" stroke-width="0.5" stroke-dasharray="3 3" opacity="0.5"/>
+            <text x="780" y="30" font-size="8" fill="#4f9e64" text-anchor="end">0.95 cutoff</text>
+            <!-- phastCons trace — peaks where UCEs cluster -->
+            <path d="M 20,72 L 30,68 L 38,55 L 45,40 L 48,28 L 52,22 L 56,30 L 62,48 L 70,62 L 80,70
+                     L 95,72 L 110,68 L 125,55 L 138,38 L 145,30 L 148,25 L 152,32 L 160,48 L 175,62
+                     L 195,70 L 220,68 L 240,55 L 260,40 L 280,28 L 295,22 L 305,28 L 320,42 L 340,58
+                     L 365,68 L 390,70 L 415,60 L 435,42 L 455,28 L 470,22 L 478,28 L 485,40 L 500,55
+                     L 520,65 L 545,70 L 570,62 L 590,48 L 610,32 L 625,24 L 632,28 L 640,40 L 658,58
+                     L 680,68 L 705,70 L 725,60 L 740,45 L 755,30 L 762,22 L 770,30 L 780,42"
+                  stroke="#ff8c6e" stroke-width="1.2" fill="none"/>
+            <!-- Inversion-candidate span overlay (cgar_inv_002) -->
+            <rect x="20" y="18" width="760" height="62" fill="rgba(255, 140, 110, 0.05)" stroke="rgba(255, 140, 110, 0.3)" stroke-width="1" stroke-dasharray="4 3"/>
+            <text x="22" y="14" font-size="8" fill="#ff8c6e">cgar_inv_002 span</text>
+          </svg>
+        </div>
+        <div class="ga-card-footnote">
+          7 distinct phastCons peaks ≥ 0.95 visible in the cgar_inv_002 span.
+          Each peak that does NOT coincide with a known UCE flags as a
+          "novel conserved element" — these are the candidates the
+          comparative-genomics supplement focuses on.
+        </div>
+      </div>
+
+      <div class="ga-card">
+        <div class="ga-card-header">
+          <div class="ga-card-title">Import schema — <code>conserved_elements</code> layer</div>
+          <div class="ga-card-status">BED + bedGraph</div>
+        </div>
+        <pre class="ga-schema-block"><code># Layer is split into TWO files:
+#
+# 1) conserved_elements.bed         (UCEs — discrete elements)
+#    Standard 6-column BED:
+#       chrom  start  end  name   phastCons_max  strand
+#    Example:
+LG01   1418520    1418720    UCE_00001   0.998   .
+LG01   2418720    2419120    UCE_00002   0.991   .
+LG01   2419520    2419650    UCE_00003   0.974   .
+LG03  14820100   14820310    UCE_00045   0.998   .
+LG03  15820440   15820640    UCE_00047   0.996   .
+#
+# 2) conserved_elements.phastcons.bedgraph   (continuous score profile)
+#    bedGraph (chrom, start, end, value) — one row per non-zero phastCons bin.
+#    Example (10 kb bins):
+LG03  12400000  12410000  0.42
+LG03  12410000  12420000  0.58
+LG03  12420000  12430000  0.74
+LG03  12480000  12490000  0.96
+LG03  12490000  12500000  0.98
+LG03  12500000  12510000  0.94
+#
+# The renderer materializes (1) into per-chrom tick arrays for View 1 +
+# overlap counts for View 2, and (2) into the continuous profile path
+# for View 3. activeChrom drives both materializations.</code></pre>
       </div>
 
       <div class="ga-card">

@@ -68,40 +68,515 @@
 
       <div class="ga-card">
         <div class="ga-card-header">
-          <div class="ga-card-title">Chromosome strip (mockup)</div>
-          <div class="ga-card-status">gradients = placeholder for real density</div>
+          <div class="ga-card-title">Chromosome strip — fClaHyb_Gar (28 LGs)</div>
+          <div class="ga-card-status">phase B · length-scaled · 4 stacked sub-tracks</div>
         </div>
-        <div class="ga-chrom-mockup">
-          <div class="ga-chrom-row">
-            <div class="ga-chrom-label">LG01</div>
-            <div class="ga-chrom-bar" style="background: linear-gradient(90deg, #2a1a14 0%, #4a2820 30%, #2a1a14 60%, #1a1a1a 100%);"></div>
-            <div class="ga-chrom-len">28.4 Mb</div>
+        <div class="ga-co-toolbar" role="toolbar" aria-label="Chromosome strip haplotype + sort">
+          <span class="ga-co-tool-label">haplotype</span>
+          <button type="button" class="ga-co-btn is-active">fClaHyb_Gar</button>
+          <button type="button" class="ga-co-btn">fClaHyb_Mac</button>
+          <span class="ga-co-tool-spacer"></span>
+          <span class="ga-co-tool-label">sort</span>
+          <button type="button" class="ga-co-btn is-active">by name</button>
+          <button type="button" class="ga-co-btn">by length</button>
+          <button type="button" class="ga-co-btn">by T2T</button>
+        </div>
+
+        <div class="ga-co-legend" role="list">
+          <span><span class="ga-co-leg ga-co-leg-base"></span> base bar · centromere · telomeres</span>
+          <span><span class="ga-co-leg ga-co-leg-gene"></span> gene density (telomere-biased)</span>
+          <span><span class="ga-co-leg ga-co-leg-repeat"></span> repeat density (peri-centromeric)</span>
+          <span><span class="ga-co-leg ga-co-leg-co"></span> CO density (sub-telomeric, dip in centromere)</span>
+          <span><span class="ga-co-t2t ga-t2t-yes">T2T</span> = fully telomere-to-telomere</span>
+        </div>
+
+        <div class="ga-co-strip" role="list" aria-label="28 LGs of the fClaHyb_Gar haplotype, length-scaled with stacked sub-tracks">
+        <div class="ga-co-row" data-chrom="LG01">
+          <div class="ga-co-name">LG01</div>
+          <div class="ga-co-stack" style="width: 100.0%;">
+            <div class="ga-co-track ga-co-base">
+              <span class="ga-co-tel ga-tel-yes">▶</span>
+              <div class="ga-co-centromere" style="left: 52%;"></div>
+              <span class="ga-co-tel ga-tel-yes">◀</span>
+            </div>
+            <div class="ga-co-track ga-co-gene"   style="background: linear-gradient(90deg, rgba(220,123,100,0.70) 0%, rgba(196,112,93,0.63) 3%, rgba(188,109,91,0.61) 7%, rgba(195,112,93,0.63) 10%, rgba(192,110,92,0.62) 14%, rgba(182,106,89,0.59) 17%, rgba(183,106,90,0.59) 21%, rgba(163,97,84,0.54) 24%, rgba(154,93,81,0.51) 28%, rgba(145,88,79,0.48) 31%, rgba(145,89,79,0.49) 34%, rgba(128,81,74,0.44) 38%, rgba(142,87,78,0.47) 41%, rgba(119,77,72,0.41) 45%, rgba(109,72,69,0.38) 48%, rgba(106,71,68,0.37) 52%, rgba(130,82,75,0.44) 55%, rgba(129,81,75,0.44) 59%, rgba(128,81,74,0.43) 62%, rgba(131,82,75,0.44) 66%, rgba(169,100,86,0.55) 69%, rgba(170,100,86,0.56) 72%, rgba(167,99,85,0.55) 76%, rgba(179,104,88,0.58) 79%, rgba(199,113,94,0.64) 83%, rgba(184,107,90,0.60) 86%, rgba(206,117,96,0.66) 90%, rgba(191,110,92,0.62) 93%, rgba(227,127,102,0.72) 97%, rgba(230,128,103,0.73) 100%);"   aria-label="gene density"></div>
+            <div class="ga-co-track ga-co-repeat" style="background: linear-gradient(90deg, rgba(96,69,63,0.39) 0%, rgba(86,64,60,0.35) 3%, rgba(91,67,62,0.37) 7%, rgba(90,66,61,0.36) 10%, rgba(87,65,61,0.35) 14%, rgba(100,71,64,0.40) 17%, rgba(80,61,59,0.33) 21%, rgba(90,66,61,0.36) 24%, rgba(86,64,61,0.35) 28%, rgba(98,71,63,0.39) 31%, rgba(102,73,64,0.41) 34%, rgba(79,60,59,0.32) 38%, rgba(118,81,68,0.47) 41%, rgba(146,96,75,0.57) 45%, rgba(167,107,79,0.64) 48%, rgba(165,106,79,0.64) 52%, rgba(165,106,79,0.64) 55%, rgba(181,114,83,0.70) 59%, rgba(172,110,81,0.66) 62%, rgba(162,104,78,0.63) 66%, rgba(149,98,75,0.58) 69%, rgba(121,83,69,0.48) 72%, rgba(88,65,61,0.36) 76%, rgba(92,67,62,0.37) 79%, rgba(82,62,59,0.33) 83%, rgba(86,64,61,0.35) 86%, rgba(91,67,62,0.37) 90%, rgba(97,70,63,0.39) 93%, rgba(79,60,59,0.32) 97%, rgba(100,71,64,0.40) 100%);" aria-label="repeat density"></div>
+            <div class="ga-co-track ga-co-co"     style="background: linear-gradient(90deg, rgba(165,84,103,0.74) 0%, rgba(124,70,86,0.55) 3%, rgba(115,66,82,0.51) 7%, rgba(127,71,87,0.57) 10%, rgba(119,68,83,0.53) 14%, rgba(120,68,84,0.53) 17%, rgba(127,71,87,0.57) 21%, rgba(107,64,79,0.48) 24%, rgba(120,68,84,0.54) 28%, rgba(122,69,85,0.54) 31%, rgba(105,63,78,0.47) 34%, rgba(77,53,66,0.35) 38%, rgba(88,57,70,0.40) 41%, rgba(66,49,61,0.30) 45%, rgba(54,45,56,0.25) 48%, rgba(70,50,63,0.31) 52%, rgba(67,49,61,0.30) 55%, rgba(108,64,79,0.48) 59%, rgba(113,66,81,0.51) 62%, rgba(75,52,65,0.34) 66%, rgba(89,57,71,0.40) 69%, rgba(100,61,75,0.45) 72%, rgba(93,59,73,0.42) 76%, rgba(132,72,89,0.59) 79%, rgba(113,66,81,0.50) 83%, rgba(125,70,86,0.56) 86%, rgba(131,72,89,0.59) 90%, rgba(138,75,92,0.62) 93%, rgba(136,74,91,0.61) 97%, rgba(129,72,88,0.58) 100%);"     aria-label="CO density"></div>
           </div>
-          <div class="ga-chrom-row">
-            <div class="ga-chrom-label">LG02</div>
-            <div class="ga-chrom-bar" style="background: linear-gradient(90deg, #1a1a1a 0%, #3a2418 25%, #5a3220 50%, #2a1a14 100%);"></div>
-            <div class="ga-chrom-len">31.2 Mb</div>
-          </div>
-          <div class="ga-chrom-row">
-            <div class="ga-chrom-label">LG03</div>
-            <div class="ga-chrom-bar" style="background: linear-gradient(90deg, #2a1a14 0%, #3a2820 40%, #1a1a1a 70%, #3a2418 100%);"></div>
-            <div class="ga-chrom-len">26.1 Mb</div>
-          </div>
-          <div class="ga-chrom-row">
-            <div class="ga-chrom-label">…</div>
-            <div class="ga-chrom-ellipsis">24 more chromosomes</div>
-            <div></div>
-          </div>
-          <div class="ga-chrom-row ga-chrom-highlight">
-            <div class="ga-chrom-label">LG28</div>
-            <div class="ga-chrom-bar ga-chrom-bar-highlight" style="background: linear-gradient(90deg, #2a1a14 0%, #4a2820 20%, #ff8c6e44 35%, #ff8c6e88 45%, #ff8c6e44 55%, #4a2820 70%, #2a1a14 100%);"></div>
-            <div class="ga-chrom-len">19.7 Mb</div>
+          <div class="ga-co-meta">
+            <span class="ga-num">41.3 Mb</span>
+            <span class="ga-co-t2t ga-t2t-yes">T2T</span>
           </div>
         </div>
+        <div class="ga-co-row" data-chrom="LG02">
+          <div class="ga-co-name">LG02</div>
+          <div class="ga-co-stack" style="width: 94.3%;">
+            <div class="ga-co-track ga-co-base">
+              <span class="ga-co-tel ga-tel-yes">▶</span>
+              <div class="ga-co-centromere" style="left: 43%;"></div>
+              <span class="ga-co-tel">○</span>
+            </div>
+            <div class="ga-co-track ga-co-gene"   style="background: linear-gradient(90deg, rgba(207,117,96,0.66) 0%, rgba(207,118,96,0.66) 3%, rgba(191,110,92,0.62) 7%, rgba(207,117,96,0.66) 10%, rgba(175,103,87,0.57) 14%, rgba(170,100,86,0.56) 17%, rgba(186,108,91,0.60) 21%, rgba(178,104,88,0.58) 24%, rgba(164,98,84,0.54) 28%, rgba(159,95,83,0.52) 31%, rgba(138,86,77,0.47) 34%, rgba(143,88,78,0.48) 38%, rgba(138,85,77,0.46) 41%, rgba(110,72,69,0.38) 45%, rgba(108,71,69,0.38) 48%, rgba(106,70,68,0.37) 52%, rgba(120,77,72,0.41) 55%, rgba(116,75,71,0.40) 59%, rgba(139,86,77,0.47) 62%, rgba(156,94,82,0.51) 66%, rgba(155,93,82,0.51) 69%, rgba(156,93,82,0.51) 72%, rgba(181,105,89,0.59) 76%, rgba(175,102,87,0.57) 79%, rgba(178,104,88,0.58) 83%, rgba(197,113,94,0.64) 86%, rgba(207,118,96,0.66) 90%, rgba(211,119,97,0.67) 93%, rgba(219,123,99,0.70) 97%, rgba(228,127,102,0.72) 100%);"   aria-label="gene density"></div>
+            <div class="ga-co-track ga-co-repeat" style="background: linear-gradient(90deg, rgba(92,67,62,0.37) 0%, rgba(89,66,61,0.36) 3%, rgba(89,65,61,0.36) 7%, rgba(99,71,63,0.40) 10%, rgba(88,65,61,0.36) 14%, rgba(83,63,60,0.34) 17%, rgba(89,66,61,0.36) 21%, rgba(80,61,59,0.33) 24%, rgba(101,72,64,0.40) 28%, rgba(80,61,59,0.33) 31%, rgba(93,68,62,0.37) 34%, rgba(125,85,70,0.49) 38%, rgba(162,104,78,0.63) 41%, rgba(168,108,80,0.65) 45%, rgba(167,107,80,0.65) 48%, rgba(186,117,84,0.71) 52%, rgba(171,109,80,0.66) 55%, rgba(168,108,80,0.65) 59%, rgba(141,93,73,0.55) 62%, rgba(129,87,71,0.51) 66%, rgba(95,69,63,0.38) 69%, rgba(90,66,61,0.36) 72%, rgba(102,73,64,0.41) 76%, rgba(82,62,59,0.33) 79%, rgba(84,63,60,0.34) 83%, rgba(92,67,62,0.37) 86%, rgba(83,63,60,0.34) 90%, rgba(90,66,61,0.37) 93%, rgba(97,70,63,0.39) 97%, rgba(92,67,62,0.37) 100%);" aria-label="repeat density"></div>
+            <div class="ga-co-track ga-co-co"     style="background: linear-gradient(90deg, rgba(141,76,93,0.63) 0%, rgba(119,68,83,0.53) 3%, rgba(123,69,85,0.55) 7%, rgba(130,72,88,0.58) 10%, rgba(106,63,78,0.47) 14%, rgba(120,68,84,0.54) 17%, rgba(143,77,94,0.64) 21%, rgba(135,74,90,0.60) 24%, rgba(100,61,76,0.45) 28%, rgba(91,58,72,0.41) 31%, rgba(85,56,69,0.38) 34%, rgba(115,66,82,0.51) 38%, rgba(79,54,67,0.36) 41%, rgba(59,46,58,0.26) 45%, rgba(41,40,50,0.19) 48%, rgba(74,52,64,0.33) 52%, rgba(85,56,69,0.38) 55%, rgba(91,58,72,0.41) 59%, rgba(113,66,81,0.51) 62%, rgba(102,62,76,0.46) 66%, rgba(100,61,75,0.45) 69%, rgba(85,56,69,0.38) 72%, rgba(120,68,84,0.54) 76%, rgba(99,61,75,0.44) 79%, rgba(102,62,76,0.46) 83%, rgba(111,65,80,0.50) 86%, rgba(132,73,89,0.59) 90%, rgba(144,77,94,0.64) 93%, rgba(159,82,101,0.71) 97%, rgba(155,81,99,0.69) 100%);"     aria-label="CO density"></div>
+          </div>
+          <div class="ga-co-meta">
+            <span class="ga-num">38.9 Mb</span>
+            <span class="ga-co-t2t">—</span>
+          </div>
+        </div>
+        <div class="ga-co-row" data-chrom="LG03">
+          <div class="ga-co-name">LG03</div>
+          <div class="ga-co-stack" style="width: 90.0%;">
+            <div class="ga-co-track ga-co-base">
+              <span class="ga-co-tel ga-tel-yes">▶</span>
+              <div class="ga-co-centromere" style="left: 55%;"></div>
+              <span class="ga-co-tel ga-tel-yes">◀</span>
+            </div>
+            <div class="ga-co-track ga-co-gene"   style="background: linear-gradient(90deg, rgba(223,125,101,0.71) 0%, rgba(207,117,96,0.66) 3%, rgba(195,112,93,0.63) 7%, rgba(196,112,93,0.63) 10%, rgba(186,108,91,0.60) 14%, rgba(186,108,90,0.60) 17%, rgba(190,109,91,0.61) 21%, rgba(171,101,86,0.56) 24%, rgba(165,98,85,0.54) 28%, rgba(141,87,78,0.47) 31%, rgba(140,86,78,0.47) 34%, rgba(124,79,73,0.42) 38%, rgba(144,88,79,0.48) 41%, rgba(137,85,77,0.46) 45%, rgba(129,81,74,0.44) 48%, rgba(103,69,67,0.36) 52%, rgba(130,82,75,0.44) 55%, rgba(134,83,76,0.45) 59%, rgba(138,85,77,0.46) 62%, rgba(147,89,79,0.49) 66%, rgba(145,89,79,0.48) 69%, rgba(164,97,84,0.54) 72%, rgba(173,102,87,0.56) 76%, rgba(179,105,89,0.58) 79%, rgba(182,106,89,0.59) 83%, rgba(180,105,89,0.58) 86%, rgba(203,116,95,0.65) 90%, rgba(194,111,93,0.63) 93%, rgba(198,113,94,0.64) 97%, rgba(230,128,103,0.73) 100%);"   aria-label="gene density"></div>
+            <div class="ga-co-track ga-co-repeat" style="background: linear-gradient(90deg, rgba(101,72,64,0.40) 0%, rgba(99,71,64,0.40) 3%, rgba(89,66,61,0.36) 7%, rgba(81,62,59,0.33) 10%, rgba(81,62,59,0.33) 14%, rgba(87,65,61,0.35) 17%, rgba(98,71,63,0.39) 21%, rgba(94,68,62,0.38) 24%, rgba(92,67,62,0.37) 28%, rgba(89,66,61,0.36) 31%, rgba(85,64,60,0.35) 34%, rgba(99,71,64,0.40) 38%, rgba(88,65,61,0.36) 41%, rgba(112,78,66,0.44) 45%, rgba(152,99,76,0.59) 48%, rgba(170,109,80,0.66) 52%, rgba(165,106,79,0.64) 55%, rgba(167,107,80,0.65) 59%, rgba(172,109,81,0.66) 62%, rgba(169,108,80,0.65) 66%, rgba(144,95,74,0.56) 69%, rgba(148,97,75,0.58) 72%, rgba(119,81,68,0.47) 76%, rgba(82,62,59,0.33) 79%, rgba(88,65,61,0.36) 83%, rgba(84,63,60,0.34) 86%, rgba(89,66,61,0.36) 90%, rgba(90,66,61,0.36) 93%, rgba(82,62,59,0.33) 97%, rgba(86,64,61,0.35) 100%);" aria-label="repeat density"></div>
+            <div class="ga-co-track ga-co-co"     style="background: linear-gradient(90deg, rgba(134,73,90,0.60) 0%, rgba(129,72,88,0.58) 3%, rgba(134,73,90,0.60) 7%, rgba(117,67,83,0.52) 10%, rgba(140,75,93,0.62) 14%, rgba(123,69,85,0.55) 17%, rgba(113,66,81,0.51) 21%, rgba(92,58,72,0.41) 24%, rgba(102,62,76,0.46) 28%, rgba(110,65,80,0.49) 31%, rgba(73,52,64,0.33) 34%, rgba(87,56,70,0.39) 38%, rgba(86,56,69,0.38) 41%, rgba(85,56,69,0.38) 45%, rgba(40,40,50,0.18) 48%, rgba(40,40,50,0.18) 52%, rgba(96,60,74,0.43) 55%, rgba(97,60,74,0.43) 59%, rgba(77,53,66,0.35) 62%, rgba(95,59,73,0.42) 66%, rgba(82,55,68,0.37) 69%, rgba(121,68,84,0.54) 72%, rgba(128,71,87,0.57) 76%, rgba(135,74,90,0.60) 79%, rgba(148,78,96,0.66) 83%, rgba(113,66,81,0.51) 86%, rgba(158,82,100,0.70) 90%, rgba(131,72,89,0.59) 93%, rgba(126,70,87,0.56) 97%, rgba(144,77,94,0.64) 100%);"     aria-label="CO density"></div>
+          </div>
+          <div class="ga-co-meta">
+            <span class="ga-num">37.1 Mb</span>
+            <span class="ga-co-t2t ga-t2t-yes">T2T</span>
+          </div>
+        </div>
+        <div class="ga-co-row" data-chrom="LG04">
+          <div class="ga-co-name">LG04</div>
+          <div class="ga-co-stack" style="width: 88.3%;">
+            <div class="ga-co-track ga-co-base">
+              <span class="ga-co-tel">○</span>
+              <div class="ga-co-centromere" style="left: 47%;"></div>
+              <span class="ga-co-tel ga-tel-yes">◀</span>
+            </div>
+            <div class="ga-co-track ga-co-gene"   style="background: linear-gradient(90deg, rgba(224,125,101,0.71) 0%, rgba(209,118,97,0.67) 3%, rgba(218,122,99,0.69) 7%, rgba(212,120,98,0.68) 10%, rgba(178,104,88,0.58) 14%, rgba(199,114,94,0.64) 17%, rgba(167,99,85,0.55) 21%, rgba(175,102,87,0.57) 24%, rgba(151,92,81,0.50) 28%, rgba(168,99,85,0.55) 31%, rgba(140,86,77,0.47) 34%, rgba(152,92,81,0.50) 38%, rgba(143,88,78,0.48) 41%, rgba(121,78,72,0.42) 45%, rgba(102,68,67,0.36) 48%, rgba(112,73,70,0.39) 52%, rgba(119,76,72,0.41) 55%, rgba(122,78,73,0.42) 59%, rgba(124,79,73,0.42) 62%, rgba(131,82,75,0.44) 66%, rgba(154,93,82,0.51) 69%, rgba(173,102,87,0.56) 72%, rgba(178,104,88,0.58) 76%, rgba(162,96,84,0.53) 79%, rgba(198,113,94,0.64) 83%, rgba(185,107,90,0.60) 86%, rgba(195,112,93,0.63) 90%, rgba(188,108,91,0.61) 93%, rgba(208,118,96,0.67) 97%, rgba(225,126,101,0.72) 100%);"   aria-label="gene density"></div>
+            <div class="ga-co-track ga-co-repeat" style="background: linear-gradient(90deg, rgba(80,61,59,0.33) 0%, rgba(86,64,61,0.35) 3%, rgba(91,67,62,0.37) 7%, rgba(95,69,63,0.38) 10%, rgba(88,65,61,0.36) 14%, rgba(99,71,64,0.40) 17%, rgba(97,70,63,0.39) 21%, rgba(80,61,59,0.33) 24%, rgba(90,66,61,0.37) 28%, rgba(99,71,64,0.40) 31%, rgba(93,68,62,0.38) 34%, rgba(89,66,61,0.36) 38%, rgba(90,66,61,0.36) 41%, rgba(132,88,71,0.52) 45%, rgba(153,100,76,0.60) 48%, rgba(168,108,80,0.65) 52%, rgba(165,106,79,0.64) 55%, rgba(185,117,84,0.71) 59%, rgba(177,112,82,0.68) 62%, rgba(172,110,81,0.66) 66%, rgba(152,99,76,0.59) 69%, rgba(133,89,72,0.52) 72%, rgba(97,70,63,0.39) 76%, rgba(90,66,61,0.36) 79%, rgba(83,63,60,0.34) 83%, rgba(88,65,61,0.36) 86%, rgba(102,73,64,0.41) 90%, rgba(97,70,63,0.39) 93%, rgba(98,70,63,0.39) 97%, rgba(91,67,62,0.37) 100%);" aria-label="repeat density"></div>
+            <div class="ga-co-track ga-co-co"     style="background: linear-gradient(90deg, rgba(169,86,105,0.75) 0%, rgba(156,81,100,0.70) 3%, rgba(127,71,87,0.57) 7%, rgba(152,80,98,0.68) 10%, rgba(124,70,86,0.55) 14%, rgba(103,62,77,0.46) 17%, rgba(117,67,83,0.53) 21%, rgba(123,69,85,0.55) 24%, rgba(100,61,75,0.45) 28%, rgba(107,64,79,0.48) 31%, rgba(103,62,77,0.46) 34%, rgba(105,63,78,0.47) 38%, rgba(81,54,67,0.36) 41%, rgba(63,48,60,0.29) 45%, rgba(63,48,59,0.28) 48%, rgba(46,42,52,0.21) 52%, rgba(71,51,63,0.32) 55%, rgba(86,56,69,0.38) 59%, rgba(71,51,63,0.32) 62%, rgba(109,64,79,0.49) 66%, rgba(101,61,76,0.45) 69%, rgba(116,67,82,0.52) 72%, rgba(88,57,70,0.40) 76%, rgba(122,69,85,0.54) 79%, rgba(112,66,81,0.50) 83%, rgba(112,66,81,0.50) 86%, rgba(135,74,90,0.60) 90%, rgba(143,77,94,0.64) 93%, rgba(129,71,88,0.58) 97%, rgba(131,72,89,0.58) 100%);"     aria-label="CO density"></div>
+          </div>
+          <div class="ga-co-meta">
+            <span class="ga-num">36.4 Mb</span>
+            <span class="ga-co-t2t">—</span>
+          </div>
+        </div>
+        <div class="ga-co-row" data-chrom="LG05">
+          <div class="ga-co-name">LG05</div>
+          <div class="ga-co-stack" style="width: 87.2%;">
+            <div class="ga-co-track ga-co-base">
+              <span class="ga-co-tel ga-tel-yes">▶</span>
+              <div class="ga-co-centromere" style="left: 53%;"></div>
+              <span class="ga-co-tel ga-tel-yes">◀</span>
+            </div>
+            <div class="ga-co-track ga-co-gene"   style="background: linear-gradient(90deg, rgba(225,126,101,0.71) 0%, rgba(227,127,102,0.72) 3%, rgba(198,113,94,0.64) 7%, rgba(197,113,94,0.63) 10%, rgba(202,115,95,0.65) 14%, rgba(183,106,89,0.59) 17%, rgba(169,100,86,0.55) 21%, rgba(175,103,87,0.57) 24%, rgba(160,96,83,0.53) 28%, rgba(148,90,80,0.49) 31%, rgba(139,86,77,0.47) 34%, rgba(146,89,79,0.49) 38%, rgba(134,83,76,0.45) 41%, rgba(140,86,77,0.47) 45%, rgba(126,80,74,0.43) 48%, rgba(130,81,75,0.44) 52%, rgba(110,72,69,0.38) 55%, rgba(138,85,77,0.46) 59%, rgba(128,81,74,0.43) 62%, rgba(143,88,78,0.48) 66%, rgba(155,93,82,0.51) 69%, rgba(165,98,85,0.54) 72%, rgba(157,94,82,0.52) 76%, rgba(162,97,84,0.53) 79%, rgba(177,103,88,0.58) 83%, rgba(190,109,91,0.61) 86%, rgba(187,108,91,0.61) 90%, rgba(220,123,100,0.70) 93%, rgba(213,120,98,0.68) 97%, rgba(202,115,95,0.65) 100%);"   aria-label="gene density"></div>
+            <div class="ga-co-track ga-co-repeat" style="background: linear-gradient(90deg, rgba(94,68,62,0.38) 0%, rgba(92,67,62,0.37) 3%, rgba(102,72,64,0.41) 7%, rgba(87,65,61,0.35) 10%, rgba(97,70,63,0.39) 14%, rgba(79,60,59,0.32) 17%, rgba(85,64,60,0.35) 21%, rgba(97,70,63,0.39) 24%, rgba(99,71,63,0.40) 28%, rgba(84,63,60,0.34) 31%, rgba(82,62,60,0.34) 34%, rgba(108,76,66,0.43) 38%, rgba(125,85,70,0.49) 41%, rgba(162,105,78,0.63) 45%, rgba(175,111,81,0.67) 48%, rgba(180,114,83,0.69) 52%, rgba(185,116,84,0.71) 55%, rgba(162,104,78,0.63) 59%, rgba(170,109,80,0.66) 62%, rgba(138,91,73,0.54) 66%, rgba(136,91,72,0.53) 69%, rgba(102,73,64,0.41) 72%, rgba(79,60,59,0.32) 76%, rgba(96,69,63,0.39) 79%, rgba(96,70,63,0.39) 83%, rgba(101,72,64,0.40) 86%, rgba(80,61,59,0.33) 90%, rgba(83,63,60,0.34) 93%, rgba(83,63,60,0.34) 97%, rgba(82,62,59,0.33) 100%);" aria-label="repeat density"></div>
+            <div class="ga-co-track ga-co-co"     style="background: linear-gradient(90deg, rgba(158,82,100,0.71) 0%, rgba(121,69,84,0.54) 3%, rgba(142,76,94,0.64) 7%, rgba(143,77,94,0.64) 10%, rgba(115,66,82,0.51) 14%, rgba(102,62,76,0.46) 17%, rgba(133,73,90,0.59) 21%, rgba(137,74,91,0.61) 24%, rgba(111,65,80,0.50) 28%, rgba(125,70,86,0.56) 31%, rgba(117,67,83,0.52) 34%, rgba(99,61,75,0.44) 38%, rgba(100,61,75,0.45) 41%, rgba(86,56,69,0.39) 45%, rgba(55,45,56,0.25) 48%, rgba(43,41,51,0.20) 52%, rgba(71,51,63,0.32) 55%, rgba(99,61,75,0.44) 59%, rgba(97,60,74,0.44) 62%, rgba(76,53,65,0.34) 66%, rgba(105,63,77,0.47) 69%, rgba(123,69,85,0.55) 72%, rgba(130,72,88,0.58) 76%, rgba(115,66,82,0.51) 79%, rgba(108,64,79,0.48) 83%, rgba(111,65,80,0.50) 86%, rgba(133,73,90,0.59) 90%, rgba(156,81,99,0.69) 93%, rgba(148,78,96,0.66) 97%, rgba(169,86,105,0.76) 100%);"     aria-label="CO density"></div>
+          </div>
+          <div class="ga-co-meta">
+            <span class="ga-num">36.0 Mb</span>
+            <span class="ga-co-t2t ga-t2t-yes">T2T</span>
+          </div>
+        </div>
+        <div class="ga-co-row" data-chrom="LG06">
+          <div class="ga-co-name">LG06</div>
+          <div class="ga-co-stack" style="width: 85.1%;">
+            <div class="ga-co-track ga-co-base">
+              <span class="ga-co-tel ga-tel-yes">▶</span>
+              <div class="ga-co-centromere" style="left: 41%;"></div>
+              <span class="ga-co-tel ga-tel-yes">◀</span>
+            </div>
+            <div class="ga-co-track ga-co-gene"   style="background: linear-gradient(90deg, rgba(231,129,103,0.73) 0%, rgba(199,114,94,0.64) 3%, rgba(220,123,100,0.70) 7%, rgba(184,107,90,0.60) 10%, rgba(188,109,91,0.61) 14%, rgba(197,113,93,0.63) 17%, rgba(190,109,91,0.61) 21%, rgba(174,102,87,0.57) 24%, rgba(154,93,81,0.51) 28%, rgba(153,92,81,0.51) 31%, rgba(154,93,82,0.51) 34%, rgba(124,79,73,0.42) 38%, rgba(130,81,75,0.44) 41%, rgba(130,82,75,0.44) 45%, rgba(105,70,68,0.37) 48%, rgba(129,81,74,0.44) 52%, rgba(139,86,77,0.47) 55%, rgba(140,86,78,0.47) 59%, rgba(133,83,76,0.45) 62%, rgba(156,94,82,0.52) 66%, rgba(140,86,78,0.47) 69%, rgba(148,90,80,0.49) 72%, rgba(165,98,85,0.54) 76%, rgba(163,97,84,0.54) 79%, rgba(168,99,85,0.55) 83%, rgba(192,111,92,0.62) 86%, rgba(212,120,98,0.68) 90%, rgba(197,113,93,0.63) 93%, rgba(207,117,96,0.66) 97%, rgba(216,122,99,0.69) 100%);"   aria-label="gene density"></div>
+            <div class="ga-co-track ga-co-repeat" style="background: linear-gradient(90deg, rgba(92,68,62,0.37) 0%, rgba(84,63,60,0.34) 3%, rgba(94,69,62,0.38) 7%, rgba(100,72,64,0.40) 10%, rgba(86,64,60,0.35) 14%, rgba(101,72,64,0.41) 17%, rgba(96,69,63,0.39) 21%, rgba(88,65,61,0.36) 24%, rgba(106,74,65,0.42) 28%, rgba(141,93,73,0.55) 31%, rgba(139,92,73,0.54) 34%, rgba(155,101,77,0.60) 38%, rgba(183,116,83,0.70) 41%, rgba(175,111,81,0.67) 45%, rgba(169,108,80,0.65) 48%, rgba(151,99,76,0.59) 52%, rgba(159,103,78,0.62) 55%, rgba(136,90,72,0.53) 59%, rgba(103,73,64,0.41) 62%, rgba(87,65,61,0.35) 66%, rgba(87,65,61,0.35) 69%, rgba(96,70,63,0.39) 72%, rgba(90,66,61,0.36) 76%, rgba(79,60,59,0.32) 79%, rgba(82,62,60,0.34) 83%, rgba(84,63,60,0.34) 86%, rgba(97,70,63,0.39) 90%, rgba(98,71,63,0.39) 93%, rgba(87,65,61,0.35) 97%, rgba(94,68,62,0.38) 100%);" aria-label="repeat density"></div>
+            <div class="ga-co-track ga-co-co"     style="background: linear-gradient(90deg, rgba(154,80,99,0.69) 0%, rgba(140,75,92,0.62) 3%, rgba(126,70,87,0.56) 7%, rgba(112,65,81,0.50) 10%, rgba(127,71,87,0.57) 14%, rgba(127,71,87,0.57) 17%, rgba(97,60,74,0.44) 21%, rgba(137,74,91,0.61) 24%, rgba(86,56,69,0.38) 28%, rgba(109,64,79,0.49) 31%, rgba(97,60,74,0.43) 34%, rgba(92,58,72,0.41) 38%, rgba(88,57,70,0.39) 41%, rgba(67,49,61,0.30) 45%, rgba(40,40,50,0.18) 48%, rgba(66,49,61,0.30) 52%, rgba(61,47,59,0.27) 55%, rgba(110,65,80,0.49) 59%, rgba(103,62,77,0.46) 62%, rgba(118,68,83,0.53) 66%, rgba(87,57,70,0.39) 69%, rgba(133,73,89,0.59) 72%, rgba(137,74,91,0.61) 76%, rgba(136,74,91,0.61) 79%, rgba(137,74,91,0.61) 83%, rgba(127,71,87,0.57) 86%, rgba(153,80,98,0.68) 90%, rgba(122,69,85,0.54) 93%, rgba(132,73,89,0.59) 97%, rgba(143,77,94,0.64) 100%);"     aria-label="CO density"></div>
+          </div>
+          <div class="ga-co-meta">
+            <span class="ga-num">35.1 Mb</span>
+            <span class="ga-co-t2t ga-t2t-yes">T2T</span>
+          </div>
+        </div>
+        <div class="ga-co-row" data-chrom="LG07">
+          <div class="ga-co-name">LG07</div>
+          <div class="ga-co-stack" style="width: 84.4%;">
+            <div class="ga-co-track ga-co-base">
+              <span class="ga-co-tel ga-tel-yes">▶</span>
+              <div class="ga-co-centromere" style="left: 59%;"></div>
+              <span class="ga-co-tel ga-tel-yes">◀</span>
+            </div>
+            <div class="ga-co-track ga-co-gene"   style="background: linear-gradient(90deg, rgba(226,126,101,0.72) 0%, rgba(198,113,94,0.64) 3%, rgba(190,109,91,0.61) 7%, rgba(193,111,92,0.62) 10%, rgba(191,110,92,0.62) 14%, rgba(192,111,92,0.62) 17%, rgba(176,103,87,0.57) 21%, rgba(180,105,89,0.58) 24%, rgba(178,104,88,0.58) 28%, rgba(160,96,83,0.53) 31%, rgba(133,83,75,0.45) 34%, rgba(130,81,75,0.44) 38%, rgba(137,85,77,0.46) 41%, rgba(113,74,70,0.39) 45%, rgba(116,75,71,0.40) 48%, rgba(135,84,76,0.46) 52%, rgba(130,82,75,0.44) 55%, rgba(121,78,72,0.42) 59%, rgba(156,94,82,0.52) 62%, rgba(140,86,78,0.47) 66%, rgba(167,99,85,0.55) 69%, rgba(179,104,88,0.58) 72%, rgba(168,99,85,0.55) 76%, rgba(177,104,88,0.58) 79%, rgba(195,112,93,0.63) 83%, rgba(197,113,93,0.63) 86%, rgba(181,105,89,0.59) 90%, rgba(195,112,93,0.63) 93%, rgba(218,123,99,0.70) 97%, rgba(230,128,103,0.73) 100%);"   aria-label="gene density"></div>
+            <div class="ga-co-track ga-co-repeat" style="background: linear-gradient(90deg, rgba(98,70,63,0.39) 0%, rgba(87,64,61,0.35) 3%, rgba(97,70,63,0.39) 7%, rgba(91,67,62,0.37) 10%, rgba(88,65,61,0.36) 14%, rgba(99,71,63,0.40) 17%, rgba(96,69,63,0.39) 21%, rgba(82,62,59,0.33) 24%, rgba(96,69,63,0.38) 28%, rgba(99,71,63,0.40) 31%, rgba(112,78,67,0.45) 34%, rgba(133,89,71,0.52) 38%, rgba(161,104,78,0.62) 41%, rgba(171,109,80,0.66) 45%, rgba(165,106,79,0.64) 48%, rgba(173,110,81,0.67) 52%, rgba(166,106,79,0.64) 55%, rgba(172,110,81,0.66) 59%, rgba(140,93,73,0.55) 62%, rgba(127,86,70,0.50) 66%, rgba(99,71,64,0.40) 69%, rgba(96,69,63,0.39) 72%, rgba(98,70,63,0.39) 76%, rgba(80,61,59,0.33) 79%, rgba(83,62,60,0.34) 83%, rgba(90,66,61,0.36) 86%, rgba(89,66,61,0.36) 90%, rgba(99,71,63,0.40) 93%, rgba(84,63,60,0.34) 97%, rgba(95,69,62,0.38) 100%);" aria-label="repeat density"></div>
+            <div class="ga-co-track ga-co-co"     style="background: linear-gradient(90deg, rgba(155,81,99,0.69) 0%, rgba(129,71,88,0.57) 3%, rgba(135,74,91,0.60) 7%, rgba(125,70,86,0.56) 10%, rgba(114,66,81,0.51) 14%, rgba(131,72,89,0.59) 17%, rgba(106,63,78,0.48) 21%, rgba(130,72,88,0.58) 24%, rgba(85,56,69,0.38) 28%, rgba(121,69,84,0.54) 31%, rgba(94,59,73,0.42) 34%, rgba(95,59,73,0.42) 38%, rgba(106,63,78,0.48) 41%, rgba(72,51,64,0.32) 45%, rgba(69,50,62,0.31) 48%, rgba(68,50,62,0.31) 52%, rgba(71,51,63,0.32) 55%, rgba(79,54,66,0.35) 59%, rgba(118,67,83,0.53) 62%, rgba(108,64,79,0.48) 66%, rgba(96,60,74,0.43) 69%, rgba(84,56,69,0.38) 72%, rgba(88,57,70,0.40) 76%, rgba(97,60,74,0.43) 79%, rgba(143,76,94,0.64) 83%, rgba(115,66,82,0.51) 86%, rgba(110,65,80,0.49) 90%, rgba(151,79,97,0.68) 93%, rgba(152,80,98,0.68) 97%, rgba(127,71,87,0.57) 100%);"     aria-label="CO density"></div>
+          </div>
+          <div class="ga-co-meta">
+            <span class="ga-num">34.8 Mb</span>
+            <span class="ga-co-t2t ga-t2t-yes">T2T</span>
+          </div>
+        </div>
+        <div class="ga-co-row" data-chrom="LG08">
+          <div class="ga-co-name">LG08</div>
+          <div class="ga-co-stack" style="width: 81.1%;">
+            <div class="ga-co-track ga-co-base">
+              <span class="ga-co-tel ga-tel-yes">▶</span>
+              <div class="ga-co-centromere ga-co-cen-uncertain" style="left: 53%;"></div>
+              <span class="ga-co-tel ga-tel-yes">◀</span>
+            </div>
+            <div class="ga-co-track ga-co-gene"   style="background: linear-gradient(90deg, rgba(204,116,95,0.65) 0%, rgba(223,125,101,0.71) 3%, rgba(202,115,95,0.65) 7%, rgba(188,108,91,0.61) 10%, rgba(175,102,87,0.57) 14%, rgba(176,103,88,0.57) 17%, rgba(192,110,92,0.62) 21%, rgba(156,94,82,0.52) 24%, rgba(178,104,88,0.58) 28%, rgba(168,99,85,0.55) 31%, rgba(149,90,80,0.49) 34%, rgba(139,86,77,0.47) 38%, rgba(140,86,77,0.47) 41%, rgba(140,86,78,0.47) 45%, rgba(125,79,73,0.43) 48%, rgba(117,76,71,0.40) 52%, rgba(125,79,73,0.43) 55%, rgba(145,89,79,0.49) 59%, rgba(140,86,78,0.47) 62%, rgba(151,91,81,0.50) 66%, rgba(168,99,85,0.55) 69%, rgba(170,100,86,0.56) 72%, rgba(153,92,81,0.51) 76%, rgba(191,110,92,0.62) 79%, rgba(168,99,85,0.55) 83%, rgba(183,106,89,0.59) 86%, rgba(188,109,91,0.61) 90%, rgba(215,121,98,0.69) 93%, rgba(211,119,97,0.67) 97%, rgba(222,124,100,0.71) 100%);"   aria-label="gene density"></div>
+            <div class="ga-co-track ga-co-repeat" style="background: linear-gradient(90deg, rgba(81,61,59,0.33) 0%, rgba(80,61,59,0.33) 3%, rgba(84,63,60,0.34) 7%, rgba(86,64,60,0.35) 10%, rgba(86,64,60,0.35) 14%, rgba(98,71,63,0.40) 17%, rgba(89,66,61,0.36) 21%, rgba(86,64,60,0.35) 24%, rgba(128,86,70,0.50) 28%, rgba(138,92,73,0.54) 31%, rgba(163,105,79,0.63) 34%, rgba(171,109,80,0.66) 38%, rgba(169,108,80,0.65) 41%, rgba(181,114,83,0.69) 45%, rgba(172,110,81,0.66) 48%, rgba(162,105,78,0.63) 52%, rgba(136,90,72,0.53) 55%, rgba(105,74,65,0.42) 59%, rgba(97,70,63,0.39) 62%, rgba(92,67,62,0.37) 66%, rgba(82,62,59,0.33) 69%, rgba(99,71,63,0.40) 72%, rgba(86,64,60,0.35) 76%, rgba(102,73,64,0.41) 79%, rgba(98,70,63,0.39) 83%, rgba(91,67,62,0.37) 86%, rgba(100,71,64,0.40) 90%, rgba(100,71,64,0.40) 93%, rgba(90,66,61,0.36) 97%, rgba(93,68,62,0.37) 100%);" aria-label="repeat density"></div>
+            <div class="ga-co-track ga-co-co"     style="background: linear-gradient(90deg, rgba(129,71,88,0.57) 0%, rgba(120,68,84,0.54) 3%, rgba(154,81,99,0.69) 7%, rgba(128,71,87,0.57) 10%, rgba(109,64,79,0.49) 14%, rgba(130,72,88,0.58) 17%, rgba(140,75,93,0.63) 21%, rgba(135,74,91,0.60) 24%, rgba(126,70,87,0.56) 28%, rgba(105,63,78,0.47) 31%, rgba(93,59,73,0.42) 34%, rgba(93,58,72,0.42) 38%, rgba(67,49,61,0.30) 41%, rgba(90,58,71,0.40) 45%, rgba(40,40,50,0.18) 48%, rgba(75,52,65,0.34) 52%, rgba(97,60,74,0.43) 55%, rgba(92,58,72,0.41) 59%, rgba(75,52,65,0.34) 62%, rgba(100,61,76,0.45) 66%, rgba(82,55,68,0.37) 69%, rgba(122,69,85,0.55) 72%, rgba(127,71,87,0.57) 76%, rgba(134,73,90,0.60) 79%, rgba(130,72,88,0.58) 83%, rgba(137,74,91,0.61) 86%, rgba(146,77,95,0.65) 90%, rgba(139,75,92,0.62) 93%, rgba(143,76,94,0.64) 97%, rgba(157,82,100,0.70) 100%);"     aria-label="CO density"></div>
+          </div>
+          <div class="ga-co-meta">
+            <span class="ga-num">33.5 Mb</span>
+            <span class="ga-co-t2t">—</span>
+          </div>
+        </div>
+        <div class="ga-co-row" data-chrom="LG09">
+          <div class="ga-co-name">LG09</div>
+          <div class="ga-co-stack" style="width: 79.7%;">
+            <div class="ga-co-track ga-co-base">
+              <span class="ga-co-tel ga-tel-yes">▶</span>
+              <div class="ga-co-centromere" style="left: 47%;"></div>
+              <span class="ga-co-tel">○</span>
+            </div>
+            <div class="ga-co-track ga-co-gene"   style="background: linear-gradient(90deg, rgba(211,119,97,0.67) 0%, rgba(203,115,95,0.65) 3%, rgba(188,109,91,0.61) 7%, rgba(198,113,94,0.64) 10%, rgba(174,102,87,0.57) 14%, rgba(176,103,88,0.57) 17%, rgba(165,98,85,0.54) 21%, rgba(165,98,84,0.54) 24%, rgba(148,90,80,0.49) 28%, rgba(164,97,84,0.54) 31%, rgba(134,83,76,0.45) 34%, rgba(157,94,82,0.52) 38%, rgba(118,76,71,0.41) 41%, rgba(128,81,74,0.44) 45%, rgba(117,75,71,0.40) 48%, rgba(116,75,71,0.40) 52%, rgba(136,85,77,0.46) 55%, rgba(133,83,76,0.45) 59%, rgba(142,87,78,0.48) 62%, rgba(150,91,80,0.50) 66%, rgba(169,100,86,0.55) 69%, rgba(148,90,80,0.49) 72%, rgba(179,104,88,0.58) 76%, rgba(179,104,88,0.58) 79%, rgba(198,113,94,0.64) 83%, rgba(197,113,93,0.63) 86%, rgba(187,108,91,0.61) 90%, rgba(191,110,92,0.62) 93%, rgba(196,112,93,0.63) 97%, rgba(233,129,103,0.74) 100%);"   aria-label="gene density"></div>
+            <div class="ga-co-track ga-co-repeat" style="background: linear-gradient(90deg, rgba(95,69,62,0.38) 0%, rgba(81,62,59,0.33) 3%, rgba(80,61,59,0.33) 7%, rgba(87,65,61,0.35) 10%, rgba(79,61,59,0.33) 14%, rgba(86,64,60,0.35) 17%, rgba(86,64,60,0.35) 21%, rgba(88,65,61,0.36) 24%, rgba(79,61,59,0.33) 28%, rgba(101,72,64,0.41) 31%, rgba(82,62,59,0.33) 34%, rgba(84,63,60,0.34) 38%, rgba(113,79,67,0.45) 41%, rgba(137,91,73,0.54) 45%, rgba(150,98,76,0.58) 48%, rgba(176,112,82,0.68) 52%, rgba(174,111,81,0.67) 55%, rgba(175,111,81,0.67) 59%, rgba(169,108,80,0.65) 62%, rgba(166,106,79,0.64) 66%, rgba(146,96,74,0.57) 69%, rgba(108,76,66,0.43) 72%, rgba(82,62,60,0.34) 76%, rgba(86,64,60,0.35) 79%, rgba(80,61,59,0.33) 83%, rgba(88,65,61,0.36) 86%, rgba(84,63,60,0.34) 90%, rgba(85,63,60,0.34) 93%, rgba(101,72,64,0.40) 97%, rgba(90,66,61,0.36) 100%);" aria-label="repeat density"></div>
+            <div class="ga-co-track ga-co-co"     style="background: linear-gradient(90deg, rgba(138,75,92,0.62) 0%, rgba(141,76,93,0.63) 3%, rgba(159,82,101,0.71) 7%, rgba(126,71,87,0.57) 10%, rgba(114,66,81,0.51) 14%, rgba(122,69,85,0.54) 17%, rgba(136,74,91,0.61) 21%, rgba(122,69,85,0.55) 24%, rgba(126,70,87,0.56) 28%, rgba(110,65,80,0.49) 31%, rgba(105,63,77,0.47) 34%, rgba(82,55,68,0.37) 38%, rgba(82,55,68,0.37) 41%, rgba(103,62,77,0.46) 45%, rgba(56,45,57,0.25) 48%, rgba(40,40,50,0.18) 52%, rgba(100,61,75,0.45) 55%, rgba(111,65,80,0.50) 59%, rgba(81,54,67,0.36) 62%, rgba(73,51,64,0.33) 66%, rgba(110,65,80,0.49) 69%, rgba(101,61,76,0.45) 72%, rgba(124,70,86,0.56) 76%, rgba(99,61,75,0.44) 79%, rgba(131,72,89,0.59) 83%, rgba(143,76,94,0.64) 86%, rgba(126,70,87,0.56) 90%, rgba(157,82,100,0.70) 93%, rgba(139,75,92,0.62) 97%, rgba(131,72,89,0.58) 100%);"     aria-label="CO density"></div>
+          </div>
+          <div class="ga-co-meta">
+            <span class="ga-num">32.9 Mb</span>
+            <span class="ga-co-t2t">—</span>
+          </div>
+        </div>
+        <div class="ga-co-row" data-chrom="LG10">
+          <div class="ga-co-name">LG10</div>
+          <div class="ga-co-stack" style="width: 77.6%;">
+            <div class="ga-co-track ga-co-base">
+              <span class="ga-co-tel ga-tel-yes">▶</span>
+              <div class="ga-co-centromere" style="left: 51%;"></div>
+              <span class="ga-co-tel ga-tel-yes">◀</span>
+            </div>
+            <div class="ga-co-track ga-co-gene"   style="background: linear-gradient(90deg, rgba(210,119,97,0.67) 0%, rgba(195,112,93,0.63) 3%, rgba(188,109,91,0.61) 7%, rgba(192,110,92,0.62) 10%, rgba(181,105,89,0.59) 14%, rgba(192,110,92,0.62) 17%, rgba(167,99,85,0.55) 21%, rgba(169,100,86,0.55) 24%, rgba(160,95,83,0.53) 28%, rgba(159,95,83,0.52) 31%, rgba(143,88,78,0.48) 34%, rgba(157,94,82,0.52) 38%, rgba(135,84,76,0.45) 41%, rgba(125,79,73,0.43) 45%, rgba(102,68,67,0.36) 48%, rgba(122,78,72,0.42) 52%, rgba(113,74,70,0.39) 55%, rgba(133,83,76,0.45) 59%, rgba(141,87,78,0.47) 62%, rgba(154,93,81,0.51) 66%, rgba(158,94,82,0.52) 69%, rgba(171,101,86,0.56) 72%, rgba(155,93,82,0.51) 76%, rgba(186,108,90,0.60) 79%, rgba(179,105,89,0.58) 83%, rgba(185,107,90,0.60) 86%, rgba(207,117,96,0.66) 90%, rgba(200,114,94,0.64) 93%, rgba(204,116,96,0.66) 97%, rgba(212,120,98,0.68) 100%);"   aria-label="gene density"></div>
+            <div class="ga-co-track ga-co-repeat" style="background: linear-gradient(90deg, rgba(95,69,62,0.38) 0%, rgba(80,61,59,0.33) 3%, rgba(101,72,64,0.40) 7%, rgba(95,69,62,0.38) 10%, rgba(90,66,61,0.36) 14%, rgba(94,69,62,0.38) 17%, rgba(100,72,64,0.40) 21%, rgba(88,65,61,0.36) 24%, rgba(88,65,61,0.36) 28%, rgba(88,65,61,0.36) 31%, rgba(102,72,64,0.41) 34%, rgba(111,77,66,0.44) 38%, rgba(122,83,69,0.48) 41%, rgba(156,101,77,0.60) 45%, rgba(173,110,81,0.67) 48%, rgba(177,112,82,0.68) 52%, rgba(187,117,84,0.72) 55%, rgba(167,107,80,0.65) 59%, rgba(162,104,78,0.63) 62%, rgba(140,93,73,0.55) 66%, rgba(138,92,73,0.54) 69%, rgba(111,77,66,0.44) 72%, rgba(81,61,59,0.33) 76%, rgba(89,66,61,0.36) 79%, rgba(79,61,59,0.32) 83%, rgba(80,61,59,0.33) 86%, rgba(87,65,61,0.35) 90%, rgba(80,61,59,0.33) 93%, rgba(99,71,64,0.40) 97%, rgba(89,66,61,0.36) 100%);" aria-label="repeat density"></div>
+            <div class="ga-co-track ga-co-co"     style="background: linear-gradient(90deg, rgba(155,81,99,0.69) 0%, rgba(157,81,100,0.70) 3%, rgba(124,70,86,0.55) 7%, rgba(156,81,99,0.70) 10%, rgba(141,76,93,0.63) 14%, rgba(139,75,92,0.62) 17%, rgba(131,72,89,0.59) 21%, rgba(108,64,79,0.48) 24%, rgba(101,61,76,0.45) 28%, rgba(125,70,86,0.56) 31%, rgba(82,55,68,0.37) 34%, rgba(68,50,62,0.31) 38%, rgba(104,63,77,0.47) 41%, rgba(65,49,61,0.29) 45%, rgba(40,40,50,0.18) 48%, rgba(74,52,64,0.33) 52%, rgba(84,55,69,0.38) 55%, rgba(62,48,59,0.28) 59%, rgba(98,61,75,0.44) 62%, rgba(118,68,83,0.53) 66%, rgba(126,71,87,0.56) 69%, rgba(87,57,70,0.39) 72%, rgba(91,58,72,0.41) 76%, rgba(139,75,92,0.62) 79%, rgba(129,72,88,0.58) 83%, rgba(139,75,92,0.62) 86%, rgba(146,77,95,0.65) 90%, rgba(135,74,91,0.60) 93%, rgba(141,76,93,0.63) 97%, rgba(154,80,99,0.69) 100%);"     aria-label="CO density"></div>
+          </div>
+          <div class="ga-co-meta">
+            <span class="ga-num">32.0 Mb</span>
+            <span class="ga-co-t2t ga-t2t-yes">T2T</span>
+          </div>
+        </div>
+        <div class="ga-co-row" data-chrom="LG11">
+          <div class="ga-co-name">LG11</div>
+          <div class="ga-co-stack" style="width: 74.9%;">
+            <div class="ga-co-track ga-co-base">
+              <span class="ga-co-tel">○</span>
+              <div class="ga-co-centromere" style="left: 46%;"></div>
+              <span class="ga-co-tel ga-tel-yes">◀</span>
+            </div>
+            <div class="ga-co-track ga-co-gene"   style="background: linear-gradient(90deg, rgba(202,115,95,0.65) 0%, rgba(215,121,98,0.69) 3%, rgba(196,112,93,0.63) 7%, rgba(186,108,90,0.60) 10%, rgba(192,110,92,0.62) 14%, rgba(193,111,92,0.62) 17%, rgba(178,104,88,0.58) 21%, rgba(167,99,85,0.55) 24%, rgba(149,90,80,0.50) 28%, rgba(169,100,86,0.55) 31%, rgba(142,87,78,0.48) 34%, rgba(146,89,79,0.49) 38%, rgba(124,79,73,0.42) 41%, rgba(128,81,74,0.43) 45%, rgba(128,81,74,0.44) 48%, rgba(134,84,76,0.45) 52%, rgba(129,81,75,0.44) 55%, rgba(141,87,78,0.47) 59%, rgba(143,87,78,0.48) 62%, rgba(153,92,81,0.51) 66%, rgba(148,90,80,0.49) 69%, rgba(154,93,82,0.51) 72%, rgba(159,95,83,0.53) 76%, rgba(175,103,87,0.57) 79%, rgba(197,113,93,0.63) 83%, rgba(198,113,94,0.64) 86%, rgba(213,120,98,0.68) 90%, rgba(202,115,95,0.65) 93%, rgba(213,120,98,0.68) 97%, rgba(235,131,104,0.75) 100%);"   aria-label="gene density"></div>
+            <div class="ga-co-track ga-co-repeat" style="background: linear-gradient(90deg, rgba(98,70,63,0.39) 0%, rgba(94,68,62,0.38) 3%, rgba(82,62,59,0.33) 7%, rgba(95,69,63,0.38) 10%, rgba(93,68,62,0.38) 14%, rgba(94,68,62,0.38) 17%, rgba(102,73,64,0.41) 21%, rgba(92,67,62,0.37) 24%, rgba(100,72,64,0.40) 28%, rgba(97,70,63,0.39) 31%, rgba(83,62,60,0.34) 34%, rgba(94,68,62,0.38) 38%, rgba(125,85,70,0.49) 41%, rgba(148,97,75,0.58) 45%, rgba(163,105,78,0.63) 48%, rgba(165,106,79,0.64) 52%, rgba(187,118,84,0.72) 55%, rgba(182,115,83,0.70) 59%, rgba(171,109,80,0.66) 62%, rgba(145,95,74,0.56) 66%, rgba(119,81,68,0.47) 69%, rgba(102,73,64,0.41) 72%, rgba(81,61,59,0.33) 76%, rgba(89,66,61,0.36) 79%, rgba(99,71,64,0.40) 83%, rgba(84,63,60,0.34) 86%, rgba(94,68,62,0.38) 90%, rgba(94,69,62,0.38) 93%, rgba(91,67,62,0.37) 97%, rgba(95,69,63,0.38) 100%);" aria-label="repeat density"></div>
+            <div class="ga-co-track ga-co-co"     style="background: linear-gradient(90deg, rgba(133,73,90,0.60) 0%, rgba(147,78,96,0.66) 3%, rgba(137,74,91,0.61) 7%, rgba(132,73,89,0.59) 10%, rgba(111,65,80,0.50) 14%, rgba(147,78,96,0.66) 17%, rgba(131,72,89,0.58) 21%, rgba(132,72,89,0.59) 24%, rgba(125,70,86,0.56) 28%, rgba(83,55,68,0.37) 31%, rgba(109,64,79,0.49) 34%, rgba(100,61,75,0.45) 38%, rgba(87,56,70,0.39) 41%, rgba(73,51,64,0.33) 45%, rgba(52,44,55,0.23) 48%, rgba(48,43,53,0.22) 52%, rgba(89,57,71,0.40) 55%, rgba(95,59,73,0.43) 59%, rgba(112,65,81,0.50) 62%, rgba(98,61,75,0.44) 66%, rgba(81,54,67,0.36) 69%, rgba(129,72,88,0.58) 72%, rgba(125,70,86,0.56) 76%, rgba(139,75,92,0.62) 79%, rgba(102,62,76,0.45) 83%, rgba(120,68,84,0.53) 86%, rgba(152,80,98,0.68) 90%, rgba(137,74,91,0.61) 93%, rgba(135,74,91,0.60) 97%, rgba(154,80,99,0.69) 100%);"     aria-label="CO density"></div>
+          </div>
+          <div class="ga-co-meta">
+            <span class="ga-num">30.9 Mb</span>
+            <span class="ga-co-t2t">—</span>
+          </div>
+        </div>
+        <div class="ga-co-row" data-chrom="LG12">
+          <div class="ga-co-name">LG12</div>
+          <div class="ga-co-stack" style="width: 73.0%;">
+            <div class="ga-co-track ga-co-base">
+              <span class="ga-co-tel ga-tel-yes">▶</span>
+              <div class="ga-co-centromere" style="left: 45%;"></div>
+              <span class="ga-co-tel ga-tel-yes">◀</span>
+            </div>
+            <div class="ga-co-track ga-co-gene"   style="background: linear-gradient(90deg, rgba(234,130,104,0.74) 0%, rgba(221,124,100,0.70) 3%, rgba(215,121,99,0.69) 7%, rgba(188,108,91,0.61) 10%, rgba(192,111,92,0.62) 14%, rgba(190,109,91,0.61) 17%, rgba(184,107,90,0.60) 21%, rgba(151,92,81,0.50) 24%, rgba(153,92,81,0.51) 28%, rgba(163,97,84,0.54) 31%, rgba(139,86,77,0.47) 34%, rgba(151,91,80,0.50) 38%, rgba(140,86,77,0.47) 41%, rgba(124,79,73,0.42) 45%, rgba(106,70,68,0.37) 48%, rgba(111,73,69,0.39) 52%, rgba(113,74,70,0.39) 55%, rgba(134,83,76,0.45) 59%, rgba(123,78,73,0.42) 62%, rgba(153,92,81,0.51) 66%, rgba(142,87,78,0.48) 69%, rgba(148,90,80,0.49) 72%, rgba(158,95,83,0.52) 76%, rgba(179,104,88,0.58) 79%, rgba(174,102,87,0.57) 83%, rgba(187,108,91,0.60) 86%, rgba(194,111,93,0.63) 90%, rgba(203,115,95,0.65) 93%, rgba(224,125,101,0.71) 97%, rgba(229,128,102,0.73) 100%);"   aria-label="gene density"></div>
+            <div class="ga-co-track ga-co-repeat" style="background: linear-gradient(90deg, rgba(90,66,61,0.36) 0%, rgba(98,70,63,0.39) 3%, rgba(95,69,63,0.38) 7%, rgba(93,68,62,0.38) 10%, rgba(93,68,62,0.38) 14%, rgba(96,69,63,0.39) 17%, rgba(96,69,63,0.39) 21%, rgba(96,70,63,0.39) 24%, rgba(97,70,63,0.39) 28%, rgba(121,83,69,0.48) 31%, rgba(145,95,74,0.56) 34%, rgba(165,106,79,0.64) 38%, rgba(155,101,77,0.60) 41%, rgba(184,116,83,0.71) 45%, rgba(172,110,81,0.66) 48%, rgba(163,105,79,0.63) 52%, rgba(156,101,77,0.61) 55%, rgba(156,101,77,0.60) 59%, rgba(125,85,70,0.49) 62%, rgba(85,64,60,0.35) 66%, rgba(86,64,60,0.35) 69%, rgba(79,60,59,0.32) 72%, rgba(88,65,61,0.36) 76%, rgba(88,65,61,0.36) 79%, rgba(100,71,64,0.40) 83%, rgba(95,69,62,0.38) 86%, rgba(79,60,59,0.32) 90%, rgba(94,68,62,0.38) 93%, rgba(98,71,63,0.39) 97%, rgba(83,63,60,0.34) 100%);" aria-label="repeat density"></div>
+            <div class="ga-co-track ga-co-co"     style="background: linear-gradient(90deg, rgba(172,87,106,0.77) 0%, rgba(131,72,89,0.59) 3%, rgba(126,71,87,0.56) 7%, rgba(146,78,95,0.65) 10%, rgba(129,71,88,0.58) 14%, rgba(110,65,80,0.49) 17%, rgba(118,68,83,0.53) 21%, rgba(96,60,74,0.43) 24%, rgba(96,60,74,0.43) 28%, rgba(99,61,75,0.44) 31%, rgba(119,68,84,0.53) 34%, rgba(97,60,74,0.44) 38%, rgba(85,56,69,0.38) 41%, rgba(72,51,63,0.32) 45%, rgba(68,50,62,0.31) 48%, rgba(50,43,54,0.23) 52%, rgba(83,55,68,0.37) 55%, rgba(66,49,61,0.30) 59%, rgba(76,52,65,0.34) 62%, rgba(81,54,67,0.36) 66%, rgba(100,61,75,0.45) 69%, rgba(88,57,70,0.39) 72%, rgba(103,62,77,0.46) 76%, rgba(134,73,90,0.60) 79%, rgba(104,63,77,0.47) 83%, rgba(114,66,81,0.51) 86%, rgba(133,73,89,0.59) 90%, rgba(143,76,94,0.64) 93%, rgba(127,71,87,0.57) 97%, rgba(145,77,95,0.65) 100%);"     aria-label="CO density"></div>
+          </div>
+          <div class="ga-co-meta">
+            <span class="ga-num">30.1 Mb</span>
+            <span class="ga-co-t2t ga-t2t-yes">T2T</span>
+          </div>
+        </div>
+        <div class="ga-co-row" data-chrom="LG13">
+          <div class="ga-co-name">LG13</div>
+          <div class="ga-co-stack" style="width: 70.9%;">
+            <div class="ga-co-track ga-co-base">
+              <span class="ga-co-tel ga-tel-yes">▶</span>
+              <div class="ga-co-centromere" style="left: 53%;"></div>
+              <span class="ga-co-tel ga-tel-yes">◀</span>
+            </div>
+            <div class="ga-co-track ga-co-gene"   style="background: linear-gradient(90deg, rgba(213,120,98,0.68) 0%, rgba(215,121,99,0.69) 3%, rgba(214,121,98,0.68) 7%, rgba(199,114,94,0.64) 10%, rgba(206,117,96,0.66) 14%, rgba(171,101,86,0.56) 17%, rgba(166,98,85,0.55) 21%, rgba(168,99,85,0.55) 24%, rgba(151,92,81,0.50) 28%, rgba(162,96,84,0.53) 31%, rgba(151,91,81,0.50) 34%, rgba(127,80,74,0.43) 38%, rgba(123,78,73,0.42) 41%, rgba(110,72,69,0.38) 45%, rgba(130,81,75,0.44) 48%, rgba(108,71,69,0.38) 52%, rgba(115,75,71,0.40) 55%, rgba(126,80,74,0.43) 59%, rgba(125,79,73,0.43) 62%, rgba(138,85,77,0.46) 66%, rgba(147,89,79,0.49) 69%, rgba(161,96,83,0.53) 72%, rgba(168,99,85,0.55) 76%, rgba(165,98,85,0.54) 79%, rgba(196,112,93,0.63) 83%, rgba(191,110,92,0.62) 86%, rgba(202,115,95,0.65) 90%, rgba(212,120,98,0.68) 93%, rgba(199,114,94,0.64) 97%, rgba(221,124,100,0.70) 100%);"   aria-label="gene density"></div>
+            <div class="ga-co-track ga-co-repeat" style="background: linear-gradient(90deg, rgba(101,72,64,0.41) 0%, rgba(92,67,62,0.37) 3%, rgba(83,63,60,0.34) 7%, rgba(84,63,60,0.34) 10%, rgba(93,68,62,0.38) 14%, rgba(87,64,61,0.35) 17%, rgba(94,68,62,0.38) 21%, rgba(91,67,62,0.37) 24%, rgba(79,60,59,0.32) 28%, rgba(100,72,64,0.40) 31%, rgba(99,71,63,0.40) 34%, rgba(111,77,66,0.44) 38%, rgba(146,96,74,0.57) 41%, rgba(152,99,76,0.59) 45%, rgba(165,106,79,0.64) 48%, rgba(171,109,80,0.66) 52%, rgba(172,110,81,0.66) 55%, rgba(162,104,78,0.63) 59%, rgba(159,103,78,0.61) 62%, rgba(145,95,74,0.57) 66%, rgba(131,88,71,0.51) 69%, rgba(87,64,61,0.35) 72%, rgba(84,63,60,0.34) 76%, rgba(99,71,64,0.40) 79%, rgba(102,73,64,0.41) 83%, rgba(97,70,63,0.39) 86%, rgba(90,66,61,0.37) 90%, rgba(102,72,64,0.41) 93%, rgba(86,64,60,0.35) 97%, rgba(100,72,64,0.40) 100%);" aria-label="repeat density"></div>
+            <div class="ga-co-track ga-co-co"     style="background: linear-gradient(90deg, rgba(130,72,88,0.58) 0%, rgba(126,70,86,0.56) 3%, rgba(152,80,98,0.68) 7%, rgba(114,66,81,0.51) 10%, rgba(144,77,94,0.64) 14%, rgba(143,76,94,0.64) 17%, rgba(131,72,89,0.59) 21%, rgba(101,61,76,0.45) 24%, rgba(105,63,77,0.47) 28%, rgba(99,61,75,0.44) 31%, rgba(91,58,72,0.41) 34%, rgba(104,63,77,0.47) 38%, rgba(80,54,67,0.36) 41%, rgba(95,59,73,0.43) 45%, rgba(42,40,50,0.19) 48%, rgba(66,49,61,0.30) 52%, rgba(100,61,76,0.45) 55%, rgba(79,54,66,0.36) 59%, rgba(81,54,67,0.36) 62%, rgba(102,62,76,0.46) 66%, rgba(92,58,72,0.41) 69%, rgba(102,62,76,0.46) 72%, rgba(122,69,85,0.54) 76%, rgba(96,60,74,0.43) 79%, rgba(124,70,86,0.56) 83%, rgba(109,64,79,0.49) 86%, rgba(127,71,87,0.57) 90%, rgba(145,77,95,0.65) 93%, rgba(131,72,89,0.59) 97%, rgba(146,77,95,0.65) 100%);"     aria-label="CO density"></div>
+          </div>
+          <div class="ga-co-meta">
+            <span class="ga-num">29.2 Mb</span>
+            <span class="ga-co-t2t ga-t2t-yes">T2T</span>
+          </div>
+        </div>
+        <div class="ga-co-row" data-chrom="LG14">
+          <div class="ga-co-name">LG14</div>
+          <div class="ga-co-stack" style="width: 70.3%;">
+            <div class="ga-co-track ga-co-base">
+              <span class="ga-co-tel ga-tel-yes">▶</span>
+              <div class="ga-co-centromere" style="left: 52%;"></div>
+              <span class="ga-co-tel ga-tel-yes">◀</span>
+            </div>
+            <div class="ga-co-track ga-co-gene"   style="background: linear-gradient(90deg, rgba(226,126,101,0.72) 0%, rgba(213,120,98,0.68) 3%, rgba(214,121,98,0.68) 7%, rgba(201,115,95,0.65) 10%, rgba(190,110,92,0.62) 14%, rgba(172,101,86,0.56) 17%, rgba(173,102,87,0.57) 21%, rgba(164,98,84,0.54) 24%, rgba(158,95,83,0.52) 28%, rgba(159,95,83,0.52) 31%, rgba(150,91,80,0.50) 34%, rgba(146,89,79,0.49) 38%, rgba(135,84,76,0.45) 41%, rgba(136,84,76,0.46) 45%, rgba(108,72,69,0.38) 48%, rgba(126,80,74,0.43) 52%, rgba(109,72,69,0.38) 55%, rgba(133,83,76,0.45) 59%, rgba(125,79,73,0.43) 62%, rgba(154,93,81,0.51) 66%, rgba(163,97,84,0.54) 69%, rgba(168,99,85,0.55) 72%, rgba(173,102,87,0.56) 76%, rgba(182,106,89,0.59) 79%, rgba(167,99,85,0.55) 83%, rgba(189,109,91,0.61) 86%, rgba(184,107,90,0.60) 90%, rgba(190,110,92,0.61) 93%, rgba(215,121,98,0.69) 97%, rgba(207,117,96,0.66) 100%);"   aria-label="gene density"></div>
+            <div class="ga-co-track ga-co-repeat" style="background: linear-gradient(90deg, rgba(89,66,61,0.36) 0%, rgba(102,73,64,0.41) 3%, rgba(98,71,63,0.39) 7%, rgba(101,72,64,0.40) 10%, rgba(96,70,63,0.39) 14%, rgba(97,70,63,0.39) 17%, rgba(98,70,63,0.39) 21%, rgba(84,63,60,0.34) 24%, rgba(99,71,64,0.40) 28%, rgba(112,78,67,0.45) 31%, rgba(131,88,71,0.52) 34%, rgba(155,101,77,0.60) 38%, rgba(174,111,81,0.67) 41%, rgba(183,115,83,0.70) 45%, rgba(171,109,80,0.66) 48%, rgba(180,114,83,0.69) 52%, rgba(155,101,77,0.60) 55%, rgba(144,95,74,0.56) 59%, rgba(138,92,73,0.54) 62%, rgba(99,71,63,0.40) 66%, rgba(85,64,60,0.35) 69%, rgba(86,64,60,0.35) 72%, rgba(96,69,63,0.39) 76%, rgba(91,67,62,0.37) 79%, rgba(87,65,61,0.35) 83%, rgba(94,68,62,0.38) 86%, rgba(99,71,64,0.40) 90%, rgba(102,72,64,0.41) 93%, rgba(91,67,62,0.37) 97%, rgba(87,65,61,0.35) 100%);" aria-label="repeat density"></div>
+            <div class="ga-co-track ga-co-co"     style="background: linear-gradient(90deg, rgba(161,83,102,0.72) 0%, rgba(127,71,87,0.57) 3%, rgba(122,69,85,0.54) 7%, rgba(117,67,83,0.52) 10%, rgba(129,72,88,0.58) 14%, rgba(135,74,90,0.60) 17%, rgba(124,70,86,0.56) 21%, rgba(123,69,85,0.55) 24%, rgba(132,73,89,0.59) 28%, rgba(119,68,83,0.53) 31%, rgba(122,69,85,0.54) 34%, rgba(77,53,66,0.35) 38%, rgba(83,55,68,0.37) 41%, rgba(94,59,73,0.42) 45%, rgba(53,44,55,0.24) 48%, rgba(72,51,63,0.32) 52%, rgba(61,47,59,0.27) 55%, rgba(64,48,60,0.29) 59%, rgba(111,65,80,0.50) 62%, rgba(91,58,72,0.41) 66%, rgba(115,66,82,0.51) 69%, rgba(132,73,89,0.59) 72%, rgba(120,68,84,0.54) 76%, rgba(131,72,89,0.58) 79%, rgba(104,63,77,0.47) 83%, rgba(128,71,87,0.57) 86%, rgba(146,77,95,0.65) 90%, rgba(146,78,95,0.65) 93%, rgba(169,86,105,0.75) 97%, rgba(148,78,96,0.66) 100%);"     aria-label="CO density"></div>
+          </div>
+          <div class="ga-co-meta">
+            <span class="ga-num">29.0 Mb</span>
+            <span class="ga-co-t2t ga-t2t-yes">T2T</span>
+          </div>
+        </div>
+        <div class="ga-co-row" data-chrom="LG15">
+          <div class="ga-co-name">LG15</div>
+          <div class="ga-co-stack" style="width: 68.1%;">
+            <div class="ga-co-track ga-co-base">
+              <span class="ga-co-tel ga-tel-yes">▶</span>
+              <div class="ga-co-centromere" style="left: 59%;"></div>
+              <span class="ga-co-tel">○</span>
+            </div>
+            <div class="ga-co-track ga-co-gene"   style="background: linear-gradient(90deg, rgba(214,120,98,0.68) 0%, rgba(225,126,101,0.71) 3%, rgba(211,119,97,0.68) 7%, rgba(191,110,92,0.62) 10%, rgba(183,106,90,0.59) 14%, rgba(180,105,89,0.59) 17%, rgba(164,98,84,0.54) 21%, rgba(185,107,90,0.60) 24%, rgba(156,93,82,0.51) 28%, rgba(167,99,85,0.55) 31%, rgba(154,93,81,0.51) 34%, rgba(134,83,76,0.45) 38%, rgba(137,85,77,0.46) 41%, rgba(110,72,69,0.38) 45%, rgba(123,78,73,0.42) 48%, rgba(117,76,71,0.40) 52%, rgba(129,81,74,0.44) 55%, rgba(143,88,78,0.48) 59%, rgba(153,92,81,0.51) 62%, rgba(151,91,81,0.50) 66%, rgba(162,96,84,0.53) 69%, rgba(169,100,86,0.55) 72%, rgba(162,96,84,0.53) 76%, rgba(164,98,84,0.54) 79%, rgba(193,111,92,0.62) 83%, rgba(186,108,91,0.60) 86%, rgba(196,112,93,0.63) 90%, rgba(216,122,99,0.69) 93%, rgba(214,120,98,0.68) 97%, rgba(207,117,96,0.66) 100%);"   aria-label="gene density"></div>
+            <div class="ga-co-track ga-co-repeat" style="background: linear-gradient(90deg, rgba(83,63,60,0.34) 0%, rgba(94,69,62,0.38) 3%, rgba(98,71,63,0.40) 7%, rgba(87,64,61,0.35) 10%, rgba(96,69,63,0.38) 14%, rgba(82,62,59,0.33) 17%, rgba(95,69,63,0.38) 21%, rgba(85,64,60,0.35) 24%, rgba(100,72,64,0.40) 28%, rgba(88,65,61,0.36) 31%, rgba(88,65,61,0.36) 34%, rgba(119,82,68,0.47) 38%, rgba(146,96,75,0.57) 41%, rgba(161,104,78,0.62) 45%, rgba(174,111,81,0.67) 48%, rgba(165,106,79,0.64) 52%, rgba(184,116,83,0.71) 55%, rgba(170,109,80,0.66) 59%, rgba(152,99,76,0.59) 62%, rgba(138,92,73,0.54) 66%, rgba(110,77,66,0.44) 69%, rgba(99,71,64,0.40) 72%, rgba(94,69,62,0.38) 76%, rgba(87,65,61,0.35) 79%, rgba(85,64,60,0.35) 83%, rgba(99,71,64,0.40) 86%, rgba(92,67,62,0.37) 90%, rgba(79,61,59,0.33) 93%, rgba(82,62,60,0.34) 97%, rgba(95,69,63,0.38) 100%);" aria-label="repeat density"></div>
+            <div class="ga-co-track ga-co-co"     style="background: linear-gradient(90deg, rgba(170,86,105,0.76) 0%, rgba(136,74,91,0.61) 3%, rgba(162,83,102,0.72) 7%, rgba(133,73,90,0.60) 10%, rgba(145,77,95,0.65) 14%, rgba(117,67,83,0.52) 17%, rgba(130,72,88,0.58) 21%, rgba(136,74,91,0.61) 24%, rgba(89,57,71,0.40) 28%, rgba(96,60,74,0.43) 31%, rgba(73,51,64,0.33) 34%, rgba(108,64,79,0.48) 38%, rgba(83,55,68,0.37) 41%, rgba(103,62,77,0.46) 45%, rgba(73,52,64,0.33) 48%, rgba(55,45,56,0.25) 52%, rgba(62,48,59,0.28) 55%, rgba(92,58,72,0.41) 59%, rgba(83,55,68,0.37) 62%, rgba(122,69,85,0.54) 66%, rgba(119,68,84,0.53) 69%, rgba(95,59,73,0.43) 72%, rgba(100,61,75,0.45) 76%, rgba(97,60,74,0.43) 79%, rgba(143,76,94,0.64) 83%, rgba(120,68,84,0.54) 86%, rgba(143,76,94,0.64) 90%, rgba(146,78,95,0.65) 93%, rgba(133,73,90,0.59) 97%, rgba(154,80,98,0.69) 100%);"     aria-label="CO density"></div>
+          </div>
+          <div class="ga-co-meta">
+            <span class="ga-num">28.1 Mb</span>
+            <span class="ga-co-t2t">—</span>
+          </div>
+        </div>
+        <div class="ga-co-row" data-chrom="LG16">
+          <div class="ga-co-name">LG16</div>
+          <div class="ga-co-stack" style="width: 66.5%;">
+            <div class="ga-co-track ga-co-base">
+              <span class="ga-co-tel ga-tel-yes">▶</span>
+              <div class="ga-co-centromere" style="left: 40%;"></div>
+              <span class="ga-co-tel ga-tel-yes">◀</span>
+            </div>
+            <div class="ga-co-track ga-co-gene"   style="background: linear-gradient(90deg, rgba(202,115,95,0.65) 0%, rgba(210,119,97,0.67) 3%, rgba(192,111,92,0.62) 7%, rgba(194,111,93,0.62) 10%, rgba(206,117,96,0.66) 14%, rgba(195,112,93,0.63) 17%, rgba(192,110,92,0.62) 21%, rgba(180,105,89,0.58) 24%, rgba(154,93,81,0.51) 28%, rgba(159,95,83,0.52) 31%, rgba(164,97,84,0.54) 34%, rgba(155,93,82,0.51) 38%, rgba(141,87,78,0.47) 41%, rgba(124,79,73,0.42) 45%, rgba(113,74,70,0.39) 48%, rgba(110,72,69,0.38) 52%, rgba(134,83,76,0.45) 55%, rgba(140,86,78,0.47) 59%, rgba(144,88,79,0.48) 62%, rgba(134,83,76,0.45) 66%, rgba(142,87,78,0.48) 69%, rgba(151,91,81,0.50) 72%, rgba(152,92,81,0.50) 76%, rgba(193,111,92,0.62) 79%, rgba(176,103,87,0.57) 83%, rgba(199,114,94,0.64) 86%, rgba(190,109,91,0.61) 90%, rgba(211,119,97,0.67) 93%, rgba(203,115,95,0.65) 97%, rgba(206,117,96,0.66) 100%);"   aria-label="gene density"></div>
+            <div class="ga-co-track ga-co-repeat" style="background: linear-gradient(90deg, rgba(97,70,63,0.39) 0%, rgba(86,64,61,0.35) 3%, rgba(95,69,62,0.38) 7%, rgba(99,71,63,0.40) 10%, rgba(81,61,59,0.33) 14%, rgba(86,64,60,0.35) 17%, rgba(82,62,59,0.33) 21%, rgba(118,81,68,0.47) 24%, rgba(130,88,71,0.51) 28%, rgba(147,97,75,0.57) 31%, rgba(159,103,78,0.62) 34%, rgba(184,116,83,0.71) 38%, rgba(175,111,81,0.67) 41%, rgba(182,115,83,0.70) 45%, rgba(165,106,79,0.64) 48%, rgba(134,90,72,0.53) 52%, rgba(115,80,67,0.46) 55%, rgba(88,65,61,0.36) 59%, rgba(85,64,60,0.35) 62%, rgba(85,64,60,0.35) 66%, rgba(94,68,62,0.38) 69%, rgba(87,65,61,0.35) 72%, rgba(97,70,63,0.39) 76%, rgba(96,70,63,0.39) 79%, rgba(86,64,60,0.35) 83%, rgba(95,69,63,0.38) 86%, rgba(89,66,61,0.36) 90%, rgba(85,64,60,0.35) 93%, rgba(100,72,64,0.40) 97%, rgba(79,60,59,0.32) 100%);" aria-label="repeat density"></div>
+            <div class="ga-co-track ga-co-co"     style="background: linear-gradient(90deg, rgba(157,82,100,0.70) 0%, rgba(131,72,89,0.59) 3%, rgba(164,84,103,0.73) 7%, rgba(116,67,82,0.52) 10%, rgba(122,69,85,0.55) 14%, rgba(137,74,91,0.61) 17%, rgba(143,77,94,0.64) 21%, rgba(113,66,81,0.50) 24%, rgba(90,58,71,0.40) 28%, rgba(101,61,76,0.45) 31%, rgba(94,59,73,0.42) 34%, rgba(112,65,80,0.50) 38%, rgba(99,61,75,0.44) 41%, rgba(68,50,62,0.31) 45%, rgba(47,42,53,0.21) 48%, rgba(46,42,52,0.21) 52%, rgba(80,54,67,0.36) 55%, rgba(79,54,67,0.36) 59%, rgba(80,54,67,0.36) 62%, rgba(105,63,78,0.47) 66%, rgba(81,54,67,0.36) 69%, rgba(93,59,72,0.42) 72%, rgba(88,57,70,0.40) 76%, rgba(127,71,87,0.57) 79%, rgba(112,66,81,0.50) 83%, rgba(148,78,96,0.66) 86%, rgba(128,71,88,0.57) 90%, rgba(125,70,86,0.56) 93%, rgba(156,81,99,0.70) 97%, rgba(170,86,105,0.76) 100%);"     aria-label="CO density"></div>
+          </div>
+          <div class="ga-co-meta">
+            <span class="ga-num">27.5 Mb</span>
+            <span class="ga-co-t2t ga-t2t-yes">T2T</span>
+          </div>
+        </div>
+        <div class="ga-co-row" data-chrom="LG17">
+          <div class="ga-co-name">LG17</div>
+          <div class="ga-co-stack" style="width: 65.2%;">
+            <div class="ga-co-track ga-co-base">
+              <span class="ga-co-tel ga-tel-yes">▶</span>
+              <div class="ga-co-centromere ga-co-cen-uncertain" style="left: 57%;"></div>
+              <span class="ga-co-tel ga-tel-yes">◀</span>
+            </div>
+            <div class="ga-co-track ga-co-gene"   style="background: linear-gradient(90deg, rgba(209,119,97,0.67) 0%, rgba(213,120,98,0.68) 3%, rgba(200,114,94,0.64) 7%, rgba(189,109,91,0.61) 10%, rgba(187,108,91,0.60) 14%, rgba(176,103,88,0.57) 17%, rgba(183,106,89,0.59) 21%, rgba(175,103,87,0.57) 24%, rgba(171,101,86,0.56) 28%, rgba(159,95,83,0.53) 31%, rgba(163,97,84,0.54) 34%, rgba(125,79,73,0.43) 38%, rgba(138,86,77,0.47) 41%, rgba(139,86,77,0.47) 45%, rgba(124,79,73,0.42) 48%, rgba(129,81,75,0.44) 52%, rgba(121,77,72,0.42) 55%, rgba(128,80,74,0.43) 59%, rgba(132,83,75,0.45) 62%, rgba(147,90,80,0.49) 66%, rgba(169,100,86,0.55) 69%, rgba(148,90,80,0.49) 72%, rgba(170,100,86,0.56) 76%, rgba(162,97,84,0.53) 79%, rgba(200,114,94,0.64) 83%, rgba(187,108,91,0.61) 86%, rgba(194,111,93,0.62) 90%, rgba(193,111,92,0.62) 93%, rgba(205,116,96,0.66) 97%, rgba(228,127,102,0.72) 100%);"   aria-label="gene density"></div>
+            <div class="ga-co-track ga-co-repeat" style="background: linear-gradient(90deg, rgba(88,65,61,0.36) 0%, rgba(83,62,60,0.34) 3%, rgba(97,70,63,0.39) 7%, rgba(94,68,62,0.38) 10%, rgba(101,72,64,0.40) 14%, rgba(84,63,60,0.34) 17%, rgba(90,66,61,0.36) 21%, rgba(92,67,62,0.37) 24%, rgba(97,70,63,0.39) 28%, rgba(80,61,59,0.33) 31%, rgba(85,64,60,0.35) 34%, rgba(101,72,64,0.40) 38%, rgba(98,70,63,0.39) 41%, rgba(121,83,69,0.48) 45%, rgba(152,99,76,0.59) 48%, rgba(171,109,80,0.66) 52%, rgba(184,116,83,0.71) 55%, rgba(176,112,82,0.68) 59%, rgba(183,115,83,0.70) 62%, rgba(154,100,76,0.60) 66%, rgba(157,102,77,0.61) 69%, rgba(116,80,68,0.46) 72%, rgba(97,70,63,0.39) 76%, rgba(92,67,62,0.37) 79%, rgba(99,71,63,0.40) 83%, rgba(93,68,62,0.38) 86%, rgba(83,63,60,0.34) 90%, rgba(80,61,59,0.33) 93%, rgba(94,68,62,0.38) 97%, rgba(81,61,59,0.33) 100%);" aria-label="repeat density"></div>
+            <div class="ga-co-track ga-co-co"     style="background: linear-gradient(90deg, rgba(162,83,102,0.72) 0%, rgba(148,78,96,0.66) 3%, rgba(114,66,81,0.51) 7%, rgba(146,78,95,0.65) 10%, rgba(128,71,87,0.57) 14%, rgba(136,74,91,0.61) 17%, rgba(125,70,86,0.56) 21%, rgba(115,66,82,0.51) 24%, rgba(130,72,88,0.58) 28%, rgba(78,53,66,0.35) 31%, rgba(90,58,71,0.40) 34%, rgba(82,55,68,0.37) 38%, rgba(66,49,61,0.30) 41%, rgba(85,56,69,0.38) 45%, rgba(62,48,59,0.28) 48%, rgba(73,51,64,0.33) 52%, rgba(90,58,71,0.40) 55%, rgba(67,49,61,0.30) 59%, rgba(101,61,76,0.45) 62%, rgba(86,56,69,0.39) 66%, rgba(98,60,75,0.44) 69%, rgba(94,59,73,0.42) 72%, rgba(98,60,75,0.44) 76%, rgba(132,73,89,0.59) 79%, rgba(98,60,75,0.44) 83%, rgba(150,79,97,0.67) 86%, rgba(123,69,85,0.55) 90%, rgba(134,73,90,0.60) 93%, rgba(167,85,104,0.75) 97%, rgba(150,79,97,0.67) 100%);"     aria-label="CO density"></div>
+          </div>
+          <div class="ga-co-meta">
+            <span class="ga-num">26.9 Mb</span>
+            <span class="ga-co-t2t">—</span>
+          </div>
+        </div>
+        <div class="ga-co-row" data-chrom="LG18">
+          <div class="ga-co-name">LG18</div>
+          <div class="ga-co-stack" style="width: 63.1%;">
+            <div class="ga-co-track ga-co-base">
+              <span class="ga-co-tel ga-tel-yes">▶</span>
+              <div class="ga-co-centromere" style="left: 59%;"></div>
+              <span class="ga-co-tel ga-tel-yes">◀</span>
+            </div>
+            <div class="ga-co-track ga-co-gene"   style="background: linear-gradient(90deg, rgba(219,123,100,0.70) 0%, rgba(207,117,96,0.66) 3%, rgba(215,121,98,0.68) 7%, rgba(193,111,92,0.62) 10%, rgba(198,113,94,0.64) 14%, rgba(173,101,87,0.56) 17%, rgba(175,103,87,0.57) 21%, rgba(160,96,83,0.53) 24%, rgba(170,100,86,0.56) 28%, rgba(156,94,82,0.52) 31%, rgba(164,97,84,0.54) 34%, rgba(142,87,78,0.48) 38%, rgba(146,89,79,0.49) 41%, rgba(140,86,77,0.47) 45%, rgba(110,72,69,0.38) 48%, rgba(122,78,72,0.42) 52%, rgba(112,73,70,0.39) 55%, rgba(137,85,77,0.46) 59%, rgba(150,91,80,0.50) 62%, rgba(134,83,76,0.45) 66%, rgba(144,88,79,0.48) 69%, rgba(177,104,88,0.58) 72%, rgba(164,97,84,0.54) 76%, rgba(191,110,92,0.62) 79%, rgba(182,106,89,0.59) 83%, rgba(197,113,94,0.64) 86%, rgba(214,121,98,0.68) 90%, rgba(190,109,91,0.61) 93%, rgba(199,114,94,0.64) 97%, rgba(220,124,100,0.70) 100%);"   aria-label="gene density"></div>
+            <div class="ga-co-track ga-co-repeat" style="background: linear-gradient(90deg, rgba(94,69,62,0.38) 0%, rgba(90,66,61,0.37) 3%, rgba(88,65,61,0.36) 7%, rgba(89,66,61,0.36) 10%, rgba(91,67,62,0.37) 14%, rgba(96,69,63,0.39) 17%, rgba(91,67,62,0.37) 21%, rgba(102,72,64,0.41) 24%, rgba(86,64,60,0.35) 28%, rgba(89,66,61,0.36) 31%, rgba(99,71,64,0.40) 34%, rgba(90,66,61,0.36) 38%, rgba(123,84,69,0.49) 41%, rgba(140,93,73,0.55) 45%, rgba(166,107,79,0.64) 48%, rgba(159,103,78,0.62) 52%, rgba(179,113,82,0.69) 55%, rgba(181,114,83,0.69) 59%, rgba(157,102,77,0.61) 62%, rgba(150,98,76,0.58) 66%, rgba(146,96,75,0.57) 69%, rgba(105,74,65,0.42) 72%, rgba(100,72,64,0.40) 76%, rgba(80,61,59,0.33) 79%, rgba(102,73,64,0.41) 83%, rgba(90,66,61,0.36) 86%, rgba(93,68,62,0.37) 90%, rgba(94,68,62,0.38) 93%, rgba(92,67,62,0.37) 97%, rgba(95,69,63,0.38) 100%);" aria-label="repeat density"></div>
+            <div class="ga-co-track ga-co-co"     style="background: linear-gradient(90deg, rgba(136,74,91,0.61) 0%, rgba(138,75,92,0.62) 3%, rgba(149,79,97,0.67) 7%, rgba(121,69,84,0.54) 10%, rgba(151,79,97,0.68) 14%, rgba(104,63,77,0.47) 17%, rgba(123,69,85,0.55) 21%, rgba(92,58,72,0.41) 24%, rgba(122,69,85,0.54) 28%, rgba(119,68,84,0.53) 31%, rgba(118,68,83,0.53) 34%, rgba(114,66,81,0.51) 38%, rgba(109,64,79,0.49) 41%, rgba(86,56,69,0.39) 45%, rgba(64,48,60,0.29) 48%, rgba(40,40,50,0.18) 52%, rgba(94,59,73,0.42) 55%, rgba(93,59,72,0.42) 59%, rgba(117,67,83,0.53) 62%, rgba(92,58,72,0.41) 66%, rgba(126,71,87,0.57) 69%, rgba(94,59,73,0.42) 72%, rgba(102,62,76,0.46) 76%, rgba(93,59,72,0.42) 79%, rgba(117,67,83,0.52) 83%, rgba(116,67,82,0.52) 86%, rgba(135,74,90,0.60) 90%, rgba(132,73,89,0.59) 93%, rgba(128,71,88,0.57) 97%, rgba(160,83,101,0.71) 100%);"     aria-label="CO density"></div>
+          </div>
+          <div class="ga-co-meta">
+            <span class="ga-num">26.0 Mb</span>
+            <span class="ga-co-t2t ga-t2t-yes">T2T</span>
+          </div>
+        </div>
+        <div class="ga-co-row" data-chrom="LG19">
+          <div class="ga-co-name">LG19</div>
+          <div class="ga-co-stack" style="width: 61.4%;">
+            <div class="ga-co-track ga-co-base">
+              <span class="ga-co-tel ga-tel-yes">▶</span>
+              <div class="ga-co-centromere" style="left: 56%;"></div>
+              <span class="ga-co-tel ga-tel-yes">◀</span>
+            </div>
+            <div class="ga-co-track ga-co-gene"   style="background: linear-gradient(90deg, rgba(211,119,97,0.67) 0%, rgba(198,113,94,0.64) 3%, rgba(203,116,95,0.65) 7%, rgba(190,109,91,0.61) 10%, rgba(176,103,88,0.57) 14%, rgba(177,103,88,0.58) 17%, rgba(190,110,92,0.61) 21%, rgba(174,102,87,0.57) 24%, rgba(172,101,87,0.56) 28%, rgba(164,98,84,0.54) 31%, rgba(134,84,76,0.45) 34%, rgba(132,82,75,0.45) 38%, rgba(127,80,74,0.43) 41%, rgba(140,86,78,0.47) 45%, rgba(124,79,73,0.42) 48%, rgba(130,82,75,0.44) 52%, rgba(142,87,78,0.48) 55%, rgba(144,88,79,0.48) 59%, rgba(146,89,79,0.49) 62%, rgba(160,96,83,0.53) 66%, rgba(138,85,77,0.46) 69%, rgba(173,102,87,0.57) 72%, rgba(185,107,90,0.60) 76%, rgba(162,96,84,0.53) 79%, rgba(181,106,89,0.59) 83%, rgba(195,112,93,0.63) 86%, rgba(208,118,97,0.67) 90%, rgba(199,114,94,0.64) 93%, rgba(199,114,94,0.64) 97%, rgba(221,124,100,0.70) 100%);"   aria-label="gene density"></div>
+            <div class="ga-co-track ga-co-repeat" style="background: linear-gradient(90deg, rgba(82,62,59,0.33) 0%, rgba(91,67,62,0.37) 3%, rgba(93,68,62,0.38) 7%, rgba(87,65,61,0.35) 10%, rgba(102,73,64,0.41) 14%, rgba(86,64,60,0.35) 17%, rgba(88,65,61,0.36) 21%, rgba(92,67,62,0.37) 24%, rgba(92,67,62,0.37) 28%, rgba(124,84,69,0.49) 31%, rgba(134,89,72,0.52) 34%, rgba(148,97,75,0.58) 38%, rgba(165,106,79,0.64) 41%, rgba(165,106,79,0.64) 45%, rgba(185,117,84,0.71) 48%, rgba(180,114,83,0.69) 52%, rgba(169,108,80,0.65) 55%, rgba(132,89,71,0.52) 59%, rgba(113,78,67,0.45) 62%, rgba(86,64,60,0.35) 66%, rgba(93,68,62,0.38) 69%, rgba(94,68,62,0.38) 72%, rgba(92,67,62,0.37) 76%, rgba(82,62,60,0.34) 79%, rgba(102,73,64,0.41) 83%, rgba(102,72,64,0.41) 86%, rgba(86,64,60,0.35) 90%, rgba(82,62,59,0.33) 93%, rgba(96,70,63,0.39) 97%, rgba(102,72,64,0.41) 100%);" aria-label="repeat density"></div>
+            <div class="ga-co-track ga-co-co"     style="background: linear-gradient(90deg, rgba(137,74,91,0.61) 0%, rgba(143,76,94,0.64) 3%, rgba(135,74,91,0.60) 7%, rgba(125,70,86,0.56) 10%, rgba(113,66,81,0.51) 14%, rgba(102,62,76,0.46) 17%, rgba(93,59,73,0.42) 21%, rgba(111,65,80,0.50) 24%, rgba(97,60,74,0.44) 28%, rgba(94,59,73,0.42) 31%, rgba(73,52,64,0.33) 34%, rgba(98,61,75,0.44) 38%, rgba(104,63,77,0.47) 41%, rgba(107,63,78,0.48) 45%, rgba(68,50,62,0.31) 48%, rgba(72,51,63,0.32) 52%, rgba(90,58,71,0.40) 55%, rgba(84,55,69,0.38) 59%, rgba(79,54,67,0.36) 62%, rgba(107,64,78,0.48) 66%, rgba(100,61,75,0.45) 69%, rgba(87,56,70,0.39) 72%, rgba(133,73,90,0.59) 76%, rgba(142,76,94,0.64) 79%, rgba(109,64,79,0.49) 83%, rgba(109,64,79,0.49) 86%, rgba(157,81,100,0.70) 90%, rgba(139,75,92,0.62) 93%, rgba(121,68,84,0.54) 97%, rgba(167,85,104,0.74) 100%);"     aria-label="CO density"></div>
+          </div>
+          <div class="ga-co-meta">
+            <span class="ga-num">25.3 Mb</span>
+            <span class="ga-co-t2t ga-t2t-yes">T2T</span>
+          </div>
+        </div>
+        <div class="ga-co-row" data-chrom="LG20">
+          <div class="ga-co-name">LG20</div>
+          <div class="ga-co-stack" style="width: 60.3%;">
+            <div class="ga-co-track ga-co-base">
+              <span class="ga-co-tel ga-tel-yes">▶</span>
+              <div class="ga-co-centromere" style="left: 43%;"></div>
+              <span class="ga-co-tel ga-tel-yes">◀</span>
+            </div>
+            <div class="ga-co-track ga-co-gene"   style="background: linear-gradient(90deg, rgba(210,119,97,0.67) 0%, rgba(213,120,98,0.68) 3%, rgba(211,119,97,0.67) 7%, rgba(198,113,94,0.64) 10%, rgba(182,106,89,0.59) 14%, rgba(174,102,87,0.57) 17%, rgba(181,105,89,0.59) 21%, rgba(165,98,85,0.54) 24%, rgba(153,92,81,0.51) 28%, rgba(158,95,83,0.52) 31%, rgba(147,89,79,0.49) 34%, rgba(140,86,78,0.47) 38%, rgba(133,83,76,0.45) 41%, rgba(137,85,77,0.46) 45%, rgba(130,82,75,0.44) 48%, rgba(117,76,71,0.40) 52%, rgba(115,75,71,0.40) 55%, rgba(117,76,71,0.40) 59%, rgba(136,84,76,0.46) 62%, rgba(145,89,79,0.49) 66%, rgba(154,93,82,0.51) 69%, rgba(145,89,79,0.48) 72%, rgba(156,94,82,0.52) 76%, rgba(170,100,86,0.55) 79%, rgba(173,101,87,0.56) 83%, rgba(193,111,92,0.62) 86%, rgba(200,114,94,0.64) 90%, rgba(212,120,98,0.68) 93%, rgba(212,120,98,0.68) 97%, rgba(202,115,95,0.65) 100%);"   aria-label="gene density"></div>
+            <div class="ga-co-track ga-co-repeat" style="background: linear-gradient(90deg, rgba(80,61,59,0.33) 0%, rgba(97,70,63,0.39) 3%, rgba(101,72,64,0.40) 7%, rgba(99,71,64,0.40) 10%, rgba(83,63,60,0.34) 14%, rgba(88,65,61,0.36) 17%, rgba(93,68,62,0.37) 21%, rgba(87,65,61,0.35) 24%, rgba(112,78,67,0.44) 28%, rgba(136,91,72,0.53) 31%, rgba(155,101,77,0.60) 34%, rgba(158,102,77,0.61) 38%, rgba(179,113,82,0.69) 41%, rgba(168,107,80,0.65) 45%, rgba(173,110,81,0.67) 48%, rgba(161,104,78,0.62) 52%, rgba(137,91,72,0.54) 55%, rgba(127,86,70,0.50) 59%, rgba(87,65,61,0.35) 62%, rgba(94,68,62,0.38) 66%, rgba(99,71,64,0.40) 69%, rgba(87,64,61,0.35) 72%, rgba(90,66,61,0.36) 76%, rgba(97,70,63,0.39) 79%, rgba(80,61,59,0.33) 83%, rgba(100,72,64,0.40) 86%, rgba(85,64,60,0.35) 90%, rgba(87,65,61,0.35) 93%, rgba(99,71,64,0.40) 97%, rgba(94,68,62,0.38) 100%);" aria-label="repeat density"></div>
+            <div class="ga-co-track ga-co-co"     style="background: linear-gradient(90deg, rgba(134,73,90,0.60) 0%, rgba(160,83,101,0.71) 3%, rgba(159,82,101,0.71) 7%, rgba(139,75,92,0.62) 10%, rgba(146,77,95,0.65) 14%, rgba(141,76,93,0.63) 17%, rgba(131,72,89,0.59) 21%, rgba(101,61,76,0.45) 24%, rgba(87,57,70,0.39) 28%, rgba(113,66,81,0.50) 31%, rgba(113,66,81,0.50) 34%, rgba(81,54,67,0.36) 38%, rgba(77,53,66,0.35) 41%, rgba(91,58,72,0.41) 45%, rgba(40,40,50,0.18) 48%, rgba(40,40,50,0.18) 52%, rgba(77,53,66,0.35) 55%, rgba(64,48,60,0.29) 59%, rgba(78,53,66,0.35) 62%, rgba(79,53,66,0.35) 66%, rgba(120,68,84,0.54) 69%, rgba(129,71,88,0.58) 72%, rgba(130,72,88,0.58) 76%, rgba(133,73,89,0.59) 79%, rgba(113,66,81,0.51) 83%, rgba(149,79,96,0.66) 86%, rgba(156,81,99,0.69) 90%, rgba(124,70,86,0.55) 93%, rgba(145,77,95,0.65) 97%, rgba(140,75,92,0.62) 100%);"     aria-label="CO density"></div>
+          </div>
+          <div class="ga-co-meta">
+            <span class="ga-num">24.9 Mb</span>
+            <span class="ga-co-t2t ga-t2t-yes">T2T</span>
+          </div>
+        </div>
+        <div class="ga-co-row" data-chrom="LG21">
+          <div class="ga-co-name">LG21</div>
+          <div class="ga-co-stack" style="width: 58.2%;">
+            <div class="ga-co-track ga-co-base">
+              <span class="ga-co-tel ga-tel-yes">▶</span>
+              <div class="ga-co-centromere" style="left: 53%;"></div>
+              <span class="ga-co-tel">○</span>
+            </div>
+            <div class="ga-co-track ga-co-gene"   style="background: linear-gradient(90deg, rgba(206,117,96,0.66) 0%, rgba(217,122,99,0.69) 3%, rgba(201,115,95,0.65) 7%, rgba(187,108,91,0.60) 10%, rgba(199,114,94,0.64) 14%, rgba(177,104,88,0.58) 17%, rgba(167,99,85,0.55) 21%, rgba(157,94,82,0.52) 24%, rgba(152,92,81,0.50) 28%, rgba(156,94,82,0.52) 31%, rgba(156,94,82,0.52) 34%, rgba(152,92,81,0.51) 38%, rgba(124,79,73,0.42) 41%, rgba(133,83,75,0.45) 45%, rgba(113,74,70,0.39) 48%, rgba(118,76,71,0.41) 52%, rgba(124,79,73,0.42) 55%, rgba(143,88,78,0.48) 59%, rgba(143,88,78,0.48) 62%, rgba(162,97,84,0.53) 66%, rgba(141,87,78,0.47) 69%, rgba(176,103,87,0.57) 72%, rgba(175,103,87,0.57) 76%, rgba(164,97,84,0.54) 79%, rgba(190,110,92,0.61) 83%, rgba(187,108,91,0.61) 86%, rgba(209,119,97,0.67) 90%, rgba(221,124,100,0.70) 93%, rgba(205,117,96,0.66) 97%, rgba(221,124,100,0.70) 100%);"   aria-label="gene density"></div>
+            <div class="ga-co-track ga-co-repeat" style="background: linear-gradient(90deg, rgba(102,73,64,0.41) 0%, rgba(101,72,64,0.41) 3%, rgba(94,68,62,0.38) 7%, rgba(92,67,62,0.37) 10%, rgba(90,66,61,0.36) 14%, rgba(96,70,63,0.39) 17%, rgba(80,61,59,0.33) 21%, rgba(92,68,62,0.37) 24%, rgba(107,75,65,0.43) 28%, rgba(132,88,71,0.52) 31%, rgba(163,105,79,0.63) 34%, rgba(178,113,82,0.68) 38%, rgba(178,113,82,0.68) 41%, rgba(173,110,81,0.67) 45%, rgba(175,111,81,0.67) 48%, rgba(155,101,77,0.60) 52%, rgba(135,90,72,0.53) 55%, rgba(112,78,67,0.44) 59%, rgba(92,68,62,0.37) 62%, rgba(84,63,60,0.34) 66%, rgba(95,69,63,0.38) 69%, rgba(102,72,64,0.41) 72%, rgba(87,65,61,0.35) 76%, rgba(79,61,59,0.32) 79%, rgba(89,66,61,0.36) 83%, rgba(102,73,64,0.41) 86%, rgba(82,62,60,0.34) 90%, rgba(102,73,64,0.41) 93%, rgba(88,65,61,0.36) 97%, rgba(89,65,61,0.36) 100%);" aria-label="repeat density"></div>
+            <div class="ga-co-track ga-co-co"     style="background: linear-gradient(90deg, rgba(167,85,104,0.75) 0%, rgba(123,69,85,0.55) 3%, rgba(130,72,88,0.58) 7%, rgba(137,74,91,0.61) 10%, rgba(126,70,87,0.56) 14%, rgba(102,62,76,0.46) 17%, rgba(96,60,74,0.43) 21%, rgba(137,74,91,0.61) 24%, rgba(105,63,77,0.47) 28%, rgba(125,70,86,0.56) 31%, rgba(122,69,85,0.54) 34%, rgba(98,61,75,0.44) 38%, rgba(102,62,76,0.46) 41%, rgba(84,56,69,0.38) 45%, rgba(46,42,52,0.21) 48%, rgba(70,50,63,0.32) 52%, rgba(63,48,59,0.28) 55%, rgba(66,49,61,0.30) 59%, rgba(100,61,75,0.45) 62%, rgba(112,66,81,0.50) 66%, rgba(106,63,78,0.47) 69%, rgba(96,60,74,0.43) 72%, rgba(105,63,78,0.47) 76%, rgba(115,66,82,0.51) 79%, rgba(109,64,79,0.49) 83%, rgba(112,65,81,0.50) 86%, rgba(129,72,88,0.58) 90%, rgba(117,67,83,0.52) 93%, rgba(161,83,102,0.72) 97%, rgba(124,70,86,0.56) 100%);"     aria-label="CO density"></div>
+          </div>
+          <div class="ga-co-meta">
+            <span class="ga-num">24.0 Mb</span>
+            <span class="ga-co-t2t">—</span>
+          </div>
+        </div>
+        <div class="ga-co-row" data-chrom="LG22">
+          <div class="ga-co-name">LG22</div>
+          <div class="ga-co-stack" style="width: 56.0%;">
+            <div class="ga-co-track ga-co-base">
+              <span class="ga-co-tel ga-tel-yes">▶</span>
+              <div class="ga-co-centromere" style="left: 59%;"></div>
+              <span class="ga-co-tel ga-tel-yes">◀</span>
+            </div>
+            <div class="ga-co-track ga-co-gene"   style="background: linear-gradient(90deg, rgba(204,116,95,0.65) 0%, rgba(223,125,101,0.71) 3%, rgba(198,113,94,0.64) 7%, rgba(189,109,91,0.61) 10%, rgba(184,107,90,0.60) 14%, rgba(190,110,92,0.61) 17%, rgba(173,101,87,0.56) 21%, rgba(155,93,82,0.51) 24%, rgba(158,95,83,0.52) 28%, rgba(140,86,78,0.47) 31%, rgba(155,93,82,0.51) 34%, rgba(136,84,76,0.46) 38%, rgba(120,77,72,0.41) 41%, rgba(112,73,70,0.39) 45%, rgba(102,69,67,0.36) 48%, rgba(116,75,71,0.40) 52%, rgba(120,77,72,0.41) 55%, rgba(149,90,80,0.50) 59%, rgba(149,91,80,0.50) 62%, rgba(162,97,84,0.53) 66%, rgba(161,96,83,0.53) 69%, rgba(154,93,81,0.51) 72%, rgba(152,92,81,0.50) 76%, rgba(188,109,91,0.61) 79%, rgba(176,103,88,0.58) 83%, rgba(200,114,94,0.64) 86%, rgba(198,113,94,0.64) 90%, rgba(190,109,91,0.61) 93%, rgba(208,118,97,0.67) 97%, rgba(216,122,99,0.69) 100%);"   aria-label="gene density"></div>
+            <div class="ga-co-track ga-co-repeat" style="background: linear-gradient(90deg, rgba(84,63,60,0.34) 0%, rgba(94,68,62,0.38) 3%, rgba(93,68,62,0.37) 7%, rgba(90,66,61,0.37) 10%, rgba(80,61,59,0.33) 14%, rgba(102,73,64,0.41) 17%, rgba(83,63,60,0.34) 21%, rgba(95,69,63,0.38) 24%, rgba(90,66,61,0.36) 28%, rgba(102,72,64,0.41) 31%, rgba(122,83,69,0.48) 34%, rgba(161,104,78,0.62) 38%, rgba(156,101,77,0.60) 41%, rgba(183,116,83,0.70) 45%, rgba(166,107,79,0.64) 48%, rgba(163,105,79,0.63) 52%, rgba(169,108,80,0.65) 55%, rgba(153,99,76,0.59) 59%, rgba(113,79,67,0.45) 62%, rgba(89,65,61,0.36) 66%, rgba(80,61,59,0.33) 69%, rgba(89,66,61,0.36) 72%, rgba(99,71,64,0.40) 76%, rgba(95,69,63,0.38) 79%, rgba(89,66,61,0.36) 83%, rgba(99,71,64,0.40) 86%, rgba(100,72,64,0.40) 90%, rgba(96,69,63,0.39) 93%, rgba(91,67,62,0.37) 97%, rgba(97,70,63,0.39) 100%);" aria-label="repeat density"></div>
+            <div class="ga-co-track ga-co-co"     style="background: linear-gradient(90deg, rgba(169,86,105,0.75) 0%, rgba(147,78,96,0.66) 3%, rgba(162,83,102,0.72) 7%, rgba(149,79,97,0.67) 10%, rgba(108,64,79,0.49) 14%, rgba(137,74,91,0.61) 17%, rgba(112,65,80,0.50) 21%, rgba(89,57,71,0.40) 24%, rgba(124,70,86,0.55) 28%, rgba(85,56,69,0.38) 31%, rgba(74,52,64,0.33) 34%, rgba(106,63,78,0.47) 38%, rgba(76,53,65,0.34) 41%, rgba(95,59,73,0.43) 45%, rgba(40,40,50,0.18) 48%, rgba(40,40,50,0.18) 52%, rgba(94,59,73,0.42) 55%, rgba(66,49,61,0.30) 59%, rgba(70,50,62,0.31) 62%, rgba(111,65,80,0.50) 66%, rgba(102,62,76,0.46) 69%, rgba(115,66,82,0.51) 72%, rgba(122,69,85,0.55) 76%, rgba(113,66,81,0.51) 79%, rgba(109,64,79,0.49) 83%, rgba(117,67,83,0.52) 86%, rgba(154,80,99,0.69) 90%, rgba(127,71,87,0.57) 93%, rgba(146,78,95,0.65) 97%, rgba(158,82,100,0.70) 100%);"     aria-label="CO density"></div>
+          </div>
+          <div class="ga-co-meta">
+            <span class="ga-num">23.1 Mb</span>
+            <span class="ga-co-t2t ga-t2t-yes">T2T</span>
+          </div>
+        </div>
+        <div class="ga-co-row" data-chrom="LG23">
+          <div class="ga-co-name">LG23</div>
+          <div class="ga-co-stack" style="width: 54.2%;">
+            <div class="ga-co-track ga-co-base">
+              <span class="ga-co-tel ga-tel-yes">▶</span>
+              <div class="ga-co-centromere" style="left: 43%;"></div>
+              <span class="ga-co-tel ga-tel-yes">◀</span>
+            </div>
+            <div class="ga-co-track ga-co-gene"   style="background: linear-gradient(90deg, rgba(219,123,100,0.70) 0%, rgba(222,125,101,0.71) 3%, rgba(215,121,98,0.68) 7%, rgba(197,113,94,0.63) 10%, rgba(190,110,92,0.61) 14%, rgba(185,107,90,0.60) 17%, rgba(188,108,91,0.61) 21%, rgba(174,102,87,0.57) 24%, rgba(160,95,83,0.53) 28%, rgba(152,92,81,0.51) 31%, rgba(137,85,77,0.46) 34%, rgba(151,91,81,0.50) 38%, rgba(146,89,79,0.49) 41%, rgba(133,83,75,0.45) 45%, rgba(120,77,72,0.41) 48%, rgba(117,76,71,0.40) 52%, rgba(122,78,73,0.42) 55%, rgba(127,80,74,0.43) 59%, rgba(148,90,80,0.49) 62%, rgba(138,85,77,0.46) 66%, rgba(160,96,83,0.53) 69%, rgba(175,102,87,0.57) 72%, rgba(156,94,82,0.52) 76%, rgba(160,96,83,0.53) 79%, rgba(168,99,85,0.55) 83%, rgba(181,105,89,0.59) 86%, rgba(210,119,97,0.67) 90%, rgba(213,120,98,0.68) 93%, rgba(223,125,101,0.71) 97%, rgba(231,128,103,0.73) 100%);"   aria-label="gene density"></div>
+            <div class="ga-co-track ga-co-repeat" style="background: linear-gradient(90deg, rgba(84,63,60,0.34) 0%, rgba(79,60,59,0.32) 3%, rgba(80,61,59,0.33) 7%, rgba(80,61,59,0.33) 10%, rgba(101,72,64,0.40) 14%, rgba(81,62,59,0.33) 17%, rgba(91,67,62,0.37) 21%, rgba(92,67,62,0.37) 24%, rgba(97,70,63,0.39) 28%, rgba(95,69,63,0.38) 31%, rgba(93,68,62,0.37) 34%, rgba(93,68,62,0.37) 38%, rgba(98,71,63,0.39) 41%, rgba(111,77,66,0.44) 45%, rgba(150,98,75,0.58) 48%, rgba(170,108,80,0.66) 52%, rgba(166,106,79,0.64) 55%, rgba(179,113,82,0.69) 59%, rgba(169,108,80,0.65) 62%, rgba(166,107,79,0.64) 66%, rgba(167,107,80,0.65) 69%, rgba(129,87,71,0.51) 72%, rgba(105,74,65,0.42) 76%, rgba(96,69,63,0.39) 79%, rgba(81,62,59,0.33) 83%, rgba(81,62,59,0.33) 86%, rgba(83,63,60,0.34) 90%, rgba(82,62,60,0.34) 93%, rgba(86,64,60,0.35) 97%, rgba(100,71,64,0.40) 100%);" aria-label="repeat density"></div>
+            <div class="ga-co-track ga-co-co"     style="background: linear-gradient(90deg, rgba(162,83,102,0.72) 0%, rgba(125,70,86,0.56) 3%, rgba(114,66,81,0.51) 7%, rgba(133,73,90,0.60) 10%, rgba(128,71,87,0.57) 14%, rgba(140,75,92,0.62) 17%, rgba(104,63,77,0.47) 21%, rgba(89,57,71,0.40) 24%, rgba(117,67,83,0.52) 28%, rgba(105,63,78,0.47) 31%, rgba(78,53,66,0.35) 34%, rgba(85,56,69,0.38) 38%, rgba(66,49,61,0.30) 41%, rgba(65,49,60,0.29) 45%, rgba(62,48,59,0.28) 48%, rgba(77,53,66,0.35) 52%, rgba(94,59,73,0.42) 55%, rgba(92,58,72,0.41) 59%, rgba(94,59,73,0.42) 62%, rgba(120,68,84,0.54) 66%, rgba(115,66,82,0.51) 69%, rgba(95,59,73,0.43) 72%, rgba(90,57,71,0.40) 76%, rgba(138,75,92,0.62) 79%, rgba(116,67,82,0.52) 83%, rgba(146,77,95,0.65) 86%, rgba(122,69,85,0.55) 90%, rgba(163,84,103,0.73) 93%, rgba(137,74,91,0.61) 97%, rgba(150,79,97,0.67) 100%);"     aria-label="CO density"></div>
+          </div>
+          <div class="ga-co-meta">
+            <span class="ga-num">22.3 Mb</span>
+            <span class="ga-co-t2t ga-t2t-yes">T2T</span>
+          </div>
+        </div>
+        <div class="ga-co-row" data-chrom="LG24">
+          <div class="ga-co-name">LG24</div>
+          <div class="ga-co-stack" style="width: 51.9%;">
+            <div class="ga-co-track ga-co-base">
+              <span class="ga-co-tel ga-tel-yes">▶</span>
+              <div class="ga-co-centromere" style="left: 54%;"></div>
+              <span class="ga-co-tel">○</span>
+            </div>
+            <div class="ga-co-track ga-co-gene"   style="background: linear-gradient(90deg, rgba(207,118,96,0.66) 0%, rgba(207,117,96,0.66) 3%, rgba(219,123,100,0.70) 7%, rgba(189,109,91,0.61) 10%, rgba(205,116,96,0.66) 14%, rgba(168,99,85,0.55) 17%, rgba(185,107,90,0.60) 21%, rgba(154,93,81,0.51) 24%, rgba(167,99,85,0.55) 28%, rgba(166,98,85,0.55) 31%, rgba(149,90,80,0.50) 34%, rgba(151,91,81,0.50) 38%, rgba(127,80,74,0.43) 41%, rgba(134,84,76,0.45) 45%, rgba(125,79,73,0.43) 48%, rgba(119,76,72,0.41) 52%, rgba(134,83,76,0.45) 55%, rgba(133,83,76,0.45) 59%, rgba(151,91,80,0.50) 62%, rgba(153,92,81,0.51) 66%, rgba(155,93,82,0.51) 69%, rgba(150,91,80,0.50) 72%, rgba(173,102,87,0.57) 76%, rgba(175,102,87,0.57) 79%, rgba(187,108,91,0.60) 83%, rgba(175,102,87,0.57) 86%, rgba(193,111,92,0.62) 90%, rgba(217,122,99,0.69) 93%, rgba(204,116,95,0.65) 97%, rgba(228,127,102,0.72) 100%);"   aria-label="gene density"></div>
+            <div class="ga-co-track ga-co-repeat" style="background: linear-gradient(90deg, rgba(102,73,64,0.41) 0%, rgba(97,70,63,0.39) 3%, rgba(87,65,61,0.35) 7%, rgba(93,68,62,0.37) 10%, rgba(100,72,64,0.40) 14%, rgba(98,70,63,0.39) 17%, rgba(87,64,61,0.35) 21%, rgba(98,71,63,0.39) 24%, rgba(138,91,73,0.54) 28%, rgba(150,98,76,0.58) 31%, rgba(155,101,77,0.60) 34%, rgba(173,110,81,0.67) 38%, rgba(177,112,82,0.68) 41%, rgba(168,108,80,0.65) 45%, rgba(163,105,79,0.63) 48%, rgba(146,96,74,0.57) 52%, rgba(127,86,70,0.50) 55%, rgba(98,70,63,0.39) 59%, rgba(89,66,61,0.36) 62%, rgba(95,69,63,0.38) 66%, rgba(85,63,60,0.34) 69%, rgba(79,61,59,0.33) 72%, rgba(91,67,62,0.37) 76%, rgba(80,61,59,0.33) 79%, rgba(89,66,61,0.36) 83%, rgba(84,63,60,0.34) 86%, rgba(85,63,60,0.34) 90%, rgba(86,64,60,0.35) 93%, rgba(82,62,59,0.33) 97%, rgba(100,71,64,0.40) 100%);" aria-label="repeat density"></div>
+            <div class="ga-co-track ga-co-co"     style="background: linear-gradient(90deg, rgba(134,73,90,0.60) 0%, rgba(150,79,97,0.67) 3%, rgba(152,80,98,0.68) 7%, rgba(143,76,94,0.64) 10%, rgba(107,64,78,0.48) 14%, rgba(118,68,83,0.53) 17%, rgba(127,71,87,0.57) 21%, rgba(122,69,85,0.54) 24%, rgba(93,59,72,0.42) 28%, rgba(123,69,85,0.55) 31%, rgba(86,56,70,0.39) 34%, rgba(73,52,64,0.33) 38%, rgba(106,63,78,0.48) 41%, rgba(71,51,63,0.32) 45%, rgba(40,40,50,0.18) 48%, rgba(71,51,63,0.32) 52%, rgba(69,50,62,0.31) 55%, rgba(64,48,60,0.29) 59%, rgba(91,58,71,0.41) 62%, rgba(97,60,74,0.43) 66%, rgba(115,66,82,0.51) 69%, rgba(99,61,75,0.44) 72%, rgba(111,65,80,0.49) 76%, rgba(140,75,93,0.63) 79%, rgba(117,67,83,0.52) 83%, rgba(113,66,81,0.50) 86%, rgba(134,73,90,0.60) 90%, rgba(141,76,93,0.63) 93%, rgba(129,72,88,0.58) 97%, rgba(155,81,99,0.69) 100%);"     aria-label="CO density"></div>
+          </div>
+          <div class="ga-co-meta">
+            <span class="ga-num">21.4 Mb</span>
+            <span class="ga-co-t2t">—</span>
+          </div>
+        </div>
+        <div class="ga-co-row" data-chrom="LG25">
+          <div class="ga-co-name">LG25</div>
+          <div class="ga-co-stack" style="width: 48.9%;">
+            <div class="ga-co-track ga-co-base">
+              <span class="ga-co-tel ga-tel-yes">▶</span>
+              <div class="ga-co-centromere" style="left: 50%;"></div>
+              <span class="ga-co-tel ga-tel-yes">◀</span>
+            </div>
+            <div class="ga-co-track ga-co-gene"   style="background: linear-gradient(90deg, rgba(235,131,104,0.74) 0%, rgba(196,112,93,0.63) 3%, rgba(200,114,94,0.64) 7%, rgba(189,109,91,0.61) 10%, rgba(182,106,89,0.59) 14%, rgba(187,108,91,0.61) 17%, rgba(162,97,84,0.53) 21%, rgba(165,98,85,0.54) 24%, rgba(167,99,85,0.55) 28%, rgba(159,95,83,0.52) 31%, rgba(131,82,75,0.44) 34%, rgba(146,89,79,0.49) 38%, rgba(144,88,79,0.48) 41%, rgba(129,81,74,0.44) 45%, rgba(113,74,70,0.39) 48%, rgba(135,84,76,0.46) 52%, rgba(117,76,71,0.40) 55%, rgba(140,86,78,0.47) 59%, rgba(150,91,80,0.50) 62%, rgba(144,88,79,0.48) 66%, rgba(165,98,85,0.54) 69%, rgba(154,93,82,0.51) 72%, rgba(167,99,85,0.55) 76%, rgba(166,98,85,0.54) 79%, rgba(186,108,90,0.60) 83%, rgba(186,107,90,0.60) 86%, rgba(195,112,93,0.63) 90%, rgba(191,110,92,0.62) 93%, rgba(204,116,95,0.66) 97%, rgba(230,128,103,0.73) 100%);"   aria-label="gene density"></div>
+            <div class="ga-co-track ga-co-repeat" style="background: linear-gradient(90deg, rgba(102,73,64,0.41) 0%, rgba(89,66,61,0.36) 3%, rgba(101,72,64,0.41) 7%, rgba(93,68,62,0.38) 10%, rgba(84,63,60,0.34) 14%, rgba(90,66,61,0.36) 17%, rgba(102,73,64,0.41) 21%, rgba(105,74,65,0.42) 24%, rgba(134,90,72,0.52) 28%, rgba(146,96,75,0.57) 31%, rgba(170,109,80,0.66) 34%, rgba(184,116,84,0.71) 38%, rgba(172,110,81,0.66) 41%, rgba(173,110,81,0.67) 45%, rgba(166,106,79,0.64) 48%, rgba(147,97,75,0.57) 52%, rgba(121,83,69,0.48) 55%, rgba(93,68,62,0.37) 59%, rgba(91,67,62,0.37) 62%, rgba(101,72,64,0.40) 66%, rgba(98,70,63,0.39) 69%, rgba(87,65,61,0.35) 72%, rgba(83,62,60,0.34) 76%, rgba(89,66,61,0.36) 79%, rgba(79,60,59,0.32) 83%, rgba(93,68,62,0.37) 86%, rgba(95,69,63,0.38) 90%, rgba(79,60,59,0.32) 93%, rgba(100,71,64,0.40) 97%, rgba(93,68,62,0.37) 100%);" aria-label="repeat density"></div>
+            <div class="ga-co-track ga-co-co"     style="background: linear-gradient(90deg, rgba(159,82,101,0.71) 0%, rgba(150,79,97,0.67) 3%, rgba(148,78,96,0.66) 7%, rgba(136,74,91,0.61) 10%, rgba(110,65,80,0.49) 14%, rgba(146,78,95,0.65) 17%, rgba(120,68,84,0.54) 21%, rgba(120,68,84,0.54) 24%, rgba(83,55,68,0.37) 28%, rgba(107,63,78,0.48) 31%, rgba(82,55,68,0.37) 34%, rgba(78,53,66,0.35) 38%, rgba(110,65,80,0.49) 41%, rgba(99,61,75,0.44) 45%, rgba(43,41,51,0.20) 48%, rgba(65,49,60,0.29) 52%, rgba(89,57,71,0.40) 55%, rgba(83,55,68,0.37) 59%, rgba(67,49,61,0.30) 62%, rgba(85,56,69,0.38) 66%, rgba(84,55,69,0.38) 69%, rgba(101,61,76,0.45) 72%, rgba(97,60,74,0.44) 76%, rgba(142,76,94,0.63) 79%, rgba(141,76,93,0.63) 83%, rgba(152,80,98,0.68) 86%, rgba(134,73,90,0.60) 90%, rgba(116,67,82,0.52) 93%, rgba(168,85,105,0.75) 97%, rgba(144,77,94,0.64) 100%);"     aria-label="CO density"></div>
+          </div>
+          <div class="ga-co-meta">
+            <span class="ga-num">20.2 Mb</span>
+            <span class="ga-co-t2t ga-t2t-yes">T2T</span>
+          </div>
+        </div>
+        <div class="ga-co-row" data-chrom="LG26">
+          <div class="ga-co-name">LG26</div>
+          <div class="ga-co-stack" style="width: 46.1%;">
+            <div class="ga-co-track ga-co-base">
+              <span class="ga-co-tel ga-tel-yes">▶</span>
+              <div class="ga-co-centromere" style="left: 44%;"></div>
+              <span class="ga-co-tel ga-tel-yes">◀</span>
+            </div>
+            <div class="ga-co-track ga-co-gene"   style="background: linear-gradient(90deg, rgba(210,119,97,0.67) 0%, rgba(205,116,96,0.66) 3%, rgba(219,123,99,0.70) 7%, rgba(202,115,95,0.65) 10%, rgba(193,111,92,0.62) 14%, rgba(170,100,86,0.56) 17%, rgba(183,106,90,0.59) 21%, rgba(172,101,86,0.56) 24%, rgba(152,92,81,0.51) 28%, rgba(145,89,79,0.49) 31%, rgba(159,95,83,0.52) 34%, rgba(145,89,79,0.49) 38%, rgba(116,75,71,0.40) 41%, rgba(135,84,76,0.45) 45%, rgba(122,78,72,0.42) 48%, rgba(121,77,72,0.41) 52%, rgba(110,72,69,0.38) 55%, rgba(124,79,73,0.42) 59%, rgba(136,84,76,0.46) 62%, rgba(142,87,78,0.48) 66%, rgba(152,92,81,0.51) 69%, rgba(162,96,84,0.53) 72%, rgba(167,99,85,0.55) 76%, rgba(171,100,86,0.56) 79%, rgba(191,110,92,0.62) 83%, rgba(183,106,90,0.59) 86%, rgba(208,118,97,0.67) 90%, rgba(188,108,91,0.61) 93%, rgba(211,119,97,0.67) 97%, rgba(202,115,95,0.65) 100%);"   aria-label="gene density"></div>
+            <div class="ga-co-track ga-co-repeat" style="background: linear-gradient(90deg, rgba(98,70,63,0.39) 0%, rgba(84,63,60,0.34) 3%, rgba(89,66,61,0.36) 7%, rgba(96,69,63,0.39) 10%, rgba(96,69,63,0.39) 14%, rgba(95,69,62,0.38) 17%, rgba(82,62,59,0.33) 21%, rgba(92,68,62,0.37) 24%, rgba(126,86,70,0.50) 28%, rgba(146,96,75,0.57) 31%, rgba(163,105,79,0.63) 34%, rgba(159,103,78,0.62) 38%, rgba(169,108,80,0.65) 41%, rgba(176,112,82,0.68) 45%, rgba(155,101,77,0.60) 48%, rgba(149,97,75,0.58) 52%, rgba(123,84,69,0.49) 55%, rgba(104,74,65,0.42) 59%, rgba(100,71,64,0.40) 62%, rgba(92,67,62,0.37) 66%, rgba(96,69,63,0.39) 69%, rgba(88,65,61,0.36) 72%, rgba(82,62,60,0.34) 76%, rgba(82,62,59,0.33) 79%, rgba(102,72,64,0.41) 83%, rgba(88,65,61,0.36) 86%, rgba(88,65,61,0.36) 90%, rgba(88,65,61,0.36) 93%, rgba(87,65,61,0.35) 97%, rgba(81,61,59,0.33) 100%);" aria-label="repeat density"></div>
+            <div class="ga-co-track ga-co-co"     style="background: linear-gradient(90deg, rgba(149,79,97,0.67) 0%, rgba(146,78,95,0.65) 3%, rgba(132,73,89,0.59) 7%, rgba(131,72,89,0.59) 10%, rgba(135,74,91,0.60) 14%, rgba(126,71,87,0.57) 17%, rgba(122,69,85,0.55) 21%, rgba(97,60,74,0.44) 24%, rgba(86,56,69,0.38) 28%, rgba(107,64,79,0.48) 31%, rgba(117,67,83,0.52) 34%, rgba(108,64,79,0.48) 38%, rgba(76,53,65,0.34) 41%, rgba(101,62,76,0.45) 45%, rgba(43,41,51,0.19) 48%, rgba(58,46,57,0.26) 52%, rgba(66,49,61,0.30) 55%, rgba(97,60,74,0.43) 59%, rgba(97,60,74,0.44) 62%, rgba(88,57,70,0.39) 66%, rgba(110,65,80,0.49) 69%, rgba(116,67,82,0.52) 72%, rgba(94,59,73,0.42) 76%, rgba(114,66,81,0.51) 79%, rgba(143,76,94,0.64) 83%, rgba(150,79,97,0.67) 86%, rgba(115,67,82,0.52) 90%, rgba(161,83,102,0.72) 93%, rgba(132,73,89,0.59) 97%, rgba(165,84,103,0.74) 100%);"     aria-label="CO density"></div>
+          </div>
+          <div class="ga-co-meta">
+            <span class="ga-num">19.0 Mb</span>
+            <span class="ga-co-t2t ga-t2t-yes">T2T</span>
+          </div>
+        </div>
+        <div class="ga-co-row" data-chrom="LG27">
+          <div class="ga-co-name">LG27</div>
+          <div class="ga-co-stack" style="width: 43.4%;">
+            <div class="ga-co-track ga-co-base">
+              <span class="ga-co-tel">○</span>
+              <div class="ga-co-centromere ga-co-cen-uncertain" style="left: 52%;"></div>
+              <span class="ga-co-tel ga-tel-yes">◀</span>
+            </div>
+            <div class="ga-co-track ga-co-gene"   style="background: linear-gradient(90deg, rgba(208,118,97,0.67) 0%, rgba(195,112,93,0.63) 3%, rgba(190,110,92,0.61) 7%, rgba(191,110,92,0.62) 10%, rgba(192,111,92,0.62) 14%, rgba(168,99,85,0.55) 17%, rgba(173,102,87,0.56) 21%, rgba(162,96,84,0.53) 24%, rgba(167,99,85,0.55) 28%, rgba(171,100,86,0.56) 31%, rgba(142,87,78,0.47) 34%, rgba(139,86,77,0.47) 38%, rgba(145,89,79,0.48) 41%, rgba(118,76,71,0.41) 45%, rgba(111,73,69,0.39) 48%, rgba(105,70,68,0.37) 52%, rgba(126,80,74,0.43) 55%, rgba(135,84,76,0.46) 59%, rgba(153,92,81,0.51) 62%, rgba(139,86,77,0.47) 66%, rgba(167,99,85,0.55) 69%, rgba(149,90,80,0.50) 72%, rgba(167,99,85,0.55) 76%, rgba(173,102,87,0.56) 79%, rgba(167,99,85,0.55) 83%, rgba(191,110,92,0.62) 86%, rgba(181,105,89,0.59) 90%, rgba(213,120,98,0.68) 93%, rgba(197,113,94,0.63) 97%, rgba(207,117,96,0.66) 100%);"   aria-label="gene density"></div>
+            <div class="ga-co-track ga-co-repeat" style="background: linear-gradient(90deg, rgba(96,69,63,0.39) 0%, rgba(89,66,61,0.36) 3%, rgba(94,68,62,0.38) 7%, rgba(86,64,60,0.35) 10%, rgba(85,64,60,0.35) 14%, rgba(91,67,62,0.37) 17%, rgba(95,69,63,0.38) 21%, rgba(86,64,60,0.35) 24%, rgba(94,68,62,0.38) 28%, rgba(97,70,63,0.39) 31%, rgba(101,72,64,0.40) 34%, rgba(100,71,64,0.40) 38%, rgba(88,65,61,0.36) 41%, rgba(126,85,70,0.50) 45%, rgba(133,89,72,0.52) 48%, rgba(169,108,80,0.65) 52%, rgba(178,113,82,0.69) 55%, rgba(163,105,79,0.63) 59%, rgba(168,108,80,0.65) 62%, rgba(169,108,80,0.65) 66%, rgba(144,95,74,0.56) 69%, rgba(131,88,71,0.51) 72%, rgba(106,75,65,0.42) 76%, rgba(93,68,62,0.37) 79%, rgba(92,67,62,0.37) 83%, rgba(93,68,62,0.37) 86%, rgba(86,64,61,0.35) 90%, rgba(94,68,62,0.38) 93%, rgba(102,73,64,0.41) 97%, rgba(98,71,63,0.39) 100%);" aria-label="repeat density"></div>
+            <div class="ga-co-track ga-co-co"     style="background: linear-gradient(90deg, rgba(141,76,93,0.63) 0%, rgba(142,76,93,0.63) 3%, rgba(130,72,88,0.58) 7%, rgba(132,73,89,0.59) 10%, rgba(131,72,89,0.59) 14%, rgba(99,61,75,0.45) 17%, rgba(136,74,91,0.61) 21%, rgba(110,65,80,0.49) 24%, rgba(127,71,87,0.57) 28%, rgba(88,57,70,0.40) 31%, rgba(78,53,66,0.35) 34%, rgba(96,60,74,0.43) 38%, rgba(97,60,74,0.44) 41%, rgba(97,60,74,0.44) 45%, rgba(51,44,54,0.23) 48%, rgba(40,40,50,0.18) 52%, rgba(92,58,72,0.41) 55%, rgba(109,64,79,0.49) 59%, rgba(93,59,72,0.42) 62%, rgba(78,53,66,0.35) 66%, rgba(95,59,73,0.43) 69%, rgba(123,69,85,0.55) 72%, rgba(123,69,85,0.55) 76%, rgba(141,76,93,0.63) 79%, rgba(144,77,94,0.64) 83%, rgba(114,66,81,0.51) 86%, rgba(121,69,84,0.54) 90%, rgba(140,75,92,0.62) 93%, rgba(155,81,99,0.69) 97%, rgba(130,72,88,0.58) 100%);"     aria-label="CO density"></div>
+          </div>
+          <div class="ga-co-meta">
+            <span class="ga-num">17.9 Mb</span>
+            <span class="ga-co-t2t">—</span>
+          </div>
+        </div>
+        <div class="ga-co-row" data-chrom="LG28">
+          <div class="ga-co-name">LG28</div>
+          <div class="ga-co-stack" style="width: 47.8%;">
+            <div class="ga-co-track ga-co-base">
+              <span class="ga-co-tel ga-tel-yes">▶</span>
+              <div class="ga-co-centromere" style="left: 45%;"></div>
+              <span class="ga-co-tel ga-tel-yes">◀</span>
+            </div>
+            <div class="ga-co-track ga-co-gene"   style="background: linear-gradient(90deg, rgba(205,117,96,0.66) 0%, rgba(218,122,99,0.69) 3%, rgba(191,110,92,0.62) 7%, rgba(212,120,98,0.68) 10%, rgba(202,115,95,0.65) 14%, rgba(178,104,88,0.58) 17%, rgba(190,110,92,0.61) 21%, rgba(171,101,86,0.56) 24%, rgba(169,100,86,0.55) 28%, rgba(153,92,81,0.51) 31%, rgba(148,90,80,0.49) 34%, rgba(142,87,78,0.48) 38%, rgba(145,89,79,0.48) 41%, rgba(136,84,76,0.46) 45%, rgba(135,84,76,0.46) 48%, rgba(127,80,74,0.43) 52%, rgba(116,75,71,0.40) 55%, rgba(135,84,76,0.46) 59%, rgba(136,85,77,0.46) 62%, rgba(152,92,81,0.50) 66%, rgba(163,97,84,0.54) 69%, rgba(178,104,88,0.58) 72%, rgba(154,93,81,0.51) 76%, rgba(175,102,87,0.57) 79%, rgba(192,111,92,0.62) 83%, rgba(202,115,95,0.65) 86%, rgba(204,116,95,0.65) 90%, rgba(217,122,99,0.69) 93%, rgba(215,121,98,0.69) 97%, rgba(217,122,99,0.69) 100%);"   aria-label="gene density"></div>
+            <div class="ga-co-track ga-co-repeat" style="background: linear-gradient(90deg, rgba(84,63,60,0.34) 0%, rgba(82,62,60,0.34) 3%, rgba(80,61,59,0.33) 7%, rgba(79,60,59,0.32) 10%, rgba(81,61,59,0.33) 14%, rgba(90,66,61,0.36) 17%, rgba(84,63,60,0.34) 21%, rgba(97,70,63,0.39) 24%, rgba(83,62,60,0.34) 28%, rgba(88,65,61,0.36) 31%, rgba(90,66,61,0.36) 34%, rgba(122,83,69,0.48) 38%, rgba(146,96,75,0.57) 41%, rgba(166,107,79,0.64) 45%, rgba(166,106,79,0.64) 48%, rgba(186,117,84,0.72) 52%, rgba(177,112,82,0.68) 55%, rgba(159,103,78,0.62) 59%, rgba(142,94,74,0.55) 62%, rgba(133,89,71,0.52) 66%, rgba(114,79,67,0.45) 69%, rgba(86,64,60,0.35) 72%, rgba(98,70,63,0.39) 76%, rgba(97,70,63,0.39) 79%, rgba(89,66,61,0.36) 83%, rgba(89,66,61,0.36) 86%, rgba(79,60,59,0.32) 90%, rgba(79,60,59,0.32) 93%, rgba(89,66,61,0.36) 97%, rgba(93,68,62,0.37) 100%);" aria-label="repeat density"></div>
+            <div class="ga-co-track ga-co-co"     style="background: linear-gradient(90deg, rgba(172,87,106,0.77) 0%, rgba(129,71,88,0.58) 3%, rgba(162,83,102,0.72) 7%, rgba(157,81,100,0.70) 10%, rgba(149,79,97,0.67) 14%, rgba(142,76,93,0.63) 17%, rgba(97,60,74,0.44) 21%, rgba(96,60,74,0.43) 24%, rgba(128,71,87,0.57) 28%, rgba(108,64,79,0.48) 31%, rgba(103,62,77,0.46) 34%, rgba(104,63,77,0.47) 38%, rgba(77,53,66,0.35) 41%, rgba(80,54,67,0.36) 45%, rgba(40,40,50,0.18) 48%, rgba(40,40,50,0.18) 52%, rgba(107,64,78,0.48) 55%, rgba(76,53,65,0.34) 59%, rgba(94,59,73,0.42) 62%, rgba(118,67,83,0.53) 66%, rgba(92,58,72,0.41) 69%, rgba(125,70,86,0.56) 72%, rgba(130,72,88,0.58) 76%, rgba(110,65,80,0.49) 79%, rgba(124,70,86,0.56) 83%, rgba(108,64,79,0.49) 86%, rgba(131,72,89,0.58) 90%, rgba(155,81,99,0.69) 93%, rgba(144,77,94,0.64) 97%, rgba(125,70,86,0.56) 100%);"     aria-label="CO density"></div>
+          </div>
+          <div class="ga-co-meta">
+            <span class="ga-num">19.7 Mb</span>
+            <span class="ga-co-t2t ga-t2t-yes">T2T</span>
+          </div>
+        </div>
+        </div>
+
         <div class="ga-card-footnote">
-          The highlight band on LG28 stands in for an active cohort candidate
-          read from <code>shared.candidate</code> (cross-atlas slot from the
-          Inversion Atlas). When that slot is null, no highlight renders.
+          The strip is <b>length-scaled</b>: LG01 sets the 100% width and the
+          smaller chroms scale proportionally so a reader can spot
+          length-vs-content trends at a glance. Each row stacks 4 sub-tracks
+          (base + gene + repeat + CO); the <b>cohort overlay</b> sub-track (row
+          5 of the design below) is drawn on hover when an Inversion-Atlas
+          candidate intersects the chrom. The Mac haplotype renders in an
+          identical strip; the toolbar toggles between them.
         </div>
       </div>
 
@@ -112,22 +587,75 @@
         </div>
         <div class="ga-panels-grid">
           <div class="ga-panel-name">1. base bar</div>
-          <div class="ga-panel-desc">Length-scaled chromosome backbone. Centromere band overlay from <code>centromere_telomere</code>.</div>
+          <div class="ga-panel-desc">Length-scaled chromosome backbone. Centromere band overlay from <code>centromere_telomere</code>; telomere chips at each end.</div>
 
           <div class="ga-panel-name">2. gene density</div>
-          <div class="ga-panel-desc">Heatmap stripe (panel-3 → accent gradient). 100 kbp bins.</div>
+          <div class="ga-panel-desc">Coral-gradient stripe. 100 kbp bins. Reads from <code>gene_track</code>; telomere-biased pattern is the expected catfish baseline.</div>
 
           <div class="ga-panel-name">3. repeat density</div>
-          <div class="ga-panel-desc">Heatmap stripe (panel-3 → bad gradient). Same binning.</div>
+          <div class="ga-panel-desc">Rust-gradient stripe. Same binning. Reads from <code>repeat_track</code>; peri-centromeric peak is the expected EDTA pattern.</div>
 
-          <div class="ga-panel-name">4. conserved density</div>
-          <div class="ga-panel-desc">Dot strip — UCE positions as ticks.</div>
+          <div class="ga-panel-name">4. CO density</div>
+          <div class="ga-panel-desc">Rose-gradient stripe. Sex-collapsed CO-event density from <code>crossover_track</code>; clicking pivots to page_crossovers filtered to the corresponding candidate.</div>
 
-          <div class="ga-panel-name">5. CO density</div>
-          <div class="ga-panel-desc">Sex-collapsed CO-event density (per-chrom, 100 kbp bins). Single-line heatmap stripe from <code>crossover_track</code>; clicking pivots to page_crossovers filtered to the corresponding candidate (or all-genome view when no candidate is hovered).</div>
+          <div class="ga-panel-name">5. cohort overlay</div>
+          <div class="ga-panel-desc">L2 envelope rectangles + candidate markers from the Inversion Atlas. Drawn on hover when <code>shared.candidate</code> intersects this chrom; otherwise hidden.</div>
+        </div>
+      </div>
 
-          <div class="ga-panel-name">6. cohort overlay</div>
-          <div class="ga-panel-desc">L2 envelope rectangles + candidate markers from the Inversion Atlas. Hidden when activeChrom is null.</div>
+      <div class="ga-card">
+        <div class="ga-card-header">
+          <div class="ga-card-title">Import schema — <code>chromosome_map.json</code></div>
+          <div class="ga-card-status">JSON Schema · draft-2020-12</div>
+        </div>
+        <pre class="ga-schema-block"><code>{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "chromosome_map.schema.json",
+  "title": "Chromosome map + density sub-tracks — per-haplotype",
+  "description": "One file per haplotype. The strip renderer fetches data/assembly/chromosome_map.&lt;hap&gt;.json (gitignored, rsynced from LANTA); the four density sub-tracks come from binning the layer-specific source files (gene_track.gff, repeat_track.bed, crossover_track.json) into the same chrom-bin lattice declared here.",
+  "type": "object",
+  "required": ["haplotype", "bin_size_bp", "chroms"],
+  "additionalProperties": true,
+  "properties": {
+    "haplotype":   { "type": "string", "description": "fClaHyb_Gar | fClaHyb_Mac" },
+    "bin_size_bp": { "type": "integer", "minimum": 1000, "description": "Bin width for the density tracks. Typical: 100000." },
+    "chroms": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/chrom" }
+    }
+  },
+  "$defs": {
+    "chrom": {
+      "type": "object",
+      "required": ["id", "length_bp", "n_bins"],
+      "additionalProperties": true,
+      "properties": {
+        "id":                  { "type": "string" },
+        "length_bp":           { "type": "integer", "minimum": 0 },
+        "n_bins":              { "type": "integer", "minimum": 1 },
+        "centromere_bp":       { "type": ["integer", "null"], "description": "Mean centromere position in bp; null if not localized." },
+        "centromere_half_width_bp": { "type": "integer", "description": "Centromere band drawn as [centromere_bp ± half_width]." },
+        "telomere_L":          { "type": "boolean", "description": "5' (start-of-chrom) telomere detected by tidk." },
+        "telomere_R":          { "type": "boolean" },
+        "is_t2t":              { "type": "boolean", "description": "centromere_complete && telomere_L && telomere_R." },
+        "gene_density": {
+          "type": "array",
+          "description": "Bin-aligned [0..1] normalized gene density. length == n_bins.",
+          "items": { "type": "number", "minimum": 0, "maximum": 1 }
+        },
+        "repeat_density":     { "type": "array", "items": { "type": "number", "minimum": 0, "maximum": 1 } },
+        "conserved_density":  { "type": "array", "items": { "type": "number", "minimum": 0, "maximum": 1 } },
+        "co_density":         { "type": "array", "items": { "type": "number", "minimum": 0, "maximum": 1 } }
+      }
+    }
+  }
+}</code></pre>
+        <div class="ga-card-footnote">
+          The strip rendered above is driven by exactly this schema. The bin
+          arrays are normalized to [0..1] on the cluster side (so the renderer
+          doesn't need to know the max bin value across all chroms before it can
+          draw the first row); the CSS gradient stops are computed from each
+          bin's normalized value.
         </div>
       </div>
 

@@ -811,6 +811,360 @@ html[data-theme="academic"] .ga-card {
   background: rgba(255, 140, 110, 0.08);
 }
 
+/* ---------------------------------------------------------------------
+ * page_chromosome_overview — length-scaled strip with stacked sub-tracks.
+ * 28 LGs render in a list; each row is name | stack | meta.
+ * --------------------------------------------------------------------- */
+.ga-co-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 8px;
+  font-size: 10px;
+  color: var(--ink-dim);
+  margin-bottom: 8px;
+}
+.ga-co-tool-label {
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-right: 2px;
+}
+.ga-co-tool-spacer { flex: 1 1 auto; }
+.ga-co-btn {
+  font: inherit;
+  font-size: 10px;
+  color: var(--ink-dim);
+  background: var(--panel-3);
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  padding: 3px 8px;
+  cursor: pointer;
+  font-family: var(--mono);
+}
+.ga-co-btn:hover {
+  color: var(--ink);
+  border-color: #ff8c6e;
+}
+.ga-co-btn.is-active {
+  color: var(--ink);
+  border-color: #ff8c6e;
+  background: rgba(255, 140, 110, 0.10);
+}
+
+.ga-co-legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 14px;
+  margin: 4px 0 10px 0;
+  font-size: 10px;
+  color: var(--ink-dim);
+}
+.ga-co-legend > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.ga-co-leg {
+  display: inline-block;
+  width: 28px;
+  height: 8px;
+  border: 1px solid var(--rule);
+  border-radius: 1px;
+}
+.ga-co-leg-base   { background: var(--panel-3); }
+.ga-co-leg-gene   { background: linear-gradient(90deg, rgba(40,40,50,0.3), rgba(255,140,110,0.8)); }
+.ga-co-leg-repeat { background: linear-gradient(90deg, rgba(40,40,50,0.3), rgba(210,130,90,0.8)); }
+.ga-co-leg-co     { background: linear-gradient(90deg, rgba(40,40,50,0.3), rgba(180,90,110,0.8)); }
+
+.ga-co-strip {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 4px;
+}
+.ga-co-row {
+  display: grid;
+  grid-template-columns: 50px 1fr 120px;
+  gap: 10px;
+  align-items: center;
+  font-size: 10.5px;
+}
+.ga-co-row:hover {
+  background: rgba(255, 140, 110, 0.04);
+}
+.ga-co-name {
+  font-family: var(--mono);
+  color: var(--ink-dim);
+  text-align: right;
+}
+.ga-co-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+.ga-co-track {
+  height: 10px;
+  border-radius: 1px;
+  position: relative;
+}
+/* Sub-track marker classes — the gradient itself is set inline (so the
+   density bins can be data-driven); these rules just tag the track with
+   its label so the renderer can hide / show per kind, and so screen
+   readers + dev-tools can identify the sub-track in the row. */
+.ga-co-gene   { /* gradient set inline */ }
+.ga-co-repeat { /* gradient set inline */ }
+.ga-co-co     { /* gradient set inline */ }
+.ga-co-base {
+  background: var(--panel-3);
+  border: 1px solid var(--rule);
+  height: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2px;
+  font-size: 8px;
+}
+.ga-co-centromere {
+  position: absolute;
+  top: 1px;
+  bottom: 1px;
+  width: 16%;
+  background: rgba(255, 140, 110, 0.45);
+  border-left:  1px solid rgba(255, 140, 110, 0.8);
+  border-right: 1px solid rgba(255, 140, 110, 0.8);
+  border-radius: 2px;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+.ga-co-centromere.ga-co-cen-uncertain {
+  background: repeating-linear-gradient(
+    45deg,
+    rgba(255, 140, 110, 0.20),
+    rgba(255, 140, 110, 0.20) 3px,
+    transparent 3px,
+    transparent 6px
+  );
+  border-color: rgba(255, 140, 110, 0.4);
+}
+.ga-co-tel {
+  font-size: 8px;
+  color: var(--ink-dimmer);
+  font-family: var(--mono);
+  padding: 0 2px;
+  z-index: 1;
+}
+.ga-co-tel.ga-tel-yes {
+  color: #ff8c6e;
+}
+.ga-co-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: flex-end;
+  font-size: 10px;
+  color: var(--ink-dim);
+}
+.ga-co-meta > .ga-num { color: var(--ink); }
+.ga-co-t2t {
+  font-size: 9px;
+  letter-spacing: 0.04em;
+  padding: 1px 4px;
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  background: var(--panel-3);
+  color: var(--ink-dimmer);
+}
+.ga-co-t2t.ga-t2t-yes {
+  color: #ff8c6e;
+  border-color: #ff8c6e;
+  background: rgba(255, 140, 110, 0.06);
+}
+
+/* ---------------------------------------------------------------------
+ * page_genes — gene-density bars, per-chrom track, cargo-per-candidate.
+ * --------------------------------------------------------------------- */
+.ga-gene-density-grid {
+  display: grid;
+  grid-template-columns: 0.6fr 1.0fr 0.8fr 1.0fr 4.0fr;
+  gap: 2px 10px;
+  font-size: 10.5px;
+}
+.ga-gd-head, .ga-gd-row { display: contents; }
+.ga-gd-head > span {
+  font-weight: 600;
+  color: var(--ink-dim);
+  font-size: 10px;
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 4px;
+}
+.ga-gd-row > span {
+  padding: 3px 0;
+  border-bottom: 1px dashed var(--rule);
+  font-family: var(--mono);
+}
+.ga-gd-bar {
+  display: inline-block;
+  background: linear-gradient(90deg, rgba(255, 140, 110, 0.6), rgba(255, 140, 110, 0.85));
+  height: 16px;
+  width: var(--w, 50%);
+  border-radius: 1px;
+  padding: 0 6px;
+  font-size: 9px;
+  color: var(--panel-1);
+  line-height: 16px;
+  white-space: nowrap;
+}
+
+.ga-gene-track-wrap {
+  margin: 4px 0;
+  padding: 6px 8px 8px 8px;
+  background: var(--panel-3);
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+}
+.ga-gene-track-svg { display: block; width: 100%; height: auto; }
+/* Strand-grouping classes — styling lives on the child rect/line elements
+   via stroke= / fill=; these classes just tag the <g> so the renderer can
+   hide / show strands. */
+.ga-gt-fwd { /* forward-strand gene group */ }
+.ga-gt-rev { /* reverse-strand gene group */ }
+
+.ga-cargo-table {
+  display: grid;
+  grid-template-columns: 1.4fr 0.7fr 1.1fr 0.6fr 2.0fr 1.0fr;
+  gap: 2px 10px;
+  font-size: 10.5px;
+}
+.ga-cargo-head, .ga-cargo-row { display: contents; }
+.ga-cargo-head > span {
+  font-weight: 600;
+  color: var(--ink-dim);
+  font-size: 10px;
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 4px;
+}
+.ga-cargo-row > span {
+  padding: 3px 0;
+  border-bottom: 1px dashed var(--rule);
+}
+
+/* ---------------------------------------------------------------------
+ * page_variant_annotations — tally / impact bars / variant detail.
+ * --------------------------------------------------------------------- */
+.ga-tally-table {
+  display: grid;
+  grid-template-columns: 1.4fr 0.7fr 0.6fr 0.6fr 0.7fr 0.9fr 2.0fr;
+  gap: 2px 10px;
+  font-size: 10.5px;
+}
+.ga-tally-head, .ga-tally-row { display: contents; }
+.ga-tally-head > span {
+  font-weight: 600;
+  color: var(--ink-dim);
+  font-size: 10px;
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 4px;
+}
+.ga-tally-row > span {
+  padding: 3px 0;
+  border-bottom: 1px dashed var(--rule);
+}
+
+.ga-impact {
+  font-size: 9px;
+  letter-spacing: 0.04em;
+  padding: 1px 4px;
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  background: var(--panel-3);
+  color: var(--ink-dimmer);
+  font-family: var(--mono);
+}
+.ga-impact-hi   { color: #c94f6b; border-color: #c94f6b; background: rgba(201, 79, 107, 0.10); }
+.ga-impact-mod  { color: #c9a23a; border-color: #c9a23a; background: rgba(201, 162, 58, 0.10); }
+.ga-impact-low  { color: var(--ink-dim); }
+.ga-impact-hi-text  { color: #c94f6b; }
+.ga-impact-mod-text { color: #c9a23a; }
+
+.ga-impact-bars { display: flex; flex-direction: column; gap: 6px; }
+.ga-impact-bar-row {
+  display: grid;
+  grid-template-columns: 130px 1fr;
+  gap: 10px;
+  align-items: center;
+  font-size: 10px;
+}
+.ga-impact-bar-label { color: var(--ink-dim); }
+.ga-impact-bar {
+  display: flex;
+  height: 18px;
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  overflow: hidden;
+  background: var(--panel-3);
+  font-size: 9px;
+  color: var(--panel-1);
+}
+.ga-impact-bar > span {
+  display: flex; align-items: center; justify-content: center;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.ga-impact-bar > .ga-impact-hi  { background: #c94f6b; color: #fff; }
+.ga-impact-bar > .ga-impact-mod { background: #c9a23a; color: #2a1a14; }
+.ga-impact-bar > .ga-impact-low { background: var(--panel-2); color: var(--ink-dim); border-color: transparent; }
+.ga-impact-bar > .ga-impact-mfr { background: var(--panel-1); color: var(--ink-dimmer); }
+
+.ga-var-table {
+  display: grid;
+  grid-template-columns: 1.0fr 1.6fr 1.2fr 0.8fr 1.6fr 0.7fr;
+  gap: 2px 10px;
+  font-size: 10.5px;
+}
+.ga-var-head, .ga-var-row { display: contents; }
+.ga-var-head > span {
+  font-weight: 600;
+  color: var(--ink-dim);
+  font-size: 10px;
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 4px;
+}
+.ga-var-row > span {
+  padding: 3px 0;
+  border-bottom: 1px dashed var(--rule);
+}
+
+/* ---------------------------------------------------------------------
+ * page_conserved_elements — UCE tick strip, candidate overlap, phastCons.
+ * --------------------------------------------------------------------- */
+.ga-uce-track-wrap, .ga-phastcons-wrap {
+  margin: 4px 0;
+  padding: 6px 8px 8px 8px;
+  background: var(--panel-3);
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+}
+.ga-uce-track-svg, .ga-phastcons-svg { display: block; width: 100%; height: auto; }
+
+.ga-uce-cargo {
+  display: grid;
+  grid-template-columns: 1.4fr 0.7fr 1.0fr 0.9fr 1.0fr 1.0fr 1.2fr;
+  gap: 2px 10px;
+  font-size: 10.5px;
+}
+.ga-uce-cargo-head, .ga-uce-cargo-row { display: contents; }
+.ga-uce-cargo-head > span {
+  font-weight: 600;
+  color: var(--ink-dim);
+  font-size: 10px;
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 4px;
+}
+.ga-uce-cargo-row > span {
+  padding: 3px 0;
+  border-bottom: 1px dashed var(--rule);
+}
+
 /* JSON Schema codeblock — re-used by every page that embeds a contract. */
 .ga-schema-block {
   background: var(--panel-3);

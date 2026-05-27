@@ -58,19 +58,189 @@
 
       <div class="ga-card">
         <div class="ga-card-header">
-          <div class="ga-card-title">Three views (mockup)</div>
-          <div class="ga-card-status">phase plan</div>
+          <div class="ga-card-title">View 1 — genome-wide gene density</div>
+          <div class="ga-card-status">mockup · driven by <code>gene_track</code></div>
         </div>
-        <div class="ga-panels-grid">
-          <div class="ga-panel-name">View 1 — genome-wide density</div>
-          <div class="ga-panel-desc">Bar chart, one bar per chromosome, height = gene count. Sort by length or by count. Highlights cross-haplotype asymmetries (Gar vs Mac).</div>
-
-          <div class="ga-panel-name">View 2 — per-chrom gene track</div>
-          <div class="ga-panel-desc">Gene models drawn as boxes (exons) + lines (introns) along a length-scaled axis. Color by strand. Hover to surface gene name + functional annotation. Width matches the Inversion Atlas scrubber so two windows can be stacked.</div>
-
-          <div class="ga-panel-name">View 3 — gene cargo per inversion</div>
-          <div class="ga-panel-desc">Table: candidate id · chrom · span · gene count · gene list (truncated) · max impact (HIGH / MODERATE / LOW / MODIFIER). Reads cross-atlas from <code>shared.candidateList</code>.</div>
+        <div class="ga-card-para ga-dim">
+          One bar per chromosome, height ∝ gene count. Sortable by length / by
+          count / by Gar–Mac asymmetry. Hover bars for gene-count vs chrom-
+          length ratio (genes per Mb).
         </div>
+        <div class="ga-gene-density-grid" role="table" aria-label="Per-chrom gene density">
+          <div class="ga-gd-head"><span>chrom</span><span class="ga-num-h">length (Mb)</span><span class="ga-num-h">genes</span><span class="ga-num-h">genes / Mb</span><span>bar</span></div>
+          <div class="ga-gd-row"><span>LG01</span><span class="ga-num">41.25</span><span class="ga-num">1412</span><span class="ga-num">34.2</span><span class="ga-gd-bar" style="--w: 100%">1412</span></div>
+          <div class="ga-gd-row"><span>LG02</span><span class="ga-num">38.90</span><span class="ga-num">1298</span><span class="ga-num">33.4</span><span class="ga-gd-bar" style="--w: 91.9%">1298</span></div>
+          <div class="ga-gd-row"><span>LG03</span><span class="ga-num">37.12</span><span class="ga-num">1105</span><span class="ga-num">29.8</span><span class="ga-gd-bar" style="--w: 78.3%">1105</span></div>
+          <div class="ga-gd-row"><span>LG04</span><span class="ga-num">36.41</span><span class="ga-num">1088</span><span class="ga-num">29.9</span><span class="ga-gd-bar" style="--w: 77.1%">1088</span></div>
+          <div class="ga-gd-row"><span>LG05</span><span class="ga-num">35.99</span><span class="ga-num">998</span> <span class="ga-num">27.7</span><span class="ga-gd-bar" style="--w: 70.7%">998</span></div>
+          <div class="ga-gd-row"><span>LG06</span><span class="ga-num">35.12</span><span class="ga-num">942</span> <span class="ga-num">26.8</span><span class="ga-gd-bar" style="--w: 66.7%">942</span></div>
+          <div class="ga-gd-row"><span>LG07</span><span class="ga-num">34.81</span><span class="ga-num">889</span> <span class="ga-num">25.5</span><span class="ga-gd-bar" style="--w: 63.0%">889</span></div>
+          <div class="ga-gd-row"><span>LG08</span><span class="ga-num">33.45</span><span class="ga-num">812</span> <span class="ga-num">24.3</span><span class="ga-gd-bar" style="--w: 57.5%">812</span></div>
+          <div class="ga-gd-row"><span>LG28</span><span class="ga-num">19.70</span><span class="ga-num">582</span> <span class="ga-num">29.5</span><span class="ga-gd-bar" style="--w: 41.2%">582</span></div>
+        </div>
+        <div class="ga-card-footnote">
+          Truncated to 9 illustrative rows; the real renderer shows all 28 +
+          27 = 55 LGs across the two haplotypes. Gar-vs-Mac asymmetry would
+          surface here as bar-pair-divergence (Gar bar vs adjacent Mac bar);
+          the test fixture has 19 855 total Gar genes vs 19 420 Mac genes —
+          a 2.2 % difference within expected inter-individual variance.
+        </div>
+      </div>
+
+      <div class="ga-card">
+        <div class="ga-card-header">
+          <div class="ga-card-title">View 2 — per-chrom gene track</div>
+          <div class="ga-card-status">mockup · LG01 shown</div>
+        </div>
+        <div class="ga-card-para ga-dim">
+          Gene models drawn as boxes (exons) + lines (introns) along a length-
+          scaled axis. Colour by strand (coral = forward, neutral = reverse).
+          Hover for gene name + functional annotation. Width matches the
+          Inversion Atlas scrubber so two windows can be stacked. Driven by
+          <code>activeChrom</code>.
+        </div>
+        <div class="ga-gene-track-wrap" aria-label="LG01 gene track mockup">
+          <svg viewBox="0 0 800 90" class="ga-gene-track-svg" preserveAspectRatio="none">
+            <line x1="20" y1="45" x2="780" y2="45" stroke="var(--rule)" stroke-width="1"/>
+            <text x="10" y="14" font-size="9" fill="var(--ink-dim)">LG01 — 41.25 Mb · 1412 genes</text>
+            <text x="10" y="86" font-size="9" fill="var(--ink-dim)">0</text>
+            <text x="780" y="86" font-size="9" fill="var(--ink-dim)" text-anchor="end">41.25 Mb</text>
+            <!-- Forward-strand genes (above the axis) -->
+            <g class="ga-gt-fwd">
+              <line x1="40"  y1="35" x2="62"  y2="35" stroke="#ff8c6e" stroke-width="1"/>
+              <rect x="40"  y="32" width="8"  height="6" fill="#ff8c6e"/>
+              <rect x="51"  y="32" width="11" height="6" fill="#ff8c6e"/>
+              <line x1="80"  y1="35" x2="108" y2="35" stroke="#ff8c6e" stroke-width="1"/>
+              <rect x="80"  y="32" width="6"  height="6" fill="#ff8c6e"/>
+              <rect x="92"  y="32" width="9"  height="6" fill="#ff8c6e"/>
+              <rect x="103" y="32" width="5"  height="6" fill="#ff8c6e"/>
+              <line x1="148" y1="35" x2="180" y2="35" stroke="#ff8c6e" stroke-width="1"/>
+              <rect x="148" y="32" width="12" height="6" fill="#ff8c6e"/>
+              <rect x="166" y="32" width="14" height="6" fill="#ff8c6e"/>
+              <line x1="220" y1="35" x2="252" y2="35" stroke="#ff8c6e" stroke-width="1"/>
+              <rect x="220" y="32" width="9"  height="6" fill="#ff8c6e"/>
+              <rect x="234" y="32" width="11" height="6" fill="#ff8c6e"/>
+              <rect x="248" y="32" width="4"  height="6" fill="#ff8c6e"/>
+              <line x1="320" y1="35" x2="368" y2="35" stroke="#ff8c6e" stroke-width="1"/>
+              <rect x="320" y="32" width="20" height="6" fill="#ff8c6e"/>
+              <rect x="346" y="32" width="22" height="6" fill="#ff8c6e"/>
+              <line x1="460" y1="35" x2="498" y2="35" stroke="#ff8c6e" stroke-width="1"/>
+              <rect x="460" y="32" width="11" height="6" fill="#ff8c6e"/>
+              <rect x="478" y="32" width="20" height="6" fill="#ff8c6e"/>
+              <line x1="560" y1="35" x2="600" y2="35" stroke="#ff8c6e" stroke-width="1"/>
+              <rect x="560" y="32" width="14" height="6" fill="#ff8c6e"/>
+              <rect x="580" y="32" width="20" height="6" fill="#ff8c6e"/>
+              <line x1="680" y1="35" x2="720" y2="35" stroke="#ff8c6e" stroke-width="1"/>
+              <rect x="680" y="32" width="16" height="6" fill="#ff8c6e"/>
+              <rect x="702" y="32" width="18" height="6" fill="#ff8c6e"/>
+            </g>
+            <!-- Reverse-strand genes (below the axis) -->
+            <g class="ga-gt-rev">
+              <line x1="60"  y1="55" x2="92"  y2="55" stroke="var(--ink-dim)" stroke-width="1"/>
+              <rect x="60"  y="52" width="8"  height="6" fill="var(--ink-dim)"/>
+              <rect x="75"  y="52" width="11" height="6" fill="var(--ink-dim)"/>
+              <rect x="88"  y="52" width="4"  height="6" fill="var(--ink-dim)"/>
+              <line x1="120" y1="55" x2="140" y2="55" stroke="var(--ink-dim)" stroke-width="1"/>
+              <rect x="120" y="52" width="10" height="6" fill="var(--ink-dim)"/>
+              <rect x="132" y="52" width="8"  height="6" fill="var(--ink-dim)"/>
+              <line x1="200" y1="55" x2="240" y2="55" stroke="var(--ink-dim)" stroke-width="1"/>
+              <rect x="200" y="52" width="14" height="6" fill="var(--ink-dim)"/>
+              <rect x="220" y="52" width="20" height="6" fill="var(--ink-dim)"/>
+              <line x1="280" y1="55" x2="320" y2="55" stroke="var(--ink-dim)" stroke-width="1"/>
+              <rect x="280" y="52" width="18" height="6" fill="var(--ink-dim)"/>
+              <rect x="304" y="52" width="16" height="6" fill="var(--ink-dim)"/>
+              <line x1="400" y1="55" x2="440" y2="55" stroke="var(--ink-dim)" stroke-width="1"/>
+              <rect x="400" y="52" width="20" height="6" fill="var(--ink-dim)"/>
+              <rect x="424" y="52" width="16" height="6" fill="var(--ink-dim)"/>
+              <line x1="520" y1="55" x2="544" y2="55" stroke="var(--ink-dim)" stroke-width="1"/>
+              <rect x="520" y="52" width="10" height="6" fill="var(--ink-dim)"/>
+              <rect x="534" y="52" width="10" height="6" fill="var(--ink-dim)"/>
+              <line x1="620" y1="55" x2="664" y2="55" stroke="var(--ink-dim)" stroke-width="1"/>
+              <rect x="620" y="52" width="22" height="6" fill="var(--ink-dim)"/>
+              <rect x="646" y="52" width="18" height="6" fill="var(--ink-dim)"/>
+              <line x1="730" y1="55" x2="770" y2="55" stroke="var(--ink-dim)" stroke-width="1"/>
+              <rect x="730" y="52" width="12" height="6" fill="var(--ink-dim)"/>
+              <rect x="748" y="52" width="22" height="6" fill="var(--ink-dim)"/>
+            </g>
+            <text x="35"  y="26" font-size="8" fill="var(--ink-dim)" text-anchor="middle">tubulin α</text>
+            <text x="170" y="26" font-size="8" fill="var(--ink-dim)" text-anchor="middle">hsp90α</text>
+            <text x="345" y="26" font-size="8" fill="var(--ink-dim)" text-anchor="middle">myosin 7</text>
+            <text x="700" y="26" font-size="8" fill="var(--ink-dim)" text-anchor="middle">collagen 1A1</text>
+          </svg>
+        </div>
+        <div class="ga-card-footnote">
+          Mockup. The real renderer reads <code>gene_track.gff</code> and draws
+          one rect per exon, with introns as connecting lines. Hover tooltip
+          carries gene id + symbol + functional annotation (from Liftoff /
+          BRAKER product fields).
+        </div>
+      </div>
+
+      <div class="ga-card">
+        <div class="ga-card-header">
+          <div class="ga-card-title">View 3 — gene cargo per inversion candidate</div>
+          <div class="ga-card-status">mockup · per-candidate table</div>
+        </div>
+        <div class="ga-card-para ga-dim">
+          For every promoted candidate from the Inversion Atlas, list the genes
+          inside its span. Sort by max SnpEff impact (HIGH / MODERATE / LOW /
+          MODIFIER) when <code>variant_annotations</code> is loaded. Cross-atlas
+          reads from <code>shared.candidateList</code>.
+        </div>
+        <div class="ga-cargo-table" role="table" aria-label="Gene cargo per inversion candidate">
+          <div class="ga-cargo-head"><span>candidate</span><span>chrom</span><span class="ga-num-h">span (Mb)</span><span class="ga-num-h">genes</span><span>top 3 genes</span><span>max impact</span></div>
+          <div class="ga-cargo-row"><span><code>cgar_inv_001</code></span><span>LG01</span><span class="ga-num">4.8–9.2</span><span class="ga-num">142</span><span class="ga-dim">tubulin α · myosin 7 · α-tubulin paralog</span><span class="ga-impact ga-impact-mod">MODERATE</span></div>
+          <div class="ga-cargo-row"><span><code>cgar_inv_002</code></span><span>LG03</span><span class="ga-num">12.4–18.1</span><span class="ga-num">208</span><span class="ga-dim">collagen 1A1 · hsp90α · ribosomal L7</span><span class="ga-impact ga-impact-hi">HIGH</span></div>
+          <div class="ga-cargo-row"><span><code>cgar_inv_003</code></span><span>LG07</span><span class="ga-num">22.1–24.0</span><span class="ga-num">68</span> <span class="ga-dim">cytb · COX1 · NADH4L</span><span class="ga-impact ga-impact-low">LOW</span></div>
+          <div class="ga-cargo-row"><span><code>cgar_inv_004</code></span><span>LG09</span><span class="ga-num">8.1–14.7</span><span class="ga-num">220</span><span class="ga-dim">enolase 1 · hsp70 · β-actin</span><span class="ga-impact ga-impact-hi">HIGH</span></div>
+          <div class="ga-cargo-row"><span><code>cgar_inv_005</code></span><span>LG12</span><span class="ga-num">2.4–6.8</span><span class="ga-num">158</span><span class="ga-dim">ferritin H · calmodulin · talin 1</span><span class="ga-impact ga-impact-mod">MODERATE</span></div>
+          <div class="ga-cargo-row"><span><code>cgar_inv_006</code></span><span>LG18</span><span class="ga-num">11.2–13.4</span><span class="ga-num">82</span> <span class="ga-dim">histone H2A · histone H3 · tubulin β</span><span class="ga-impact ga-impact-low">LOW</span></div>
+          <div class="ga-cargo-row"><span><code>cgar_inv_007</code></span><span>LG28</span><span class="ga-num">4.8–12.3</span><span class="ga-num">192</span><span class="ga-dim">SRP14 · pyruvate dehydrogenase · L11</span><span class="ga-impact ga-impact-mod">MODERATE</span></div>
+        </div>
+        <div class="ga-card-footnote">
+          Top-3 column lists the 3 highest-impact genes (or 3 highest-rank
+          functional annotations if no variant calls are loaded). The full
+          per-candidate gene list is reachable via the candidate-detail page
+          on the Inversion Atlas.
+        </div>
+      </div>
+
+      <div class="ga-card">
+        <div class="ga-card-header">
+          <div class="ga-card-title">Import schema — <code>gene_track.gff</code></div>
+          <div class="ga-card-status">GFF3 · standard fields</div>
+        </div>
+        <div class="ga-card-para ga-dim">
+          The gene track is a standard GFF3 file (no atlas-specific JSON).
+          The renderer materializes it into per-chrom in-memory arrays at
+          mount; the dispatcher's <code>import_table</code> runner can also
+          ingest it into a <code>staging_genome_table_v0</code> envelope for
+          forensic queries.
+        </div>
+        <pre class="ga-schema-block"><code># gene_track.gff (GFF3)
+# Standard 9-column format. The atlas reads:
+#   col 1: seqid       (chrom; matches assembly_stats.per_chrom[*].chrom)
+#   col 3: type        ('gene' | 'mRNA' | 'exon' | 'CDS' | 'five_prime_UTR' | ...)
+#   col 4: start_bp    (1-based, GFF3 convention)
+#   col 5: end_bp      (inclusive)
+#   col 7: strand      ('+' | '-' | '.')
+#   col 9: attributes  (ID=...; Name=...; product=...; gene_biotype=...)
+#
+# Example rows (the renderer paginates by chrom):
+LG01  BRAKER3  gene  2418520  2429110  .  +  .  ID=g00012;Name=CGAR.LG01.g00012;gene_biotype=protein_coding;product=tubulin alpha 1a
+LG01  BRAKER3  mRNA  2418520  2429110  .  +  .  ID=g00012.t1;Parent=g00012
+LG01  BRAKER3  exon  2418520  2418680  .  +  .  ID=g00012.t1.e1;Parent=g00012.t1
+LG01  BRAKER3  exon  2419010  2419520  .  +  .  ID=g00012.t1.e2;Parent=g00012.t1
+LG01  BRAKER3  exon  2420410  2421120  .  +  .  ID=g00012.t1.e3;Parent=g00012.t1
+LG01  BRAKER3  exon  2421810  2422910  .  +  .  ID=g00012.t1.e4;Parent=g00012.t1
+LG01  BRAKER3  exon  2423400  2424410  .  +  .  ID=g00012.t1.e5;Parent=g00012.t1
+LG01  BRAKER3  exon  2424910  2425520  .  +  .  ID=g00012.t1.e6;Parent=g00012.t1
+LG01  BRAKER3  exon  2428100  2429110  .  +  .  ID=g00012.t1.e7;Parent=g00012.t1
+LG01  Liftoff  gene  5108300  5120880  .  -  .  ID=g00013;Name=CGAR.LG01.g00013;gene_biotype=protein_coding;product=heat shock protein 90 alpha
+LG01  Liftoff  mRNA  5108300  5120880  .  -  .  ID=g00013.t1;Parent=g00013
+LG01  Liftoff  exon  5108300  5108920  .  -  .  ID=g00013.t1.e1;Parent=g00013.t1
+LG01  Liftoff  exon  5109810  5110720  .  -  .  ID=g00013.t1.e2;Parent=g00013.t1
+LG01  Liftoff  exon  5112310  5114210  .  -  .  ID=g00013.t1.e3;Parent=g00013.t1</code></pre>
       </div>
 
       <div class="ga-card">
