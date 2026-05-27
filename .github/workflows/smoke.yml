@@ -21,3 +21,46 @@ jobs:
 
       - name: run smoke-script self-tests
         run: python3 tests/test_smoke_checks.py
+
+  cross-atlas-js:
+    # JS test runner for the cross-atlas selection layer (shared modules
+    # + page-index + active-pill + the headless DOM stub). See
+    # docs/CROSS_ATLAS_INTEGRATION.md and test/README.md for what's
+    # covered. Stock Node, no package.json / npm install.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: syntax-check every shared module + touched page
+        run: |
+          set -euo pipefail
+          for f in \
+            atlases/genome/shared/candidates.js \
+            atlases/genome/shared/cross-atlas.js \
+            atlases/genome/shared/active-pill.js \
+            atlases/genome/shared/page-index.js \
+            atlases/genome/pages/assembly/page_scaffold.js \
+            atlases/genome/pages/assembly/page_assembly_stats.js \
+            atlases/genome/pages/assembly/page_chromosome_overview.js \
+            atlases/genome/pages/assembly/page_assembly_methods.js \
+            atlases/genome/pages/annotation/page_genes.js \
+            atlases/genome/pages/annotation/page_repeats_te.js \
+            atlases/genome/pages/annotation/page_variant_annotations.js \
+            atlases/genome/pages/annotation/page_conserved_elements.js \
+            atlases/genome/pages/comparative/page_synteny.js \
+            atlases/genome/pages/comparative/page_haplotype_synteny.js \
+            atlases/genome/pages/comparative/page_ancestral_karyotype.js \
+            atlases/genome/pages/comparative/page_orthologues.js \
+            atlases/genome/pages/comparative/page_comparative_te.js \
+            test/run.js \
+            test/_dom-stub.js \
+            test/_assert.js; do
+            node --check "$f"
+          done
+
+      - name: run cross-atlas test suite
+        run: node test/run.js
