@@ -1613,6 +1613,34 @@ html[data-theme="light"]    .ga-sankey-btn.is-active {
 }
 .ga-chromov-cand:hover { fill: var(--accent); fill-opacity: 0.18; }
 
+/* Centromere band overlay (when start/end coords known). Sits on top of
+   the backbone — slightly darker fill so it reads as a constriction. */
+.ga-chromov-cent-band {
+  fill: var(--ink-dim, #555);
+  fill-opacity: 0.55;
+  stroke: var(--ink, #222);
+  stroke-width: 0.6;
+}
+/* Centromere marker dot (when only "complete" is known, no position). */
+.ga-chromov-cent-dot {
+  fill: var(--ink-dim, #555);
+  stroke: var(--ink, #222);
+  stroke-width: 0.6;
+  opacity: 0.85;
+}
+/* Telomere caps at chromosome ends — small contrast pips on the backbone. */
+.ga-chromov-telo {
+  fill: var(--accent, #c97);
+  fill-opacity: 0.95;
+  stroke: none;
+}
+/* T2T-complete chip rendered next to the length label. */
+.ga-chromov-t2t {
+  font: 9px var(--mono);
+  fill: var(--accent, #c97);
+  letter-spacing: 0.04em;
+}
+
 
 /* ---------------------------------------------------------------------
  * Live-page UI primitives (added 2026-05-27).

@@ -22,11 +22,13 @@
           Backbone sized by <code>chromosome_map.chroms[].length_bp</code>;
           stripes are 100 kbp bins of <code>gene_track</code> (gene density),
           <code>repeat_track</code> (repeat density) and
-          <code>conserved_elements</code> (UCE density). Cohort overlay
-          rectangles read <code>inversion.candidates_v1</code> cross-atlas.
-          Missing layers leave their stripe blank. crossover_track is
-          per-candidate and lives in meiosis-atlas — surfaced in
-          <code>meiosis / crossovers_per_candidate</code>.
+          <code>conserved_elements</code> (UCE density). Centromere bands +
+          telomere caps + T2T chips read <code>centromere_telomere</code>
+          (tolerant of position-known and presence-only upstream shapes).
+          Cohort overlay rectangles read <code>inversion.candidates_v1</code>
+          cross-atlas. Missing layers leave their stripe blank.
+          crossover_track is per-candidate and lives in meiosis-atlas —
+          surfaced in <code>meiosis / crossovers_per_candidate</code>.
         </div>
       </div>
 
@@ -135,7 +137,7 @@
         </div>
         <div class="ga-panels-grid">
           <div class="ga-panel-name">1. base bar</div>
-          <div class="ga-panel-desc">Length-scaled chromosome backbone. Centromere band overlay from <code>centromere_telomere</code>.</div>
+          <div class="ga-panel-desc">Length-scaled chromosome backbone. Centromere band overlay from <code>centromere_telomere</code> (live; positional band when start/end known, constriction dot when only "complete" flag is known); telomere caps at both ends (live); T2T chip next to the length label (live).</div>
 
           <div class="ga-panel-name">2. gene density</div>
           <div class="ga-panel-desc">Heatmap stripe (panel-3 → accent gradient). 100 kbp bins.</div>
