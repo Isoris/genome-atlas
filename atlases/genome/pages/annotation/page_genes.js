@@ -208,16 +208,49 @@ function _renderDensity() {
     const y = DENSITY_PAD_T + i * DENSITY_BAR_H + 1;
     const xEnd = xFor(r.count);
     const w = Math.max(1, xEnd - DENSITY_PAD_L);
+    // Whole row (label + bar + count) lives in a <g data-ga-density-chrom>
+    // so click delegation can pick up either the label, the bar, or the
+    // count without the user having to hit the bar precisely.
     parts.push(
+      `<g class="ga-density-row" data-ga-density-chrom="${_esc(r.chrom)}">`,
+      `<rect class="ga-density-row-hit" x="0" y="${y - 1}" width="${DENSITY_W}" height="${DENSITY_BAR_H}" fill="transparent" pointer-events="all"/>`,
       `<text class="ga-density-label" x="${DENSITY_PAD_L - 6}" y="${y + DENSITY_BAR_H / 2 + 3}" text-anchor="end">${_esc(r.chrom)}</text>`,
       `<rect class="ga-density-bar" x="${DENSITY_PAD_L}" y="${y}" width="${w}" height="${DENSITY_BAR_H - 2}">` +
         `<title>${_esc(r.chrom)} · ${_fmtInt(r.count)} genes · ${_fmtMb(r.length_bp)} Mb</title>` +
       `</rect>`,
       `<text class="ga-density-val" x="${xEnd + 4}" y="${y + DENSITY_BAR_H / 2 + 3}">${_fmtInt(r.count)}</text>`,
+      `</g>`,
     );
   });
   parts.push('</svg>');
   slot.innerHTML = parts.join('');
+  _wireDensityClicks();
+  _applyActiveChromHighlightDensity(_getActiveChrom());
+}
+
+function _wireDensityClicks() {
+  const slot = document.getElementById('pageGenesDensitySlot');
+  if (!slot || slot.__gaDensityClicksWired) return;
+  slot.addEventListener('click', (ev) => {
+    const g = ev.target.closest && ev.target.closest('g[data-ga-density-chrom]');
+    if (!g) return;
+    const chrom = g.getAttribute('data-ga-density-chrom');
+    if (!chrom) return;
+    g.dispatchEvent(new CustomEvent('ga-density-chrom-click', {
+      bubbles: true,
+      detail: { chrom },
+    }));
+  });
+  slot.__gaDensityClicksWired = true;
+}
+
+function _applyActiveChromHighlightDensity(active) {
+  const slot = document.getElementById('pageGenesDensitySlot');
+  if (!slot) return;
+  const id = active && active.chrom;
+  slot.querySelectorAll('g[data-ga-density-chrom]').forEach((g) => {
+    g.classList.toggle('is-active', id != null && g.getAttribute('data-ga-density-chrom') === id);
+  });
 }
 
 function _applyDensitySort() {
@@ -475,10 +508,13 @@ export async function mount(root, atlasState, registry) {
   _installPageIndex(root, 'page_genes');
 
   // Chrom-aware: when any sibling page sets the active chrom (page_assembly_stats
-  // QC row click, page_chromosome_overview strip click), switch this page's
-  // gene-track dropdown + redraw.
+  // QC row click, page_chromosome_overview strip click, this page's own
+  // density bar click), switch the gene-track dropdown + redraw AND
+  // highlight the matching density row.
   if (root && !root.__gaGenesChromSub) {
     root.__gaGenesChromSub = _onActiveChrom(({ chrom }) => {
+      const active = chrom ? { chrom } : null;
+      _applyActiveChromHighlightDensity(active);
       if (!chrom || chrom === _state.trackChrom) return;
       // Only switch if the chrom actually exists in this page's gene_track.
       const exists = _state.perChrom.some((c) => c.chrom === chrom);

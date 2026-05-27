@@ -361,14 +361,18 @@ function _renderStrip() {
     if (_state.repeatBins && _state.repeatBins.get(c.id)) stripeY = _drawStripe(parts, _state.repeatBins.get(c.id), repeatMax, LABEL_W, stripeY, w, 'repeat') + STRIPE_GAP;
     if (_state.uceBins && _state.uceBins.get(c.id))       stripeY = _drawStripe(parts, _state.uceBins.get(c.id),    uceMax,    LABEL_W, stripeY, w, 'uce')    + STRIPE_GAP;
 
-    // Candidate overlay
+    // Candidate overlay — each band is its own SVG element tagged with
+    // the candidate id so the strip becomes a candidate-picker too. The
+    // click delegation below dispatches ga-cargo-cand-click so sister
+    // pages (page_genes cargo, page_variant_annotations burden, etc.)
+    // light up when the user clicks an overlay band on the strip.
     const cands = candByChrom.get(c.id) || [];
     for (const cand of cands) {
       const cx0 = xFor(cand.start_bp);
       const cx1 = xFor(cand.end_bp);
       const cw = Math.max(2, cx1 - cx0);
       parts.push(
-        `<rect class="ga-chromov-cand" x="${cx0.toFixed(1)}" y="${yTop - 2}" width="${cw.toFixed(1)}" height="${BACKBONE_H + 4}" rx="2" ry="2">` +
+        `<rect class="ga-chromov-cand" data-ga-cand-id="${_esc(cand.id)}" x="${cx0.toFixed(1)}" y="${yTop - 2}" width="${cw.toFixed(1)}" height="${BACKBONE_H + 4}" rx="2" ry="2">` +
         `<title>${_esc(cand.id)} · ${_esc(c.id)} · ${_fmtMb(cand.start_bp)} – ${_fmtMb(cand.end_bp)} Mb</title></rect>`
       );
     }
@@ -391,6 +395,26 @@ function _wireStripClicks() {
   const slot = document.getElementById('pageChromOvStripSlot');
   if (!slot || slot.__gaStripClicksWired) return;
   slot.addEventListener('click', (ev) => {
+    // Click a candidate overlay band first — bands sit on top of the
+    // backbone so the closest()-walk picks the band before the row group.
+    // Dispatches ga-cargo-cand-click with the full candidate (id, chrom,
+    // span) so sister pages light up + the router sets active chrom too.
+    const candEl = ev.target.closest && ev.target.closest('[data-ga-cand-id]');
+    if (candEl) {
+      ev.stopPropagation();
+      const candId = candEl.getAttribute('data-ga-cand-id');
+      const cand = _state.candidates.find((c) => c.id === candId);
+      candEl.dispatchEvent(new CustomEvent('ga-cargo-cand-click', {
+        bubbles: true,
+        detail: {
+          candidate: cand
+            ? { id: candId, chrom: cand.chrom, start_bp: cand.start_bp, end_bp: cand.end_bp, label: candId }
+            : { id: candId },
+        },
+      }));
+      return;
+    }
+    // Otherwise it's a plain chrom-row click → active chrom only.
     const g = ev.target.closest && ev.target.closest('g[data-ga-strip-chrom]');
     if (!g) return;
     const chrom = g.getAttribute('data-ga-strip-chrom');

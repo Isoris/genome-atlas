@@ -1690,6 +1690,22 @@ html[data-theme="light"]    .ga-sankey-btn.is-active {
 .ga-density-svg { width: 100%; height: auto; display: block; }
 .ga-density-bar  { fill: var(--accent); opacity: 0.78; }
 .ga-density-bar:hover { opacity: 1; }
+/* page_genes View 1 density bars participate in the cross-atlas
+   chrom-selection loop. Whole row is a click target. */
+.ga-density-svg g.ga-density-row { cursor: pointer; }
+.ga-density-svg g.ga-density-row:hover .ga-density-bar { opacity: 1; }
+.ga-density-svg g.ga-density-row.is-active .ga-density-bar {
+  fill: #ff8c6e;
+  opacity: 1;
+}
+.ga-density-svg g.ga-density-row.is-active .ga-density-label,
+.ga-density-svg g.ga-density-row.is-active .ga-density-val {
+  fill: #ff8c6e;
+  font-weight: 600;
+}
+html[data-theme="light"] .ga-density-svg g.ga-density-row.is-active .ga-density-bar { fill: #c2410c; }
+html[data-theme="light"] .ga-density-svg g.ga-density-row.is-active .ga-density-label,
+html[data-theme="light"] .ga-density-svg g.ga-density-row.is-active .ga-density-val { fill: #c2410c; }
 .ga-density-label,
 .ga-density-val {
   font: 10px var(--mono);
@@ -1712,6 +1728,7 @@ html[data-theme="light"]    .ga-sankey-btn.is-active {
   stroke: var(--accent);
   stroke-width: 1.5;
   opacity: 0.85;
+  cursor: pointer;
 }
 .ga-chromov-cand:hover { fill: var(--accent); fill-opacity: 0.18; }
 
