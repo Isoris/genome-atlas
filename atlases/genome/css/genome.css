@@ -1546,6 +1546,61 @@ html[data-theme="light"] .ga-gene-tooltip { border-left-color: #c2410c; }
   color: var(--ink-dim);
 }
 
+/* --------------------------------------------------------------------- */
+/* page8 — Conserved elements (UCE tick strip + phastCons profile).      */
+/* Re-uses .ga-gene-* axis/title/tooltip rules + .ga-impact-* table.     */
+/* --------------------------------------------------------------------- */
+
+.ga-ce-strip-host {
+  position: relative;
+  margin: 4px 0 6px 0;
+  padding: 6px 8px 8px 8px;
+  background: var(--panel-3);
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+}
+.ga-ce-strip-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  font-family: var(--mono);
+  user-select: none;
+}
+.ga-ce-tick-bg {
+  fill: var(--panel-2);
+  stroke: var(--rule);
+  stroke-width: 0.5;
+}
+.ga-ce-prof-bg {
+  fill: var(--panel-2);
+  stroke: var(--rule);
+  stroke-width: 0.5;
+}
+.ga-ce-tick {
+  stroke-width: 1.5;
+  cursor: crosshair;
+}
+.ga-ce-tick:hover { stroke-width: 2.5; }
+.ga-ce-prof-area { stroke-linejoin: round; }
+.ga-ce-threshold-line { pointer-events: none; }
+
+/* Threshold slider in the toolbar */
+.ga-ce-range {
+  width: 160px;
+  vertical-align: middle;
+  accent-color: #ff8c6e;
+}
+.ga-ce-threshold-readout {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+  min-width: 32px;
+  display: inline-block;
+}
+
+html[data-theme="light"] .ga-ce-range { accent-color: #c2410c; }
+
 /* --- JSON-schema codeblock ------------------------------------------- */
 .ga-schema-block {
   margin: 4px 0;

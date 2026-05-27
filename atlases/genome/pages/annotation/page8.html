@@ -50,7 +50,7 @@
 
       <div class="ga-card">
         <div class="ga-card-header">
-          <div class="ga-card-title">Views (mockup)</div>
+          <div class="ga-card-title">Three views (overview)</div>
           <div class="ga-card-status">phase plan</div>
         </div>
         <div class="ga-panels-grid">
@@ -63,6 +63,48 @@
           <div class="ga-panel-name">View 3 — phastCons score profile</div>
           <div class="ga-panel-desc">Continuous score track (phastCons posterior probability) along the active chromosome. Highlights conserved peaks not annotated as UCEs.</div>
         </div>
+      </div>
+
+      <div class="ga-card" data-ga-card="ce-track">
+        <div class="ga-card-header">
+          <div class="ga-card-title">View 1 + 3 — Per-chromosome conserved track</div>
+          <div class="ga-card-status" data-ga-ce-source>sample data</div>
+        </div>
+        <div class="ga-card-para ga-dim">
+          Pick a chromosome to view its UCE tick strip (top) and phastCons
+          posterior profile (bottom). Ticks are scaled to the chrom length;
+          hover any tick for its score and bp position.
+        </div>
+        <div class="ga-gene-toolbar" role="toolbar" aria-label="Conserved track controls">
+          <span class="ga-gene-tool-label">chrom</span>
+          <select class="ga-gene-select" data-ga-ce-chrom></select>
+          <span class="ga-gene-tool-spacer"></span>
+          <span class="ga-gene-tool-label">score ≥</span>
+          <input type="range" min="0" max="100" value="0" step="5" class="ga-ce-range" data-ga-ce-threshold>
+          <span class="ga-ce-threshold-readout" data-ga-ce-threshold-readout>0.00</span>
+        </div>
+        <div class="ga-ce-strip-host" data-ga-ce-strip
+             role="img" aria-label="UCE tick strip + phastCons profile.">
+          <svg class="ga-ce-strip-svg"
+               viewBox="0 0 960 220"
+               preserveAspectRatio="xMidYMid meet"
+               xmlns="http://www.w3.org/2000/svg"></svg>
+          <div class="ga-gene-tooltip" data-ga-ce-tip role="tooltip" hidden></div>
+        </div>
+      </div>
+
+      <div class="ga-card" data-ga-card="ce-overlap">
+        <div class="ga-card-header">
+          <div class="ga-card-title">View 2 — Conserved-element overlap per candidate</div>
+          <div class="ga-card-status">cross-atlas: shared.candidates</div>
+        </div>
+        <div class="ga-card-para ga-dim">
+          One row per promoted candidate. Counts and bp totals come from any
+          UCE whose interval intersects the candidate's span on the same
+          chromosome; max phastCons score scans the candidate window of the
+          binned profile. Sortable headers.
+        </div>
+        <div class="ga-impact-table-host" data-ga-ce-overlap></div>
       </div>
 
       <div class="ga-card">
