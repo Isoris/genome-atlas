@@ -1,0 +1,23 @@
+##gff-version 3
+##date 2026-05-12
+##genome fClaHyb_Gar.fa
+##source EDTA v2.2.0 (intact-only output: --step all --anno 1)
+##source-version EDTA_v2.2.0
+LG01	EDTA_intact	LTR_retrotransposon	1820400	1830250	.	+	.	ID=LTRRT_001;Name=fClaHyb_Gar_LTRCopia_fam_03;Classification=LTR/Copia;ltr_identity=98.4;motif=TGCA;TSD=AAAGT;Method=structural
+LG01	EDTA_intact	LTR_retrotransposon	14210800	14228420	.	-	.	ID=LTRRT_002;Name=fClaHyb_Gar_LTRGypsy_fam_11;Classification=LTR/Gypsy;ltr_identity=99.1;motif=TGCA;TSD=ACCGT;Method=structural
+LG02	EDTA_intact	helitron	22410800	22418100	.	+	.	ID=HEL_001;Name=fClaHyb_Gar_Helitron_fam_07;Classification=Helitron/?;motif=TC;TSD=AT;Method=structural
+LG02	EDTA_intact	DNA_transposon	33010200	33012840	.	-	.	ID=DNATE_001;Name=fClaHyb_Gar_DTC_fam_02;Classification=DNA/CMC-EnSpm;TSD=CCTGGCG;Method=homology
+LG03	EDTA_intact	LTR_retrotransposon	8410200	8423100	.	+	.	ID=LTRRT_003;Name=fClaHyb_Gar_LTRCopia_fam_05;Classification=LTR/Copia;ltr_identity=97.8;motif=TGCA;TSD=ATGCA;Method=structural
+LG04	EDTA_intact	DNA_transposon	17820100	17822480	.	+	.	ID=DNATE_002;Name=fClaHyb_Gar_DTH_fam_01;Classification=DNA/PIF-Harbinger;TSD=TAA;Method=homology
+LG05	EDTA_intact	LTR_retrotransposon	5210600	5224400	.	-	.	ID=LTRRT_004;Name=fClaHyb_Gar_LTRGypsy_fam_22;Classification=LTR/Gypsy;ltr_identity=98.9;motif=TGCA;TSD=AGCGT;Method=structural
+LG06	EDTA_intact	helitron	11800400	11806020	.	+	.	ID=HEL_002;Name=fClaHyb_Gar_Helitron_fam_12;Classification=Helitron/?;motif=TC;TSD=AT;Method=structural
+LG07	EDTA_intact	LTR_retrotransposon	19420800	19438480	.	+	.	ID=LTRRT_005;Name=fClaHyb_Gar_LTRCopia_fam_08;Classification=LTR/Copia;ltr_identity=99.4;motif=TGCA;TSD=AAATG;Method=structural
+LG08	EDTA_intact	DNA_transposon	8120300	8124920	.	-	.	ID=DNATE_003;Name=fClaHyb_Gar_DTM_fam_05;Classification=DNA/Mutator;TSD=GGTGGTG;Method=homology
+LG10	EDTA_intact	LINE_element	14800100	14812400	.	+	.	ID=LINE_001;Name=fClaHyb_Gar_LINE_L1_fam_03;Classification=LINE/L1;Method=homology
+LG11	EDTA_intact	LTR_retrotransposon	7820400	7836820	.	-	.	ID=LTRRT_006;Name=fClaHyb_Gar_LTRGypsy_fam_15;Classification=LTR/Gypsy;ltr_identity=97.2;motif=TGCA;TSD=ACCGA;Method=structural
+LG13	EDTA_intact	helitron	18420900	18426510	.	+	.	ID=HEL_003;Name=fClaHyb_Gar_Helitron_fam_18;Classification=Helitron/?;motif=TC;TSD=AT;Method=structural
+LG15	EDTA_intact	DNA_transposon	22100600	22102810	.	+	.	ID=DNATE_004;Name=fClaHyb_Gar_DTC_fam_09;Classification=DNA/CMC-EnSpm;TSD=CCTGGCG;Method=homology
+LG18	EDTA_intact	LINE_element	5810800	5821100	.	-	.	ID=LINE_002;Name=fClaHyb_Gar_LINE_RTE_fam_02;Classification=LINE/RTE-BovB;Method=homology
+LG20	EDTA_intact	LTR_retrotransposon	8410200	8425820	.	+	.	ID=LTRRT_007;Name=fClaHyb_Gar_LTRCopia_fam_12;Classification=LTR/Copia;ltr_identity=98.6;motif=TGCA;TSD=AGCGT;Method=structural
+LG22	EDTA_intact	DNA_transposon	18420400	18422910	.	-	.	ID=DNATE_005;Name=fClaHyb_Gar_DTH_fam_03;Classification=DNA/PIF-Harbinger;TSD=TAA;Method=homology
+LG28	EDTA_intact	DNA_transposon	7810600	7813240	.	+	.	ID=DNATE_006;Name=fClaHyb_Gar_DTC_fam_11;Classification=DNA/CMC-EnSpm;TSD=CCTGGCG;Method=homology

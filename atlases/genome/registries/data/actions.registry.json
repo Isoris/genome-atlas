@@ -4,6 +4,16 @@
       "runner":      "runners.import_table.import_table",
       "schema_in":   "import_table_v1",
       "description": "Read a tabular file (TSV/CSV/JSON) from the workspace and emit a staging_genome_table_v0 layer. Pure file-IO; no server engines invoked."
+    },
+    "edta_intact_ingest": {
+      "runner":      "runners.edta_ingest.edta_intact_ingest",
+      "schema_in":   "edta_intact_ingest_v1",
+      "description": "Resolve an EDTA *.EDTA.intact.gff3 file from the workspace and emit a repeat_track_intact_v0 layer. Pure file-IO; the extractor handles the parse."
+    },
+    "edta_all_te_ingest": {
+      "runner":      "runners.edta_ingest.edta_all_te_ingest",
+      "schema_in":   "edta_all_te_ingest_v1",
+      "description": "Resolve an EDTA *.EDTA.TEanno.gff3(.gz) file from the workspace; the extractor streams it line-by-line and emits a te_hierarchy_v0 envelope of aggregated counts (per-feature rows are NOT materialized — file is too large)."
     }
   }
 }

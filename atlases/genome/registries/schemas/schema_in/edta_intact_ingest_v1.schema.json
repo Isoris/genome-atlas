@@ -1,0 +1,31 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "edta_intact_ingest_v1.schema.json",
+  "title": "edta_intact_ingest_v1 — manifest contract for EDTA intact-TE ingest",
+  "description": "Validates POST /api/actions when type='edta_intact_ingest'. Resolves an EDTA `*.EDTA.intact.gff3` from the workspace and emits a repeat_track_intact_v0 envelope.",
+  "type": "object",
+  "required": ["target"],
+  "additionalProperties": true,
+  "properties": {
+    "target": {
+      "type": "object",
+      "required": ["path"],
+      "additionalProperties": true,
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Workspace-relative path to the EDTA intact GFF3."
+        },
+        "subject": {
+          "type": "string",
+          "description": "Optional tag for the assembly/haplotype these features describe (e.g. 'fClaHyb_Gar')."
+        }
+      }
+    },
+    "params": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  }
+}

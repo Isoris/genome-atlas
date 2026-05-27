@@ -7,6 +7,24 @@
       "stage":          "staging",
       "parser":         "extractors.genome_table.extract",
       "input_format":   "tsv|csv|json"
+    },
+    {
+      "extractor_id":   "extract_repeat_track_intact_v0",
+      "layer_type":     "repeat_track_intact",
+      "schema_version": "repeat_track_intact_v0",
+      "stage":          "normalized",
+      "parser":         "extractors.edta_intact_gff.extract",
+      "input_format":   "gff3",
+      "_doc":           "EDTA intact-TE adapter. Materializes per-feature rows + per-chrom counts. Pairs with action edta_intact_ingest."
+    },
+    {
+      "extractor_id":   "extract_te_hierarchy_v0",
+      "layer_type":     "te_hierarchy",
+      "schema_version": "te_hierarchy_v0",
+      "stage":          "normalized",
+      "parser":         "extractors.edta_all_te_gff.extract",
+      "input_format":   "gff3|gff3.gz",
+      "_doc":           "EDTA all-TE adapter. Streams the (potentially huge) TEanno.gff3, emits aggregated counts only (no per-feature rows). Pairs with action edta_all_te_ingest. Supports params.min_length_bp + params.keep_unknown."
     }
   ]
 }

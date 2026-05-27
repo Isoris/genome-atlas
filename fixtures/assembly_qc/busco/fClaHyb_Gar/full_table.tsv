@@ -1,0 +1,35 @@
+# BUSCO version is: 5.5.0
+# The lineage dataset is: actinopterygii_odb10 (Creation date: 2024-01-08, number of genomes: 26, number of BUSCOs: 3640)
+# Busco id	Status	Sequence	Gene Start	Gene End	Strand	Score	Length	OrthoDB url	Description
+# Truncated example — full real table is 3 640 rows.
+3122at7898	Complete	LG01	2418520	2429110	+	1240.5	2118	https://www.orthodb.org/v10?query=3122at7898	tubulin alpha 1a
+4451at7898	Complete	LG01	5108300	5120880	-	980.2	1812	https://www.orthodb.org/v10?query=4451at7898	heat shock protein 90 alpha
+6720at7898	Duplicated	LG02	14820100	14831450	+	850.7	1640	https://www.orthodb.org/v10?query=6720at7898	cytochrome c oxidase subunit 6c
+6720at7898	Duplicated	LG18	8210930	8222080	-	849.1	1638	https://www.orthodb.org/v10?query=6720at7898	cytochrome c oxidase subunit 6c
+8842at7898	Complete	LG02	18910420	18925100	+	1390.4	2278	https://www.orthodb.org/v10?query=8842at7898	histone H2A
+10221at7898	Complete	LG03	7110200	7124880	-	1180.0	2042	https://www.orthodb.org/v10?query=10221at7898	ribosomal protein L7
+12450at7898	Fragmented	LG03	22300100	22305410	+	410.5	820	https://www.orthodb.org/v10?query=12450at7898	zinc finger protein 142 (partial)
+14721at7898	Complete	LG04	5421300	5438200	-	1620.8	2701	https://www.orthodb.org/v10?query=14721at7898	myosin heavy chain 7
+17820at7898	Complete	LG05	14200100	14218000	+	1840.3	3120	https://www.orthodb.org/v10?query=17820at7898	microtubule-associated protein 4
+20418at7898	Complete	LG06	8720100	8740000	-	1980.7	3441	https://www.orthodb.org/v10?query=20418at7898	collagen alpha-1(I)
+24881at7898	Complete	LG07	12410200	12420900	+	1110.0	1820	https://www.orthodb.org/v10?query=24881at7898	thymopoietin
+27410at7898	Missing	-	-	-	-	-	-	https://www.orthodb.org/v10?query=27410at7898	-
+30122at7898	Complete	LG08	15800000	15814200	-	1290.5	2240	https://www.orthodb.org/v10?query=30122at7898	signal recognition particle 14
+32441at7898	Complete	LG09	7720200	7732800	+	1370.0	2380	https://www.orthodb.org/v10?query=32441at7898	enolase 1
+35820at7898	Complete	LG10	14418520	14430110	-	1310.4	2138	https://www.orthodb.org/v10?query=35820at7898	ribosomal protein S6
+38721at7898	Complete	LG11	8210100	8224200	+	1450.0	2520	https://www.orthodb.org/v10?query=38721at7898	beta-actin
+41040at7898	Complete	LG12	12110410	12124820	-	1180.0	2042	https://www.orthodb.org/v10?query=41040at7898	calmodulin
+44120at7898	Complete	LG13	7218100	7228800	+	950.1	1660	https://www.orthodb.org/v10?query=44120at7898	ferritin heavy chain
+47820at7898	Fragmented	LG14	14720010	14724500	-	380.8	780	https://www.orthodb.org/v10?query=47820at7898	splicing factor 3a subunit 1 (partial)
+51290at7898	Complete	LG15	8810420	8825800	+	1610.0	2790	https://www.orthodb.org/v10?query=51290at7898	talin 1
+54120at7898	Missing	-	-	-	-	-	-	https://www.orthodb.org/v10?query=54120at7898	-
+57810at7898	Complete	LG16	12010000	12022400	-	1240.2	2120	https://www.orthodb.org/v10?query=57810at7898	heat shock protein 70
+60120at7898	Complete	LG17	7720410	7733100	+	1290.0	2230	https://www.orthodb.org/v10?query=60120at7898	mitochondrial ATP synthase F1
+62890at7898	Complete	LG18	13800200	13815800	-	1480.5	2540	https://www.orthodb.org/v10?query=62890at7898	α-tubulin
+65240at7898	Duplicated	LG19	8420100	8434400	+	1310.0	2300	https://www.orthodb.org/v10?query=65240at7898	ribosomal protein L23a
+65240at7898	Duplicated	LG24	5810420	5824800	-	1308.9	2298	https://www.orthodb.org/v10?query=65240at7898	ribosomal protein L23a
+68410at7898	Complete	LG20	11410200	11424800	+	1410.0	2440	https://www.orthodb.org/v10?query=68410at7898	pyruvate dehydrogenase E1
+71800at7898	Complete	LG21	8810100	8822800	-	1280.0	2218	https://www.orthodb.org/v10?query=71800at7898	60S ribosomal protein L11
+74410at7898	Complete	LG22	7420100	7434400	+	1340.0	2340	https://www.orthodb.org/v10?query=74410at7898	hsp90 beta
+77200at7898	Complete	LG23	12810100	12824400	-	1440.5	2480	https://www.orthodb.org/v10?query=77200at7898	histone H3
+80120at7898	Complete	LG28	7810200	7822800	+	1380.0	2400	https://www.orthodb.org/v10?query=80120at7898	tubulin beta

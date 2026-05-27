@@ -1,0 +1,4 @@
+haplotype     length_bp     kmer_errors  qv     error_rate    band
+fClaHyb_Gar   968412571     21500        45.82  2.6116e-05    Q40+
+fClaHyb_Mac   962108334     24100        45.31  2.9362e-05    Q40+
+Both          1930520905    45600        45.55  2.7747e-05    Q40+

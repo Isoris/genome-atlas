@@ -1,0 +1,4 @@
+Assembly       k-mers   Unique         QV     Error_rate
+fClaHyb_Gar    21500    968400000      45.82  2.6116e-05
+fClaHyb_Mac    24100    961900000      45.31  2.9362e-05
+Both           45600    1930300000     45.55  2.7747e-05
