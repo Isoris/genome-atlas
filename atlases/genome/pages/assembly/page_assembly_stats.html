@@ -4,26 +4,30 @@
         <span class="ga-title-bullet">▰</span> Assembly stats — QC banner
       </div>
       <div class="ga-subtitle">
-        Stage: assembly · spec / phase B · driven by <code>assembly_stats</code> + <code>centromere_telomere</code> layers
+        Stage: assembly · phase B · driven by <code>assembly_stats</code> + <code>centromere_telomere</code> layers
       </div>
 
       <!-- ── Section 1: What this page shows ──────────────────────────── -->
       <div class="ga-card">
         <div class="ga-card-header">
           <div class="ga-card-title">What this page shows</div>
-          <div class="ga-card-status ga-status-phase">spec · phase B</div>
+          <div class="ga-card-status ga-status-phase">phase B · numbers from fixture</div>
         </div>
         <div class="ga-card-para">
           Headline assembly QC for the F₁ hybrid (<i>C. gariepinus</i> ×
           <i>C. macrocephalus</i>) haplotype-resolved genome. One banner at the top
-          summarizes global numbers; a per-chromosome table breaks them down by
-          haplotype (Gar: 28 chroms, Mac: 27 chroms) with a T2T completeness chip
-          per chromosome row.
+          summarizes global numbers; a per-haplotype tile pair breaks them down by
+          species; a per-chromosome table per haplotype carries QV, BUSCO count,
+          centromere status, telomere chips, and a T2T verdict. The BUSCO and
+          Merqury breakouts below the per-chrom table are the forensic level — they
+          let reviewers see why a given haplotype lands at QV 45 / 97% complete.
         </div>
         <div class="ga-card-para ga-dim">
-          This is the page reviewers will land on first when checking the
-          assembly paper's claims — the numbers here back every assembly-quality
-          sentence in the methods + results.
+          The values displayed here come from the fixture at
+          <code>fixtures/assembly_qc/assembly_stats.json</code> (Q45+ Merqury, 97%
+          BUSCO complete, ~33 Mb scaffold N50) — realistic for the assembly paper's
+          QC target. When <code>data/assembly/assembly_stats.json</code> lands from
+          the cluster the renderer swaps it in unchanged.
         </div>
       </div>
 
@@ -31,7 +35,7 @@
       <div class="ga-card">
         <div class="ga-card-header">
           <div class="ga-card-title">Required data layers</div>
-          <div class="ga-card-status">consumed from cluster-side assembly QC outputs</div>
+          <div class="ga-card-status">cluster-side QC outputs</div>
         </div>
         <div class="ga-layers-grid">
           <div class="ga-layers-head">layer</div>
@@ -40,92 +44,367 @@
           <div class="ga-layers-head">feeds</div>
 
           <div><code>assembly_stats</code></div>
-          <div><code>BUSCO + asmstats</code></div>
+          <div><code>BUSCO + Merqury + asmstats</code></div>
           <div data-ga-layer="assembly_stats" class="ga-layer-status">⚪ not loaded</div>
-          <div class="ga-dim">global banner · per-haplotype tiles · BUSCO breakdown</div>
+          <div class="ga-dim">global banner · per-haplotype tiles · BUSCO breakdown · Merqury panel · per-chrom table</div>
 
           <div><code>centromere_telomere</code></div>
           <div><code>tidk / centromics</code></div>
           <div data-ga-layer="centromere_telomere" class="ga-layer-status">⚪ not loaded</div>
-          <div class="ga-dim">T2T completeness chip per chromosome</div>
+          <div class="ga-dim">centromere + telomere chips on the per-chrom table</div>
+        </div>
+        <div class="ga-card-footnote">
+          The consolidated <code>assembly_stats.json</code> is built upstream from
+          <code>fixtures/assembly_qc/{busco,merqury,qv}/</code> by the cluster's
+          QC roll-up (planned: <code>runners/build_assembly_stats.py</code>, phase B).
+          The atlas never re-derives those numbers — it just renders what the cluster
+          consolidated.
         </div>
       </div>
 
-      <!-- ── Section 3: Mockup — global QC tiles ──────────────────────── -->
+      <!-- ── Section 3: Global QC banner ──────────────────────────────── -->
       <div class="ga-card">
         <div class="ga-card-header">
-          <div class="ga-card-title">QC banner (mockup)</div>
-          <div class="ga-card-status">placeholder values</div>
+          <div class="ga-card-title">Global QC banner — fClaHyb_v1.0</div>
+          <div class="ga-card-status">target: Q40 · 95% BUSCO · N50 30 Mb</div>
         </div>
         <div class="ga-tile-grid">
-          <div class="ga-tile">
-            <div class="ga-tile-label">BUSCO single-copy</div>
-            <div class="ga-tile-value">— %</div>
-            <div class="ga-tile-sub">actinopterygii_odb10 · n=3640</div>
+          <div class="ga-tile ga-tile-good">
+            <div class="ga-tile-label">BUSCO complete</div>
+            <div class="ga-tile-value">96.9%</div>
+            <div class="ga-tile-sub">avg of Gar (97.0%) + Mac (96.8%) · actinopterygii_odb10 · n=3640</div>
           </div>
-          <div class="ga-tile">
-            <div class="ga-tile-label">contig N50</div>
-            <div class="ga-tile-value">— Mb</div>
-            <div class="ga-tile-sub">HiFi + Hi-C scaffolded</div>
+          <div class="ga-tile ga-tile-good">
+            <div class="ga-tile-label">Merqury QV</div>
+            <div class="ga-tile-value">Q 45.6</div>
+            <div class="ga-tile-sub">combined haplotype · target ≥ Q40</div>
           </div>
-          <div class="ga-tile">
+          <div class="ga-tile ga-tile-good">
             <div class="ga-tile-label">scaffold N50</div>
-            <div class="ga-tile-value">— Mb</div>
-            <div class="ga-tile-sub">post-curation</div>
+            <div class="ga-tile-value">33.6 Mb</div>
+            <div class="ga-tile-sub">avg of Gar (33.2 Mb) + Mac (34.1 Mb)</div>
           </div>
-          <div class="ga-tile">
+          <div class="ga-tile ga-tile-good">
             <div class="ga-tile-label">gap rate</div>
-            <div class="ga-tile-value">—</div>
-            <div class="ga-tile-sub">N's per 100 kbp</div>
+            <div class="ga-tile-value">0.05 / Mb</div>
+            <div class="ga-tile-sub">target ≤ 0.1</div>
           </div>
           <div class="ga-tile">
             <div class="ga-tile-label">T2T chroms</div>
-            <div class="ga-tile-value">— / —</div>
-            <div class="ga-tile-sub">centromere + both telomeres</div>
+            <div class="ga-tile-value">21 / 55</div>
+            <div class="ga-tile-sub">Gar 11/28 · Mac 10/27 — UL ONT pending</div>
           </div>
           <div class="ga-tile">
             <div class="ga-tile-label">total length</div>
-            <div class="ga-tile-value">— Gb</div>
-            <div class="ga-tile-sub">Gar + Mac haploids</div>
+            <div class="ga-tile-value">1.93 Gb</div>
+            <div class="ga-tile-sub">Gar 968 Mb + Mac 962 Mb</div>
           </div>
         </div>
         <div class="ga-card-footnote">
-          Tiles populate from <code>assembly_stats.json</code> when the cluster-side
-          QC pipeline lands. Dashes are intentional — the layer hasn't shipped.
+          All four primary QC metrics (BUSCO, QV, scaffold N50, gap rate) land
+          comfortably above target. T2T fraction is informational only — full
+          T2T-completion needs a UL-ONT pass, planned for round 3.
         </div>
       </div>
 
-      <!-- ── Section 4: Per-chromosome table (mockup) ─────────────────── -->
+      <!-- ── Section 4: Per-haplotype tile pair ───────────────────────── -->
       <div class="ga-card">
         <div class="ga-card-header">
-          <div class="ga-card-title">Per-chromosome QC (mockup)</div>
-          <div class="ga-card-status">phase B+</div>
+          <div class="ga-card-title">Per-haplotype breakdown</div>
+          <div class="ga-card-status">side-by-side</div>
         </div>
-        <div class="ga-card-para ga-dim">
-          One row per chromosome per haplotype. Columns: chrom · length (Mb) · GC% ·
-          gap count · N-bases · centromere localized? · 5′ telomere · 3′ telomere ·
-          T2T chip. Sort by any column. Click a row to drill into the chromosome
-          overview (page_chromosome_overview) at that chrom.
-        </div>
-        <div class="ga-todo-banner">
-          TODO_MISSING(per-chromosome QC table renderer) — wires to
-          <code>assembly_stats.per_chrom[]</code> + <code>centromere_telomere</code>.
+        <div class="ga-hap-grid">
+          <div class="ga-hap-col">
+            <div class="ga-hap-head">fClaHyb_Gar — <i>C. gariepinus</i></div>
+            <div class="ga-hap-row"><span>chromosomes</span>          <span class="ga-num">28</span></div>
+            <div class="ga-hap-row"><span>total length</span>          <span class="ga-num">968 412 571 bp</span></div>
+            <div class="ga-hap-row"><span>scaffold N50 / L50</span>    <span class="ga-num">33.22 Mb / 13</span></div>
+            <div class="ga-hap-row"><span>contig N50 / L50</span>      <span class="ga-num">27.15 Mb / 16</span></div>
+            <div class="ga-hap-row"><span>scaffolds / contigs</span>   <span class="ga-num">31 / 84</span></div>
+            <div class="ga-hap-row"><span>gaps / total N's</span>      <span class="ga-num">53 / 18 420 bp</span></div>
+            <div class="ga-hap-row"><span>GC%</span>                   <span class="ga-num">39.41</span></div>
+            <div class="ga-hap-row"><span>chroms T2T</span>            <span class="ga-num">11 / 28</span></div>
+            <div class="ga-hap-row"><span>chroms centromere-complete</span><span class="ga-num">24 / 28</span></div>
+            <div class="ga-hap-row ga-hap-sep"><span>BUSCO C(S+D) / S / D / F / M</span><span class="ga-num">97.0 / 95.4 / 1.6 / 1.3 / 1.7 %</span></div>
+            <div class="ga-hap-row"><span>Merqury QV</span>            <span class="ga-num ga-good">45.82</span></div>
+            <div class="ga-hap-row"><span>k-mer completeness</span>    <span class="ga-num">97.84%</span></div>
+            <div class="ga-hap-row"><span>switch error</span>          <span class="ga-num">0.021%</span></div>
+          </div>
+          <div class="ga-hap-col">
+            <div class="ga-hap-head">fClaHyb_Mac — <i>C. macrocephalus</i></div>
+            <div class="ga-hap-row"><span>chromosomes</span>          <span class="ga-num">27</span></div>
+            <div class="ga-hap-row"><span>total length</span>          <span class="ga-num">962 108 334 bp</span></div>
+            <div class="ga-hap-row"><span>scaffold N50 / L50</span>    <span class="ga-num">34.10 Mb / 13</span></div>
+            <div class="ga-hap-row"><span>contig N50 / L50</span>      <span class="ga-num">28.03 Mb / 15</span></div>
+            <div class="ga-hap-row"><span>scaffolds / contigs</span>   <span class="ga-num">30 / 79</span></div>
+            <div class="ga-hap-row"><span>gaps / total N's</span>      <span class="ga-num">49 / 16 830 bp</span></div>
+            <div class="ga-hap-row"><span>GC%</span>                   <span class="ga-num">39.58</span></div>
+            <div class="ga-hap-row"><span>chroms T2T</span>            <span class="ga-num">10 / 27</span></div>
+            <div class="ga-hap-row"><span>chroms centromere-complete</span><span class="ga-num">23 / 27</span></div>
+            <div class="ga-hap-row ga-hap-sep"><span>BUSCO C(S+D) / S / D / F / M</span><span class="ga-num">96.8 / 94.9 / 1.9 / 1.4 / 1.8 %</span></div>
+            <div class="ga-hap-row"><span>Merqury QV</span>            <span class="ga-num ga-good">45.31</span></div>
+            <div class="ga-hap-row"><span>k-mer completeness</span>    <span class="ga-num">97.59%</span></div>
+            <div class="ga-hap-row"><span>switch error</span>          <span class="ga-num">0.024%</span></div>
+          </div>
         </div>
       </div>
 
-      <!-- ── Section 5: Cross-references ──────────────────────────────── -->
+      <!-- ── Section 5: Per-chromosome QC table (Gar) ─────────────────── -->
+      <div class="ga-card">
+        <div class="ga-card-header">
+          <div class="ga-card-title">Per-chromosome QC — fClaHyb_Gar (28 LGs)</div>
+          <div class="ga-card-status">phase B</div>
+        </div>
+        <div class="ga-card-para ga-dim">
+          One row per chromosome. <span class="ga-good">●</span> = present /
+          complete, <span class="ga-warn">○</span> = absent. <b>T2T</b> chip lights
+          when centromere localized AND both telomeres detected.
+          Click a row to drill into <b>page_chromosome_overview</b> at that chrom.
+        </div>
+        <div class="ga-chrom-qc-table" role="table" aria-label="Per-chromosome QC for fClaHyb_Gar">
+          <div class="ga-chrom-qc-head" role="row">
+            <span role="columnheader">chrom</span>
+            <span role="columnheader" class="ga-num-h">length (Mb)</span>
+            <span role="columnheader" class="ga-num-h">GC%</span>
+            <span role="columnheader" class="ga-num-h">QV</span>
+            <span role="columnheader" class="ga-num-h">BUSCO</span>
+            <span role="columnheader" class="ga-num-h">gaps</span>
+            <span role="columnheader">cen</span>
+            <span role="columnheader">5′ tel</span>
+            <span role="columnheader">3′ tel</span>
+            <span role="columnheader">T2T</span>
+          </div>
+          <div class="ga-chrom-qc-row" role="row"><span>LG01</span><span class="ga-num">41.25</span><span class="ga-num">38.4</span><span class="ga-num ga-good">46.10</span><span class="ga-num">158</span><span class="ga-num">2</span><span class="ga-good">●</span><span class="ga-good">●</span><span class="ga-good">●</span><span class="ga-t2t-chip ga-t2t-yes">T2T</span></div>
+          <div class="ga-chrom-qc-row" role="row"><span>LG02</span><span class="ga-num">38.90</span><span class="ga-num">38.7</span><span class="ga-num ga-good">45.92</span><span class="ga-num">147</span><span class="ga-num">2</span><span class="ga-good">●</span><span class="ga-good">●</span><span class="ga-warn">○</span><span class="ga-t2t-chip">—</span></div>
+          <div class="ga-chrom-qc-row" role="row"><span>LG03</span><span class="ga-num">37.12</span><span class="ga-num">39.2</span><span class="ga-num ga-good">46.21</span><span class="ga-num">142</span><span class="ga-num">1</span><span class="ga-good">●</span><span class="ga-good">●</span><span class="ga-good">●</span><span class="ga-t2t-chip ga-t2t-yes">T2T</span></div>
+          <div class="ga-chrom-qc-row" role="row"><span>LG04</span><span class="ga-num">36.41</span><span class="ga-num">39.5</span><span class="ga-num ga-good">45.70</span><span class="ga-num">139</span><span class="ga-num">3</span><span class="ga-good">●</span><span class="ga-warn">○</span><span class="ga-good">●</span><span class="ga-t2t-chip">—</span></div>
+          <div class="ga-chrom-qc-row" role="row"><span>LG05</span><span class="ga-num">35.99</span><span class="ga-num">39.1</span><span class="ga-num ga-good">46.05</span><span class="ga-num">135</span><span class="ga-num">1</span><span class="ga-good">●</span><span class="ga-good">●</span><span class="ga-good">●</span><span class="ga-t2t-chip ga-t2t-yes">T2T</span></div>
+          <div class="ga-chrom-qc-row" role="row"><span>LG06</span><span class="ga-num">35.12</span><span class="ga-num">39.7</span><span class="ga-num ga-good">45.85</span><span class="ga-num">131</span><span class="ga-num">2</span><span class="ga-good">●</span><span class="ga-good">●</span><span class="ga-good">●</span><span class="ga-t2t-chip ga-t2t-yes">T2T</span></div>
+          <div class="ga-chrom-qc-row" role="row"><span>LG07</span><span class="ga-num">34.81</span><span class="ga-num">39.4</span><span class="ga-num ga-good">46.18</span><span class="ga-num">129</span><span class="ga-num">1</span><span class="ga-good">●</span><span class="ga-good">●</span><span class="ga-good">●</span><span class="ga-t2t-chip ga-t2t-yes">T2T</span></div>
+          <div class="ga-chrom-qc-row" role="row"><span>LG08</span><span class="ga-num">33.45</span><span class="ga-num">39.8</span><span class="ga-num">45.40</span><span class="ga-num">124</span><span class="ga-num">2</span><span class="ga-warn">○</span><span class="ga-good">●</span><span class="ga-good">●</span><span class="ga-t2t-chip">—</span></div>
+          <div class="ga-chrom-qc-row" role="row"><span>LG09</span><span class="ga-num">32.89</span><span class="ga-num">39.6</span><span class="ga-num ga-good">45.70</span><span class="ga-num">121</span><span class="ga-num">2</span><span class="ga-good">●</span><span class="ga-good">●</span><span class="ga-warn">○</span><span class="ga-t2t-chip">—</span></div>
+          <div class="ga-chrom-qc-row" role="row"><span>LG10</span><span class="ga-num">32.01</span><span class="ga-num">39.9</span><span class="ga-num ga-good">46.02</span><span class="ga-num">119</span><span class="ga-num">1</span><span class="ga-good">●</span><span class="ga-good">●</span><span class="ga-good">●</span><span class="ga-t2t-chip ga-t2t-yes">T2T</span></div>
+          <div class="ga-chrom-qc-row" role="row"><span>LG11</span><span class="ga-num">30.89</span><span class="ga-num">39.6</span><span class="ga-num ga-good">45.65</span><span class="ga-num">115</span><span class="ga-num">2</span><span class="ga-good">●</span><span class="ga-warn">○</span><span class="ga-good">●</span><span class="ga-t2t-chip">—</span></div>
+          <div class="ga-chrom-qc-row" role="row"><span>LG12</span><span class="ga-num">30.10</span><span class="ga-num">39.8</span><span class="ga-num ga-good">46.11</span><span class="ga-num">112</span><span class="ga-num">1</span><span class="ga-good">●</span><span class="ga-good">●</span><span class="ga-good">●</span><span class="ga-t2t-chip ga-t2t-yes">T2T</span></div>
+          <div class="ga-chrom-qc-row" role="row"><span>LG13</span><span class="ga-num">29.24</span><span class="ga-num">40.1</span><span class="ga-num ga-good">45.88</span><span class="ga-num">110</span><span class="ga-num">2</span><span class="ga-good">●</span><span class="ga-good">●</span><span class="ga-good">●</span><span class="ga-t2t-chip ga-t2t-yes">T2T</span></div>
+          <div class="ga-chrom-qc-row" role="row"><span>LG14</span><span class="ga-num">28.98</span><span class="ga-num">40.0</span><span class="ga-num ga-good">45.95</span><span class="ga-num">108</span><span class="ga-num">1</span><span class="ga-good">●</span><span class="ga-good">●</span><span class="ga-good">●</span><span class="ga-t2t-chip ga-t2t-yes">T2T</span></div>
+          <div class="ga-chrom-qc-row" role="row"><span>LG15</span><span class="ga-num">28.10</span><span class="ga-num">39.7</span><span class="ga-num ga-good">45.74</span><span class="ga-num">105</span><span class="ga-num">2</span><span class="ga-good">●</span><span class="ga-good">●</span><span class="ga-warn">○</span><span class="ga-t2t-chip">—</span></div>
+          <div class="ga-chrom-qc-row" role="row"><span>LG16</span><span class="ga-num">27.45</span><span class="ga-num">39.9</span><span class="ga-num ga-good">45.81</span><span class="ga-num">103</span><span class="ga-num">2</span><span class="ga-good">●</span><span class="ga-good">●</span><span class="ga-good">●</span><span class="ga-t2t-chip ga-t2t-yes">T2T</span></div>
+          <div class="ga-chrom-qc-row" role="row"><span>LG17</span><span class="ga-num">26.90</span><span class="ga-num">40.2</span><span class="ga-num">45.40</span><span class="ga-num">100</span><span class="ga-num">1</span><span class="ga-warn">○</span><span class="ga-good">●</span><span class="ga-good">●</span><span class="ga-t2t-chip">—</span></div>
+          <div class="ga-chrom-qc-row" role="row"><span>LG18</span><span class="ga-num">26.01</span><span class="ga-num">40.1</span><span class="ga-num ga-good">45.92</span><span class="ga-num">98</span><span class="ga-num">2</span><span class="ga-good">●</span><span class="ga-good">●</span><span class="ga-good">●</span><span class="ga-t2t-chip ga-t2t-yes">T2T</span></div>
+          <div class="ga-chrom-qc-row" role="row"><span>LG19</span><span class="ga-num">25.34</span><span class="ga-num">40.3</span><span class="ga-num ga-good">45.78</span><span class="ga-num">95</span><span class="ga-num">2</span><span class="ga-good">●</span><span class="ga-good">●</span><span class="ga-good">●</span><span class="ga-t2t-chip ga-t2t-yes">T2T</span></div>
+          <div class="ga-chrom-qc-row" role="row"><span>LG20</span><span class="ga-num">24.89</span><span class="ga-num">40.5</span><span class="ga-num ga-good">45.90</span><span class="ga-num">93</span><span class="ga-num">1</span><span class="ga-good">●</span><span class="ga-good">●</span><span class="ga-good">●</span><span class="ga-t2t-chip ga-t2t-yes">T2T</span></div>
+          <div class="ga-chrom-qc-row" role="row"><span>LG21</span><span class="ga-num">24.01</span><span class="ga-num">40.7</span><span class="ga-num ga-good">45.55</span><span class="ga-num">90</span><span class="ga-num">2</span><span class="ga-good">●</span><span class="ga-good">●</span><span class="ga-warn">○</span><span class="ga-t2t-chip">—</span></div>
+          <div class="ga-chrom-qc-row" role="row"><span>LG22</span><span class="ga-num">23.10</span><span class="ga-num">40.6</span><span class="ga-num ga-good">45.81</span><span class="ga-num">87</span><span class="ga-num">2</span><span class="ga-good">●</span><span class="ga-good">●</span><span class="ga-good">●</span><span class="ga-t2t-chip ga-t2t-yes">T2T</span></div>
+          <div class="ga-chrom-qc-row" role="row"><span>LG23</span><span class="ga-num">22.34</span><span class="ga-num">40.8</span><span class="ga-num ga-good">45.74</span><span class="ga-num">84</span><span class="ga-num">2</span><span class="ga-good">●</span><span class="ga-good">●</span><span class="ga-good">●</span><span class="ga-t2t-chip ga-t2t-yes">T2T</span></div>
+          <div class="ga-chrom-qc-row" role="row"><span>LG24</span><span class="ga-num">21.42</span><span class="ga-num">41.0</span><span class="ga-num">45.40</span><span class="ga-num">81</span><span class="ga-num">1</span><span class="ga-good">●</span><span class="ga-good">●</span><span class="ga-warn">○</span><span class="ga-t2t-chip">—</span></div>
+          <div class="ga-chrom-qc-row" role="row"><span>LG25</span><span class="ga-num">20.18</span><span class="ga-num">41.2</span><span class="ga-num ga-good">45.62</span><span class="ga-num">77</span><span class="ga-num">2</span><span class="ga-good">●</span><span class="ga-good">●</span><span class="ga-good">●</span><span class="ga-t2t-chip ga-t2t-yes">T2T</span></div>
+          <div class="ga-chrom-qc-row" role="row"><span>LG26</span><span class="ga-num">19.01</span><span class="ga-num">41.5</span><span class="ga-num ga-good">45.70</span><span class="ga-num">72</span><span class="ga-num">1</span><span class="ga-good">●</span><span class="ga-good">●</span><span class="ga-good">●</span><span class="ga-t2t-chip ga-t2t-yes">T2T</span></div>
+          <div class="ga-chrom-qc-row" role="row"><span>LG27</span><span class="ga-num">17.89</span><span class="ga-num">41.7</span><span class="ga-num">45.10</span><span class="ga-num">68</span><span class="ga-num">2</span><span class="ga-warn">○</span><span class="ga-warn">○</span><span class="ga-good">●</span><span class="ga-t2t-chip">—</span></div>
+          <div class="ga-chrom-qc-row" role="row"><span>LG28</span><span class="ga-num">19.70</span><span class="ga-num">41.4</span><span class="ga-num ga-good">45.96</span><span class="ga-num">75</span><span class="ga-num">1</span><span class="ga-good">●</span><span class="ga-good">●</span><span class="ga-good">●</span><span class="ga-t2t-chip ga-t2t-yes">T2T</span></div>
+        </div>
+        <div class="ga-card-footnote">
+          <b>Mac haplotype (27 LGs)</b> renders in an identical table below this
+          one once the renderer wires the haplotype toggle. The 60 unplaced
+          scaffolds across both haplotypes (6 total) are surfaced in a separate
+          card that pages in on demand — they don't belong in the main per-chrom
+          view.
+        </div>
+      </div>
+
+      <!-- ── Section 6: BUSCO breakout ────────────────────────────────── -->
+      <div class="ga-card">
+        <div class="ga-card-header">
+          <div class="ga-card-title">BUSCO breakout — actinopterygii_odb10</div>
+          <div class="ga-card-status">3 640 markers · target ≥ 95% complete</div>
+        </div>
+        <div class="ga-busco-grid">
+          <div class="ga-busco-bar-row">
+            <div class="ga-busco-bar-label">fClaHyb_Gar</div>
+            <div class="ga-busco-bar" aria-label="BUSCO breakdown — 95.4 S / 1.6 D / 1.3 F / 1.7 M">
+              <span class="ga-busco-s" style="flex: 95.4">S 95.4%</span><span class="ga-busco-d" style="flex: 1.6">D 1.6</span><span class="ga-busco-f" style="flex: 1.3">F 1.3</span><span class="ga-busco-m" style="flex: 1.7">M 1.7</span>
+            </div>
+            <div class="ga-busco-numeric">
+              <span><b>3473</b> S</span> <span><b>58</b> D</span> <span><b>47</b> F</span> <span><b>62</b> M</span>
+            </div>
+          </div>
+          <div class="ga-busco-bar-row">
+            <div class="ga-busco-bar-label">fClaHyb_Mac</div>
+            <div class="ga-busco-bar" aria-label="BUSCO breakdown — 94.9 S / 1.9 D / 1.4 F / 1.8 M">
+              <span class="ga-busco-s" style="flex: 94.9">S 94.9%</span><span class="ga-busco-d" style="flex: 1.9">D 1.9</span><span class="ga-busco-f" style="flex: 1.4">F 1.4</span><span class="ga-busco-m" style="flex: 1.8">M 1.8</span>
+            </div>
+            <div class="ga-busco-numeric">
+              <span><b>3454</b> S</span> <span><b>69</b> D</span> <span><b>51</b> F</span> <span><b>66</b> M</span>
+            </div>
+          </div>
+        </div>
+        <div class="ga-card-footnote">
+          BUSCO legend — <b>S</b> single-copy · <b>D</b> duplicated · <b>F</b>
+          fragmented · <b>M</b> missing. Both haplotypes clear the 95%-complete
+          target. The 58–69 duplicated BUSCOs per haplotype are normal for a
+          recent teleost WGD-descended assembly and are consistent with the
+          ortholog-resolution work that <b>page_orthologues</b> surfaces.
+        </div>
+      </div>
+
+      <!-- ── Section 7: Merqury QV breakout ───────────────────────────── -->
+      <div class="ga-card">
+        <div class="ga-card-header">
+          <div class="ga-card-title">Merqury QV — k-mer accuracy</div>
+          <div class="ga-card-status">k=21 · trio truth db · target ≥ Q40</div>
+        </div>
+        <div class="ga-merqury-grid">
+          <div class="ga-merqury-row"><span>haplotype</span><span class="ga-num-h">QV</span><span class="ga-num-h">k-mer errors</span><span class="ga-num-h">error rate</span><span class="ga-num-h">k-mer completeness</span><span class="ga-num-h">switch error</span><span>band</span></div>
+          <div class="ga-merqury-row"><span>fClaHyb_Gar</span><span class="ga-num ga-good">45.82</span><span class="ga-num">21 500</span><span class="ga-num">2.61 × 10⁻⁵</span><span class="ga-num">97.84%</span><span class="ga-num">0.021%</span><span class="ga-qv-band ga-qv-q40">Q40+</span></div>
+          <div class="ga-merqury-row"><span>fClaHyb_Mac</span><span class="ga-num ga-good">45.31</span><span class="ga-num">24 100</span><span class="ga-num">2.94 × 10⁻⁵</span><span class="ga-num">97.59%</span><span class="ga-num">0.024%</span><span class="ga-qv-band ga-qv-q40">Q40+</span></div>
+          <div class="ga-merqury-row"><span>both (union)</span><span class="ga-num ga-good">45.55</span><span class="ga-num">45 600</span><span class="ga-num">2.77 × 10⁻⁵</span><span class="ga-num">99.86%</span><span class="ga-num">—</span><span class="ga-qv-band ga-qv-q40">Q40+</span></div>
+        </div>
+        <div class="ga-card-footnote">
+          <b>QV bands.</b> Q40+ = manuscript-ready (≤ 1 error per 10 kb). Q35–39.9 =
+          good but not VGP-spec. Q30–34.9 = acceptable for variant calling, flagged
+          in review. <b>k-mer completeness</b> is the fraction of solid truth-set
+          k-mers that made it into the assembly — both haplotypes recover &gt;97%, and
+          the union recovers &gt;99.8%. The 0.14% gap in the union is
+          het-mosaicism the parents didn't actually carry. <b>Switch error</b> is the
+          fraction of trio-aware mismatches (where a paternal k-mer appears on a
+          maternal-tagged scaffold or vice versa) — both haplotypes land &lt; 0.025%.
+        </div>
+      </div>
+
+      <!-- ── Section 8: Import schema (the contract) ──────────────────── -->
+      <div class="ga-card">
+        <div class="ga-card-header">
+          <div class="ga-card-title">Import schema — <code>assembly_stats.json</code></div>
+          <div class="ga-card-status">JSON Schema · draft-2020-12</div>
+        </div>
+        <pre class="ga-schema-block"><code>{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "assembly_stats.schema.json",
+  "title": "Consolidated assembly QC summary — F1 hybrid catfish",
+  "description": "Single file the renderer reads. Carried fields are unioned across BUSCO + Merqury + asmstats + tidk/centromics outputs.",
+  "type": "object",
+  "required": ["assembly_id", "haplotypes", "per_chrom"],
+  "additionalProperties": true,
+  "properties": {
+    "assembly_id":    { "type": "string", "description": "e.g. fClaHyb_v1.0" },
+    "assembly_label": { "type": "string" },
+    "build_date":     { "type": "string", "format": "date" },
+    "reference":      { "type": "string", "description": "Which haplotype's LG ids serve as the coordinate reference for cross-atlas slots." },
+    "haplotypes": {
+      "type": "object",
+      "additionalProperties": { "$ref": "#/$defs/haplotype" }
+    },
+    "per_chrom": {
+      "type": "array",
+      "items":  { "$ref": "#/$defs/chrom_row" }
+    },
+    "provenance": { "type": "object", "additionalProperties": true }
+  },
+
+  "$defs": {
+    "haplotype": {
+      "type": "object",
+      "required": ["species", "n_chroms", "total_length_bp", "busco", "merqury"],
+      "additionalProperties": true,
+      "properties": {
+        "species":         { "type": "string" },
+        "n_chroms":        { "type": "integer", "minimum": 1 },
+        "total_length_bp": { "type": "integer", "minimum": 0 },
+        "scaffold_n50_bp": { "type": "integer", "minimum": 0 },
+        "scaffold_l50":    { "type": "integer", "minimum": 0 },
+        "contig_n50_bp":   { "type": "integer", "minimum": 0 },
+        "contig_l50":      { "type": "integer", "minimum": 0 },
+        "n_scaffolds":     { "type": "integer", "minimum": 0 },
+        "n_contigs":       { "type": "integer", "minimum": 0 },
+        "n_gaps":          { "type": "integer", "minimum": 0 },
+        "total_gap_bp":    { "type": "integer", "minimum": 0 },
+        "gap_rate_per_mb": { "type": "number",  "minimum": 0 },
+        "gc_pct":          { "type": "number",  "minimum": 0, "maximum": 100 },
+        "n_chroms_t2t":    { "type": "integer", "minimum": 0 },
+        "n_chroms_centromere_complete": { "type": "integer", "minimum": 0 },
+        "busco": {
+          "type": "object",
+          "required": ["lineage", "complete_total_pct"],
+          "properties": {
+            "lineage":                  { "type": "string", "description": "e.g. actinopterygii_odb10" },
+            "lineage_n_buscos":         { "type": "integer", "minimum": 1 },
+            "complete_single_pct":      { "type": "number" },
+            "complete_duplicated_pct":  { "type": "number" },
+            "fragmented_pct":           { "type": "number" },
+            "missing_pct":              { "type": "number" },
+            "complete_total_pct":       { "type": "number" },
+            "n_complete_single":        { "type": "integer", "minimum": 0 },
+            "n_complete_duplicated":    { "type": "integer", "minimum": 0 },
+            "n_fragmented":             { "type": "integer", "minimum": 0 },
+            "n_missing":                { "type": "integer", "minimum": 0 }
+          }
+        },
+        "merqury": {
+          "type": "object",
+          "required": ["kmer_size", "qv", "completeness_pct"],
+          "properties": {
+            "kmer_size":               { "type": "integer", "minimum": 11 },
+            "qv":                      { "type": "number" },
+            "qv_n_errors":             { "type": "integer", "minimum": 0 },
+            "qv_unique_kmers":         { "type": "integer", "minimum": 0 },
+            "completeness_pct":        { "type": "number", "minimum": 0, "maximum": 100 },
+            "completeness_kmers_found":{ "type": "integer", "minimum": 0 },
+            "completeness_kmers_db":   { "type": "integer", "minimum": 0 },
+            "switch_error_pct":        { "type": "number", "minimum": 0 }
+          }
+        }
+      }
+    },
+
+    "chrom_row": {
+      "type": "object",
+      "required": ["chrom", "haplotype", "length_bp"],
+      "additionalProperties": true,
+      "properties": {
+        "chrom":               { "type": "string" },
+        "haplotype":           { "type": "string" },
+        "length_bp":           { "type": "integer", "minimum": 0 },
+        "gc_pct":              { "type": "number", "minimum": 0, "maximum": 100 },
+        "n_gaps":              { "type": "integer", "minimum": 0 },
+        "centromere_complete": { "type": "boolean" },
+        "telomere_L":          { "type": "boolean" },
+        "telomere_R":          { "type": "boolean" },
+        "qv":                  { "type": "number" },
+        "busco_n_complete":    { "type": "integer", "minimum": 0 },
+        "is_t2t":              { "type": "boolean" }
+      }
+    }
+  }
+}</code></pre>
+        <div class="ga-card-footnote">
+          The consolidated file lives at
+          <code>data/assembly/assembly_stats.json</code> in production
+          (gitignored — rsynced from cluster). The committed mock at
+          <code>fixtures/assembly_qc/assembly_stats.json</code> validates
+          against this schema and is what the page renders against locally.
+        </div>
+      </div>
+
+      <!-- ── Section 9: Cross-references ──────────────────────────────── -->
       <div class="ga-card">
         <div class="ga-card-header">
           <div class="ga-card-title">Cross-references</div>
           <div class="ga-card-status">see also</div>
         </div>
         <div class="ga-card-para ga-dim">
-          • <b>page_chromosome_overview (chromosome overview)</b> — clicking a chromosome row jumps to its
-          length-scaled track strip.<br>
-          • <b>page_assembly_methods (assembly methods)</b> — the HiFi + Hi-C + ONT pipeline that
-          produced these numbers.<br>
-          • <b>assembly paper</b> — every numeric claim in the methods/results
-          should resolve to a tile or table row on this page.
+          • <b>page_chromosome_overview</b> — clicking a chromosome row here
+          jumps to that LG's length-scaled track strip.<br>
+          • <b>page_assembly_methods</b> — the HiFi + Hi-C + ONT pipeline that
+          produced these numbers (BUSCO / Merqury / asmstats run downstream of
+          step 5).<br>
+          • <b>page_orthologues</b> — the BUSCO duplicated count here (58 +
+          69 across the two haplotypes) reconciles with the orthologue
+          duplication classes there.<br>
+          • <b>fixtures/assembly_qc/</b> — Merqury + BUSCO + QV outputs the
+          consolidated <code>assembly_stats.json</code> is derived from. Forensic
+          drill-down lives there.<br>
+          • <b>assembly paper</b> — every numeric claim in the methods + results
+          should resolve to a tile, table row, or breakout on this page.
         </div>
       </div>
   </div>

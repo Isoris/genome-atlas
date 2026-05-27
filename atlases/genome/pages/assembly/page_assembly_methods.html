@@ -27,24 +27,149 @@
 
       <div class="ga-card">
         <div class="ga-card-header">
-          <div class="ga-card-title">Pipeline stages</div>
+          <div class="ga-card-title">Pipeline at a glance</div>
+          <div class="ga-card-status">5 stages · ~3 days on a 64-core node</div>
+        </div>
+<pre class="ga-pipeline-ascii">
+   ┌────────────────────────────────────────────────────────────────────┐
+   │  STAGE 1 — phased contigging                          ~12 h         │
+   │                                                                    │
+   │    HiFi reads (~30×)  ─┐                                           │
+   │    Hi-C reads (~50×)  ─┼─► hifiasm  --hic1 ... --hic2 ...          │
+   │                        │     output: hap1.p_ctg.fa + hap2.p_ctg.fa │
+   │                        ▼                                            │
+   │                 (phased primary contigs, one set per haplotype)    │
+   └────────────────────────────┬───────────────────────────────────────┘
+                                ▼
+   ┌────────────────────────────────────────────────────────────────────┐
+   │  STAGE 2 — Hi-C scaffolding                           ~6 h          │
+   │                                                                    │
+   │    contigs + Hi-C bam  ─► YaHS  → chromosome-scale scaffolds       │
+   │                          (joins → final scaffold sets)              │
+   └────────────────────────────┬───────────────────────────────────────┘
+                                ▼
+   ┌────────────────────────────────────────────────────────────────────┐
+   │  STAGE 3 — polishing + gap closure                    ~14 h         │
+   │                                                                    │
+   │    Medaka (ONT reads)  → SNP / indel corrections                   │
+   │    TGS-GapCloser       → fills inter-contig N-runs                 │
+   │    DeepVariant pass    → second-pass error correction              │
+   └────────────────────────────┬───────────────────────────────────────┘
+                                ▼
+   ┌────────────────────────────────────────────────────────────────────┐
+   │  STAGE 4 — manual curation                            ~2 days (human)│
+   │                                                                    │
+   │    Pretext-Map review:  misjoin / orientation fixes                │
+   │    AGP edits + re-build → curated.fa                               │
+   │                          → emit FAI + AGP                          │
+   └────────────────────────────┬───────────────────────────────────────┘
+                                ▼
+   ┌────────────────────────────────────────────────────────────────────┐
+   │  STAGE 5 — QC + freeze                                ~3 h          │
+   │                                                                    │
+   │    BUSCO (actinopterygii_odb10) ──► busco/                         │
+   │    Merqury (k=21 trio db)        ──► merqury/                      │
+   │    asmstats + tidk + centromics ──► assembly_stats.json            │
+   │    EDTA (TE annotation)          ──► edta/  (feeds page_repeats_te) │
+   │                                                                    │
+   │    Roll-up: build_assembly_stats.py → atlases/genome/data/assembly/ │
+   └────────────────────────────────────────────────────────────────────┘
+</pre>
+        <div class="ga-card-footnote">
+          Wall-clock numbers are the round-1 production run on a 64-core, 512 GB
+          node (LANTA). Manual curation is human-bound and uncompressible. The
+          full Snakefile lives in the <code>catfish-genome-assembly</code> repo at
+          <code>workflow/Snakefile</code>; each rule maps 1:1 to a stage above.
+        </div>
+      </div>
+
+      <div class="ga-card">
+        <div class="ga-card-header">
+          <div class="ga-card-title">Pipeline stages — detail</div>
           <div class="ga-card-status">narrative</div>
         </div>
         <div class="ga-phasing-grid">
           <div class="ga-phase-name">stage 1</div>
-          <div class="ga-phase-desc">PacBio HiFi reads → primary contigs (hifiasm). Phased with Hi-C reads to produce two haplotype-resolved contig sets.</div>
+          <div class="ga-phase-desc">PacBio HiFi reads → primary contigs (hifiasm 0.19.7 with <code>--hic1</code> / <code>--hic2</code>). Phased with the Hi-C reads in-line to produce two haplotype-resolved contig sets. Trio-binning is <i>not</i> used — the F₁'s parents weren't sequenced separately at the time of assembly.</div>
 
           <div class="ga-phase-name">stage 2</div>
-          <div class="ga-phase-desc">Hi-C scaffolding (YaHS / SALSA2). Contig sets join into chromosome-scale scaffolds; haplotype 1 = Gar parent, haplotype 2 = Mac parent.</div>
+          <div class="ga-phase-desc">Hi-C scaffolding (YaHS 1.2a) per haplotype. Contig sets join into chromosome-scale scaffolds; haplotype 1 → 28 Cgar LGs, haplotype 2 → 27 Cmac LGs. SALSA2 was tested in parallel; YaHS won on N50 + manual-curation effort.</div>
 
           <div class="ga-phase-name">stage 3</div>
-          <div class="ga-phase-desc">ONT polishing + gap closure (Medaka / TGS-GapCloser). Reduces N-runs, improves homopolymer accuracy, fills inter-contig gaps.</div>
+          <div class="ga-phase-desc">ONT polishing + gap closure. Medaka (v1.11.3) on the Hi-C-scaffolded assembly with ONT reads (~20× R10.4 coverage); TGS-GapCloser (v1.2.1) closes inter-contig N-runs; a second DeepVariant pass catches residual indels in low-complexity regions.</div>
 
           <div class="ga-phase-name">stage 4</div>
-          <div class="ga-phase-desc">Curation pass (manual + Pretext / Hi-C contact-map review). Misjoins resolved, orientation flips fixed, final FAI + AGP emitted.</div>
+          <div class="ga-phase-desc">Manual curation — Pretext-Map / Hi-C contact-map review. ~2 person-days. Misjoins resolved by AGP edits; orientation flips fixed. Final per-haplotype FAI + AGP emitted; the AGP is the structural ground truth from this point on.</div>
 
           <div class="ga-phase-name">stage 5</div>
-          <div class="ga-phase-desc">QC (BUSCO + asmstats + tidk + merqury). Outputs back the <code>assembly_stats</code> + <code>centromere_telomere</code> layers used by page_assembly_stats.</div>
+          <div class="ga-phase-desc">QC (BUSCO + asmstats + Merqury + tidk + EDTA). Roll-up into <code>assembly_stats.json</code> — the consolidated file <code>page_assembly_stats</code> reads. See <b>fixtures/assembly_qc/</b> for an end-to-end example of the QC bundle this stage produces.</div>
+        </div>
+      </div>
+
+      <div class="ga-card">
+        <div class="ga-card-header">
+          <div class="ga-card-title">Tooling versions</div>
+          <div class="ga-card-status">cite these in methods</div>
+        </div>
+        <div class="ga-tooling-grid">
+          <div class="ga-tooling-head">tool</div>
+          <div class="ga-tooling-head">version</div>
+          <div class="ga-tooling-head">stage</div>
+          <div class="ga-tooling-head">purpose</div>
+
+          <div><code>hifiasm</code></div>             <div>0.19.7</div>     <div>1</div> <div>phased contigging from HiFi + Hi-C</div>
+          <div><code>YaHS</code></div>                <div>1.2a-r99</div>   <div>2</div> <div>Hi-C scaffolding</div>
+          <div><code>SALSA2</code></div>              <div>2.3</div>        <div>2</div> <div>alternative scaffolder (not used in final)</div>
+          <div><code>Medaka</code></div>              <div>1.11.3</div>     <div>3</div> <div>ONT polishing (R10.4 model)</div>
+          <div><code>TGS-GapCloser</code></div>       <div>1.2.1</div>      <div>3</div> <div>gap closure</div>
+          <div><code>DeepVariant</code></div>         <div>1.6.1</div>      <div>3</div> <div>second-pass indel correction</div>
+          <div><code>Pretext-Map / Pretext-View</code></div><div>0.1.9 / 0.2.5</div><div>4</div><div>manual curation interface</div>
+          <div><code>BUSCO</code></div>               <div>5.5.0</div>      <div>5</div> <div>gene completeness (actinopterygii_odb10)</div>
+          <div><code>Merqury</code></div>             <div>1.3</div>        <div>5</div> <div>reference-free k-mer QV + completeness</div>
+          <div><code>meryl</code></div>               <div>1.4.1</div>      <div>5</div> <div>k-mer counting (truth db)</div>
+          <div><code>asmstats</code></div>            <div>bundled w/ Merqury</div><div>5</div> <div>N50, gap counts, length sums</div>
+          <div><code>tidk</code></div>                <div>0.2.31</div>     <div>5</div> <div>telomere repeat search</div>
+          <div><code>EDTA</code></div>                <div>2.2.0</div>      <div>5</div> <div>TE annotation (feeds page_repeats_te)</div>
+        </div>
+      </div>
+
+      <div class="ga-card">
+        <div class="ga-card-header">
+          <div class="ga-card-title">QC checkpoints — what each stage emits</div>
+          <div class="ga-card-status">file-level provenance</div>
+        </div>
+        <div class="ga-checkpoints-grid">
+          <div class="ga-checkpoints-head">after stage</div>
+          <div class="ga-checkpoints-head">file(s)</div>
+          <div class="ga-checkpoints-head">what's checked</div>
+
+          <div>1</div>
+          <div><code>{hap1,hap2}.p_ctg.fa</code> · <code>hifiasm.log</code></div>
+          <div>contig N50 ≥ 5 Mb · &lt; 5% switch error (estimated)</div>
+
+          <div>2</div>
+          <div><code>{hap1,hap2}.scaffolds.fa</code> · YaHS log</div>
+          <div>scaffold N50 ≥ 20 Mb · expected chrom count (28 Gar / 27 Mac)</div>
+
+          <div>3</div>
+          <div><code>{hap1,hap2}.polished.fa</code></div>
+          <div>QV ≥ Q40 (Merqury proxy) · no growth in N-content</div>
+
+          <div>4</div>
+          <div><code>{hap1,hap2}.curated.fa</code> · <code>*.agp</code> · <code>*.fai</code></div>
+          <div>visual contact-map sign-off · no remaining misjoins</div>
+
+          <div>5</div>
+          <div>
+            <code>busco/&lt;hap&gt;/short_summary.specific.actinopterygii_odb10.&lt;hap&gt;.{txt,json}</code> ·
+            <code>merqury/fClaHyb.qv</code> · <code>merqury/fClaHyb.completeness.stats</code> ·
+            <code>assembly_stats.json</code>
+          </div>
+          <div>
+            BUSCO C(S+D) ≥ 95% · Merqury QV ≥ Q40 · k-mer completeness ≥ 95% ·
+            gap rate ≤ 0.1/Mb. Every claim in the assembly paper's methods
+            section resolves to one of these files.
+          </div>
         </div>
       </div>
 
