@@ -9,6 +9,7 @@
 // =============================================================================
 
 import { _pageState, _setActiveState } from './page_assembly_methods/_state.js';
+import { installPageIndex as _installPageIndex } from '../../shared/page-index.js';
 
 export function renderPage4(/* state */) {
   // No-op. Documentation page; static HTML.
@@ -30,6 +31,7 @@ export function refreshPage4(state) {
 export async function mount(root, atlasState, registry) {
   const legacyState = _buildLegacyState(atlasState);
   _setActiveState(legacyState);
+  _installPageIndex(root, 'page_assembly_methods');
   try { refreshPage4(legacyState); }
   catch (e) { console.warn('page_assembly_methods.mount: refreshPage4 threw —', e); }
   if (atlasState.genome) atlasState.genome._page_assembly_methodsState = legacyState;

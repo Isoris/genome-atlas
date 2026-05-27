@@ -129,7 +129,24 @@ Each action `type` (in the request manifest) pairs with a runner module and a `s
 1. Drop the fragment HTML at `atlases/genome/pages/<stage>/page_<topic>.html`, the module at `page_<topic>.js`, and the state stub at `page_<topic>/_state.js`.
 2. Register in `atlases/genome/manifest.json#pages` with `id`, `label`, `stage`, `fragment`, `module`, `tooltip`.
 3. Register the page's `requires_layers` / `requires_slots` in `atlases/genome/registries/data/pages.registry.json`.
-4. If the page consumes a new layer, declare it in `atlases/genome/registries/data/layers.registry.json` and add a typed `action` + `extractor` pair (see existing entries for the shape).
+4. Register in `atlases/genome/shared/page-index.js#PAGES` so the per-page mini-nav lists it.
+5. If the page consumes a new layer, declare it in `atlases/genome/registries/data/layers.registry.json` and add a typed `action` + `extractor` pair (see existing entries for the shape).
+6. If the page participates in the selection loop (active candidate / active chrom), follow the integration pattern in [`docs/CROSS_ATLAS_INTEGRATION.md`](docs/CROSS_ATLAS_INTEGRATION.md).
+
+## Cross-atlas selection layer
+
+A unified active-candidate / active-chrom signal flows between pages — a
+click on a per-chrom QC row drives the chromosome strip, the gene track,
+and the per-chrom dotplot to the same chromosome; a click on a cargo row
+highlights the matching candidate everywhere. The plumbing lives in
+[`atlases/genome/shared/`](atlases/genome/shared/) (four small modules)
+and is documented in [`docs/CROSS_ATLAS_INTEGRATION.md`](docs/CROSS_ATLAS_INTEGRATION.md).
+
+Run the headless tests:
+
+```sh
+node test/run.js   # 23 cases · 4 suites · 0 deps
+```
 
 ## Status
 

@@ -23,6 +23,15 @@
 
 import { probeModeB, renderModeBBadge } from '../../../../core/mode_b_badge.js';
 import { _pageState, _setActiveState } from './page_genes/_state.js';
+import {
+  installRouter as _installCrossAtlasRouter,
+  onActiveChrom as _onActiveChrom,
+  getActiveChrom as _getActiveChrom,
+  onActiveCandidate as _onActiveCandidate,
+  getActiveCandidate as _getActiveCandidate,
+} from '../../shared/cross-atlas.js';
+import { installActivePill as _installActivePill } from '../../shared/active-pill.js';
+import { installPageIndex as _installPageIndex } from '../../shared/page-index.js';
 
 // ----- Column synonyms (tolerant matching) -------------------------------
 const CHROM_KEYS   = ['chrom', 'chromosome', 'chr', 'seqid', 'seqname'];
@@ -199,16 +208,49 @@ function _renderDensity() {
     const y = DENSITY_PAD_T + i * DENSITY_BAR_H + 1;
     const xEnd = xFor(r.count);
     const w = Math.max(1, xEnd - DENSITY_PAD_L);
+    // Whole row (label + bar + count) lives in a <g data-ga-density-chrom>
+    // so click delegation can pick up either the label, the bar, or the
+    // count without the user having to hit the bar precisely.
     parts.push(
+      `<g class="ga-density-row" data-ga-density-chrom="${_esc(r.chrom)}">`,
+      `<rect class="ga-density-row-hit" x="0" y="${y - 1}" width="${DENSITY_W}" height="${DENSITY_BAR_H}" fill="transparent" pointer-events="all"/>`,
       `<text class="ga-density-label" x="${DENSITY_PAD_L - 6}" y="${y + DENSITY_BAR_H / 2 + 3}" text-anchor="end">${_esc(r.chrom)}</text>`,
       `<rect class="ga-density-bar" x="${DENSITY_PAD_L}" y="${y}" width="${w}" height="${DENSITY_BAR_H - 2}">` +
         `<title>${_esc(r.chrom)} · ${_fmtInt(r.count)} genes · ${_fmtMb(r.length_bp)} Mb</title>` +
       `</rect>`,
       `<text class="ga-density-val" x="${xEnd + 4}" y="${y + DENSITY_BAR_H / 2 + 3}">${_fmtInt(r.count)}</text>`,
+      `</g>`,
     );
   });
   parts.push('</svg>');
   slot.innerHTML = parts.join('');
+  _wireDensityClicks();
+  _applyActiveChromHighlightDensity(_getActiveChrom());
+}
+
+function _wireDensityClicks() {
+  const slot = document.getElementById('pageGenesDensitySlot');
+  if (!slot || slot.__gaDensityClicksWired) return;
+  slot.addEventListener('click', (ev) => {
+    const g = ev.target.closest && ev.target.closest('g[data-ga-density-chrom]');
+    if (!g) return;
+    const chrom = g.getAttribute('data-ga-density-chrom');
+    if (!chrom) return;
+    g.dispatchEvent(new CustomEvent('ga-density-chrom-click', {
+      bubbles: true,
+      detail: { chrom },
+    }));
+  });
+  slot.__gaDensityClicksWired = true;
+}
+
+function _applyActiveChromHighlightDensity(active) {
+  const slot = document.getElementById('pageGenesDensitySlot');
+  if (!slot) return;
+  const id = active && active.chrom;
+  slot.querySelectorAll('g[data-ga-density-chrom]').forEach((g) => {
+    g.classList.toggle('is-active', id != null && g.getAttribute('data-ga-density-chrom') === id);
+  });
 }
 
 function _applyDensitySort() {
@@ -240,7 +282,7 @@ function _renderCargo() {
     '<th class="ga-num">length (Mb)</th><th class="ga-num">gene count</th>',
     '<th>genes (first 12)</th></tr></thead><tbody>'];
   for (const r of rows) {
-    lines.push('<tr>' +
+    lines.push('<tr class="ga-cargo-row" data-ga-cand-id="' + _esc(r.candidate_id) + '">' +
       `<td><code>${_esc(r.candidate_id)}</code></td>` +
       `<td>${_esc(r.chrom)}</td>` +
       `<td class="ga-num">${_fmtMb(r.start_bp)} – ${_fmtMb(r.end_bp)}</td>` +
@@ -251,6 +293,40 @@ function _renderCargo() {
   }
   lines.push('</tbody></table>');
   slot.innerHTML = lines.join('');
+  _wireCargoClicks();
+  _applyActiveCandidateHighlight(_getActiveCandidate());
+}
+
+function _wireCargoClicks() {
+  const slot = document.getElementById('pageGenesCargoSlot');
+  if (!slot || slot.__gaCargoClicksWired) return;
+  slot.addEventListener('click', (ev) => {
+    const tr = ev.target.closest && ev.target.closest('tr[data-ga-cand-id]');
+    if (!tr) return;
+    const candId = tr.getAttribute('data-ga-cand-id');
+    if (!candId) return;
+    // Look the candidate row up in the cargo state so the event carries the
+    // full payload (chrom + span) the router can use to update active chrom.
+    const cand = _state.cargo.find((c) => c.candidate_id === candId);
+    tr.dispatchEvent(new CustomEvent('ga-cargo-cand-click', {
+      bubbles: true,
+      detail: {
+        candidate: cand
+          ? { id: candId, chrom: cand.chrom, start_bp: cand.start_bp, end_bp: cand.end_bp, label: candId }
+          : { id: candId },
+      },
+    }));
+  });
+  slot.__gaCargoClicksWired = true;
+}
+
+function _applyActiveCandidateHighlight(active) {
+  const slot = document.getElementById('pageGenesCargoSlot');
+  if (!slot) return;
+  const id = active && active.id;
+  slot.querySelectorAll('tr[data-ga-cand-id]').forEach((tr) => {
+    tr.classList.toggle('is-active', id != null && tr.getAttribute('data-ga-cand-id') === id);
+  });
 }
 
 function _applyCargoFilter() {
@@ -425,6 +501,37 @@ export async function mount(root, atlasState, registry) {
   _state.trackGenes = [];
   _state.registry = registry || null;
   _setActiveState(_state);
+
+  // Cross-atlas wiring — idempotent.
+  _installCrossAtlasRouter();
+  _installActivePill();
+  _installPageIndex(root, 'page_genes');
+
+  // Chrom-aware: when any sibling page sets the active chrom (page_assembly_stats
+  // QC row click, page_chromosome_overview strip click, this page's own
+  // density bar click), switch the gene-track dropdown + redraw AND
+  // highlight the matching density row.
+  if (root && !root.__gaGenesChromSub) {
+    root.__gaGenesChromSub = _onActiveChrom(({ chrom }) => {
+      const active = chrom ? { chrom } : null;
+      _applyActiveChromHighlightDensity(active);
+      if (!chrom || chrom === _state.trackChrom) return;
+      // Only switch if the chrom actually exists in this page's gene_track.
+      const exists = _state.perChrom.some((c) => c.chrom === chrom);
+      if (!exists) return;
+      const sel = document.getElementById('pageGenesTrackChromSel');
+      if (sel) sel.value = chrom;
+      _selectTrackChrom(chrom);
+      _renderTrack();
+    });
+  }
+  // Candidate-aware: re-highlight the cargo row whenever the router updates.
+  if (root && !root.__gaGenesCandSub) {
+    root.__gaGenesCandSub = _onActiveCandidate(({ candidate }) => {
+      _applyActiveCandidateHighlight(candidate);
+    });
+  }
+
   _wire();
 
   const probe = await probeModeB(registry, 'gene_track');
@@ -471,6 +578,16 @@ export async function unmount(root) {
   _state.cargoView = [];
   _state.trackChrom = '';
   _state.trackGenes = [];
+  if (root) {
+    if (typeof root.__gaGenesChromSub === 'function') {
+      try { root.__gaGenesChromSub(); } catch (_) {}
+      root.__gaGenesChromSub = null;
+    }
+    if (typeof root.__gaGenesCandSub === 'function') {
+      try { root.__gaGenesCandSub(); } catch (_) {}
+      root.__gaGenesCandSub = null;
+    }
+  }
 }
 
 // ----- Legacy compat (kept so anything that imported renderPage5 still works) ----

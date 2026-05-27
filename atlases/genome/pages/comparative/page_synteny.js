@@ -28,6 +28,13 @@
 
 import { _pageState, _setActiveState } from './page_synteny/_state.js';
 import { ensureInstalled as ensureRouterBridge } from '../../shared/_router_bridge.js';
+import {
+  installRouter as _installCrossAtlasRouter,
+  onActiveChrom as _onActiveChrom,
+  getActiveChrom as _getActiveChrom,
+} from '../../shared/cross-atlas.js';
+import { installActivePill as _installActivePill } from '../../shared/active-pill.js';
+import { installPageIndex as _installPageIndex } from '../../shared/page-index.js';
 
 const POPOVER_DEBOUNCE_MS = 200;
 
@@ -80,6 +87,14 @@ export async function mount(root, atlasState, registry) {
   legacyState.drilledPair  = ga._page_syntenyDrilledPair  || null;
   legacyState.drilledChrom = ga._page_syntenyDrilledChrom || null;
   _setActiveState(legacyState);
+
+  // Cross-atlas wiring — install router + pill + page-index. The
+  // existing _router_bridge.js installed above handles cross-page
+  // pair/chrom slots; cross-atlas.js handles the active-candidate +
+  // active-chrom selection layer (different concern).
+  _installCrossAtlasRouter();
+  _installActivePill();
+  _installPageIndex(root, 'page_synteny');
   try { refreshPage9(legacyState); }
   catch (e) { console.warn('page_synteny.mount: refreshPage9 threw —', e); }
   _wireOxfordToggle(root, legacyState, atlasState, registry);

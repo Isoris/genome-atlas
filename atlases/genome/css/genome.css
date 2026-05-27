@@ -444,6 +444,37 @@
 .ga-table th.ga-sort-asc::after  { content: " \25B2"; color: var(--accent); }
 .ga-table th.ga-sort-desc::after { content: " \25BC"; color: var(--accent); }
 .ga-table tbody tr:hover { background: var(--panel-2); }
+.ga-table tbody tr.ga-qc-row,
+.ga-table tbody tr.ga-cargo-row { cursor: pointer; }
+.ga-table tbody tr.is-active {
+  background: rgba(255, 140, 110, 0.14);
+  box-shadow: inset 3px 0 0 0 #ff8c6e;
+}
+html[data-theme="light"] .ga-table tbody tr.is-active {
+  background: rgba(194, 65, 12, 0.12);
+  box-shadow: inset 3px 0 0 0 #c2410c;
+}
+/* Same active-row affordance for the SVG chromosome-strip rows on
+   page_chromosome_overview. Backbone rects only have stroke/fill, no
+   background — so we boost their stroke + drop a thin accent under the
+   row's labels via CSS filters on the parent <g>. */
+.ga-chromov-svg g.ga-chromov-row { cursor: pointer; }
+.ga-chromov-svg g.ga-chromov-row.is-active .ga-chromov-bone {
+  stroke: #ff8c6e;
+  stroke-width: 1.5;
+}
+.ga-chromov-svg g.ga-chromov-row.is-active .ga-chromov-label,
+.ga-chromov-svg g.ga-chromov-row.is-active .ga-chromov-len {
+  fill: #ff8c6e;
+  font-weight: 600;
+}
+html[data-theme="light"] .ga-chromov-svg g.ga-chromov-row.is-active .ga-chromov-bone {
+  stroke: #c2410c;
+}
+html[data-theme="light"] .ga-chromov-svg g.ga-chromov-row.is-active .ga-chromov-label,
+html[data-theme="light"] .ga-chromov-svg g.ga-chromov-row.is-active .ga-chromov-len {
+  fill: #c2410c;
+}
 .ga-table td.ga-cell-num  { font-variant-numeric: tabular-nums; }
 .ga-table td.ga-cell-id   { color: var(--ink); }
 .ga-table td.ga-cell-flag { text-align: center; color: var(--ink-dim); }
@@ -1659,6 +1690,22 @@ html[data-theme="light"]    .ga-sankey-btn.is-active {
 .ga-density-svg { width: 100%; height: auto; display: block; }
 .ga-density-bar  { fill: var(--accent); opacity: 0.78; }
 .ga-density-bar:hover { opacity: 1; }
+/* page_genes View 1 density bars participate in the cross-atlas
+   chrom-selection loop. Whole row is a click target. */
+.ga-density-svg g.ga-density-row { cursor: pointer; }
+.ga-density-svg g.ga-density-row:hover .ga-density-bar { opacity: 1; }
+.ga-density-svg g.ga-density-row.is-active .ga-density-bar {
+  fill: #ff8c6e;
+  opacity: 1;
+}
+.ga-density-svg g.ga-density-row.is-active .ga-density-label,
+.ga-density-svg g.ga-density-row.is-active .ga-density-val {
+  fill: #ff8c6e;
+  font-weight: 600;
+}
+html[data-theme="light"] .ga-density-svg g.ga-density-row.is-active .ga-density-bar { fill: #c2410c; }
+html[data-theme="light"] .ga-density-svg g.ga-density-row.is-active .ga-density-label,
+html[data-theme="light"] .ga-density-svg g.ga-density-row.is-active .ga-density-val { fill: #c2410c; }
 .ga-density-label,
 .ga-density-val {
   font: 10px var(--mono);
@@ -1681,6 +1728,7 @@ html[data-theme="light"]    .ga-sankey-btn.is-active {
   stroke: var(--accent);
   stroke-width: 1.5;
   opacity: 0.85;
+  cursor: pointer;
 }
 .ga-chromov-cand:hover { fill: var(--accent); fill-opacity: 0.18; }
 
@@ -2655,3 +2703,168 @@ html[data-theme="light"]    .ga-sankey-btn.is-active {
   background: transparent;
   padding: 0;
 }
+
+/* --------------------------------------------------------------------- */
+/* Per-page mini-nav (shared/page-index.js).                              */
+/* --------------------------------------------------------------------- */
+
+.ga-page-index {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  align-items: center;
+  padding: 8px 10px;
+  margin: 0 0 10px 0;
+  background: var(--panel-3);
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  font-family: var(--mono);
+  font-size: 10px;
+}
+.ga-page-index-group {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  align-items: center;
+}
+.ga-page-index-stage {
+  font-size: 8.5px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+  margin-right: 4px;
+}
+.ga-page-index-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  text-decoration: none;
+  color: var(--ink-dim);
+  background: var(--panel-2);
+  border: 1px solid var(--rule);
+  border-radius: 12px;
+  font-size: 10px;
+  letter-spacing: 0.02em;
+  transition: color 80ms ease, border-color 80ms ease, background 80ms ease;
+}
+.ga-page-index-chip:hover {
+  color: var(--ink);
+  border-color: #ff8c6e;
+}
+.ga-page-index-chip.is-active {
+  color: var(--ink);
+  border-color: #ff8c6e;
+  background: rgba(255, 140, 110, 0.14);
+  box-shadow: 0 0 0 1px #ff8c6e;
+}
+.ga-page-index-num {
+  font-weight: 700;
+  color: var(--ink);
+  font-size: 10.5px;
+  font-variant-numeric: tabular-nums;
+  min-width: 1ch;
+}
+.ga-page-index-chip.is-active .ga-page-index-num { color: #ff8c6e; }
+.ga-page-index-label { color: inherit; }
+.ga-page-index-cap {
+  font-size: 8px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0 4px;
+  border-radius: 2px;
+  color: var(--ink-dim);
+  background: var(--panel-3);
+}
+.ga-page-index-cap.is-cand   { color: #ff8c6e; }
+.ga-page-index-cap.is-chrom  { color: #4f9e64; }
+.ga-page-index-cap.is-static { color: var(--ink-dimmer); }
+
+html[data-theme="light"] .ga-page-index-chip.is-active {
+  border-color: #c2410c;
+  background: rgba(194, 65, 12, 0.12);
+  box-shadow: 0 0 0 1px #c2410c;
+}
+html[data-theme="light"] .ga-page-index-chip.is-active .ga-page-index-num {
+  color: #c2410c;
+}
+html[data-theme="light"] .ga-page-index-cap.is-cand { color: #c2410c; }
+
+/* --------------------------------------------------------------------- */
+/* Atlas-wide active-selection pill (shared/active-pill.js).             */
+/* --------------------------------------------------------------------- */
+
+.ga-active-pill {
+  position: fixed;
+  bottom: 14px;
+  right: 18px;
+  z-index: 8000;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px 6px 12px;
+  background: var(--panel-2);
+  border: 1px solid #ff8c6e;
+  border-left: 3px solid #ff8c6e;
+  border-radius: 18px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.32);
+  font-family: var(--mono);
+  font-size: 10.5px;
+  color: var(--ink);
+  pointer-events: auto;
+  transition: opacity 120ms ease;
+}
+.ga-active-pill[hidden] { display: none; }
+
+.ga-active-pill-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.ga-active-pill-kind {
+  font-size: 8.5px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+}
+.ga-active-pill-id {
+  font-weight: 600;
+  color: #ff8c6e;
+  letter-spacing: 0.02em;
+}
+.ga-active-pill-chrom {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--ink);
+  padding: 1px 6px;
+  background: var(--panel-3);
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+}
+.ga-active-pill-close {
+  font: inherit;
+  font-size: 14px;
+  line-height: 1;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: transparent;
+  border: 1px solid var(--rule);
+  color: var(--ink-dim);
+  cursor: pointer;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.ga-active-pill-close:hover {
+  color: var(--ink);
+  border-color: #ff8c6e;
+  background: rgba(255, 140, 110, 0.12);
+}
+
+html[data-theme="light"] .ga-active-pill {
+  border-color: #c2410c;
+  border-left-color: #c2410c;
+}
+html[data-theme="light"] .ga-active-pill-id { color: #c2410c; }

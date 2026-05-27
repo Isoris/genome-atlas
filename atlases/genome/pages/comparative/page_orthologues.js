@@ -14,6 +14,7 @@
 import { _pageState, _setActiveState } from './page_orthologues/_state.js';
 import { ensureInstalled as ensureRouterBridge } from '../../shared/_router_bridge.js';
 import { probeModeB, renderModeBBadge, distinctCount } from '../../../../core/mode_b_badge.js';
+import { installPageIndex as _installPageIndex } from '../../shared/page-index.js';
 
 // ─── Mode-B probe ────────────────────────────────────────────────────────
 // Resolves ortholog_tables for the active focalGenome (templated). Comparator
@@ -86,6 +87,7 @@ export async function mount(root, atlasState, registry) {
   const legacyState = _buildLegacyState(atlasState);
   legacyState.focalGenome = legacyState.focalGenome || _readSharedFocal(atlasState) || 'cgar';
   _setActiveState(legacyState);
+  _installPageIndex(root, 'page_orthologues');
   try { refreshPage13(legacyState); }
   catch (e) { console.warn('page_orthologues.mount: refreshPage13 threw —', e); }
   _wireFocalSelector(root, legacyState, atlasState);

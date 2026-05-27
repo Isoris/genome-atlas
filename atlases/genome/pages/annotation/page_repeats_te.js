@@ -37,6 +37,13 @@
 
 import { _pageState, _setActiveState } from './page_repeats_te/_state.js';
 import { probeModeB, renderModeBBadge, distinctCount } from '../../../../core/mode_b_badge.js';
+import {
+  installRouter as _installCrossAtlasRouter,
+  onActiveCandidate as _onActiveCandidate,
+  getActiveCandidate as _getActiveCandidate,
+} from '../../shared/cross-atlas.js';
+import { installActivePill as _installActivePill } from '../../shared/active-pill.js';
+import { installPageIndex as _installPageIndex } from '../../shared/page-index.js';
 
 // ─── Mode-B probe ────────────────────────────────────────────────────────
 // Resolves the repeat_track BED via the registry. Round-1 layer is
@@ -246,6 +253,15 @@ export async function mount(root, atlasState, registry) {
   catch (e) { console.warn('page_repeats_te.mount: refreshPage6 threw —', e); }
   if (atlasState.genome) atlasState.genome._page_repeats_teState = legacyState;
 
+  _installCrossAtlasRouter();
+  _installActivePill();
+  _installPageIndex(root, 'page_repeats_te');
+  if (root && !root.__gaRepCandSub) {
+    root.__gaRepCandSub = _onActiveCandidate(({ candidate }) => {
+      _applyFlankActiveHighlight(candidate);
+    });
+  }
+
   // ── View 4 (Sankey) keeps its own mount path above; Views 1/2/3 share a
   // single Mode-B probe that feeds the data-source badge AND the three live
   // cards. The probe is non-blocking so the Sankey never waits on it.
@@ -277,6 +293,10 @@ export async function unmount(root) {
     host.__gaSankey.destroy();
   }
   _setActiveState(null);
+  if (root && typeof root.__gaRepCandSub === 'function') {
+    try { root.__gaRepCandSub(); } catch (_) {}
+    root.__gaRepCandSub = null;
+  }
 }
 
 function _buildLegacyState(atlasState) {
@@ -1296,7 +1316,7 @@ function _renderFlank() {
     '<th class="ga-num">chrom rate</th><th class="ga-num">enrichment</th>',
     '<th>flag</th></tr></thead><tbody>'];
   for (const r of rows) {
-    lines.push('<tr>' +
+    lines.push('<tr class="ga-cargo-row" data-ga-cand-id="' + _v123Esc(r.candidate_id) + '">' +
       `<td><code>${_v123Esc(r.candidate_id)}</code></td>` +
       `<td>${_v123Esc(r.chrom)}</td>` +
       `<td class="ga-num">${_v123FmtMb(r.start_bp)} – ${_v123FmtMb(r.end_bp)}</td>` +
@@ -1309,6 +1329,38 @@ function _renderFlank() {
   }
   lines.push('</tbody></table>');
   slot.innerHTML = lines.join('');
+  _wireFlankClicks();
+  _applyFlankActiveHighlight(_getActiveCandidate());
+}
+
+function _wireFlankClicks() {
+  const slot = document.getElementById('pageRepeatsFlankSlot');
+  if (!slot || slot.__gaFlankClicksWired) return;
+  slot.addEventListener('click', (ev) => {
+    const tr = ev.target.closest && ev.target.closest('tr[data-ga-cand-id]');
+    if (!tr) return;
+    const candId = tr.getAttribute('data-ga-cand-id');
+    if (!candId) return;
+    const cand = _v123State.flank.find((c) => c.candidate_id === candId);
+    tr.dispatchEvent(new CustomEvent('ga-cargo-cand-click', {
+      bubbles: true,
+      detail: {
+        candidate: cand
+          ? { id: candId, chrom: cand.chrom, start_bp: cand.start_bp, end_bp: cand.end_bp, label: candId }
+          : { id: candId },
+      },
+    }));
+  });
+  slot.__gaFlankClicksWired = true;
+}
+
+function _applyFlankActiveHighlight(active) {
+  const slot = document.getElementById('pageRepeatsFlankSlot');
+  if (!slot) return;
+  const id = active && active.id;
+  slot.querySelectorAll('tr[data-ga-cand-id]').forEach((tr) => {
+    tr.classList.toggle('is-active', id != null && tr.getAttribute('data-ga-cand-id') === id);
+  });
 }
 
 async function _loadCandidatesAndRenderFlank(registry) {

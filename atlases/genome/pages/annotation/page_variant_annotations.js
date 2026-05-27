@@ -16,6 +16,13 @@
 
 import { probeModeB, renderModeBBadge } from '../../../../core/mode_b_badge.js';
 import { _pageState, _setActiveState } from './page_variant_annotations/_state.js';
+import {
+  installRouter as _installCrossAtlasRouter,
+  onActiveCandidate as _onActiveCandidate,
+  getActiveCandidate as _getActiveCandidate,
+} from '../../shared/cross-atlas.js';
+import { installActivePill as _installActivePill } from '../../shared/active-pill.js';
+import { installPageIndex as _installPageIndex } from '../../shared/page-index.js';
 
 // ----- Column synonyms ---------------------------------------------------
 const CHROM_KEYS  = ['chrom', 'chromosome', 'chr', 'seqid'];
@@ -240,7 +247,7 @@ function _renderBurden() {
     '<th class="ga-num">LOW</th><th class="ga-num">MODIFIER</th>',
     '<th class="ga-num">total</th></tr></thead><tbody>'];
   for (const r of rows) {
-    lines.push('<tr>' +
+    lines.push('<tr class="ga-cargo-row" data-ga-cand-id="' + _esc(r.candidate_id) + '">' +
       `<td><code>${_esc(r.candidate_id)}</code></td>` +
       `<td>${_esc(r.chrom)}</td>` +
       `<td class="ga-num">${_fmtMb(r.start_bp)} – ${_fmtMb(r.end_bp)}</td>` +
@@ -253,6 +260,38 @@ function _renderBurden() {
   }
   lines.push('</tbody></table>');
   slot.innerHTML = lines.join('');
+  _wireBurdenClicks();
+  _applyActiveCandidateHighlight(_getActiveCandidate());
+}
+
+function _wireBurdenClicks() {
+  const slot = document.getElementById('pageVarAnnBurdenSlot');
+  if (!slot || slot.__gaBurdenClicksWired) return;
+  slot.addEventListener('click', (ev) => {
+    const tr = ev.target.closest && ev.target.closest('tr[data-ga-cand-id]');
+    if (!tr) return;
+    const candId = tr.getAttribute('data-ga-cand-id');
+    if (!candId) return;
+    const cand = _state.burden.find((c) => c.candidate_id === candId);
+    tr.dispatchEvent(new CustomEvent('ga-impact-cand-click', {
+      bubbles: true,
+      detail: {
+        candidate: cand
+          ? { id: candId, chrom: cand.chrom, start_bp: cand.start_bp, end_bp: cand.end_bp, label: candId }
+          : { id: candId },
+      },
+    }));
+  });
+  slot.__gaBurdenClicksWired = true;
+}
+
+function _applyActiveCandidateHighlight(active) {
+  const slot = document.getElementById('pageVarAnnBurdenSlot');
+  if (!slot) return;
+  const id = active && active.id;
+  slot.querySelectorAll('tr[data-ga-cand-id]').forEach((tr) => {
+    tr.classList.toggle('is-active', id != null && tr.getAttribute('data-ga-cand-id') === id);
+  });
 }
 
 // ----- View 3 — HIGH-impact variant list --------------------------------
@@ -393,6 +432,16 @@ export async function mount(root, atlasState, registry) {
   _state.burdenSort = 'n_high';
   _state.registry = registry || null;
   _setActiveState(_state);
+
+  _installCrossAtlasRouter();
+  _installActivePill();
+  _installPageIndex(root, 'page_variant_annotations');
+  if (root && !root.__gaVarCandSub) {
+    root.__gaVarCandSub = _onActiveCandidate(({ candidate }) => {
+      _applyActiveCandidateHighlight(candidate);
+    });
+  }
+
   _wire();
 
   const probe = await probeModeB(registry, 'variant_annotations');
@@ -436,6 +485,10 @@ export async function unmount(root) {
   _state.burdenView = [];
   _state.high = [];
   _state.highView = [];
+  if (root && typeof root.__gaVarCandSub === 'function') {
+    try { root.__gaVarCandSub(); } catch (_) {}
+    root.__gaVarCandSub = null;
+  }
 }
 
 // ----- Legacy compat -----------------------------------------------------
