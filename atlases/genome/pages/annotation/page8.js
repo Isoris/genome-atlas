@@ -20,6 +20,8 @@
 // =============================================================================
 
 import { _pageState, _setActiveState } from './page8/_state.js';
+import { CANDIDATES_FALLBACK, resolveCandidates as _resolveSharedCandidates } from '../../shared/candidates.js';
+import { installRouter as _installCrossAtlasRouter, onActiveCandidate as _onActiveCandidate, getActiveCandidate as _getActiveCandidate } from '../../shared/cross-atlas.js';
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 const N_BINS = 80;
@@ -112,11 +114,8 @@ const CHROM_INVENTORY_FALLBACK = (() => {
     id: e.chrom, name: e.chrom, hap: e.hap, length_bp: e.length_bp,
   }));
 })();
-const CANDIDATES_FALLBACK = [
-  { id: 'cand:01', chrom: 'Gar_3',  start_bp: 14_000_000, end_bp: 18_500_000, label: 'cand-01' },
-  { id: 'cand:02', chrom: 'Gar_11', start_bp:  4_500_000, end_bp:  6_800_000, label: 'cand-02' },
-  { id: 'cand:03', chrom: 'Mac_5',  start_bp: 22_000_000, end_bp: 24_500_000, label: 'cand-03' },
-];
+// Candidates come from shared/candidates.js — see CANDIDATES_FALLBACK
+// imported above. Pages share that constant so demo numbers line up.
 
 // ---------------------------------------------------------------------------
 // Public lifecycle.
@@ -144,9 +143,24 @@ export async function mount(root, atlasState, registry) {
   const legacyState = _buildLegacyState(atlasState);
   legacyState.root = root || document;
   _setActiveState(legacyState);
+  _installCrossAtlasRouter();
   try { renderPage8(legacyState); }
   catch (e) { console.warn('page8.mount: renderPage8 threw —', e); }
+  _applyActiveCandidateHighlight(root, _getActiveCandidate());
+  if (root && !root.__gaPage8ActiveSub) {
+    root.__gaPage8ActiveSub = _onActiveCandidate(({ candidate }) => {
+      _applyActiveCandidateHighlight(root, candidate);
+    });
+  }
   if (atlasState.genome) atlasState.genome._page8State = legacyState;
+}
+
+function _applyActiveCandidateHighlight(root, candidate) {
+  if (!root || !root.querySelectorAll) return;
+  const id = candidate && candidate.id;
+  root.querySelectorAll('.ga-impact-tr').forEach((tr) => {
+    tr.classList.toggle('is-active', id != null && tr.getAttribute('data-ga-cand-id') === id);
+  });
 }
 
 export async function unmount(root) {
@@ -183,11 +197,7 @@ function _resolveInventory(state, conserved) {
     ? CHROM_INVENTORY_FALLBACK
     : Object.values(conserved.chroms).map((e) => ({ id: e.chrom, name: e.chrom, hap: e.hap, length_bp: e.length_bp }));
 }
-function _resolveCandidates(state) {
-  const shared = state.shared || {};
-  if (Array.isArray(shared.candidates) && shared.candidates.length > 0) return shared.candidates;
-  return CANDIDATES_FALLBACK;
-}
+const _resolveCandidates = _resolveSharedCandidates;
 
 function _mount(root, state) {
   const { loaded, data: conserved } = _resolveConserved(state);

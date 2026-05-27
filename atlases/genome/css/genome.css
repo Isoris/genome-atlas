@@ -1369,6 +1369,14 @@ html[data-theme="light"] .ga-strip-btn.is-active {
 }
 .ga-cargo-tr { cursor: pointer; transition: background-color 80ms ease; }
 .ga-cargo-tr:hover { background: rgba(255, 140, 110, 0.06); }
+.ga-cargo-tr.is-active {
+  background: rgba(255, 140, 110, 0.14);
+  box-shadow: inset 3px 0 0 0 #ff8c6e;
+}
+html[data-theme="light"] .ga-cargo-tr.is-active {
+  background: rgba(194, 65, 12, 0.12);
+  box-shadow: inset 3px 0 0 0 #c2410c;
+}
 .ga-cargo-tr:last-child .ga-cargo-td { border-bottom: none; }
 .ga-cargo-genelist { color: var(--ink-dim); font-size: 10px; }
 .ga-cargo-impact {
@@ -1480,6 +1488,14 @@ html[data-theme="light"] .ga-gene-tooltip { border-left-color: #c2410c; }
 
 .ga-impact-tr { cursor: pointer; transition: background-color 80ms ease; }
 .ga-impact-tr:hover { background: rgba(255, 140, 110, 0.06); }
+.ga-impact-tr.is-active {
+  background: rgba(255, 140, 110, 0.14);
+  box-shadow: inset 3px 0 0 0 #ff8c6e;
+}
+html[data-theme="light"] .ga-impact-tr.is-active {
+  background: rgba(194, 65, 12, 0.12);
+  box-shadow: inset 3px 0 0 0 #c2410c;
+}
 .ga-impact-tr:last-child .ga-impact-td { border-bottom: none; }
 .ga-impact-genelist { color: var(--ink-dim); font-size: 10px; }
 

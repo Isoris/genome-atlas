@@ -36,6 +36,8 @@
 // =============================================================================
 
 import { _pageState, _setActiveState } from './page5/_state.js';
+import { CANDIDATES_FALLBACK, resolveCandidates as _resolveSharedCandidates, isFallback as _isFallbackCandidates } from '../../shared/candidates.js';
+import { installRouter as _installCrossAtlasRouter, onActiveCandidate as _onActiveCandidate, getActiveCandidate as _getActiveCandidate, setActiveCandidate as _setActiveCandidate } from '../../shared/cross-atlas.js';
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 const IMPACT_COLORS = {
@@ -194,13 +196,8 @@ const CHROM_INVENTORY_FALLBACK = (() => {
   });
 })();
 
-// Tiny example candidate set — same shape as page3's COHORT_FALLBACK so the
-// two pages agree when run standalone.
-const CANDIDATES_FALLBACK = [
-  { id: 'cand:01', chrom: 'Gar_3',  start_bp: 14_000_000, end_bp: 18_500_000, label: 'cand-01' },
-  { id: 'cand:02', chrom: 'Gar_11', start_bp:  4_500_000, end_bp:  6_800_000, label: 'cand-02' },
-  { id: 'cand:03', chrom: 'Mac_5',  start_bp: 22_000_000, end_bp: 24_500_000, label: 'cand-03' },
-];
+// Candidates come from shared/candidates.js — see CANDIDATES_FALLBACK
+// imported at the top. Pages share that constant so demo numbers line up.
 
 // ---------------------------------------------------------------------------
 // Public lifecycle.
@@ -228,8 +225,17 @@ export async function mount(root, atlasState, registry) {
   const legacyState = _buildLegacyState(atlasState);
   legacyState.root = root || document;
   _setActiveState(legacyState);
+  _installCrossAtlasRouter();
   try { renderPage5(legacyState); }
   catch (e) { console.warn('page5.mount: renderPage5 threw —', e); }
+  // Highlight whichever candidate the cross-atlas router currently flags
+  // as active (and re-highlight whenever the user clicks a row anywhere).
+  _applyActiveCandidateHighlight(root, _getActiveCandidate());
+  if (root && !root.__gaPage5ActiveSub) {
+    root.__gaPage5ActiveSub = _onActiveCandidate(({ candidate }) => {
+      _applyActiveCandidateHighlight(root, candidate);
+    });
+  }
   if (atlasState.genome) atlasState.genome._page5State = legacyState;
 }
 
@@ -294,11 +300,7 @@ function _resolveChromInventory(state, geneData) {
     id: e.chrom, name: e.chrom, hap: e.hap, length_bp: e.length_bp,
   }));
 }
-function _resolveCandidates(state) {
-  const shared = state.shared || {};
-  if (Array.isArray(shared.candidates) && shared.candidates.length > 0) return shared.candidates;
-  return CANDIDATES_FALLBACK;
-}
+const _resolveCandidates = _resolveSharedCandidates;
 function _resolveImpact(state) {
   const v = state.layers && state.layers.variant_annotations;
   if (v && typeof v === 'object' && v.gene_impact && typeof v.gene_impact === 'object') {
@@ -324,7 +326,7 @@ function _mount(root, state) {
   };
   tagCard('[data-ga-card="gene-density"]',  loaded ? 'gene_track · loaded' : 'sample data');
   tagCard('[data-ga-card="gene-track"]',    loaded ? 'gene_track · loaded' : 'sample data');
-  tagCard('[data-ga-card="gene-cargo"]',    candidates === CANDIDATES_FALLBACK ? 'sample candidates' : 'shared.candidates · loaded');
+  tagCard('[data-ga-card="gene-cargo"]',    _isFallbackCandidates(candidates) ? 'sample candidates' : 'shared.candidates · loaded');
 
   _mountDensity(root, { geneData, inventory });
   const trackCtx = _mountTrack(root, { geneData, inventory });
@@ -1086,4 +1088,16 @@ function _fmtBp(bp) {
   if (bp >= 1e6) return (bp / 1e6).toFixed(1) + ' Mb';
   if (bp >= 1e3) return (bp / 1e3).toFixed(0) + ' kb';
   return `${bp} bp`;
+}
+
+// ---------------------------------------------------------------------------
+// Cross-atlas highlight — flag the row matching the router's active candidate.
+// ---------------------------------------------------------------------------
+
+function _applyActiveCandidateHighlight(root, candidate) {
+  if (!root || !root.querySelectorAll) return;
+  const id = candidate && candidate.id;
+  root.querySelectorAll('.ga-cargo-tr').forEach((tr) => {
+    tr.classList.toggle('is-active', id != null && tr.getAttribute('data-ga-cand-id') === id);
+  });
 }

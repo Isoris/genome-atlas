@@ -22,6 +22,8 @@
 // =============================================================================
 
 import { _pageState, _setActiveState } from './page7/_state.js';
+import { CANDIDATES_FALLBACK, resolveCandidates as _resolveSharedCandidates } from '../../shared/candidates.js';
+import { installRouter as _installCrossAtlasRouter, onActiveCandidate as _onActiveCandidate, getActiveCandidate as _getActiveCandidate } from '../../shared/cross-atlas.js';
 
 const IMPACT_COLORS = {
   HIGH: '#c0392b',
@@ -46,11 +48,8 @@ function _rng(seed) {
   };
 }
 
-const CANDIDATES_FALLBACK = [
-  { id: 'cand:01', chrom: 'Gar_3',  start_bp: 14_000_000, end_bp: 18_500_000, label: 'cand-01' },
-  { id: 'cand:02', chrom: 'Gar_11', start_bp:  4_500_000, end_bp:  6_800_000, label: 'cand-02' },
-  { id: 'cand:03', chrom: 'Mac_5',  start_bp: 22_000_000, end_bp: 24_500_000, label: 'cand-03' },
-];
+// Candidates come from shared/candidates.js — see CANDIDATES_FALLBACK
+// imported above. Pages share that constant so demo numbers line up.
 
 const _GENE_NAME_POOL = [
   'TYRP1', 'OPN1MW', 'BRCA2', 'TP53', 'CDKN2A', 'NOTCH1', 'PAX6', 'WNT4',
@@ -149,9 +148,24 @@ export async function mount(root, atlasState, registry) {
   const legacyState = _buildLegacyState(atlasState);
   legacyState.root = root || document;
   _setActiveState(legacyState);
+  _installCrossAtlasRouter();
   try { renderPage7(legacyState); }
   catch (e) { console.warn('page7.mount: renderPage7 threw —', e); }
+  _applyActiveCandidateHighlight(root, _getActiveCandidate());
+  if (root && !root.__gaPage7ActiveSub) {
+    root.__gaPage7ActiveSub = _onActiveCandidate(({ candidate }) => {
+      _applyActiveCandidateHighlight(root, candidate);
+    });
+  }
   if (atlasState.genome) atlasState.genome._page7State = legacyState;
+}
+
+function _applyActiveCandidateHighlight(root, candidate) {
+  if (!root || !root.querySelectorAll) return;
+  const id = candidate && candidate.id;
+  root.querySelectorAll('.ga-impact-tr').forEach((tr) => {
+    tr.classList.toggle('is-active', id != null && tr.getAttribute('data-ga-cand-id') === id);
+  });
 }
 
 export async function unmount(root) {
@@ -191,11 +205,7 @@ function _resolveAnnotations(state, candidates) {
   });
   return { source: 'sample variants', data: out };
 }
-function _resolveCandidates(state) {
-  const shared = state.shared || {};
-  if (Array.isArray(shared.candidates) && shared.candidates.length > 0) return shared.candidates;
-  return CANDIDATES_FALLBACK;
-}
+const _resolveCandidates = _resolveSharedCandidates;
 
 function _mount(root, state) {
   const candidates = _resolveCandidates(state);

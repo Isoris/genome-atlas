@@ -29,6 +29,8 @@
 // =============================================================================
 
 import { _pageState, _setActiveState } from './page3/_state.js';
+import { CANDIDATES_FALLBACK as _SHARED_CANDIDATES_FALLBACK, resolveCandidates as _resolveSharedCandidates } from '../../shared/candidates.js';
+import { installRouter as _installCrossAtlasRouter } from '../../shared/cross-atlas.js';
 
 const N_BINS = 80;                 // density bin count per chrom in the fallback
 const COHORT_HIGHLIGHT_PALETTE = ['#ff8c6e', '#9b6fa3', '#4f9e64', '#3a5f9f'];
@@ -99,13 +101,9 @@ const CHROM_MAP_FALLBACK = (() => {
   return { chroms };
 })();
 
-const COHORT_FALLBACK = {
-  candidates: [
-    { id: 'cand:01', chrom: 'Gar_3',  start_bp: 14_000_000, end_bp: 18_500_000, label: 'cand-01', envelope: [12_000_000, 20_000_000] },
-    { id: 'cand:02', chrom: 'Gar_11', start_bp:  4_500_000, end_bp:  6_800_000, label: 'cand-02', envelope: [ 3_000_000,  8_000_000] },
-    { id: 'cand:03', chrom: 'Mac_5',  start_bp: 22_000_000, end_bp: 24_500_000, label: 'cand-03', envelope: [20_000_000, 27_000_000] },
-  ],
-};
+// Cohort overlay reads from shared.candidates (Inversion-Atlas cross-atlas
+// slot); falls back to the canonical sample set in shared/candidates.js.
+const COHORT_FALLBACK = { candidates: _SHARED_CANDIDATES_FALLBACK };
 
 // ---------------------------------------------------------------------------
 // Public lifecycle.
@@ -135,6 +133,7 @@ export async function mount(root, atlasState, registry) {
   const legacyState = _buildLegacyState(atlasState);
   legacyState.root = root || document;
   _setActiveState(legacyState);
+  _installCrossAtlasRouter();
   try { renderPage3(legacyState); }
   catch (e) { console.warn('page3.mount: renderPage3 threw —', e); }
   if (atlasState.genome) atlasState.genome._page3State = legacyState;
@@ -181,11 +180,7 @@ function _resolveData(state) {
   });
   return { chroms };
 }
-function _resolveCandidates(state) {
-  const shared = state.shared || {};
-  if (Array.isArray(shared.candidates) && shared.candidates.length > 0) return shared.candidates;
-  return COHORT_FALLBACK.candidates;
-}
+const _resolveCandidates = _resolveSharedCandidates;
 
 function _mountStrip(host, state) {
   const data = _resolveData(state);
