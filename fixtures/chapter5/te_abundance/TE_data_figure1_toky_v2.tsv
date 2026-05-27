@@ -1,0 +1,247 @@
+Tree_tip_label	Genera	Species	Repeat_Class	Repeat_Class_SO_long	Repeat_Family	TE_Count	Masked_lenght_	TE_abundance_genome_pct	Avg_TE_length_bp
+Ameiurus_melas	Ameiurus	melas	LTR	LTR_retrotransposons	Gypsy	35283	16022493	1.8454	454.1136808
+Ameiurus_melas	Ameiurus	melas	LTR	LTR_retrotransposons	LTR unknown	230255	71120342	8.1913	308.8764283
+Ameiurus_melas	Ameiurus	melas	nonLTR	nonLTR_retrotransposons	DIRS YR	834	259851	0.0299	311.5719424
+Ameiurus_melas	Ameiurus	melas	nonLTR	nonLTR_retrotransposons	LINE element	7861	3414004	0.3932	434.2963999
+Ameiurus_melas	Ameiurus	melas	nonLTR	nonLTR_retrotransposons	Penelope	155	188175	0.0217	1214.032258
+Ameiurus_melas	Ameiurus	melas	nonTIR	nonTIR_DNA_transposons	helitron	119029	34250806	3.9448	287.7517748
+Ameiurus_melas	Ameiurus	melas	nonTIR	nonTIR_DNA_transposons	polinton	1266	1401770	0.1614	1107.243286
+Ameiurus_melas	Ameiurus	melas	TIR	TIR_DNA_transposons	CACTA	303373	85947772	9.8990	283.3072554
+Ameiurus_melas	Ameiurus	melas	TIR	TIR_DNA_transposons	hAT	66955	21598107	2.4876	322.5764618
+Ameiurus_melas	Ameiurus	melas	TIR	TIR_DNA_transposons	Mutator	145026	41699351	4.8027	287.5301739
+Ameiurus_melas	Ameiurus	melas	TIR	TIR_DNA_transposons	PIF Harbinger	14903	3600698	0.4147	241.6089378
+Ameiurus_melas	Ameiurus	melas	TIR	TIR_DNA_transposons	Tc1 Mariner	18031	6088195	0.7012	337.6515446
+Ameiurus_melas	Ameiurus	melas	unclassified	SO_term_generic	repeat region	119529	32165504	3.7046	269.1020924
+Channallabes_apus	Channallabes	apus	LTR	LTR_retrotransposons	Copia	117	141248	0.0121	1207.247863
+Channallabes_apus	Channallabes	apus	LTR	LTR_retrotransposons	Gypsy	195404	132615547	11.3853	678.6736556
+Channallabes_apus	Channallabes	apus	LTR	LTR_retrotransposons	LTR unknown	274690	115894613	9.9498	421.9105646
+Channallabes_apus	Channallabes	apus	nonLTR	nonLTR_retrotransposons	DIRS YR	475	103987	0.0089	218.92
+Channallabes_apus	Channallabes	apus	nonLTR	nonLTR_retrotransposons	LINE element	15619	7238781	0.6215	463.4599526
+Channallabes_apus	Channallabes	apus	nonLTR	nonLTR_retrotransposons	Penelope	628	335427	0.0288	534.1194268
+Channallabes_apus	Channallabes	apus	nonTIR	nonTIR_DNA_transposons	helitron	134604	38429653	3.2993	285.5015676
+Channallabes_apus	Channallabes	apus	nonTIR	nonTIR_DNA_transposons	polinton	194	208458	0.0179	1074.525773
+Channallabes_apus	Channallabes	apus	TIR	TIR_DNA_transposons	CACTA	345885	102370487	8.7887	295.96683
+Channallabes_apus	Channallabes	apus	TIR	TIR_DNA_transposons	hAT	233699	76072338	6.5310	325.5141785
+Channallabes_apus	Channallabes	apus	TIR	TIR_DNA_transposons	Mutator	193216	47372107	4.0670	245.1769367
+Channallabes_apus	Channallabes	apus	TIR	TIR_DNA_transposons	PIF Harbinger	37257	9203666	0.7902	247.0318598
+Channallabes_apus	Channallabes	apus	TIR	TIR_DNA_transposons	Tc1 Mariner	30371	7053467	0.6056	232.2434889
+Channallabes_apus	Channallabes	apus	unclassified	SO_term_generic	repeat region	129825	35214740	3.0233	271.2477566
+Clarias_fuscus	Clarias	fuscus	LTR	LTR_retrotransposons	Copia	89	60555	0.0064	680.3932584
+Clarias_fuscus	Clarias	fuscus	LTR	LTR_retrotransposons	Gypsy	120671	62157347	6.5838	515.0976374
+Clarias_fuscus	Clarias	fuscus	LTR	LTR_retrotransposons	LTR unknown	139941	49736087	5.2681	355.4075432
+Clarias_fuscus	Clarias	fuscus	nonLTR	nonLTR_retrotransposons	DIRS YR	288	155539	0.0165	540.0659722
+Clarias_fuscus	Clarias	fuscus	nonLTR	nonLTR_retrotransposons	LINE element	8607	4098899	0.4342	476.2285349
+Clarias_fuscus	Clarias	fuscus	nonLTR	nonLTR_retrotransposons	Penelope	631	423794	0.0449	671.6228209
+Clarias_fuscus	Clarias	fuscus	nonTIR	nonTIR_DNA_transposons	helitron	151381	39210608	4.1533	259.0193485
+Clarias_fuscus	Clarias	fuscus	nonTIR	nonTIR_DNA_transposons	polinton	292	368273	0.0390	1261.208904
+Clarias_fuscus	Clarias	fuscus	TIR	TIR_DNA_transposons	CACTA	321435	77021138	8.1582	239.6165259
+Clarias_fuscus	Clarias	fuscus	TIR	TIR_DNA_transposons	hAT	74626	29380885	3.1121	393.708426
+Clarias_fuscus	Clarias	fuscus	TIR	TIR_DNA_transposons	Mutator	175505	44867261	4.7524	255.6466255
+Clarias_fuscus	Clarias	fuscus	TIR	TIR_DNA_transposons	PIF Harbinger	23589	5644469	0.5979	239.2839459
+Clarias_fuscus	Clarias	fuscus	TIR	TIR_DNA_transposons	Tc1 Mariner	45420	10490255	1.1111	230.9611405
+Clarias_fuscus	Clarias	fuscus	unclassified	SO_term_generic	repeat region	97068	28931662	3.0645	298.0556105
+Cranoglanis_bouderius	Cranoglanis	bouderius	LTR	LTR_retrotransposons	Gypsy	18039	13358340	1.5157	740.525528
+Cranoglanis_bouderius	Cranoglanis	bouderius	LTR	LTR_retrotransposons	LTR unknown	168247	51592723	5.8540	306.6486951
+Cranoglanis_bouderius	Cranoglanis	bouderius	nonLTR	nonLTR_retrotransposons	DIRS YR	2499	1081262	0.1227	432.6778711
+Cranoglanis_bouderius	Cranoglanis	bouderius	nonLTR	nonLTR_retrotransposons	LINE element	8357	4732532	0.5370	566.2955606
+Cranoglanis_bouderius	Cranoglanis	bouderius	nonLTR	nonLTR_retrotransposons	Penelope	523	1114798	0.1265	2131.544933
+Cranoglanis_bouderius	Cranoglanis	bouderius	nonTIR	nonTIR_DNA_transposons	helitron	115649	33402971	3.7901	288.8306081
+Cranoglanis_bouderius	Cranoglanis	bouderius	nonTIR	nonTIR_DNA_transposons	polinton	789	988467	0.1122	1252.809886
+Cranoglanis_bouderius	Cranoglanis	bouderius	TIR	TIR_DNA_transposons	CACTA	364008	107161842	12.1591	294.3941946
+Cranoglanis_bouderius	Cranoglanis	bouderius	TIR	TIR_DNA_transposons	hAT	109560	41266326	4.6823	376.6550383
+Cranoglanis_bouderius	Cranoglanis	bouderius	TIR	TIR_DNA_transposons	Mutator	155431	45139489	5.1218	290.4149687
+Cranoglanis_bouderius	Cranoglanis	bouderius	TIR	TIR_DNA_transposons	PIF Harbinger	25805	9056470	1.0276	350.9579539
+Cranoglanis_bouderius	Cranoglanis	bouderius	TIR	TIR_DNA_transposons	Tc1 Mariner	29098	9717865	1.1026	333.9702041
+Cranoglanis_bouderius	Cranoglanis	bouderius	unclassified	SO_term_generic	repeat region	130427	40743058	4.6229	312.3820835
+Hemibagrus_wyckioides	Hemibagrus	wyckioides	LTR	LTR_retrotransposons	Copia	90	58682	0.0074	652.0222222
+Hemibagrus_wyckioides	Hemibagrus	wyckioides	LTR	LTR_retrotransposons	Gypsy	41456	15694045	1.9871	378.5711357
+Hemibagrus_wyckioides	Hemibagrus	wyckioides	LTR	LTR_retrotransposons	LTR unknown	144991	40841457	5.1712	281.6827044
+Hemibagrus_wyckioides	Hemibagrus	wyckioides	nonLTR	nonLTR_retrotransposons	DIRS YR	879	178505	0.0226	203.0773606
+Hemibagrus_wyckioides	Hemibagrus	wyckioides	nonLTR	nonLTR_retrotransposons	LINE element	4104	2159605	0.2734	526.2195419
+Hemibagrus_wyckioides	Hemibagrus	wyckioides	nonLTR	nonLTR_retrotransposons	Penelope	290	143211	0.0181	493.8310345
+Hemibagrus_wyckioides	Hemibagrus	wyckioides	nonTIR	nonTIR_DNA_transposons	helitron	45464	11887319	1.5051	261.4666329
+Hemibagrus_wyckioides	Hemibagrus	wyckioides	nonTIR	nonTIR_DNA_transposons	polinton	406	295751	0.0374	728.4507389
+Hemibagrus_wyckioides	Hemibagrus	wyckioides	TIR	TIR_DNA_transposons	CACTA	178601	48123941	6.0933	269.4494488
+Hemibagrus_wyckioides	Hemibagrus	wyckioides	TIR	TIR_DNA_transposons	hAT	35887	15978888	2.0232	445.2556079
+Hemibagrus_wyckioides	Hemibagrus	wyckioides	TIR	TIR_DNA_transposons	Mutator	73185	20361918	2.5781	278.2252921
+Hemibagrus_wyckioides	Hemibagrus	wyckioides	TIR	TIR_DNA_transposons	PIF Harbinger	10980	2417639	0.3061	220.1857013
+Hemibagrus_wyckioides	Hemibagrus	wyckioides	TIR	TIR_DNA_transposons	Tc1 Mariner	12582	3136336	0.3971	249.2716579
+Hemibagrus_wyckioides	Hemibagrus	wyckioides	unclassified	SO_term_generic	repeat region	109384	39838592	5.0442	364.2085863
+Ictalurus_furcatus	Ictalurus	furcatus	LTR	LTR_retrotransposons	Copia	292	128730	0.0159	440.8561644
+Ictalurus_furcatus	Ictalurus	furcatus	LTR	LTR_retrotransposons	Gypsy	31003	14916118	1.8431	481.1185369
+Ictalurus_furcatus	Ictalurus	furcatus	LTR	LTR_retrotransposons	LTR unknown	134702	41208021	5.0917	305.9198898
+Ictalurus_furcatus	Ictalurus	furcatus	nonLTR	nonLTR_retrotransposons	DIRS YR	801	304379	0.0376	379.9987516
+Ictalurus_furcatus	Ictalurus	furcatus	nonLTR	nonLTR_retrotransposons	LINE element	5555	3132989	0.3871	563.9944194
+Ictalurus_furcatus	Ictalurus	furcatus	nonLTR	nonLTR_retrotransposons	Penelope	153	126861	0.0157	829.1568627
+Ictalurus_furcatus	Ictalurus	furcatus	nonTIR	nonTIR_DNA_transposons	helitron	96417	27405849	3.3863	284.2429136
+Ictalurus_furcatus	Ictalurus	furcatus	nonTIR	nonTIR_DNA_transposons	polinton	1565	1460821	0.1805	933.4319489
+Ictalurus_furcatus	Ictalurus	furcatus	TIR	TIR_DNA_transposons	CACTA	315853	86002837	10.6267	272.287542
+Ictalurus_furcatus	Ictalurus	furcatus	TIR	TIR_DNA_transposons	hAT	86909	28030394	3.4635	322.5257913
+Ictalurus_furcatus	Ictalurus	furcatus	TIR	TIR_DNA_transposons	Mutator	131524	35565950	4.3946	270.4141449
+Ictalurus_furcatus	Ictalurus	furcatus	TIR	TIR_DNA_transposons	PIF Harbinger	22619	5750985	0.7106	254.254609
+Ictalurus_furcatus	Ictalurus	furcatus	TIR	TIR_DNA_transposons	Tc1 Mariner	18619	5458888	0.6745	293.1891079
+Ictalurus_furcatus	Ictalurus	furcatus	unclassified	SO_term_generic	repeat region	99253	26876440	3.3209	270.7871802
+Ictalurus_punctatus	Ictalurus	punctatus	LTR	LTR_retrotransposons	Copia	193	54128	0.0065	280.4559585
+Ictalurus_punctatus	Ictalurus	punctatus	LTR	LTR_retrotransposons	Gypsy	29372	14370048	1.7160	489.2430887
+Ictalurus_punctatus	Ictalurus	punctatus	LTR	LTR_retrotransposons	LTR unknown	112265	34125079	4.0750	303.968993
+Ictalurus_punctatus	Ictalurus	punctatus	nonLTR	nonLTR_retrotransposons	DIRS YR	373	98182	0.0117	263.2225201
+Ictalurus_punctatus	Ictalurus	punctatus	nonLTR	nonLTR_retrotransposons	LINE element	8448	4869022	0.5814	576.352036
+Ictalurus_punctatus	Ictalurus	punctatus	nonLTR	nonLTR_retrotransposons	Penelope	324	277409	0.0331	856.2006173
+Ictalurus_punctatus	Ictalurus	punctatus	nonTIR	nonTIR_DNA_transposons	helitron	122854	31690179	3.7843	257.9499162
+Ictalurus_punctatus	Ictalurus	punctatus	nonTIR	nonTIR_DNA_transposons	polinton	995	1153218	0.1377	1159.013065
+Ictalurus_punctatus	Ictalurus	punctatus	TIR	TIR_DNA_transposons	CACTA	326022	91971018	10.9827	282.1006496
+Ictalurus_punctatus	Ictalurus	punctatus	TIR	TIR_DNA_transposons	hAT	78823	27674391	3.3047	351.0953783
+Ictalurus_punctatus	Ictalurus	punctatus	TIR	TIR_DNA_transposons	Mutator	165414	45781913	5.4670	276.7716941
+Ictalurus_punctatus	Ictalurus	punctatus	TIR	TIR_DNA_transposons	PIF Harbinger	25508	6023289	0.7193	236.1333307
+Ictalurus_punctatus	Ictalurus	punctatus	TIR	TIR_DNA_transposons	Tc1 Mariner	21591	5542810	0.6619	256.7185401
+Ictalurus_punctatus	Ictalurus	punctatus	unclassified	SO_term_generic	repeat region	151660	41870587	5.2000	276.0819399
+Neoarius_graeffei	Neoarius	graeffei	LTR	LTR_retrotransposons	Copia	4193	1774313	0.0762	423.1607441
+Neoarius_graeffei	Neoarius	graeffei	LTR	LTR_retrotransposons	Gypsy	550969	340168816	14.6110	617.401008
+Neoarius_graeffei	Neoarius	graeffei	LTR	LTR_retrotransposons	LTR unknown	778776	268441351	11.5301	344.6964865
+Neoarius_graeffei	Neoarius	graeffei	nonLTR	nonLTR_retrotransposons	DIRS YR	3586	1675226	0.0720	467.1572783
+Neoarius_graeffei	Neoarius	graeffei	nonLTR	nonLTR_retrotransposons	LINE element	31436	14846043	0.6377	472.2624698
+Neoarius_graeffei	Neoarius	graeffei	nonLTR	nonLTR_retrotransposons	Penelope	2212	925572	0.0398	418.4321881
+Neoarius_graeffei	Neoarius	graeffei	nonTIR	nonTIR_DNA_transposons	helitron	183304	64073060	2.7521	349.5453454
+Neoarius_graeffei	Neoarius	graeffei	TIR	TIR_DNA_transposons	CACTA	835951	302417389	12.9895	361.7644922
+Neoarius_graeffei	Neoarius	graeffei	TIR	TIR_DNA_transposons	hAT	812766	316116072	13.5778	388.9386023
+Neoarius_graeffei	Neoarius	graeffei	TIR	TIR_DNA_transposons	Mutator	509487	169202568	7.2676	332.1037985
+Neoarius_graeffei	Neoarius	graeffei	TIR	TIR_DNA_transposons	PIF Harbinger	59108	31535356	1.3545	533.5209447
+Neoarius_graeffei	Neoarius	graeffei	TIR	TIR_DNA_transposons	Tc1 Mariner	34493	11396240	0.4895	330.3928333
+Neoarius_graeffei	Neoarius	graeffei	unclassified	SO_term_generic	repeat region	347197	93532385	4.0174	269.3928375
+Pangasianodon_hypophthalmus	Pangasianodon	hypophthalmus	LTR	LTR_retrotransposons	Copia	386	60682	0.0080	157.2072539
+Pangasianodon_hypophthalmus	Pangasianodon	hypophthalmus	LTR	LTR_retrotransposons	Gypsy	23153	11843594	1.5561	511.5360428
+Pangasianodon_hypophthalmus	Pangasianodon	hypophthalmus	LTR	LTR_retrotransposons	LTR unknown	119597	26768324	3.5170	223.8210323
+Pangasianodon_hypophthalmus	Pangasianodon	hypophthalmus	nonLTR	nonLTR_retrotransposons	DIRS YR	864	297841	0.0391	344.7233796
+Pangasianodon_hypophthalmus	Pangasianodon	hypophthalmus	nonLTR	nonLTR_retrotransposons	LINE element	3852	1750174	0.2299	454.354621
+Pangasianodon_hypophthalmus	Pangasianodon	hypophthalmus	nonLTR	nonLTR_retrotransposons	nonLTR unknown	128	22213	0.0029	173.5390625
+Pangasianodon_hypophthalmus	Pangasianodon	hypophthalmus	nonLTR	nonLTR_retrotransposons	Penelope	322	590735	0.0776	1834.580745
+Pangasianodon_hypophthalmus	Pangasianodon	hypophthalmus	nonTIR	nonTIR_DNA_transposons	helitron	82054	17692591	2.3246	215.6213104
+Pangasianodon_hypophthalmus	Pangasianodon	hypophthalmus	nonTIR	nonTIR_DNA_transposons	polinton	473	523112	0.0687	1105.945032
+Pangasianodon_hypophthalmus	Pangasianodon	hypophthalmus	TIR	TIR_DNA_transposons	CACTA	302876	75918069	9.9746	250.6572624
+Pangasianodon_hypophthalmus	Pangasianodon	hypophthalmus	TIR	TIR_DNA_transposons	hAT	44637	12480480	1.6398	279.5994354
+Pangasianodon_hypophthalmus	Pangasianodon	hypophthalmus	TIR	TIR_DNA_transposons	Mutator	129502	30878988	4.0571	238.4441012
+Pangasianodon_hypophthalmus	Pangasianodon	hypophthalmus	TIR	TIR_DNA_transposons	PIF Harbinger	25127	4899098	0.6437	194.9734548
+Pangasianodon_hypophthalmus	Pangasianodon	hypophthalmus	TIR	TIR_DNA_transposons	Tc1 Mariner	35889	7176914	0.9430	199.9753128
+Pangasianodon_hypophthalmus	Pangasianodon	hypophthalmus	unclassified	SO_term_generic	repeat region	94947	24156093	3.1738	254.4166008
+Plotosus_lineatus	Plotosus	lineatus	LTR	LTR_retrotransposons	Copia	3300	1163824	0.0873	352.6739394
+Plotosus_lineatus	Plotosus	lineatus	LTR	LTR_retrotransposons	Gypsy	153855	70672673	5.2984	459.3459621
+Plotosus_lineatus	Plotosus	lineatus	LTR	LTR_retrotransposons	LTR unknown	899803	230905196	17.3111	256.6174996
+Plotosus_lineatus	Plotosus	lineatus	nonLTR	nonLTR_retrotransposons	DIRS YR	592	553484	0.0415	934.9391892
+Plotosus_lineatus	Plotosus	lineatus	nonLTR	nonLTR_retrotransposons	LINE element	22563	11961329	0.8968	530.1302575
+Plotosus_lineatus	Plotosus	lineatus	nonLTR	nonLTR_retrotransposons	Penelope	885	513163	0.0385	579.8451977
+Plotosus_lineatus	Plotosus	lineatus	nonTIR	nonTIR_DNA_transposons	helitron	194137	38259962	2.8684	197.0771259
+Plotosus_lineatus	Plotosus	lineatus	nonTIR	nonTIR_DNA_transposons	polinton	24	3555	0.0003	148.125
+Plotosus_lineatus	Plotosus	lineatus	TIR	TIR_DNA_transposons	CACTA	633315	166619351	12.4916	263.0908016
+Plotosus_lineatus	Plotosus	lineatus	TIR	TIR_DNA_transposons	hAT	393505	128204853	9.6116	325.8023481
+Plotosus_lineatus	Plotosus	lineatus	TIR	TIR_DNA_transposons	Mutator	294128	61404314	4.6035	208.767319
+Plotosus_lineatus	Plotosus	lineatus	TIR	TIR_DNA_transposons	PIF Harbinger	27880	5571120	0.4177	199.8249641
+Plotosus_lineatus	Plotosus	lineatus	TIR	TIR_DNA_transposons	Tc1 Mariner	28446	5730394	0.4296	201.4481474
+Plotosus_lineatus	Plotosus	lineatus	unclassified	SO_term_generic	repeat region	139928	35225859	2.6409	251.7427463
+Silurus_aristotelis	Silurus	aristotelis	LTR	LTR_retrotransposons	Copia	57	56713	0.0071	994.9649123
+Silurus_aristotelis	Silurus	aristotelis	LTR	LTR_retrotransposons	Gypsy	100588	26193895	3.2744	260.4077524
+Silurus_aristotelis	Silurus	aristotelis	LTR	LTR_retrotransposons	LTR unknown	183056	42346658	5.2936	231.3317127
+Silurus_aristotelis	Silurus	aristotelis	nonLTR	nonLTR_retrotransposons	DIRS YR	689	150621	0.0188	218.6081277
+Silurus_aristotelis	Silurus	aristotelis	nonLTR	nonLTR_retrotransposons	LINE element	21379	7472470	0.9341	349.5238318
+Silurus_aristotelis	Silurus	aristotelis	nonLTR	nonLTR_retrotransposons	Penelope	358	1220792	0.1526	3410.03352
+Silurus_aristotelis	Silurus	aristotelis	nonTIR	nonTIR_DNA_transposons	helitron	102344	38403218	4.8006	375.2366333
+Silurus_aristotelis	Silurus	aristotelis	TIR	TIR_DNA_transposons	CACTA	252401	63146530	7.8937	250.183359
+Silurus_aristotelis	Silurus	aristotelis	TIR	TIR_DNA_transposons	hAT	93697	45827924	5.7288	489.1076982
+Silurus_aristotelis	Silurus	aristotelis	TIR	TIR_DNA_transposons	Mutator	82474	26501695	3.3129	321.3339355
+Silurus_aristotelis	Silurus	aristotelis	TIR	TIR_DNA_transposons	PIF Harbinger	18943	4013217	0.5017	211.8575199
+Silurus_aristotelis	Silurus	aristotelis	TIR	TIR_DNA_transposons	Tc1 Mariner	8505	1968811	0.2461	231.4886537
+Silurus_aristotelis	Silurus	aristotelis	unclassified	SO_term_generic	repeat region	105396	31462211	3.9330	298.5142795
+Silurus_meridionalis	Silurus	meridionalis	LTR	LTR_retrotransposons	Copia	108	62345	0.0084	577.2685185
+Silurus_meridionalis	Silurus	meridionalis	LTR	LTR_retrotransposons	Gypsy	83876	28501247	3.8451	339.8021723
+Silurus_meridionalis	Silurus	meridionalis	LTR	LTR_retrotransposons	LTR unknown	161252	45656531	6.1595	283.1377657
+Silurus_meridionalis	Silurus	meridionalis	nonLTR	nonLTR_retrotransposons	DIRS YR	281	77749	0.0105	276.6868327
+Silurus_meridionalis	Silurus	meridionalis	nonLTR	nonLTR_retrotransposons	LINE element	4877	1975123	0.2665	404.9872873
+Silurus_meridionalis	Silurus	meridionalis	nonLTR	nonLTR_retrotransposons	Penelope	188	107795	0.0145	573.3776596
+Silurus_meridionalis	Silurus	meridionalis	nonTIR	nonTIR_DNA_transposons	helitron	68294	17242781	2.3262	252.4787097
+Silurus_meridionalis	Silurus	meridionalis	TIR	TIR_DNA_transposons	CACTA	212371	52952905	7.1439	249.3415061
+Silurus_meridionalis	Silurus	meridionalis	TIR	TIR_DNA_transposons	hAT	70584	20266766	2.7342	287.1297461
+Silurus_meridionalis	Silurus	meridionalis	TIR	TIR_DNA_transposons	Mutator	127435	34067185	4.5960	267.3298937
+Silurus_meridionalis	Silurus	meridionalis	TIR	TIR_DNA_transposons	PIF Harbinger	16555	3730325	0.5033	225.3292057
+Silurus_meridionalis	Silurus	meridionalis	TIR	TIR_DNA_transposons	Tc1 Mariner	24336	5441910	0.7342	223.6156312
+Silurus_meridionalis	Silurus	meridionalis	unclassified	SO_term_generic	repeat region	83222	22545159	3.0416	270.9038355
+Tachysurus_fulvidraco	Tachysurus	fulvidraco	LTR	LTR_retrotransposons	Gypsy	42550	17027781	2.3928	400.1828672
+Tachysurus_fulvidraco	Tachysurus	fulvidraco	LTR	LTR_retrotransposons	LTR unknown	281499	65660042	9.2267	233.2514219
+Tachysurus_fulvidraco	Tachysurus	fulvidraco	nonLTR	nonLTR_retrotransposons	DIRS YR	668	503675	0.0708	754.004491
+Tachysurus_fulvidraco	Tachysurus	fulvidraco	nonLTR	nonLTR_retrotransposons	LINE element	3273	1743244	0.2450	532.6135044
+Tachysurus_fulvidraco	Tachysurus	fulvidraco	nonTIR	nonTIR_DNA_transposons	helitron	35602	8210607	1.1538	230.6220718
+Tachysurus_fulvidraco	Tachysurus	fulvidraco	TIR	TIR_DNA_transposons	CACTA	117053	28392618	3.9898	242.5620702
+Tachysurus_fulvidraco	Tachysurus	fulvidraco	TIR	TIR_DNA_transposons	hAT	52469	17673163	2.4835	336.8305666
+Tachysurus_fulvidraco	Tachysurus	fulvidraco	TIR	TIR_DNA_transposons	Mutator	73166	19916037	2.7986	272.2034415
+Tachysurus_fulvidraco	Tachysurus	fulvidraco	TIR	TIR_DNA_transposons	PIF Harbinger	12350	3309182	0.4650	267.9499595
+Tachysurus_fulvidraco	Tachysurus	fulvidraco	TIR	TIR_DNA_transposons	Tc1 Mariner	9195	1922838	0.2702	209.1177814
+Tachysurus_fulvidraco	Tachysurus	fulvidraco	unclassified	SO_term_generic	repeat region	44827	13428178	1.8869	299.5555803
+Tachysurus_vachellii	Tachysurus	vachellii	LTR	LTR_retrotransposons	Copia	136	126468	0.0183	929.9117647
+Tachysurus_vachellii	Tachysurus	vachellii	LTR	LTR_retrotransposons	Gypsy	49183	19347711	2.7961	393.3820832
+Tachysurus_vachellii	Tachysurus	vachellii	LTR	LTR_retrotransposons	LTR unknown	225572	60061610	8.6799	266.2635877
+Tachysurus_vachellii	Tachysurus	vachellii	nonLTR	nonLTR_retrotransposons	DIRS YR	1122	534236	0.0772	476.1461676
+Tachysurus_vachellii	Tachysurus	vachellii	nonLTR	nonLTR_retrotransposons	LINE element	3985	2028536	0.2932	509.0429109
+Tachysurus_vachellii	Tachysurus	vachellii	nonTIR	nonTIR_DNA_transposons	helitron	35727	11084704	1.6019	310.261259
+Tachysurus_vachellii	Tachysurus	vachellii	nonTIR	nonTIR_DNA_transposons	polinton	287	149033	0.0215	519.2787456
+Tachysurus_vachellii	Tachysurus	vachellii	TIR	TIR_DNA_transposons	CACTA	136104	36825110	5.3219	270.5659643
+Tachysurus_vachellii	Tachysurus	vachellii	TIR	TIR_DNA_transposons	hAT	45644	14004637	2.0239	306.823175
+Tachysurus_vachellii	Tachysurus	vachellii	TIR	TIR_DNA_transposons	Mutator	53903	13723825	1.9833	254.6022485
+Tachysurus_vachellii	Tachysurus	vachellii	TIR	TIR_DNA_transposons	PIF Harbinger	9683	4990514	0.7212	515.3892389
+Tachysurus_vachellii	Tachysurus	vachellii	TIR	TIR_DNA_transposons	Tc1 Mariner	7872	1801413	0.2603	228.8380335
+Tachysurus_vachellii	Tachysurus	vachellii	unclassified	SO_term_generic	repeat region	58164	16612595	2.4008	285.6164466
+Trichomycterus_rosablanca	Trichomycterus	rosablanca	LTR	LTR_retrotransposons	Copia	830	690333	0.0661	831.726506
+Trichomycterus_rosablanca	Trichomycterus	rosablanca	LTR	LTR_retrotransposons	Gypsy	39453	24325122	2.3278	616.5595012
+Trichomycterus_rosablanca	Trichomycterus	rosablanca	LTR	LTR_retrotransposons	LTR unknown	379967	105540117	10.0997	277.7612714
+Trichomycterus_rosablanca	Trichomycterus	rosablanca	nonLTR	nonLTR_retrotransposons	DIRS YR	333	192626	0.0184	578.4564565
+Trichomycterus_rosablanca	Trichomycterus	rosablanca	nonLTR	nonLTR_retrotransposons	LINE element	7402	4840020	0.4632	653.8800324
+Trichomycterus_rosablanca	Trichomycterus	rosablanca	nonLTR	nonLTR_retrotransposons	Penelope	361	425639	0.0407	1179.055402
+Trichomycterus_rosablanca	Trichomycterus	rosablanca	nonTIR	nonTIR_DNA_transposons	helitron	187442	60617475	5.8008	323.3932363
+Trichomycterus_rosablanca	Trichomycterus	rosablanca	nonTIR	nonTIR_DNA_transposons	polinton	152	302869	0.0290	1992.559211
+Trichomycterus_rosablanca	Trichomycterus	rosablanca	TIR	TIR_DNA_transposons	CACTA	408202	102363460	9.7957	250.7666792
+Trichomycterus_rosablanca	Trichomycterus	rosablanca	TIR	TIR_DNA_transposons	hAT	190198	65982364	6.3142	346.914079
+Trichomycterus_rosablanca	Trichomycterus	rosablanca	TIR	TIR_DNA_transposons	Mutator	276205	72131009	6.9026	261.1502652
+Trichomycterus_rosablanca	Trichomycterus	rosablanca	TIR	TIR_DNA_transposons	PIF Harbinger	43278	9654906	0.9239	223.0903923
+Trichomycterus_rosablanca	Trichomycterus	rosablanca	TIR	TIR_DNA_transposons	Tc1 Mariner	36135	14956819	1.4313	413.9150131
+Trichomycterus_rosablanca	Trichomycterus	rosablanca	unclassified	SO_term_generic	repeat region	127772	47294228	4.5258	370.1454779
+Clarias_gariepinus	Clarias	gariepinus	LINE	LINE	L1	671	266495	0.0277	397.160954
+Clarias_gariepinus	Clarias	gariepinus	LINE	LINE	L2	523	217262	0.0226	415.414914
+Clarias_gariepinus	Clarias	gariepinus	LINE	LINE	R2	56	60565	0.0063	1081.517857
+Clarias_gariepinus	Clarias	gariepinus	LINE	LINE	RTE	48	37067	0.0038	772.229167
+Clarias_gariepinus	Clarias	gariepinus	LINE	LINE	Rex	3416	775276	0.0805	226.954333
+Clarias_gariepinus	Clarias	gariepinus	LINE	LINE	LINE unknown	7159	3677385	0.3819	513.672999
+Clarias_gariepinus	Clarias	gariepinus	LTR	LTR_retrotransposons	Bel_Pao	30	10626	0.0011	354.200000
+Clarias_gariepinus	Clarias	gariepinus	LTR	LTR_retrotransposons	Copia	261	238368	0.0248	913.287356
+Clarias_gariepinus	Clarias	gariepinus	LTR	LTR_retrotransposons	Gypsy	145594	70365565	7.3076	483.299896
+Clarias_gariepinus	Clarias	gariepinus	LTR	LTR_retrotransposons	LTR unknown	149706	45746191	4.7508	305.573531
+Clarias_gariepinus	Clarias	gariepinus	TIR	TIR_DNA_transposons	CACTA	353717	90551872	9.4039	256.000905
+Clarias_gariepinus	Clarias	gariepinus	TIR	TIR_DNA_transposons	Mutator	157471	37753704	3.9208	239.750202
+Clarias_gariepinus	Clarias	gariepinus	TIR	TIR_DNA_transposons	PIF_Harbinger	53304	13348183	1.3862	250.416160
+Clarias_gariepinus	Clarias	gariepinus	TIR	TIR_DNA_transposons	Sola	102	44886	0.0047	440.058824
+Clarias_gariepinus	Clarias	gariepinus	TIR	TIR_DNA_transposons	Tc1_Mariner	30026	6296624	0.6539	209.705722
+Clarias_gariepinus	Clarias	gariepinus	TIR	TIR_DNA_transposons	hAT	86104	26152986	2.7160	303.737178
+Clarias_gariepinus	Clarias	gariepinus	TIR	TIR_DNA_transposons	piggyBac	949	445762	0.0463	469.717597
+Clarias_gariepinus	Clarias	gariepinus	TIR	TIR_DNA_transposons	polinton	342	549500	0.0571	1606.725146
+Clarias_gariepinus	Clarias	gariepinus	nonLTR	nonLTR_retrotransposons	DIRS YR	579	215071	0.0223	371.452504
+Clarias_gariepinus	Clarias	gariepinus	nonLTR	nonLTR_retrotransposons	Penelope	255	141714	0.0147	555.741176
+Clarias_gariepinus	Clarias	gariepinus	nonLTR	nonLTR_retrotransposons	pararetrovirus	53	12708	0.0013	239.773585
+Clarias_gariepinus	Clarias	gariepinus	nonTIR	nonTIR_DNA_transposons	helitron	150568	45093850	4.6831	299.491592
+Clarias_gariepinus	Clarias	gariepinus	repeat_fragment	repeat_fragment	repeat_fragment	102620	35697724	3.7073	347.863224
+Clarias_macrocephalus	Clarias	macrocephalus	LINE	LINE	I	164	39473	0.0044	240.689024
+Clarias_macrocephalus	Clarias	macrocephalus	LINE	LINE	L1	1744	487597	0.0546	279.585436
+Clarias_macrocephalus	Clarias	macrocephalus	LINE	LINE	L2	1033	110608	0.0124	107.074540
+Clarias_macrocephalus	Clarias	macrocephalus	LINE	LINE	RTE	282	73363	0.0082	260.152482
+Clarias_macrocephalus	Clarias	macrocephalus	LINE	LINE	Rex	719	141441	0.0158	196.719054
+Clarias_macrocephalus	Clarias	macrocephalus	LINE	LINE	LINE unknown	7847	3488366	0.3903	444.547725
+Clarias_macrocephalus	Clarias	macrocephalus	LTR	LTR_retrotransposons	Bel_Pao	18	7326	0.0008	407.000000
+Clarias_macrocephalus	Clarias	macrocephalus	LTR	LTR_retrotransposons	Copia	53	29325	0.0033	553.301887
+Clarias_macrocephalus	Clarias	macrocephalus	LTR	LTR_retrotransposons	Gypsy	69137	37170372	4.1586	537.633568
+Clarias_macrocephalus	Clarias	macrocephalus	LTR	LTR_retrotransposons	LTR unknown	144793	40757205	4.5599	281.486018
+Clarias_macrocephalus	Clarias	macrocephalus	TIR	TIR_DNA_transposons	CACTA	354430	85759529	9.5947	241.964645
+Clarias_macrocephalus	Clarias	macrocephalus	TIR	TIR_DNA_transposons	Mutator	172303	41139901	4.6027	238.764856
+Clarias_macrocephalus	Clarias	macrocephalus	TIR	TIR_DNA_transposons	PIF_Harbinger	36033	8184673	0.9157	227.143813
+Clarias_macrocephalus	Clarias	macrocephalus	TIR	TIR_DNA_transposons	Tc1_Mariner	42048	8888133	0.9944	211.380636
+Clarias_macrocephalus	Clarias	macrocephalus	TIR	TIR_DNA_transposons	hAT	80438	23839281	2.6671	296.368396
+Clarias_macrocephalus	Clarias	macrocephalus	TIR	TIR_DNA_transposons	piggyBac	773	279822	0.0313	361.994825
+Clarias_macrocephalus	Clarias	macrocephalus	TIR	TIR_DNA_transposons	polinton	244	162853	0.0182	667.430328
+Clarias_macrocephalus	Clarias	macrocephalus	nonLTR	nonLTR_retrotransposons	DIRS YR	612	266081	0.0298	434.772876
+Clarias_macrocephalus	Clarias	macrocephalus	nonLTR	nonLTR_retrotransposons	Penelope	759	439386	0.0492	578.901186
+Clarias_macrocephalus	Clarias	macrocephalus	nonTIR	nonTIR_DNA_transposons	helitron	167108	39651235	4.4361	237.279095
+Clarias_macrocephalus	Clarias	macrocephalus	repeat_fragment	repeat_fragment	repeat_fragment	82658	29504282	3.3009	356.944059
