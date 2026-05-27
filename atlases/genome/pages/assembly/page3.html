@@ -61,42 +61,55 @@
         </div>
       </div>
 
-      <div class="ga-card">
+      <div class="ga-card" data-ga-card="chrom-strip">
         <div class="ga-card-header">
-          <div class="ga-card-title">Chromosome strip (mockup)</div>
-          <div class="ga-card-status">gradients = placeholder for real density</div>
+          <div class="ga-card-title">Chromosome strip</div>
+          <div class="ga-card-status" data-ga-strip-source>sample data</div>
         </div>
-        <div class="ga-chrom-mockup">
-          <div class="ga-chrom-row">
-            <div class="ga-chrom-label">LG01</div>
-            <div class="ga-chrom-bar" style="background: linear-gradient(90deg, #2a1a14 0%, #4a2820 30%, #2a1a14 60%, #1a1a1a 100%);"></div>
-            <div class="ga-chrom-len">28.4 Mb</div>
-          </div>
-          <div class="ga-chrom-row">
-            <div class="ga-chrom-label">LG02</div>
-            <div class="ga-chrom-bar" style="background: linear-gradient(90deg, #1a1a1a 0%, #3a2418 25%, #5a3220 50%, #2a1a14 100%);"></div>
-            <div class="ga-chrom-len">31.2 Mb</div>
-          </div>
-          <div class="ga-chrom-row">
-            <div class="ga-chrom-label">LG03</div>
-            <div class="ga-chrom-bar" style="background: linear-gradient(90deg, #2a1a14 0%, #3a2820 40%, #1a1a1a 70%, #3a2418 100%);"></div>
-            <div class="ga-chrom-len">26.1 Mb</div>
-          </div>
-          <div class="ga-chrom-row">
-            <div class="ga-chrom-label">…</div>
-            <div class="ga-chrom-ellipsis">24 more chromosomes</div>
-            <div></div>
-          </div>
-          <div class="ga-chrom-row ga-chrom-highlight">
-            <div class="ga-chrom-label">LG28</div>
-            <div class="ga-chrom-bar ga-chrom-bar-highlight" style="background: linear-gradient(90deg, #2a1a14 0%, #4a2820 20%, #ff8c6e44 35%, #ff8c6e88 45%, #ff8c6e44 55%, #4a2820 70%, #2a1a14 100%);"></div>
-            <div class="ga-chrom-len">19.7 Mb</div>
-          </div>
+
+        <div class="ga-strip-toolbar" role="toolbar" aria-label="Chromosome strip controls">
+          <span class="ga-strip-tool-label">hap</span>
+          <button type="button" class="ga-strip-btn is-active" data-ga-strip-hap="all">all</button>
+          <button type="button" class="ga-strip-btn" data-ga-strip-hap="Gar">Gar (28)</button>
+          <button type="button" class="ga-strip-btn" data-ga-strip-hap="Mac">Mac (27)</button>
+          <span class="ga-strip-tool-spacer"></span>
+          <label class="ga-strip-toggle">
+            <input type="checkbox" data-ga-strip-track="gene" checked>
+            <span>gene</span>
+          </label>
+          <label class="ga-strip-toggle">
+            <input type="checkbox" data-ga-strip-track="repeat" checked>
+            <span>repeat</span>
+          </label>
+          <label class="ga-strip-toggle">
+            <input type="checkbox" data-ga-strip-track="conserved" checked>
+            <span>conserved</span>
+          </label>
+          <label class="ga-strip-toggle">
+            <input type="checkbox" data-ga-strip-track="cohort" checked>
+            <span>cohort</span>
+          </label>
         </div>
+
+        <div class="ga-strip-legend" aria-label="Sub-track legend">
+          <span class="ga-strip-leg-chip ga-density-gene-bg"></span>gene density
+          <span class="ga-strip-leg-chip ga-density-repeat-bg"></span>repeat density
+          <span class="ga-strip-leg-chip ga-density-conserved-bg"></span>conserved (ticks)
+          <span class="ga-strip-leg-chip ga-density-cohort-bg"></span>cohort envelope / candidate
+          <span class="ga-strip-leg-chip ga-density-cen-bg"></span>centromere
+        </div>
+
+        <div class="ga-strip-host" data-ga-strip-host></div>
+
         <div class="ga-card-footnote">
-          The highlight band on LG28 stands in for an active cohort candidate
-          read from <code>shared.candidate</code> (cross-atlas slot from the
-          Inversion Atlas). When that slot is null, no highlight renders.
+          One row per chromosome, length-scaled. Bar widths are
+          <code>chrom.length_bp / max(length_bp)</code> of the available
+          track region. Centromere band overlays from <code>centromere_telomere</code>;
+          cohort envelope + candidate markers from
+          <code>shared.candidates</code> (cross-atlas, Inversion Atlas).
+          Hover any track for the bin's value; click a row to dispatch a
+          <code>ga-strip-chrom-click</code> event the shell can route to a
+          per-chromosome detail view.
         </div>
       </div>
 

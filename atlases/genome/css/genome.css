@@ -1020,6 +1020,204 @@ html[data-theme="light"] .ga-qc-btn.is-active {
   background: rgba(194, 65, 12, 0.10);
 }
 
+/* --------------------------------------------------------------------- */
+/* page3 — Length-scaled chromosome strip + stacked density sub-tracks.  */
+/* HTML+CSS rows (one per chrom), inline linear-gradient encodes density */
+/* in alpha against per-track --ga-density-*-rgb tokens.                 */
+/* --------------------------------------------------------------------- */
+
+/* Per-track colour tokens used by the gradient stops (RGB triplets). */
+.ga-card[data-ga-card="chrom-strip"] {
+  --ga-density-gene-rgb:     255, 140, 110;   /* coral */
+  --ga-density-repeat-rgb:   122, 134, 168;   /* muted blue-grey */
+  --ga-density-conserved-rgb: 79, 158, 100;   /* green */
+  --ga-density-cohort-rgb:    79,  95, 159;   /* deep blue */
+}
+
+.ga-strip-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 6px 0 6px 0;
+  font-size: 10px;
+  color: var(--ink-dim);
+}
+.ga-strip-tool-label {
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-right: 2px;
+}
+.ga-strip-tool-spacer { flex: 1 1 auto; }
+.ga-strip-btn {
+  font: inherit;
+  font-size: 10px;
+  color: var(--ink-dim);
+  background: var(--panel-3);
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  padding: 3px 8px;
+  cursor: pointer;
+  font-family: var(--mono);
+  letter-spacing: 0.02em;
+}
+.ga-strip-btn:hover { color: var(--ink); border-color: #ff8c6e; }
+.ga-strip-btn.is-active {
+  color: var(--ink);
+  border-color: #ff8c6e;
+  background: rgba(255, 140, 110, 0.10);
+}
+.ga-strip-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--ink-dim);
+}
+.ga-strip-toggle input { cursor: pointer; }
+
+.ga-strip-legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 10px;
+  font-size: 9.5px;
+  font-family: var(--mono);
+  color: var(--ink-dim);
+  margin: 0 0 8px 0;
+}
+.ga-strip-leg-chip {
+  display: inline-block;
+  width: 14px; height: 8px;
+  border-radius: 1px;
+  margin-right: 2px;
+}
+.ga-density-gene-bg      { background: rgb(var(--ga-density-gene-rgb)); }
+.ga-density-repeat-bg    { background: rgb(var(--ga-density-repeat-rgb)); }
+.ga-density-conserved-bg { background: rgb(var(--ga-density-conserved-rgb)); }
+.ga-density-cohort-bg    { background: rgb(var(--ga-density-cohort-rgb)); }
+.ga-density-cen-bg       { background: var(--ink-dimmer); }
+
+/* Host — scrollable container so 55 rows stay manageable. */
+.ga-strip-host {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 6px 6px 8px 6px;
+  background: var(--panel-3);
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  max-height: 720px;
+  overflow-y: auto;
+}
+
+/* Per-chrom row: label | tracks | length. Same grid template as the legacy
+   mockup; only the middle column changes. */
+.ga-strip-row {
+  display: grid;
+  grid-template-columns: 70px 1fr 84px;
+  gap: 8px;
+  align-items: center;
+  padding: 4px 4px;
+  border-radius: 2px;
+  cursor: pointer;
+}
+.ga-strip-row:hover { background: rgba(255, 140, 110, 0.04); }
+.ga-strip-label {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  color: var(--ink);
+  letter-spacing: 0.02em;
+}
+.ga-strip-len {
+  text-align: right;
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--ink-dim);
+  font-variant-numeric: tabular-nums;
+}
+
+/* The tracks column — its inline `width` is set to (len/max)×100% so the
+   bar is length-scaled. */
+.ga-strip-tracks {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.ga-strip-bar {
+  position: relative;
+  height: 10px;
+  border-radius: 2px;
+  background: var(--panel-2);
+  border: 1px solid var(--rule);
+}
+
+/* Centromere band overlays the base bar. */
+.ga-density-cen {
+  position: absolute;
+  top: -1px; bottom: -1px;
+  background: var(--ink-dimmer);
+  border-radius: 1px;
+  opacity: 0.7;
+}
+
+/* Density stripes share a base shape; per-kind classes set the background. */
+.ga-strip-density {
+  position: relative;
+  height: 8px;
+  border-radius: 1px;
+}
+.ga-density-conserved {
+  background: var(--panel-2);
+  border: 1px solid var(--rule);
+  height: 6px;
+}
+.ga-density-conserved-tick {
+  position: absolute;
+  top: 0; bottom: 0;
+  width: 1.5px;
+  background: rgb(var(--ga-density-conserved-rgb));
+}
+
+/* Cohort overlay — envelope rectangles + candidate band markers. */
+.ga-density-cohort {
+  position: relative;
+  height: 10px;
+  background: var(--panel-2);
+  border: 1px solid var(--rule);
+  border-radius: 1px;
+}
+.ga-density-cohort-env {
+  position: absolute;
+  top: -1px; bottom: -1px;
+  border: 1px dashed currentColor;
+  border-radius: 2px;
+  opacity: 0.6;
+}
+.ga-density-cohort-band {
+  position: absolute;
+  top: 1px; bottom: 1px;
+  border-radius: 1px;
+  opacity: 0.85;
+}
+
+.ga-strip-empty {
+  padding: 18px;
+  text-align: center;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  color: var(--ink-dim);
+}
+
+/* Light-theme accent shift, matching the rest of the atlas. */
+html[data-theme="light"] .ga-strip-btn.is-active {
+  color: #c2410c;
+  border-color: #c2410c;
+  background: rgba(194, 65, 12, 0.10);
+}
+
 /* --- JSON-schema codeblock ------------------------------------------- */
 .ga-schema-block {
   margin: 4px 0;
