@@ -253,4 +253,30 @@ Run through this list. If any answer is NO, the PR is not ready:
   `atlas-core/core/registry_core.schema.json`
 - Minimal working example: `atlas-core/tests/mock-atlas/`
 
+## 11. Cross-atlas selection layer (sibling concern)
+
+There is one piece of in-atlas wiring that does NOT go through the
+registry: the **active-candidate / active-chrom selection layer**. When
+the user clicks a per-chrom QC row, the chromosome strip should scroll
++ highlight. When the user clicks a cargo row, the matching candidate
+should light up across every page.
+
+This isn't layer-resolution data, it's transient selection state. It
+lives in `atlases/genome/shared/{cross-atlas,active-pill,page-index,candidates}.js`
+and is documented in [`../../docs/CROSS_ATLAS_INTEGRATION.md`](../../docs/CROSS_ATLAS_INTEGRATION.md).
+
+The contract:
+- Pages emit `ga-*-cand-click` / `ga-*-chrom-click` CustomEvents on row
+  clicks. The router catches them at the document level.
+- Sister pages subscribe via `onActiveCandidate` / `onActiveChrom`.
+- The router also re-broadcasts on `document` as
+  `ga-genome-active-candidate` / `ga-genome-active-chrom` — these are
+  the events the atlas-core shell can use to drive cross-atlas
+  navigation when it lands.
+
+This sits below the page→core→page contract (no `localStorage`, no
+direct `window.*`, no sibling-page imports — pages import the shared
+module, never each other), and it solves a different problem from
+registry layer resolution. The two don't conflict.
+
 End of REGISTRY_GUIDE.
