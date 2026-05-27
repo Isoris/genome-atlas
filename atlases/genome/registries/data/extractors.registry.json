@@ -1,12 +1,48 @@
 {
   "extractors": [
     {
-      "extractor_id":   "extract_staging_genome_table_v0",
-      "layer_type":     "genome_table",
+      "extractor_id": "extract_staging_genome_table_v0",
+      "layer_type": "genome_table",
       "schema_version": "staging_genome_table_v0",
-      "stage":          "staging",
-      "parser":         "extractors.genome_table.extract",
-      "input_format":   "tsv|csv|json"
+      "stage": "staging",
+      "parser": "extractors.genome_table.extract",
+      "input_format": "tsv|csv|json"
+    },
+    {
+      "extractor_id": "extract_repeat_track_intact_v0_bed",
+      "layer_type": "repeat_track_intact",
+      "schema_version": "repeat_track_intact_v0",
+      "stage": "normalized",
+      "parser": "extractors.edta_intact_bed.extract",
+      "input_format": "bed",
+      "_doc": "EDTA intact-only BED adapter. Same output schema as the GFF3 form; uses the more compact BED layout from Chapter 5."
+    },
+    {
+      "extractor_id": "extract_kimura_landscape_v0",
+      "layer_type": "kimura_landscape",
+      "schema_version": "kimura_landscape_v0",
+      "stage": "normalized",
+      "parser": "extractors.kimura_distance.extract",
+      "input_format": "distance",
+      "_doc": "RepeatMasker divsum / Kimura distance file. Per-species TE age landscape (Chapter 5 Fig 5.2 source)."
+    },
+    {
+      "extractor_id": "extract_te_abundance_v0",
+      "layer_type": "te_abundance",
+      "schema_version": "te_abundance_v0",
+      "stage": "normalized",
+      "parser": "extractors.te_abundance_table.extract",
+      "input_format": "tsv",
+      "_doc": "Long-format TE abundance table (TE_data_figure1_*.tsv). Per-species \u00d7 class \u00d7 family counts + genome %."
+    },
+    {
+      "extractor_id": "extract_centromeres_table_v0",
+      "layer_type": "centromeres_table",
+      "schema_version": "centromeres_table_v0",
+      "stage": "normalized",
+      "parser": "extractors.centromere_table.extract",
+      "input_format": "tsv",
+      "_doc": "quarTeT / centromics centromere TSV. Normalizes percentage strings to floats + adds TR-dominant / TE-dominant / mixed verdict per row."
     }
   ]
 }

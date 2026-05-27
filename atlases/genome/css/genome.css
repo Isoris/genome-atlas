@@ -1165,6 +1165,220 @@ html[data-theme="academic"] .ga-card {
   border-bottom: 1px dashed var(--rule);
 }
 
+/* ---------------------------------------------------------------------
+ * page_comparative_te — 17-species TE landscape (Chapter 5 ingest).
+ *
+ * Five views: abundance bars, Kimura age landscape, Cgar centromere
+ * context, ALG collinearity heatmap, breakpoint × TE cross. All under
+ * the .ga-cte-* prefix to keep distinct from page_repeats_te's .ga-te-*.
+ * --------------------------------------------------------------------- */
+
+/* V1 — TE abundance bars (per species). */
+.ga-cte-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.ga-cte-bar-row {
+  display: grid;
+  grid-template-columns: 180px 1fr 70px;
+  gap: 10px;
+  align-items: center;
+  font-size: 10.5px;
+}
+.ga-cte-bar-label {
+  text-align: right;
+  color: var(--ink-dim);
+  white-space: nowrap;
+}
+.ga-cte-bar-outer {
+  /* width is set inline; outer wraps the inner so the bar shrinks for
+     low-total species */
+}
+.ga-cte-bar {
+  display: flex;
+  height: 18px;
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  overflow: hidden;
+  background: var(--panel-3);
+  font-size: 9px;
+  color: var(--panel-1);
+  width: 100%;
+}
+.ga-cte-bar > span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 0 3px;
+}
+.ga-cte-bar > .ga-te-other2 { background: #aa9988; }
+
+.ga-cte-bar-total {
+  font-family: var(--mono);
+  text-align: right;
+}
+
+/* V2 — Kimura age landscape (per species). */
+.ga-cte-kim-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 10px;
+}
+.ga-cte-kim-panel {
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  padding: 4px 6px 2px 6px;
+  background: var(--panel-3);
+}
+.ga-cte-kim-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 10px;
+  margin-bottom: 2px;
+}
+.ga-cte-kim-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* V3 — Cgar centromere context table. */
+.ga-cte-cen-table {
+  display: grid;
+  grid-template-columns:
+    0.5fr     /* chr */
+    1.0fr     /* start */
+    1.0fr     /* end */
+    0.8fr     /* length */
+    0.8fr     /* TR cov */
+    0.8fr     /* TE cov */
+    0.8fr     /* score */
+    1.2fr;    /* verdict */
+  gap: 2px 10px;
+  font-size: 10.5px;
+}
+.ga-cte-cen-head, .ga-cte-cen-row { display: contents; }
+.ga-cte-cen-head > span {
+  font-weight: 600;
+  color: var(--ink-dim);
+  font-size: 10px;
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 4px;
+}
+.ga-cte-cen-row > span {
+  padding: 3px 0;
+  border-bottom: 1px dashed var(--rule);
+  font-family: var(--mono);
+}
+.ga-cte-cen-chip {
+  font-size: 9px;
+  letter-spacing: 0.04em;
+  padding: 1px 4px;
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  background: var(--panel-3);
+}
+.ga-cte-cen-tr    { color: #ff8c6e; border-color: #ff8c6e; background: rgba(255, 140, 110, 0.08); }
+.ga-cte-cen-te    { color: #6fb8c9; border-color: #6fb8c9; background: rgba(111, 184, 201, 0.08); }
+.ga-cte-cen-mixed { color: var(--ink-dim); }
+
+/* V4 — ALG collinearity heatmap. */
+.ga-cte-alg-table {
+  display: grid;
+  grid-template-columns: 90px repeat(12, 1fr);
+  gap: 1px;
+  font-size: 9px;
+  font-family: var(--mono);
+}
+.ga-cte-alg-head, .ga-cte-alg-row { display: contents; }
+.ga-cte-alg-head > span {
+  font-size: 8px;
+  font-weight: 600;
+  color: var(--ink-dim);
+  text-align: center;
+  padding: 4px 0;
+  border-bottom: 1px solid var(--rule);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ga-cte-alg-head > span:first-child { text-align: left; padding-left: 4px; }
+.ga-cte-alg-row > span:first-child {
+  font-family: var(--mono);
+  color: var(--ink-dim);
+  padding: 2px 4px;
+}
+.ga-cte-alg-cell {
+  display: inline-block;
+  text-align: center;
+  padding: 3px 0;
+  color: var(--panel-1);
+}
+/* 7-step coral ramp for anchor density */
+.ga-cte-alg-cell[data-d="-1"] { background: var(--panel-3);                color: var(--ink-dimmer); }
+.ga-cte-alg-cell[data-d="1"]  { background: rgba(255, 140, 110, 0.18);     color: var(--ink); }
+.ga-cte-alg-cell[data-d="2"]  { background: rgba(255, 140, 110, 0.35);     color: var(--ink); }
+.ga-cte-alg-cell[data-d="3"]  { background: rgba(255, 140, 110, 0.55);     color: var(--panel-1); }
+.ga-cte-alg-cell[data-d="4"]  { background: rgba(255, 140, 110, 0.75);     color: var(--panel-1); }
+.ga-cte-alg-cell[data-d="5"]  { background: rgba(255, 140, 110, 0.92);     color: var(--panel-1); }
+.ga-cte-alg-legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 10px;
+  margin-top: 8px;
+  font-size: 10px;
+  color: var(--ink-dim);
+}
+.ga-cte-alg-legend .ga-cte-alg-cell {
+  display: inline-block;
+  width: 24px;
+  height: 12px;
+  vertical-align: middle;
+  border: 1px solid var(--rule);
+  border-radius: 1px;
+  padding: 0;
+}
+
+/* V5 — breakpoint × TE cross panel. */
+.ga-cte-bp-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+@media (max-width: 720px) {
+  .ga-cte-bp-grid { grid-template-columns: 1fr; }
+}
+.ga-cte-bp-col {
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  padding: 8px 10px;
+  background: var(--panel-3);
+}
+.ga-cte-bp-head {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--ink);
+  padding-bottom: 4px;
+  margin-bottom: 6px;
+  border-bottom: 1px solid var(--rule);
+}
+.ga-cte-bp-caveat {
+  margin-top: 10px;
+  padding: 8px 10px;
+  border: 1px dashed #c9a23a;
+  border-radius: 3px;
+  background: rgba(201, 162, 58, 0.06);
+  font-size: 10.5px;
+  color: var(--ink);
+  line-height: 1.5;
+}
+
 /* JSON Schema codeblock — re-used by every page that embeds a contract. */
 .ga-schema-block {
   background: var(--panel-3);

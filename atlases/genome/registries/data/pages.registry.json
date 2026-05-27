@@ -1,26 +1,26 @@
 {
   "$schema": "../../../../core/registry_core.schema.json",
-  "_doc": "Per-page data and slot requirements for the Genome Atlas. Round 1 declares all ten planned pages (one per major spec); requires_layers / requires_slots / preloads are stubbed empty because none of the pages has a renderer yet — they're scaffold specs. Each page's _doc captures what the page will read once its phase ships.",
+  "_doc": "Per-page data and slot requirements for the Genome Atlas. Round 1 declares all ten planned pages (one per major spec); requires_layers / requires_slots / preloads are stubbed empty because none of the pages has a renderer yet \u2014 they're scaffold specs. Each page's _doc captures what the page will read once its phase ships.",
   "_round1_status": "All ten pages declared as scaffolds. Real requires_* are added per page as renderers wire in (phase B+).",
   "pages": {
     "page_scaffold": {
-      "_label": "scaffold — landing / phase A preview",
-      "_doc": "Static landing page. Six sections: vision, required data layers (eight chips, all '⚪ not loaded' in round 1), chromosome-overview mockup (gradient stand-ins for real density tracks), planned-panel inventory, phasing roadmap (A → E), cross-references to the three sibling atlases. SCHEMA §28. Round-1 status: stub-preserving + lifecycle scaffolding — mount() builds a no-op _pageState; unmount() clears it. Renderer hook (refreshPage1) is a no-op pending phase B+.",
+      "_label": "scaffold \u2014 landing / phase A preview",
+      "_doc": "Static landing page. Six sections: vision, required data layers (eight chips, all '\u26aa not loaded' in round 1), chromosome-overview mockup (gradient stand-ins for real density tracks), planned-panel inventory, phasing roadmap (A \u2192 E), cross-references to the three sibling atlases. SCHEMA \u00a728. Round-1 status: stub-preserving + lifecycle scaffolding \u2014 mount() builds a no-op _pageState; unmount() clears it. Renderer hook (refreshPage1) is a no-op pending phase B+.",
       "requires_layers": [],
       "requires_operations": [],
       "requires_slots": [],
       "preloads": []
     },
     "page_assembly_stats": {
-      "_label": "assembly stats — QC banner",
-      "_doc": "Headline assembly QC: BUSCO single-copy %, contig/scaffold N50, gap rate, T2T completeness, total length. Six global tiles + a per-chromosome QC table (chrom × haplotype, with centromere/telomere status, T2T chip). Phase B wires assembly_stats + centromere_telomere layers. Future requires_layers: ['assembly_stats', 'centromere_telomere'].",
+      "_label": "assembly stats \u2014 QC banner",
+      "_doc": "Headline assembly QC: BUSCO single-copy %, contig/scaffold N50, gap rate, T2T completeness, total length. Six global tiles + a per-chromosome QC table (chrom \u00d7 haplotype, with centromere/telomere status, T2T chip). Phase B wires assembly_stats + centromere_telomere layers. Future requires_layers: ['assembly_stats', 'centromere_telomere'].",
       "requires_layers": [],
       "requires_operations": [],
       "requires_slots": [],
       "preloads": []
     },
     "page_chromosome_overview": {
-      "_label": "chromosome overview — length-scaled strip",
+      "_label": "chromosome overview \u2014 length-scaled strip",
       "_doc": "Primary phase-B deliverable. One row per chromosome, length-scaled across the page. Stacked sub-tracks: base bar (with centromere overlay), gene density, repeat density, conserved-element density, CO density (sex-collapsed, from crossover_track; clicking pivots to page_crossovers for the active candidate), cohort overlay (L2 envelopes + candidates from the Inversion Atlas). Mirrors scrubber width so the two atlases can be stacked. Future requires_layers: ['chromosome_map', 'gene_track', 'repeat_track', 'conserved_elements', 'centromere_telomere', 'crossover_track']. Future requires_slots: ['activeChrom', 'candidate'] (cross-atlas reads).",
       "requires_layers": [],
       "requires_operations": [],
@@ -28,7 +28,7 @@
       "preloads": []
     },
     "page_assembly_methods": {
-      "_label": "assembly methods — documentation",
+      "_label": "assembly methods \u2014 documentation",
       "_doc": "Pure documentation page describing the HiFi + Hi-C + ONT haplotype-resolved assembly pipeline. Five stages from raw reads to curated FAI+AGP. No data layers, no renderer. Ships round 1 in its final shape; no phase B/C upgrade planned beyond text edits.",
       "requires_layers": [],
       "requires_operations": [],
@@ -36,15 +36,15 @@
       "preloads": []
     },
     "page_genes": {
-      "_label": "genes — track, density, cargo",
-      "_doc": "Three views: (1) genome-wide gene-density bar chart, one bar per chrom; (2) per-chrom gene track (boxes + introns) on a length-scaled axis driven by activeChrom; (3) gene cargo per inversion candidate — for every promoted candidate, list genes inside the span, sorted by SnpEff impact when variant_annotations is loaded. Bridges the assembly paper to the Inversion Atlas. Future requires_layers: ['gene_track', 'chromosome_map', 'variant_annotations']. Future requires_slots: ['activeChrom', 'candidateList'].",
+      "_label": "genes \u2014 track, density, cargo",
+      "_doc": "Three views: (1) genome-wide gene-density bar chart, one bar per chrom; (2) per-chrom gene track (boxes + introns) on a length-scaled axis driven by activeChrom; (3) gene cargo per inversion candidate \u2014 for every promoted candidate, list genes inside the span, sorted by SnpEff impact when variant_annotations is loaded. Bridges the assembly paper to the Inversion Atlas. Future requires_layers: ['gene_track', 'chromosome_map', 'variant_annotations']. Future requires_slots: ['activeChrom', 'candidateList'].",
       "requires_layers": [],
       "requires_operations": [],
       "requires_slots": [],
       "preloads": []
     },
     "page_repeats_te": {
-      "_label": "repeats / TE — landscape and breakpoint enrichment",
+      "_label": "repeats / TE \u2014 landscape and breakpoint enrichment",
       "_doc": "Three views: per-class composition (LTR / LINE / SINE / DNA / simple / unclassified), per-chrom density heatmap, breakpoint enrichment per inversion candidate using the Spalax-style focal-vs-bg widget (same widget the Inversion Atlas uses on page16). Future requires_layers: ['repeat_track', 'chromosome_map']. Future requires_slots: ['candidateList'].",
       "requires_layers": [],
       "requires_operations": [],
@@ -52,7 +52,7 @@
       "preloads": []
     },
     "page_variant_annotations": {
-      "_label": "variant annotations — SnpEff / VEP overlay",
+      "_label": "variant annotations \u2014 SnpEff / VEP overlay",
       "_doc": "Phase E (final piece of the Genome Atlas). SnpEff / VEP impact category overlay per inversion candidate. Three views: per-candidate impact tally table, compact impact bar (HIGH/MODERATE/LOW/MODIFIER), expandable HIGH-impact variant list. Depends on MODULE_CONSERVATION cluster-side deliverables (VESM / SIFT4G / SnpEff / GERP++). Future requires_layers: ['variant_annotations', 'gene_track']. Future requires_slots: ['candidateList'].",
       "requires_layers": [],
       "requires_operations": [],
@@ -60,23 +60,23 @@
       "preloads": []
     },
     "page_conserved_elements": {
-      "_label": "conserved elements — UCE / phastCons overlay",
-      "_doc": "Phase C–D. UCE + phastCons regulatory-disruption overlay per inversion candidate. Three views: per-chrom element tick strip, per-candidate UCE overlap table, continuous phastCons score profile. Complements page_genes (gene cargo) by counting regulatory hits. Future requires_layers: ['conserved_elements', 'synteny_blocks']. Future requires_slots: ['activeChrom', 'candidateList'].",
+      "_label": "conserved elements \u2014 UCE / phastCons overlay",
+      "_doc": "Phase C\u2013D. UCE + phastCons regulatory-disruption overlay per inversion candidate. Three views: per-chrom element tick strip, per-candidate UCE overlap table, continuous phastCons score profile. Complements page_genes (gene cargo) by counting regulatory hits. Future requires_layers: ['conserved_elements', 'synteny_blocks']. Future requires_slots: ['activeChrom', 'candidateList'].",
       "requires_layers": [],
       "requires_operations": [],
       "requires_slots": [],
       "preloads": []
     },
     "page_synteny": {
-      "_label": "synteny — Cactus pairwise blocks + macrosyntR Oxford grid",
-      "_doc": "Phase D. Cross-species collinearity for Cgar vs related Siluriformes (Cmac, I. punctatus, plus 7-9 more via catfish-synteny-toolkit wfmash). Four views: (1) pairwise ribbon (one species pair); (2) multi-species ribbon stack; (3) per-chrom dotplot; (4) macrosyntR-style Oxford grid — aggregated chrom-pair view, one dot per (chrom_a × chrom_b) cell, dot size ∝ shared-ortholog count, colour ∝ BH-q (large blue ≤ q_hi=0.01, small yellow ≤ q_lo=0.05, blank otherwise). Focal genomes A/B are toggleable from the page; on change the renderer fetches data/comparative/oxford/<a>_<b>.json. Hover surfaces chrom_a · chrom_b · n_orthologs · q. Inversions render as anti-parallel polygons in View 1; translocations as chrom-jumping polygons. Ties to Inversion Atlas page16 cross-species breakpoint catalogue. Future requires_layers: ['synteny_blocks', 'chromosome_map', 'synteny_oxford_grid']. Future requires_slots: ['activeChrom'].",
+      "_label": "synteny \u2014 Cactus pairwise blocks + macrosyntR Oxford grid",
+      "_doc": "Phase D. Cross-species collinearity for Cgar vs related Siluriformes (Cmac, I. punctatus, plus 7-9 more via catfish-synteny-toolkit wfmash). Four views: (1) pairwise ribbon (one species pair); (2) multi-species ribbon stack; (3) per-chrom dotplot; (4) macrosyntR-style Oxford grid \u2014 aggregated chrom-pair view, one dot per (chrom_a \u00d7 chrom_b) cell, dot size \u221d shared-ortholog count, colour \u221d BH-q (large blue \u2264 q_hi=0.01, small yellow \u2264 q_lo=0.05, blank otherwise). Focal genomes A/B are toggleable from the page; on change the renderer fetches data/comparative/oxford/<a>_<b>.json. Hover surfaces chrom_a \u00b7 chrom_b \u00b7 n_orthologs \u00b7 q. Inversions render as anti-parallel polygons in View 1; translocations as chrom-jumping polygons. Ties to Inversion Atlas page16 cross-species breakpoint catalogue. Future requires_layers: ['synteny_blocks', 'chromosome_map', 'synteny_oxford_grid']. Future requires_slots: ['activeChrom'].",
       "requires_layers": [],
       "requires_operations": [],
       "requires_slots": [],
       "preloads": []
     },
     "page_ancestral_karyotype": {
-      "_label": "ancestral karyotype — Siluriformes reconstruction",
+      "_label": "ancestral karyotype \u2014 Siluriformes reconstruction",
       "_doc": "Phase D. Ancestral karyotype panel + phylogeny-with-events + per-element descent map. Same Cactus output as page_synteny, viewed phylogenetically rather than pairwise. Likely promoted to a Supplementary Note in the assembly paper. Future requires_layers: ['synteny_blocks', 'chromosome_map'].",
       "requires_layers": [],
       "requires_operations": [],
@@ -84,24 +84,32 @@
       "preloads": []
     },
     "page_crossovers": {
-      "_label": "crossovers — per-inversion-candidate ideogram, telomere bias, optional PRDM9 logo",
-      "_doc": "Phase C. Three views over the recombination map AROUND ONE INVERSION CANDIDATE AT A TIME, pared down from the aye-aye CO paper's Fig.1 (Versoza et al. GBE 2024): (1) sex-specific ideogram of CO events inside candidate_span + flank_bp (red♀ dots left, blue♂ dots right, candidate span as translucent band); (2) CO rate vs. relative telomere distance — LOESS curve + 95% CI band per sex (lower-left panel of the source figure); (3) PRDM9 binding motif sequence logo, FACULTATIVE (auto-hidden when `prdm9_motif.pwm` is null/missing). Dropped from the source figure: panel (c) AlphaFold complex (decorative) + panel (e) parental-age effect (F₁ data is single-generation). NCO + gene conversion live on the sister page_nco_gc. Future requires_layers: ['crossover_track', 'chromosome_map']. Optional future requires_layers: ['prdm9_motif']. Future requires_slots: ['candidate'] (read from the Inversion Atlas's candidates_registry). JSON import contract: one `crossover_track.json` per INVERSION CANDIDATE, file path `data/annotation/crossovers/<candidate_id>.json`, shape { candidate_id, candidate_span{chrom,start_bp,end_bp}, flank_bp?, events[{chrom,pos_bp,sex,indiv?,in_span?}], telomere_curve?, curve_params?, prdm9_motif?{pwm,tool,evalue,n_hotspots} } — see the schema block on the page itself for the JSON-Schema draft-2020-12 definition.",
+      "_label": "crossovers \u2014 per-inversion-candidate ideogram, telomere bias, optional PRDM9 logo",
+      "_doc": "Phase C. Three views over the recombination map AROUND ONE INVERSION CANDIDATE AT A TIME, pared down from the aye-aye CO paper's Fig.1 (Versoza et al. GBE 2024): (1) sex-specific ideogram of CO events inside candidate_span + flank_bp (red\u2640 dots left, blue\u2642 dots right, candidate span as translucent band); (2) CO rate vs. relative telomere distance \u2014 LOESS curve + 95% CI band per sex (lower-left panel of the source figure); (3) PRDM9 binding motif sequence logo, FACULTATIVE (auto-hidden when `prdm9_motif.pwm` is null/missing). Dropped from the source figure: panel (c) AlphaFold complex (decorative) + panel (e) parental-age effect (F\u2081 data is single-generation). NCO + gene conversion live on the sister page_nco_gc. Future requires_layers: ['crossover_track', 'chromosome_map']. Optional future requires_layers: ['prdm9_motif']. Future requires_slots: ['candidate'] (read from the Inversion Atlas's candidates_registry). JSON import contract: one `crossover_track.json` per INVERSION CANDIDATE, file path `data/annotation/crossovers/<candidate_id>.json`, shape { candidate_id, candidate_span{chrom,start_bp,end_bp}, flank_bp?, events[{chrom,pos_bp,sex,indiv?,in_span?}], telomere_curve?, curve_params?, prdm9_motif?{pwm,tool,evalue,n_hotspots} } \u2014 see the schema block on the page itself for the JSON-Schema draft-2020-12 definition.",
       "requires_layers": [],
       "requires_operations": [],
       "requires_slots": [],
       "preloads": []
     },
     "page_nco_gc": {
-      "_label": "NCO / gene conversion — per-inversion-candidate tract ideogram + tract-rate telomere bias",
-      "_doc": "Phase C. Sister page to page_crossovers, same per-inversion-candidate keying. Two views: (1) tract ideogram — green NCO ticks on the left, yellow GC ticks on the right, candidate inverted span as translucent band; (2) tract rate vs. relative telomere distance — LOESS curve + 95% CI band per kind (nco / gc). Future requires_layers: ['nco_gc_track', 'chromosome_map']. Future requires_slots: ['candidate']. JSON import contract: one `nco_gc_track.json` per INVERSION CANDIDATE, file path `data/annotation/nco_gc/<candidate_id>.json`, shape { candidate_id, candidate_span{chrom,start_bp,end_bp}, flank_bp?, tracts[{chrom,start_bp,end_bp,kind∈nco|gc,indiv?,in_span?}], telomere_curve?, curve_params? } — see the schema block on the page itself.",
+      "_label": "NCO / gene conversion \u2014 per-inversion-candidate tract ideogram + tract-rate telomere bias",
+      "_doc": "Phase C. Sister page to page_crossovers, same per-inversion-candidate keying. Two views: (1) tract ideogram \u2014 green NCO ticks on the left, yellow GC ticks on the right, candidate inverted span as translucent band; (2) tract rate vs. relative telomere distance \u2014 LOESS curve + 95% CI band per kind (nco / gc). Future requires_layers: ['nco_gc_track', 'chromosome_map']. Future requires_slots: ['candidate']. JSON import contract: one `nco_gc_track.json` per INVERSION CANDIDATE, file path `data/annotation/nco_gc/<candidate_id>.json`, shape { candidate_id, candidate_span{chrom,start_bp,end_bp}, flank_bp?, tracts[{chrom,start_bp,end_bp,kind\u2208nco|gc,indiv?,in_span?}], telomere_curve?, curve_params? } \u2014 see the schema block on the page itself.",
       "requires_layers": [],
       "requires_operations": [],
       "requires_slots": [],
       "preloads": []
     },
     "page_orthologues": {
-      "_label": "orthologues — focal vs. non-focal tables",
-      "_doc": "Phase D. Three tables comparing one focal genome against every non-focal genome in the comparison set: (1) summary table — one row per non-focal, counts of 1:1 / 1:n / m:1 / m:n + focal-orphan + non-focal-orphan, % mapped; (2) per focal-chrom breakdown — one row per focal chrom, one column per non-focal with %1:1 conservation, cells green/amber/red on configurable thresholds (default ≥90 / 65–90 / <65); (3) gene-level explorer — one row per focal gene with ortholog ids (or '—') for each non-focal, copy count as superscript on 1:n, filterable by gene-id prefix, paginated. Focal genome is selectable and reads/writes shared.focalGenome (synced with page_synteny's Oxford-grid row axis). Future requires_layers: ['ortholog_tables', 'chromosome_map']. Optional future requires_layers: ['ortholog_pairs']. Future requires_slots: ['focalGenome']. JSON import contract: one `ortholog_tables.json` per FOCAL genome at `data/comparative/orthologs/<focal_id>.json` carrying { focal{id,label,assembly,gene_count,chroms[]}, non_focal[{id,label,assembly,gene_count,summary{one_to_one,one_to_many,many_to_one,many_to_many,focal_orphans,nonfocal_orphans},per_focal_chrom[{chrom,pct_one_to_one}]}], thresholds?{pct_good,pct_mid}, source_pipeline? }. Optional companion `ortholog_pairs.json` per (focal × non-focal) at `data/comparative/orthologs/pairs/<focal>_<nonfocal>.json` for View 3 — lazy-loaded on column reveal. Both schemas embedded on the page.",
+      "_label": "orthologues \u2014 focal vs. non-focal tables",
+      "_doc": "Phase D. Three tables comparing one focal genome against every non-focal genome in the comparison set: (1) summary table \u2014 one row per non-focal, counts of 1:1 / 1:n / m:1 / m:n + focal-orphan + non-focal-orphan, % mapped; (2) per focal-chrom breakdown \u2014 one row per focal chrom, one column per non-focal with %1:1 conservation, cells green/amber/red on configurable thresholds (default \u226590 / 65\u201390 / <65); (3) gene-level explorer \u2014 one row per focal gene with ortholog ids (or '\u2014') for each non-focal, copy count as superscript on 1:n, filterable by gene-id prefix, paginated. Focal genome is selectable and reads/writes shared.focalGenome (synced with page_synteny's Oxford-grid row axis). Future requires_layers: ['ortholog_tables', 'chromosome_map']. Optional future requires_layers: ['ortholog_pairs']. Future requires_slots: ['focalGenome']. JSON import contract: one `ortholog_tables.json` per FOCAL genome at `data/comparative/orthologs/<focal_id>.json` carrying { focal{id,label,assembly,gene_count,chroms[]}, non_focal[{id,label,assembly,gene_count,summary{one_to_one,one_to_many,many_to_one,many_to_many,focal_orphans,nonfocal_orphans},per_focal_chrom[{chrom,pct_one_to_one}]}], thresholds?{pct_good,pct_mid}, source_pipeline? }. Optional companion `ortholog_pairs.json` per (focal \u00d7 non-focal) at `data/comparative/orthologs/pairs/<focal>_<nonfocal>.json` for View 3 \u2014 lazy-loaded on column reveal. Both schemas embedded on the page.",
+      "requires_layers": [],
+      "requires_operations": [],
+      "requires_slots": [],
+      "preloads": []
+    },
+    "page_comparative_te": {
+      "_label": "comparative TE \u2014 Chapter 5 ingest (17 catfish genomes)",
+      "_doc": "17-species TE landscape. Five views driven by fixtures/chapter5/consolidated.json: abundance bars (te_abundance), Kimura age landscape (kimura_landscape), Cgar centromere context (centromeres_cgar), ALG collinearity heatmap (alg_collinearity), breakpoint \u00d7 TE cross (breakpoint_te_cross). Phase D \u2014 wires when the cluster pipeline lands the equivalent atlases/genome/data/comparative/te/consolidated.json file.",
       "requires_layers": [],
       "requires_operations": [],
       "requires_slots": [],

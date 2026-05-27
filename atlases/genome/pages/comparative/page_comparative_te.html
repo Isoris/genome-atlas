@@ -1,0 +1,745 @@
+<div id="page_comparative_te" class="page">
+  <div class="ga-content">
+      <div class="ga-title">
+        <span class="ga-title-bullet">▰</span> Comparative TE landscape — 17 catfish genomes
+      </div>
+      <div class="ga-subtitle">
+        Stage: comparative · phase D · driven by Chapter 5 module
+        (<code>te_abundance</code> · <code>kimura_landscape</code> · <code>centromeres</code> · <code>alg_collinearity</code>)
+      </div>
+
+      <div class="ga-card">
+        <div class="ga-card-header">
+          <div class="ga-card-title">What this page shows</div>
+          <div class="ga-card-status ga-status-phase">phase D · ingest of Chapter 5 deliverable</div>
+        </div>
+        <div class="ga-card-para">
+          Cross-species TE landscape for 17 chromosome-scale catfish genomes
+          + the two focal haplotypes (<i>fClaHyb_Gar</i>, <i>fClaHyb_Mac</i>).
+          Five views: abundance bars per species, Kimura age landscapes,
+          Cgar centromere context, ALG collinearity heatmap, and the
+          breakpoint × TE cross-analysis (the chapter's key deliverable).
+        </div>
+        <div class="ga-card-para ga-dim">
+          Source: the Chapter 5 R module (<code>fixtures/chapter5/</code>).
+          Ingest replicates the figures from
+          <i>Chapter5_Full_with_Appendix.docx</i> — Fig 5.1 (abundance bars),
+          Fig 5.2 (Kimura landscape), Table 5.4 (centromere context), and the
+          TE12 upgraded breakpoint enrichment. Numbers are from the real
+          uploaded TSVs, not transcribed.
+        </div>
+      </div>
+
+      <div class="ga-card">
+        <div class="ga-card-header">
+          <div class="ga-card-title">Required data layers</div>
+          <div class="ga-card-status">cluster-side outputs · Chapter 5 module</div>
+        </div>
+        <div class="ga-layers-grid">
+          <div class="ga-layers-head">layer</div>
+          <div class="ga-layers-head">source</div>
+          <div class="ga-layers-head">status</div>
+          <div class="ga-layers-head">feeds</div>
+
+          <div><code>te_abundance</code></div>
+          <div><code>EDTA + RepeatMasker (17 species)</code></div>
+          <div data-ga-layer="te_abundance" class="ga-layer-status">⚪ not loaded</div>
+          <div class="ga-dim">View 1 — abundance bars (Fig 5.1)</div>
+
+          <div><code>kimura_landscape</code></div>
+          <div><code>RepeatMasker divsum per species</code></div>
+          <div data-ga-layer="kimura_landscape" class="ga-layer-status">⚪ not loaded</div>
+          <div class="ga-dim">View 2 — age landscape (Fig 5.2)</div>
+
+          <div><code>centromeres_cgar</code></div>
+          <div><code>quarTeT / centromics</code></div>
+          <div data-ga-layer="centromeres_cgar" class="ga-layer-status">⚪ not loaded</div>
+          <div class="ga-dim">View 3 — centromere context (Table 5.4)</div>
+
+          <div><code>alg_collinearity</code></div>
+          <div><code>OrthoFinder + wfmash projection</code></div>
+          <div data-ga-layer="alg_collinearity" class="ga-layer-status">⚪ not loaded</div>
+          <div class="ga-dim">View 4 — ALG heatmap</div>
+
+          <div><code>breakpoint_te_cross</code></div>
+          <div><code>TE12_breakpoint_TE_cross.R (chapter5)</code></div>
+          <div data-ga-layer="breakpoint_te_cross" class="ga-layer-status">⚪ not loaded</div>
+          <div class="ga-dim">View 5 — enrichment vs background</div>
+        </div>
+      </div>
+
+      <!-- ── View 1: TE abundance stacked bars (Fig 5.1) ──────────────── -->
+      <div class="ga-card">
+        <div class="ga-card-header">
+          <div class="ga-card-title">View 1 — TE abundance per species (Fig 5.1)</div>
+          <div class="ga-card-status">17 species · 7 TE classes · genome %</div>
+        </div>
+        <div class="ga-card-para ga-dim">
+          One horizontal bar per genome, sorted by total TE %. Segments split
+          by EDTA / RepeatMasker class. Bars scaled to the max-total so the
+          eye catches relative TE load at a glance. Hover a segment for the
+          class % (the renderer fills this in from <code>te_abundance</code>).
+        </div>
+        <div class="ga-cte-bars">
+          <div class="ga-cte-bar-row">
+            <div class="ga-cte-bar-label"><i>Neoarius graeffei</i></div>
+            <div class="ga-cte-bar-outer" style="width: 100.0%;">
+              <div class="ga-cte-bar"><span class="ga-te-ltr" style="flex: 26.22">LTR 26.2</span><span class="ga-te-dna" style="flex: 35.68">TIR 35.7</span><span class="ga-te-helitron" style="flex: 2.75">nonTIR 2.8</span><span class="ga-te-sine" style="flex: 0.75"></span><span class="ga-te-other" style="flex: 4.02">unclassified 4.0</span></div>
+            </div>
+            <div class="ga-cte-bar-total"><span class="ga-num ga-good">69.4%</span></div>
+          </div>
+
+          <div class="ga-cte-bar-row">
+            <div class="ga-cte-bar-label"><i>Plotosus lineatus</i></div>
+            <div class="ga-cte-bar-outer" style="width: 81.7%;">
+              <div class="ga-cte-bar"><span class="ga-te-ltr" style="flex: 22.70">LTR 22.7</span><span class="ga-te-dna" style="flex: 27.55">TIR 27.6</span><span class="ga-te-helitron" style="flex: 2.87">nonTIR 2.9</span><span class="ga-te-sine" style="flex: 0.98"></span><span class="ga-te-other" style="flex: 2.64">unclassified 2.6</span></div>
+            </div>
+            <div class="ga-cte-bar-total"><span class="ga-num ga-good">56.7%</span></div>
+          </div>
+
+          <div class="ga-cte-bar-row">
+            <div class="ga-cte-bar-label"><i>Channallabes apus</i></div>
+            <div class="ga-cte-bar-outer" style="width: 70.8%;">
+              <div class="ga-cte-bar"><span class="ga-te-ltr" style="flex: 21.35">LTR 21.3</span><span class="ga-te-dna" style="flex: 20.78">TIR 20.8</span><span class="ga-te-helitron" style="flex: 3.32">nonTIR 3.3</span><span class="ga-te-sine" style="flex: 0.66"></span><span class="ga-te-other" style="flex: 3.02">unclassified 3.0</span></div>
+            </div>
+            <div class="ga-cte-bar-total"><span class="ga-num ga-good">49.1%</span></div>
+          </div>
+
+          <div class="ga-cte-bar-row">
+            <div class="ga-cte-bar-label"><i>Trichomycterus rosablanca</i></div>
+            <div class="ga-cte-bar-outer" style="width: 70.2%;">
+              <div class="ga-cte-bar"><span class="ga-te-ltr" style="flex: 12.49">LTR 12.5</span><span class="ga-te-dna" style="flex: 25.37">TIR 25.4</span><span class="ga-te-helitron" style="flex: 5.83">nonTIR 5.8</span><span class="ga-te-sine" style="flex: 0.52"></span><span class="ga-te-other" style="flex: 4.53">unclassified 4.5</span></div>
+            </div>
+            <div class="ga-cte-bar-total"><span class="ga-num ga-good">48.7%</span></div>
+          </div>
+
+          <div class="ga-cte-bar-row">
+            <div class="ga-cte-bar-label"><i>Cranoglanis bouderius</i></div>
+            <div class="ga-cte-bar-outer" style="width: 58.7%;">
+              <div class="ga-cte-bar"><span class="ga-te-ltr" style="flex: 7.37">LTR 7.4</span><span class="ga-te-dna" style="flex: 24.09">TIR 24.1</span><span class="ga-te-helitron" style="flex: 3.90">nonTIR 3.9</span><span class="ga-te-sine" style="flex: 0.79"></span><span class="ga-te-other" style="flex: 4.62">unclassified 4.6</span></div>
+            </div>
+            <div class="ga-cte-bar-total"><span class="ga-num ga-good">40.8%</span></div>
+          </div>
+
+          <div class="ga-cte-bar-row">
+            <div class="ga-cte-bar-label"><i>Clarias gariepinus</i></div>
+            <div class="ga-cte-bar-outer" style="width: 56.5%;">
+              <div class="ga-cte-bar"><span class="ga-te-ltr" style="flex: 12.08">LTR 12.1</span><span class="ga-te-dna" style="flex: 18.19">TIR 18.2</span><span class="ga-te-helitron" style="flex: 4.68">nonTIR 4.7</span><span class="ga-te-line" style="flex: 0.52"></span><span class="ga-te-sine" style="flex: 0.04"></span><span class="ga-te-other2" style="flex: 3.71">repeat_fragment 3.7</span></div>
+            </div>
+            <div class="ga-cte-bar-total"><span class="ga-num ga-good">39.2%</span></div>
+          </div>
+
+          <div class="ga-cte-bar-row">
+            <div class="ga-cte-bar-label"><i>Clarias fuscus</i></div>
+            <div class="ga-cte-bar-outer" style="width: 53.8%;">
+              <div class="ga-cte-bar"><span class="ga-te-ltr" style="flex: 11.86">LTR 11.9</span><span class="ga-te-dna" style="flex: 17.73">TIR 17.7</span><span class="ga-te-helitron" style="flex: 4.19">nonTIR 4.2</span><span class="ga-te-sine" style="flex: 0.50"></span><span class="ga-te-other" style="flex: 3.06">unclassified 3.1</span></div>
+            </div>
+            <div class="ga-cte-bar-total"><span class="ga-num ga-good">37.3%</span></div>
+          </div>
+
+          <div class="ga-cte-bar-row">
+            <div class="ga-cte-bar-label"><i>Ictalurus punctatus</i></div>
+            <div class="ga-cte-bar-outer" style="width: 52.8%;">
+              <div class="ga-cte-bar"><span class="ga-te-ltr" style="flex: 5.80">LTR 5.8</span><span class="ga-te-dna" style="flex: 21.14">TIR 21.1</span><span class="ga-te-helitron" style="flex: 3.92">nonTIR 3.9</span><span class="ga-te-sine" style="flex: 0.63"></span><span class="ga-te-other" style="flex: 5.20">unclassified 5.2</span></div>
+            </div>
+            <div class="ga-cte-bar-total"><span class="ga-num ga-good">36.7%</span></div>
+          </div>
+
+          <div class="ga-cte-bar-row">
+            <div class="ga-cte-bar-label"><i>Ameiurus melas</i></div>
+            <div class="ga-cte-bar-outer" style="width: 52.7%;">
+              <div class="ga-cte-bar"><span class="ga-te-ltr" style="flex: 10.04">LTR 10.0</span><span class="ga-te-dna" style="flex: 18.31">TIR 18.3</span><span class="ga-te-helitron" style="flex: 4.11">nonTIR 4.1</span><span class="ga-te-sine" style="flex: 0.44"></span><span class="ga-te-other" style="flex: 3.70">unclassified 3.7</span></div>
+            </div>
+            <div class="ga-cte-bar-total"><span class="ga-num ga-good">36.6%</span></div>
+          </div>
+
+          <div class="ga-cte-bar-row">
+            <div class="ga-cte-bar-label"><i>Silurus aristotelis</i></div>
+            <div class="ga-cte-bar-outer" style="width: 52.0%;">
+              <div class="ga-cte-bar"><span class="ga-te-ltr" style="flex: 8.58">LTR 8.6</span><span class="ga-te-dna" style="flex: 17.68">TIR 17.7</span><span class="ga-te-helitron" style="flex: 4.80">nonTIR 4.8</span><span class="ga-te-sine" style="flex: 1.11"></span><span class="ga-te-other" style="flex: 3.93">unclassified 3.9</span></div>
+            </div>
+            <div class="ga-cte-bar-total"><span class="ga-num ga-good">36.1%</span></div>
+          </div>
+
+          <div class="ga-cte-bar-row">
+            <div class="ga-cte-bar-label"><i>Clarias macrocephalus</i></div>
+            <div class="ga-cte-bar-outer" style="width: 51.6%;">
+              <div class="ga-cte-bar"><span class="ga-te-ltr" style="flex: 8.72">LTR 8.7</span><span class="ga-te-dna" style="flex: 18.82">TIR 18.8</span><span class="ga-te-helitron" style="flex: 4.44">nonTIR 4.4</span><span class="ga-te-line" style="flex: 0.49"></span><span class="ga-te-sine" style="flex: 0.08"></span><span class="ga-te-other2" style="flex: 3.30">repeat_fragment 3.3</span></div>
+            </div>
+            <div class="ga-cte-bar-total"><span class="ga-num ga-good">35.8%</span></div>
+          </div>
+
+          <div class="ga-cte-bar-row">
+            <div class="ga-cte-bar-label"><i>Ictalurus furcatus</i></div>
+            <div class="ga-cte-bar-outer" style="width: 49.2%;">
+              <div class="ga-cte-bar"><span class="ga-te-ltr" style="flex: 6.95">LTR 7.0</span><span class="ga-te-dna" style="flex: 19.87">TIR 19.9</span><span class="ga-te-helitron" style="flex: 3.57">nonTIR 3.6</span><span class="ga-te-sine" style="flex: 0.44"></span><span class="ga-te-other" style="flex: 3.32">unclassified 3.3</span></div>
+            </div>
+            <div class="ga-cte-bar-total"><span class="ga-num ga-good">34.1%</span></div>
+          </div>
+
+          <div class="ga-cte-bar-row">
+            <div class="ga-cte-bar-label"><i>Silurus meridionalis</i></div>
+            <div class="ga-cte-bar-outer" style="width: 45.2%;">
+              <div class="ga-cte-bar"><span class="ga-te-ltr" style="flex: 10.01">LTR 10.0</span><span class="ga-te-dna" style="flex: 15.71">TIR 15.7</span><span class="ga-te-helitron" style="flex: 2.33">nonTIR 2.3</span><span class="ga-te-sine" style="flex: 0.29"></span><span class="ga-te-other" style="flex: 3.04">unclassified 3.0</span></div>
+            </div>
+            <div class="ga-cte-bar-total"><span class="ga-num ga-good">31.4%</span></div>
+          </div>
+
+          <div class="ga-cte-bar-row">
+            <div class="ga-cte-bar-label"><i>Pangasianodon hypophthalmus</i></div>
+            <div class="ga-cte-bar-outer" style="width: 40.7%;">
+              <div class="ga-cte-bar"><span class="ga-te-ltr" style="flex: 5.08">LTR 5.1</span><span class="ga-te-dna" style="flex: 17.26">TIR 17.3</span><span class="ga-te-helitron" style="flex: 2.39">nonTIR 2.4</span><span class="ga-te-sine" style="flex: 0.35"></span><span class="ga-te-other" style="flex: 3.17">unclassified 3.2</span></div>
+            </div>
+            <div class="ga-cte-bar-total"><span class="ga-num ga-good">28.3%</span></div>
+          </div>
+
+          <div class="ga-cte-bar-row">
+            <div class="ga-cte-bar-label"><i>Tachysurus vachellii</i></div>
+            <div class="ga-cte-bar-outer" style="width: 37.7%;">
+              <div class="ga-cte-bar"><span class="ga-te-ltr" style="flex: 11.49">LTR 11.5</span><span class="ga-te-dna" style="flex: 10.31">TIR 10.3</span><span class="ga-te-helitron" style="flex: 1.62">nonTIR 1.6</span><span class="ga-te-sine" style="flex: 0.37"></span><span class="ga-te-other" style="flex: 2.40">unclassified 2.4</span></div>
+            </div>
+            <div class="ga-cte-bar-total"><span class="ga-num ga-good">26.2%</span></div>
+          </div>
+
+          <div class="ga-cte-bar-row">
+            <div class="ga-cte-bar-label"><i>Hemibagrus wyckioides</i></div>
+            <div class="ga-cte-bar-outer" style="width: 36.7%;">
+              <div class="ga-cte-bar"><span class="ga-te-ltr" style="flex: 7.17">LTR 7.2</span><span class="ga-te-dna" style="flex: 11.40">TIR 11.4</span><span class="ga-te-helitron" style="flex: 1.54">nonTIR 1.5</span><span class="ga-te-sine" style="flex: 0.31"></span><span class="ga-te-other" style="flex: 5.04">unclassified 5.0</span></div>
+            </div>
+            <div class="ga-cte-bar-total"><span class="ga-num ga-good">25.5%</span></div>
+          </div>
+
+          <div class="ga-cte-bar-row">
+            <div class="ga-cte-bar-label"><i>Tachysurus fulvidraco</i></div>
+            <div class="ga-cte-bar-outer" style="width: 36.0%;">
+              <div class="ga-cte-bar"><span class="ga-te-ltr" style="flex: 11.62">LTR 11.6</span><span class="ga-te-dna" style="flex: 10.01">TIR 10.0</span><span class="ga-te-helitron" style="flex: 1.15"></span><span class="ga-te-sine" style="flex: 0.32"></span><span class="ga-te-other" style="flex: 1.89">unclassified 1.9</span></div>
+            </div>
+            <div class="ga-cte-bar-total"><span class="ga-num ga-good">25.0%</span></div>
+          </div>
+        </div>
+        <div class="ga-card-footnote">
+          Top-5 TE loads — <i>Neoarius graeffei</i> (69%), <i>Plotosus
+          lineatus</i> (57%), <i>Channallabes apus</i> (49%), <i>T.
+          rosablanca</i> (49%), <i>C. bouderius</i> (41%). The two
+          focal-frame haplotypes (Gar 39%, Mac 36%) sit mid-pack — the
+          catfish-wide range is roughly 25–70%. <b>TIR DNA transposons</b>
+          are the dominant class in most genomes — the youngest active
+          superfamily across this clade.
+        </div>
+      </div>
+
+      <!-- ── View 2: Kimura age landscape (Fig 5.2, top 5 species) ─────── -->
+      <div class="ga-card">
+        <div class="ga-card-header">
+          <div class="ga-card-title">View 2 — Kimura age landscape (Fig 5.2)</div>
+          <div class="ga-card-status">top 5 by total TE · bp per K2P-div bucket</div>
+        </div>
+        <div class="ga-card-para ga-dim">
+          Per-element K2P distance to TE consensus = age proxy (low div = recent
+          activity, high div = ancient burst). One panel per species; y axis is
+          bp annotated; x axis is divergence 0–70. The recent peak on the left
+          is the youngest active TE burst; the broad mid-divergence mass is
+          ancient repeats inherited across the catfish clade.
+        </div>
+        <div class="ga-cte-kim-grid">
+          <div class="ga-cte-kim-panel">
+            <div class="ga-cte-kim-head"><i>Neoarius graeffei</i><span class="ga-num">2062 Mb annotated TE</span></div>
+            <svg viewBox="0 0 220 60" class="ga-cte-kim-svg" preserveAspectRatio="none">
+              <line x1="10" y1="55" x2="210" y2="55" stroke="var(--rule)" stroke-width="0.5"/>
+              <text x="10" y="60" font-size="7" fill="var(--ink-dimmer)">0</text>
+              <text x="210" y="60" font-size="7" fill="var(--ink-dimmer)" text-anchor="end">div=70</text>
+              <path d="M 10,55 L 10.0,37.0 L 12.9,10.0 L 15.7,10.1 L 18.6,19.8 L 21.4,22.7 L 24.3,29.9 L 27.1,32.2 L 30.0,34.3 L 32.9,37.4 L 35.7,38.5 L 38.6,40.0 L 41.4,41.6 L 44.3,42.4 L 47.1,42.9 L 50.0,44.1 L 52.9,45.4 L 55.7,46.6 L 58.6,47.1 L 61.4,47.5 L 64.3,47.3 L 67.1,47.6 L 70.0,47.5 L 72.9,48.4 L 75.7,47.5 L 78.6,48.0 L 81.4,49.4 L 84.3,50.0 L 87.1,50.3 L 90.0,50.7 L 92.9,51.1 L 95.7,49.2 L 98.6,49.7 L 101.4,51.4 L 104.3,52.0 L 107.1,52.4 L 110.0,52.5 L 112.9,52.5 L 115.7,51.7 L 118.6,51.1 L 121.4,51.8 L 124.3,52.4 L 127.1,52.6 L 130.0,52.8 L 132.9,53.0 L 135.7,53.2 L 138.6,53.5 L 141.4,53.9 L 144.3,54.3 L 147.1,54.6 L 150.0,54.7 L 152.9,54.8 L 155.7,54.9 L 158.6,54.9 L 161.4,55.0 L 164.3,55.0 L 167.1,55.0 L 170.0,55.0 L 172.9,55.0 L 175.7,55.0 L 178.6,55.0 L 181.4,55.0 L 184.3,55.0 L 187.1,55.0 L 190.0,55.0 L 192.9,55.0 L 195.7,55.0 L 198.6,55.0 L 201.4,55.0 L 204.3,55.0 L 207.1,55.0 L 210.0,55.0 L 210,55 Z" fill="rgba(255, 140, 110, 0.35)" stroke="#ff8c6e" stroke-width="0.8"/>
+            </svg>
+          </div>
+
+          <div class="ga-cte-kim-panel">
+            <div class="ga-cte-kim-head"><i>Plotosus lineatus</i><span class="ga-num">1087 Mb annotated TE</span></div>
+            <svg viewBox="0 0 220 60" class="ga-cte-kim-svg" preserveAspectRatio="none">
+              <line x1="10" y1="55" x2="210" y2="55" stroke="var(--rule)" stroke-width="0.5"/>
+              <text x="10" y="60" font-size="7" fill="var(--ink-dimmer)">0</text>
+              <text x="210" y="60" font-size="7" fill="var(--ink-dimmer)" text-anchor="end">div=70</text>
+              <path d="M 10,55 L 10.0,47.0 L 12.9,41.7 L 15.7,37.3 L 18.6,34.7 L 21.4,27.4 L 24.3,27.0 L 27.1,21.6 L 30.0,15.9 L 32.9,12.3 L 35.7,10.0 L 38.6,13.8 L 41.4,18.7 L 44.3,21.7 L 47.1,25.1 L 50.0,27.4 L 52.9,28.9 L 55.7,30.1 L 58.6,31.4 L 61.4,32.8 L 64.3,34.0 L 67.1,35.4 L 70.0,36.6 L 72.9,37.8 L 75.7,38.7 L 78.6,39.6 L 81.4,40.3 L 84.3,41.1 L 87.1,41.7 L 90.0,42.7 L 92.9,43.5 L 95.7,44.4 L 98.6,45.2 L 101.4,46.1 L 104.3,46.9 L 107.1,47.8 L 110.0,48.8 L 112.9,49.7 L 115.7,50.4 L 118.6,51.2 L 121.4,51.7 L 124.3,52.3 L 127.1,52.5 L 130.0,52.9 L 132.9,53.3 L 135.7,53.7 L 138.6,53.9 L 141.4,54.2 L 144.3,54.4 L 147.1,54.6 L 150.0,54.7 L 152.9,54.8 L 155.7,54.8 L 158.6,54.9 L 161.4,54.9 L 164.3,54.9 L 167.1,54.9 L 170.0,55.0 L 172.9,55.0 L 175.7,55.0 L 178.6,55.0 L 181.4,55.0 L 184.3,55.0 L 187.1,55.0 L 190.0,55.0 L 192.9,55.0 L 195.7,55.0 L 198.6,55.0 L 201.4,55.0 L 204.3,55.0 L 207.1,55.0 L 210.0,55.0 L 210,55 Z" fill="rgba(255, 140, 110, 0.35)" stroke="#ff8c6e" stroke-width="0.8"/>
+            </svg>
+          </div>
+
+          <div class="ga-cte-kim-panel">
+            <div class="ga-cte-kim-head"><i>Channallabes apus</i><span class="ga-num">740 Mb annotated TE</span></div>
+            <svg viewBox="0 0 220 60" class="ga-cte-kim-svg" preserveAspectRatio="none">
+              <line x1="10" y1="55" x2="210" y2="55" stroke="var(--rule)" stroke-width="0.5"/>
+              <text x="10" y="60" font-size="7" fill="var(--ink-dimmer)">0</text>
+              <text x="210" y="60" font-size="7" fill="var(--ink-dimmer)" text-anchor="end">div=70</text>
+              <path d="M 10,55 L 10.0,23.6 L 12.9,10.0 L 15.7,11.3 L 18.6,18.9 L 21.4,23.0 L 24.3,27.9 L 27.1,32.4 L 30.0,38.7 L 32.9,41.3 L 35.7,42.2 L 38.6,43.3 L 41.4,43.9 L 44.3,44.4 L 47.1,45.1 L 50.0,44.2 L 52.9,43.8 L 55.7,43.2 L 58.6,42.6 L 61.4,42.2 L 64.3,41.7 L 67.1,41.2 L 70.0,41.2 L 72.9,42.5 L 75.7,43.2 L 78.6,43.4 L 81.4,40.3 L 84.3,42.7 L 87.1,45.7 L 90.0,47.0 L 92.9,48.0 L 95.7,48.7 L 98.6,49.5 L 101.4,50.4 L 104.3,51.1 L 107.1,51.4 L 110.0,51.5 L 112.9,51.5 L 115.7,51.7 L 118.6,52.0 L 121.4,52.5 L 124.3,52.4 L 127.1,52.2 L 130.0,53.1 L 132.9,53.4 L 135.7,53.8 L 138.6,54.0 L 141.4,54.3 L 144.3,54.5 L 147.1,54.7 L 150.0,54.8 L 152.9,54.9 L 155.7,54.9 L 158.6,55.0 L 161.4,55.0 L 164.3,55.0 L 167.1,55.0 L 170.0,55.0 L 172.9,55.0 L 175.7,55.0 L 178.6,55.0 L 181.4,55.0 L 184.3,55.0 L 187.1,55.0 L 190.0,55.0 L 192.9,55.0 L 195.7,55.0 L 198.6,55.0 L 201.4,55.0 L 204.3,55.0 L 207.1,55.0 L 210.0,55.0 L 210,55 Z" fill="rgba(255, 140, 110, 0.35)" stroke="#ff8c6e" stroke-width="0.8"/>
+            </svg>
+          </div>
+
+          <div class="ga-cte-kim-panel">
+            <div class="ga-cte-kim-head"><i>Trichomycterus rosablanca</i><span class="ga-num">741 Mb annotated TE</span></div>
+            <svg viewBox="0 0 220 60" class="ga-cte-kim-svg" preserveAspectRatio="none">
+              <line x1="10" y1="55" x2="210" y2="55" stroke="var(--rule)" stroke-width="0.5"/>
+              <text x="10" y="60" font-size="7" fill="var(--ink-dimmer)">0</text>
+              <text x="210" y="60" font-size="7" fill="var(--ink-dimmer)" text-anchor="end">div=70</text>
+              <path d="M 10,55 L 10.0,13.1 L 12.9,10.0 L 15.7,27.1 L 18.6,36.9 L 21.4,36.4 L 24.3,33.2 L 27.1,28.0 L 30.0,24.1 L 32.9,24.4 L 35.7,29.3 L 38.6,33.8 L 41.4,36.7 L 44.3,37.9 L 47.1,37.7 L 50.0,39.2 L 52.9,39.3 L 55.7,39.1 L 58.6,38.8 L 61.4,29.9 L 64.3,36.9 L 67.1,38.6 L 70.0,38.7 L 72.9,38.7 L 75.7,38.5 L 78.6,39.2 L 81.4,39.8 L 84.3,40.7 L 87.1,41.6 L 90.0,42.8 L 92.9,43.9 L 95.7,44.6 L 98.6,45.3 L 101.4,46.0 L 104.3,46.5 L 107.1,47.4 L 110.0,48.7 L 112.9,49.9 L 115.7,50.4 L 118.6,50.7 L 121.4,50.6 L 124.3,51.2 L 127.1,51.8 L 130.0,52.5 L 132.9,53.1 L 135.7,53.2 L 138.6,53.0 L 141.4,52.9 L 144.3,52.9 L 147.1,53.4 L 150.0,53.9 L 152.9,54.4 L 155.7,54.7 L 158.6,54.8 L 161.4,54.9 L 164.3,54.9 L 167.1,55.0 L 170.0,55.0 L 172.9,55.0 L 175.7,55.0 L 178.6,55.0 L 181.4,55.0 L 184.3,55.0 L 187.1,55.0 L 190.0,55.0 L 192.9,55.0 L 195.7,55.0 L 198.6,55.0 L 201.4,55.0 L 204.3,55.0 L 207.1,55.0 L 210.0,55.0 L 210,55 Z" fill="rgba(255, 140, 110, 0.35)" stroke="#ff8c6e" stroke-width="0.8"/>
+            </svg>
+          </div>
+
+          <div class="ga-cte-kim-panel">
+            <div class="ga-cte-kim-head"><i>Cranoglanis bouderius</i><span class="ga-num">482 Mb annotated TE</span></div>
+            <svg viewBox="0 0 220 60" class="ga-cte-kim-svg" preserveAspectRatio="none">
+              <line x1="10" y1="55" x2="210" y2="55" stroke="var(--rule)" stroke-width="0.5"/>
+              <text x="10" y="60" font-size="7" fill="var(--ink-dimmer)">0</text>
+              <text x="210" y="60" font-size="7" fill="var(--ink-dimmer)" text-anchor="end">div=70</text>
+              <path d="M 10,55 L 10.0,32.3 L 12.9,24.1 L 15.7,20.3 L 18.6,13.1 L 21.4,24.0 L 24.3,23.2 L 27.1,13.8 L 30.0,10.0 L 32.9,16.2 L 35.7,22.5 L 38.6,25.7 L 41.4,25.9 L 44.3,25.4 L 47.1,25.4 L 50.0,25.7 L 52.9,28.3 L 55.7,30.8 L 58.6,32.9 L 61.4,32.1 L 64.3,31.6 L 67.1,32.0 L 70.0,32.0 L 72.9,32.5 L 75.7,32.3 L 78.6,33.2 L 81.4,34.2 L 84.3,35.4 L 87.1,36.7 L 90.0,38.0 L 92.9,39.8 L 95.7,41.8 L 98.6,43.4 L 101.4,45.2 L 104.3,46.6 L 107.1,47.9 L 110.0,48.2 L 112.9,48.9 L 115.7,50.4 L 118.6,51.1 L 121.4,51.4 L 124.3,52.1 L 127.1,52.5 L 130.0,53.0 L 132.9,53.3 L 135.7,53.7 L 138.6,54.1 L 141.4,54.4 L 144.3,54.6 L 147.1,54.7 L 150.0,54.8 L 152.9,54.9 L 155.7,54.9 L 158.6,54.9 L 161.4,55.0 L 164.3,55.0 L 167.1,55.0 L 170.0,55.0 L 172.9,55.0 L 175.7,55.0 L 178.6,55.0 L 181.4,55.0 L 184.3,55.0 L 187.1,55.0 L 190.0,55.0 L 192.9,55.0 L 195.7,55.0 L 198.6,55.0 L 201.4,55.0 L 204.3,55.0 L 207.1,55.0 L 210.0,55.0 L 210,55 Z" fill="rgba(255, 140, 110, 0.35)" stroke="#ff8c6e" stroke-width="0.8"/>
+            </svg>
+          </div>
+        </div>
+        <div class="ga-card-footnote">
+          The two leftmost peaks in each panel are the recent DNA-transposon +
+          LTR-Gypsy bursts. <i>N. graeffei</i> (top) has the largest annotated
+          TE mass (188 Mb in its single highest-div bucket); the rest stack
+          below. The full 17-species set + per-family breakdown lives in
+          <code>fixtures/chapter5/kimura/*.distance</code>.
+        </div>
+      </div>
+
+      <!-- ── View 3: Centromere context — Cgar (Table 5.4) ────────────── -->
+      <div class="ga-card">
+        <div class="ga-card-header">
+          <div class="ga-card-title">View 3 — Cgar centromere context (Table 5.4)</div>
+          <div class="ga-card-status">29 chroms · TR-dominant / TE-dominant / mixed</div>
+        </div>
+        <div class="ga-card-para ga-dim">
+          One row per <i>C. gariepinus</i> RefSeq chromosome (centromere coords +
+          tandem-repeat coverage + TE coverage + region score). First 12 of 29
+          shown; click "show more" for the rest.
+        </div>
+        <div class="ga-cte-cen-table" role="table">
+          <div class="ga-cte-cen-head">
+            <span>chr</span><span class="ga-num-h">start (Mb)</span>
+            <span class="ga-num-h">end (Mb)</span><span class="ga-num-h">length</span>
+            <span class="ga-num-h">TR cov</span><span class="ga-num-h">TE cov</span>
+            <span class="ga-num-h">score</span><span>verdict</span>
+          </div>
+          <div class="ga-cte-cen-row">
+            <span>01</span>
+            <span class="ga-num">30.59</span>
+            <span class="ga-num">31.04</span>
+            <span class="ga-num">447 kb</span>
+            <span class="ga-num">99.55%</span>
+            <span class="ga-num">0.0%</span>
+            <span class="ga-num">0.995</span>
+            <span><span class="ga-cte-cen-chip ga-cte-cen-tr">TR-dominant</span></span>
+          </div>
+
+          <div class="ga-cte-cen-row">
+            <span>02</span>
+            <span class="ga-num">25.87</span>
+            <span class="ga-num">26.08</span>
+            <span class="ga-num">202 kb</span>
+            <span class="ga-num">44.46%</span>
+            <span class="ga-num">23.72%</span>
+            <span class="ga-num">0.468</span>
+            <span><span class="ga-cte-cen-chip ga-cte-cen-mixed">mixed</span></span>
+          </div>
+
+          <div class="ga-cte-cen-row">
+            <span>03</span>
+            <span class="ga-num">44.85</span>
+            <span class="ga-num">45.08</span>
+            <span class="ga-num">229 kb</span>
+            <span class="ga-num">35.18%</span>
+            <span class="ga-num">37.69%</span>
+            <span class="ga-num">0.390</span>
+            <span><span class="ga-cte-cen-chip ga-cte-cen-mixed">mixed</span></span>
+          </div>
+
+          <div class="ga-cte-cen-row">
+            <span>04</span>
+            <span class="ga-num">43.49</span>
+            <span class="ga-num">43.62</span>
+            <span class="ga-num">128 kb</span>
+            <span class="ga-num">27.42%</span>
+            <span class="ga-num">24.5%</span>
+            <span class="ga-num">0.299</span>
+            <span><span class="ga-cte-cen-chip ga-cte-cen-mixed">mixed</span></span>
+          </div>
+
+          <div class="ga-cte-cen-row">
+            <span>05</span>
+            <span class="ga-num">13.89</span>
+            <span class="ga-num">14.01</span>
+            <span class="ga-num">119 kb</span>
+            <span class="ga-num">99.23%</span>
+            <span class="ga-num">0.0%</span>
+            <span class="ga-num">0.992</span>
+            <span><span class="ga-cte-cen-chip ga-cte-cen-tr">TR-dominant</span></span>
+          </div>
+
+          <div class="ga-cte-cen-row">
+            <span>06</span>
+            <span class="ga-num">40.94</span>
+            <span class="ga-num">41.13</span>
+            <span class="ga-num">191 kb</span>
+            <span class="ga-num">26.02%</span>
+            <span class="ga-num">33.15%</span>
+            <span class="ga-num">0.293</span>
+            <span><span class="ga-cte-cen-chip ga-cte-cen-mixed">mixed</span></span>
+          </div>
+
+          <div class="ga-cte-cen-row">
+            <span>07</span>
+            <span class="ga-num">22.42</span>
+            <span class="ga-num">22.80</span>
+            <span class="ga-num">382 kb</span>
+            <span class="ga-num">12.13%</span>
+            <span class="ga-num">55.62%</span>
+            <span class="ga-num">0.177</span>
+            <span><span class="ga-cte-cen-chip ga-cte-cen-te">TE-dominant</span></span>
+          </div>
+
+          <div class="ga-cte-cen-row">
+            <span>08</span>
+            <span class="ga-num">27.10</span>
+            <span class="ga-num">27.65</span>
+            <span class="ga-num">548 kb</span>
+            <span class="ga-num">14.17%</span>
+            <span class="ga-num">96.03%</span>
+            <span class="ga-num">0.238</span>
+            <span><span class="ga-cte-cen-chip ga-cte-cen-te">TE-dominant</span></span>
+          </div>
+
+          <div class="ga-cte-cen-row">
+            <span>09</span>
+            <span class="ga-num">9.11</span>
+            <span class="ga-num">9.65</span>
+            <span class="ga-num">543 kb</span>
+            <span class="ga-num">76.33%</span>
+            <span class="ga-num">2.5%</span>
+            <span class="ga-num">0.766</span>
+            <span><span class="ga-cte-cen-chip ga-cte-cen-tr">TR-dominant</span></span>
+          </div>
+
+          <div class="ga-cte-cen-row">
+            <span>10</span>
+            <span class="ga-num">35.06</span>
+            <span class="ga-num">35.17</span>
+            <span class="ga-num">114 kb</span>
+            <span class="ga-num">19.34%</span>
+            <span class="ga-num">54.36%</span>
+            <span class="ga-num">0.248</span>
+            <span><span class="ga-cte-cen-chip ga-cte-cen-te">TE-dominant</span></span>
+          </div>
+
+          <div class="ga-cte-cen-row">
+            <span>11</span>
+            <span class="ga-num">34.18</span>
+            <span class="ga-num">34.44</span>
+            <span class="ga-num">259 kb</span>
+            <span class="ga-num">5.69%</span>
+            <span class="ga-num">21.19%</span>
+            <span class="ga-num">0.078</span>
+            <span><span class="ga-cte-cen-chip ga-cte-cen-mixed">mixed</span></span>
+          </div>
+
+          <div class="ga-cte-cen-row">
+            <span>12</span>
+            <span class="ga-num">0.12</span>
+            <span class="ga-num">0.25</span>
+            <span class="ga-num">127 kb</span>
+            <span class="ga-num">10.47%</span>
+            <span class="ga-num">17.15%</span>
+            <span class="ga-num">0.122</span>
+            <span><span class="ga-cte-cen-chip ga-cte-cen-mixed">mixed</span></span>
+          </div>
+        </div>
+        <div class="ga-card-footnote">
+          <b>9 of 29 centromeres</b> are TR-dominant (≥ 50% tandem repeat) —
+          classic satellite-array centromeres (chr 1, 5, 9, 13, 15, 16, 20,
+          24, 26). The remainder are TE-dominant or mixed — typical for
+          teleosts where TE-derived centromere assembly is common. The real
+          quarTeT centromere BED supersedes this RefSeq-frame table; swap
+          in via the chromosome_map.json schema on page_chromosome_overview.
+        </div>
+      </div>
+
+      <!-- ── View 4: ALG collinearity heatmap ─────────────────────────── -->
+      <div class="ga-card">
+        <div class="ga-card-header">
+          <div class="ga-card-title">View 4 — ALG collinearity (Gar LG × catfish species)</div>
+          <div class="ga-card-status">anchor counts · OrthoFinder + wfmash</div>
+        </div>
+        <div class="ga-card-para ga-dim">
+          Per (Gar LG × species) cell: number of shared 1:1 orthologue anchors
+          on the species's syntenic chromosome with the most orthologs.
+          Darker = more anchors. First 14 of 28 Gar LGs × 12 catfish species
+          shown; full table is 28 × 17 in <code>alg_collinearity</code>.
+        </div>
+        <div class="ga-cte-alg-table"><div class="ga-cte-alg-head"><span>Gar LG</span><span title="C_gariepinus">C.gariepinus</span><span title="C_macrocephalus">C.macrocephalus</span><span title="C_fuscus">C.fuscus</span><span title="C_apus">C.apus</span><span title="I_punctatus">I.punctatus</span><span title="I_furcatus">I.furcatus</span><span title="P_hypophthalmus">P.hypophthalmus</span><span title="S_meridionalis">S.meridionalis</span><span title="A_melas">A.melas</span><span title="H_wyckioides">H.wyckioides</span><span title="T_fulvidraco">T.fulvidraco</span><span title="N_graeffei">N.graeffei</span></div>
+<div class="ga-cte-alg-row"><span>LG01</span><span class="ga-cte-alg-cell" data-d="4">43</span><span class="ga-cte-alg-cell" data-d="-1"></span><span class="ga-cte-alg-cell" data-d="4">42</span><span class="ga-cte-alg-cell" data-d="4">41</span><span class="ga-cte-alg-cell" data-d="4">42</span><span class="ga-cte-alg-cell" data-d="4">42</span><span class="ga-cte-alg-cell" data-d="4">42</span><span class="ga-cte-alg-cell" data-d="4">41</span><span class="ga-cte-alg-cell" data-d="4">42</span><span class="ga-cte-alg-cell" data-d="4">42</span><span class="ga-cte-alg-cell" data-d="4">42</span><span class="ga-cte-alg-cell" data-d="4">42</span></div>
+<div class="ga-cte-alg-row"><span>LG02</span><span class="ga-cte-alg-cell" data-d="5">57</span><span class="ga-cte-alg-cell" data-d="-1"></span><span class="ga-cte-alg-cell" data-d="5">57</span><span class="ga-cte-alg-cell" data-d="5">57</span><span class="ga-cte-alg-cell" data-d="4">41</span><span class="ga-cte-alg-cell" data-d="4">41</span><span class="ga-cte-alg-cell" data-d="4">41</span><span class="ga-cte-alg-cell" data-d="4">41</span><span class="ga-cte-alg-cell" data-d="4">41</span><span class="ga-cte-alg-cell" data-d="4">41</span><span class="ga-cte-alg-cell" data-d="4">41</span><span class="ga-cte-alg-cell" data-d="5">57</span></div>
+<div class="ga-cte-alg-row"><span>LG03</span><span class="ga-cte-alg-cell" data-d="5">49</span><span class="ga-cte-alg-cell" data-d="-1"></span><span class="ga-cte-alg-cell" data-d="4">39</span><span class="ga-cte-alg-cell" data-d="4">39</span><span class="ga-cte-alg-cell" data-d="4">39</span><span class="ga-cte-alg-cell" data-d="4">39</span><span class="ga-cte-alg-cell" data-d="4">39</span><span class="ga-cte-alg-cell" data-d="4">39</span><span class="ga-cte-alg-cell" data-d="4">38</span><span class="ga-cte-alg-cell" data-d="4">39</span><span class="ga-cte-alg-cell" data-d="4">39</span><span class="ga-cte-alg-cell" data-d="4">39</span></div>
+<div class="ga-cte-alg-row"><span>LG04</span><span class="ga-cte-alg-cell" data-d="4">39</span><span class="ga-cte-alg-cell" data-d="-1"></span><span class="ga-cte-alg-cell" data-d="4">39</span><span class="ga-cte-alg-cell" data-d="3">22</span><span class="ga-cte-alg-cell" data-d="4">39</span><span class="ga-cte-alg-cell" data-d="4">39</span><span class="ga-cte-alg-cell" data-d="4">39</span><span class="ga-cte-alg-cell" data-d="4">39</span><span class="ga-cte-alg-cell" data-d="4">39</span><span class="ga-cte-alg-cell" data-d="4">39</span><span class="ga-cte-alg-cell" data-d="4">39</span><span class="ga-cte-alg-cell" data-d="4">39</span></div>
+<div class="ga-cte-alg-row"><span>LG05</span><span class="ga-cte-alg-cell" data-d="4">37</span><span class="ga-cte-alg-cell" data-d="-1"></span><span class="ga-cte-alg-cell" data-d="4">37</span><span class="ga-cte-alg-cell" data-d="4">37</span><span class="ga-cte-alg-cell" data-d="4">37</span><span class="ga-cte-alg-cell" data-d="4">37</span><span class="ga-cte-alg-cell" data-d="4">37</span><span class="ga-cte-alg-cell" data-d="4">37</span><span class="ga-cte-alg-cell" data-d="4">37</span><span class="ga-cte-alg-cell" data-d="4">37</span><span class="ga-cte-alg-cell" data-d="4">37</span><span class="ga-cte-alg-cell" data-d="4">35</span></div>
+<div class="ga-cte-alg-row"><span>LG06</span><span class="ga-cte-alg-cell" data-d="4">37</span><span class="ga-cte-alg-cell" data-d="-1"></span><span class="ga-cte-alg-cell" data-d="4">37</span><span class="ga-cte-alg-cell" data-d="4">35</span><span class="ga-cte-alg-cell" data-d="4">31</span><span class="ga-cte-alg-cell" data-d="4">31</span><span class="ga-cte-alg-cell" data-d="4">37</span><span class="ga-cte-alg-cell" data-d="4">37</span><span class="ga-cte-alg-cell" data-d="3">29</span><span class="ga-cte-alg-cell" data-d="4">37</span><span class="ga-cte-alg-cell" data-d="4">37</span><span class="ga-cte-alg-cell" data-d="4">36</span></div>
+<div class="ga-cte-alg-row"><span>LG07</span><span class="ga-cte-alg-cell" data-d="5">49</span><span class="ga-cte-alg-cell" data-d="-1"></span><span class="ga-cte-alg-cell" data-d="5">49</span><span class="ga-cte-alg-cell" data-d="3">26</span><span class="ga-cte-alg-cell" data-d="5">49</span><span class="ga-cte-alg-cell" data-d="5">49</span><span class="ga-cte-alg-cell" data-d="5">49</span><span class="ga-cte-alg-cell" data-d="5">49</span><span class="ga-cte-alg-cell" data-d="4">32</span><span class="ga-cte-alg-cell" data-d="5">49</span><span class="ga-cte-alg-cell" data-d="5">49</span><span class="ga-cte-alg-cell" data-d="5">49</span></div>
+<div class="ga-cte-alg-row"><span>LG08</span><span class="ga-cte-alg-cell" data-d="5">53</span><span class="ga-cte-alg-cell" data-d="-1"></span><span class="ga-cte-alg-cell" data-d="5">53</span><span class="ga-cte-alg-cell" data-d="4">38</span><span class="ga-cte-alg-cell" data-d="5">53</span><span class="ga-cte-alg-cell" data-d="5">53</span><span class="ga-cte-alg-cell" data-d="5">53</span><span class="ga-cte-alg-cell" data-d="5">53</span><span class="ga-cte-alg-cell" data-d="5">53</span><span class="ga-cte-alg-cell" data-d="5">53</span><span class="ga-cte-alg-cell" data-d="5">53</span><span class="ga-cte-alg-cell" data-d="5">53</span></div>
+<div class="ga-cte-alg-row"><span>LG09</span><span class="ga-cte-alg-cell" data-d="5">50</span><span class="ga-cte-alg-cell" data-d="-1"></span><span class="ga-cte-alg-cell" data-d="5">50</span><span class="ga-cte-alg-cell" data-d="3">25</span><span class="ga-cte-alg-cell" data-d="5">50</span><span class="ga-cte-alg-cell" data-d="5">50</span><span class="ga-cte-alg-cell" data-d="5">50</span><span class="ga-cte-alg-cell" data-d="5">50</span><span class="ga-cte-alg-cell" data-d="4">30</span><span class="ga-cte-alg-cell" data-d="5">50</span><span class="ga-cte-alg-cell" data-d="5">50</span><span class="ga-cte-alg-cell" data-d="5">50</span></div>
+<div class="ga-cte-alg-row"><span>LG10</span><span class="ga-cte-alg-cell" data-d="5">57</span><span class="ga-cte-alg-cell" data-d="-1"></span><span class="ga-cte-alg-cell" data-d="5">57</span><span class="ga-cte-alg-cell" data-d="5">57</span><span class="ga-cte-alg-cell" data-d="5">57</span><span class="ga-cte-alg-cell" data-d="5">57</span><span class="ga-cte-alg-cell" data-d="5">57</span><span class="ga-cte-alg-cell" data-d="5">57</span><span class="ga-cte-alg-cell" data-d="3">25</span><span class="ga-cte-alg-cell" data-d="5">57</span><span class="ga-cte-alg-cell" data-d="5">57</span><span class="ga-cte-alg-cell" data-d="5">57</span></div>
+<div class="ga-cte-alg-row"><span>LG11</span><span class="ga-cte-alg-cell" data-d="4">35</span><span class="ga-cte-alg-cell" data-d="-1"></span><span class="ga-cte-alg-cell" data-d="4">35</span><span class="ga-cte-alg-cell" data-d="4">31</span><span class="ga-cte-alg-cell" data-d="4">35</span><span class="ga-cte-alg-cell" data-d="4">35</span><span class="ga-cte-alg-cell" data-d="4">35</span><span class="ga-cte-alg-cell" data-d="4">35</span><span class="ga-cte-alg-cell" data-d="4">35</span><span class="ga-cte-alg-cell" data-d="4">35</span><span class="ga-cte-alg-cell" data-d="4">35</span><span class="ga-cte-alg-cell" data-d="3">26</span></div>
+<div class="ga-cte-alg-row"><span>LG12</span><span class="ga-cte-alg-cell" data-d="3">18</span><span class="ga-cte-alg-cell" data-d="-1"></span><span class="ga-cte-alg-cell" data-d="3">18</span><span class="ga-cte-alg-cell" data-d="3">18</span><span class="ga-cte-alg-cell" data-d="3">18</span><span class="ga-cte-alg-cell" data-d="3">18</span><span class="ga-cte-alg-cell" data-d="3">18</span><span class="ga-cte-alg-cell" data-d="3">18</span><span class="ga-cte-alg-cell" data-d="3">18</span><span class="ga-cte-alg-cell" data-d="3">18</span><span class="ga-cte-alg-cell" data-d="3">18</span><span class="ga-cte-alg-cell" data-d="3">18</span></div>
+<div class="ga-cte-alg-row"><span>LG13</span><span class="ga-cte-alg-cell" data-d="5">53</span><span class="ga-cte-alg-cell" data-d="-1"></span><span class="ga-cte-alg-cell" data-d="5">53</span><span class="ga-cte-alg-cell" data-d="5">53</span><span class="ga-cte-alg-cell" data-d="5">53</span><span class="ga-cte-alg-cell" data-d="5">53</span><span class="ga-cte-alg-cell" data-d="5">53</span><span class="ga-cte-alg-cell" data-d="5">53</span><span class="ga-cte-alg-cell" data-d="5">53</span><span class="ga-cte-alg-cell" data-d="5">53</span><span class="ga-cte-alg-cell" data-d="5">53</span><span class="ga-cte-alg-cell" data-d="5">53</span></div>
+<div class="ga-cte-alg-row"><span>LG14</span><span class="ga-cte-alg-cell" data-d="4">37</span><span class="ga-cte-alg-cell" data-d="-1"></span><span class="ga-cte-alg-cell" data-d="4">37</span><span class="ga-cte-alg-cell" data-d="4">37</span><span class="ga-cte-alg-cell" data-d="4">37</span><span class="ga-cte-alg-cell" data-d="4">37</span><span class="ga-cte-alg-cell" data-d="4">37</span><span class="ga-cte-alg-cell" data-d="4">37</span><span class="ga-cte-alg-cell" data-d="4">37</span><span class="ga-cte-alg-cell" data-d="4">37</span><span class="ga-cte-alg-cell" data-d="4">37</span><span class="ga-cte-alg-cell" data-d="4">37</span></div>
+        </div>
+        <div class="ga-cte-alg-legend">
+          anchors per LG-species pair:
+          <span class="ga-cte-alg-cell" data-d="-1"></span> 0
+          <span class="ga-cte-alg-cell" data-d="1"></span> 1-4
+          <span class="ga-cte-alg-cell" data-d="2"></span> 5-14
+          <span class="ga-cte-alg-cell" data-d="3"></span> 15-29
+          <span class="ga-cte-alg-cell" data-d="4"></span> 30-44
+          <span class="ga-cte-alg-cell" data-d="5"></span> 45+
+        </div>
+      </div>
+
+      <!-- ── View 5: Breakpoint × TE cross — Chapter 5 key finding ────── -->
+      <div class="ga-card">
+        <div class="ga-card-header">
+          <div class="ga-card-title">View 5 — Breakpoint × TE cross (chapter 5 key finding)</div>
+          <div class="ga-card-status">377 Gar / 412 Mac breakpoints · TE12 upgrade</div>
+        </div>
+        <div class="ga-card-para ga-dim">
+          For each breakpoint (from <i>bpatlas</i> refined catalogue), look up
+          the overlapping intact TEs in a ±50 kb window. The youngest class
+          (highest identity-to-consensus) is the "candidate TE at this junction".
+        </div>
+        <div class="ga-cte-bp-grid">
+          <div class="ga-cte-bp-col">
+            <div class="ga-cte-bp-head">fClaHyb_Gar</div>
+            <div class="ga-hap-row"><span>total breakpoints</span>                 <span class="ga-num">377</span></div>
+            <div class="ga-hap-row"><span>with ≥ 1 TE in ±50 kb</span>              <span class="ga-num">202</span></div>
+            <div class="ga-hap-row"><span>base-resolved (vs binned)</span>          <span class="ga-num">64 / 377</span></div>
+            <div class="ga-hap-row ga-hap-sep"><span>by event type</span>           <span></span></div>
+            <div class="ga-hap-row"><span>inversion</span>                          <span class="ga-num">331</span></div>
+            <div class="ga-hap-row"><span>noncollinear</span>                       <span class="ga-num">39</span></div>
+            <div class="ga-hap-row"><span>inverted_translocation</span>             <span class="ga-num">4</span></div>
+            <div class="ga-hap-row"><span>translocation</span>                      <span class="ga-num">2</span></div>
+            <div class="ga-hap-row"><span>fission_or_fusion</span>                  <span class="ga-num">1</span></div>
+            <div class="ga-hap-row ga-hap-sep"><span>youngest TE class</span>       <span></span></div>
+            <div class="ga-hap-row"><span><b>DNA</b> (TIR)</span>                   <span class="ga-num ga-good">117</span></div>
+            <div class="ga-hap-row"><span>MITE</span>                               <span class="ga-num">48</span></div>
+            <div class="ga-hap-row"><span>LTR</span>                                <span class="ga-num">37</span></div>
+            <div class="ga-hap-row ga-hap-sep"><span>region</span>                  <span></span></div>
+            <div class="ga-hap-row"><span>paracentromeric</span>                    <span class="ga-num">304</span></div>
+            <div class="ga-hap-row"><span>pericentromeric</span>                    <span class="ga-num">27</span></div>
+          </div>
+          <div class="ga-cte-bp-col">
+            <div class="ga-cte-bp-head">fClaHyb_Mac</div>
+            <div class="ga-hap-row"><span>total breakpoints</span>                 <span class="ga-num">412</span></div>
+            <div class="ga-hap-row"><span>with ≥ 1 TE in ±50 kb</span>              <span class="ga-num">223</span></div>
+            <div class="ga-hap-row"><span>base-resolved (vs binned)</span>          <span class="ga-num">— / 412</span></div>
+            <div class="ga-hap-row ga-hap-sep"><span>by event type</span>           <span></span></div>
+            <div class="ga-hap-row"><span>inversion</span>                          <span class="ga-num">321</span></div>
+            <div class="ga-hap-row"><span>noncollinear</span>                       <span class="ga-num">58</span></div>
+            <div class="ga-hap-row"><span>fission_or_fusion</span>                  <span class="ga-num">6</span></div>
+            <div class="ga-hap-row"><span>translocation</span>                      <span class="ga-num">7</span></div>
+            <div class="ga-hap-row"><span>inverted_translocation</span>             <span class="ga-num">5</span></div>
+            <div class="ga-hap-row ga-hap-sep"><span>youngest TE class</span>       <span></span></div>
+            <div class="ga-hap-row"><span><b>DNA</b> (TIR)</span>                   <span class="ga-num ga-good">124</span></div>
+            <div class="ga-hap-row"><span>MITE</span>                               <span class="ga-num">65</span></div>
+            <div class="ga-hap-row"><span>LTR</span>                                <span class="ga-num">34</span></div>
+          </div>
+        </div>
+        <div class="ga-cte-bp-caveat">
+          <b>Important caveat:</b> only 64 / 377 Gar breakpoints are base-precise;
+          83 % sit on round 50 kb multiples (binned). Enrichment in ±50 kb
+          measures <b>neighbourhood density</b>, not what sits ON the junction.
+          The DNA-transposon "dominance" (117 / 202) is a <b>raw count</b>, not
+          enrichment. Whether it's real enrichment depends on the genome-wide
+          background — see the TE12 upgrade
+          (<code>breakpoint_TEclass_enrichment_&lt;F&gt;.tsv</code>): Fisher +
+          fold-enrichment with Bonferroni against intact-TE genome-wide
+          background. fold &gt; 1.5 and sig → real enrichment; fold ~ 1 →
+          abundance only.
+        </div>
+      </div>
+
+      <!-- ── Schema block + intact-bed reference + cross-refs ─────────── -->
+      <div class="ga-card">
+        <div class="ga-card-header">
+          <div class="ga-card-title">Import schema — <code>consolidated.json</code></div>
+          <div class="ga-card-status">JSON Schema · draft-2020-12 (envelope contract)</div>
+        </div>
+        <pre class="ga-schema-block"><code>{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "comparative_te_consolidated.schema.json",
+  "title": "Comparative TE landscape envelope — Chapter 5 deliverable",
+  "type": "object",
+  "required": ["cohort", "te_classes", "species_list",
+               "te_abundance", "species_metadata",
+               "centromeres_cgar", "alg_collinearity", "kimura_landscapes"],
+  "properties": {
+    "cohort":          { "type": "string" },
+    "reference":       { "type": "string" },
+    "te_classes":      { "type": "array", "items": { "type": "string" } },
+    "species_list":    { "type": "array", "items": { "type": "string" } },
+
+    "te_abundance": {
+      "type": "array",
+      "description": "Long-format: one row per (species, class, family).",
+      "items": {
+        "type": "object",
+        "required": ["Tree_tip_label", "Repeat_Class", "Repeat_Family",
+                     "TE_Count", "Masked_lenght_", "TE_abundance_genome_pct"],
+        "properties": {
+          "Tree_tip_label":         { "type": "string", "description": "Species tip on the phylogeny." },
+          "Genera":                 { "type": "string" },
+          "Species":                { "type": "string" },
+          "Repeat_Class":           { "enum": ["LTR","TIR","nonTIR","LINE","nonLTR","unclassified","repeat_fragment"] },
+          "Repeat_Class_SO_long":   { "type": "string" },
+          "Repeat_Family":          { "type": "string" },
+          "TE_Count":               { "type": "integer", "minimum": 0 },
+          "Masked_lenght_":         { "type": "integer", "minimum": 0 },
+          "TE_abundance_genome_pct":{ "type": "number" },
+          "Avg_TE_length_bp":       { "type": "number" }
+        }
+      }
+    },
+
+    "species_metadata": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["Accession", "Genera", "species", "Genome_len", "SampleID"],
+        "properties": {
+          "Accession":  { "type": "string" },
+          "Common_name":{ "type": "string" },
+          "Genera":     { "type": "string" },
+          "species":    { "type": "string" },
+          "Genome_len": { "type": "integer", "minimum": 0 },
+          "SampleID":   { "type": "string" },
+          "plot_title": { "type": "string" },
+          "plot_facet": { "type": "string" }
+        }
+      }
+    },
+
+    "centromeres_cgar": {
+      "type": "array",
+      "description": "quarTeT centromere coords on the C. gariepinus RefSeq frame.",
+      "items": {
+        "type": "object",
+        "required": ["Chr", "start_CE", "end_CE", "length_CE", "regionscore"],
+        "properties": {
+          "Chr":         { "type": "integer", "minimum": 1 },
+          "start_CE":    { "type": "integer", "minimum": 0 },
+          "end_CE":      { "type": "integer", "minimum": 0 },
+          "length_CE":   { "type": "integer", "minimum": 0 },
+          "TRlength":    { "type": "integer", "minimum": 0 },
+          "TRcoverage":  { "type": "string", "description": "Percentage string e.g. '99.55%'." },
+          "TElength":    { "type": "integer", "minimum": 0 },
+          "TEcoverage":  { "type": "string" },
+          "regionscore": { "type": "number", "minimum": 0, "maximum": 1 }
+        }
+      }
+    },
+
+    "alg_collinearity": {
+      "type": "array",
+      "description": "Per (Gar LG × species) ortholog-anchor count.",
+      "items": {
+        "type": "object",
+        "required": ["Gar_LG", "species", "ortholog_chrom", "anchors"],
+        "properties": {
+          "Gar_LG":            { "type": "string", "description": "e.g. C_gar_LG01" },
+          "species":           { "type": "string" },
+          "ortholog_chrom":    { "type": "string" },
+          "anchors":           { "type": "integer", "minimum": 0 },
+          "pct_of_LG":         { "type": "string" },
+          "secondary_chrom(anchors)": { "type": "string" }
+        }
+      }
+    },
+
+    "kimura_landscapes": {
+      "type": "object",
+      "description": "Per-species K2P landscape. Key = species id; value = { families, buckets }.",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["families", "buckets"],
+        "properties": {
+          "families": { "type": "array", "items": { "type": "string" }, "description": "Column order for `buckets[*].bp`." },
+          "buckets": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["div", "bp"],
+              "properties": {
+                "div": { "type": "integer", "minimum": 0, "description": "K2P divergence bucket (0..N)." },
+                "bp":  { "type": "array", "items": { "type": "integer", "minimum": 0 }, "description": "bp annotated per family at this div, indexed by `families`." }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}</code></pre>
+      </div>
+
+      <div class="ga-card">
+        <div class="ga-card-header">
+          <div class="ga-card-title">Intact-TE BED reference</div>
+          <div class="ga-card-status">2 files · 9 304 + ~6 500 elements</div>
+        </div>
+        <div class="ga-card-para ga-dim">
+          The two large EDTA-intact BED files (the per-element track for each
+          haplotype) are not inlined in the consolidated envelope. They feed
+          the breakpoint cross-analysis (TE12) and the page_chromosome_overview
+          density tracks. Format mirrors EDTA's intact GFF3 but in BED form —
+          1-based half-open chrom/start/end + name + classification + score.
+        </div>
+        <pre class="ga-schema-block"><code># fClaHyb_{Gar,Mac}_LG.fa.mod.EDTA.intact.bed   (EDTA v2.2 intact track)
+#
+# Tab-separated. 12 columns:
+#   col 1   chrom            (C_gar_LGNN | C_mac_LGNN)
+#   col 2   start_bp_0based  (BED half-open)
+#   col 3   end_bp_0based
+#   col 4   element_id       (TE_NNNNNNN)
+#   col 5   classification   (DNA/DTA | LTR/Gypsy | DNA/Helitron | ...)
+#   col 6   call_method      (structural | homology)
+#   col 7   identity         (0..1; age proxy — higher = younger)
+#   col 8-10 reserved        (typically '.')
+#   col 11  attributes       (TSD=...; TIR=...; motif=...; tsd=...)
+#   col 12  superfamily      (DNA | LTR | LINE | ...)
+#   col 13  family           (e.g. TIR/hAT, LTR/Gypsy)
+#
+# Example rows (Gar haplotype):
+C_gar_LG01  55381    58472    TE_00000379  DNA/DTA      structural  1       .  .  .  TSD=GTGTACTG_GTGTACTG_100.0;TIR=TAGTGATGGG_CCCATCACTA  TIR  TIR/hAT
+C_gar_LG01  101456   102749   TE_00003435  DNA/DTA      structural  0.9     .  .  .  TSD=TTGCCAGG_TTGCCAGG_100.0;TIR=CAGGGACGTG_CACGTGCCTG  TIR  TIR/hAT
+C_gar_LG01  468499   474976   TE_00002115  LTR/Gypsy    structural  0.9908  .  +  .  motif=TGGA;tsd=GTGTC                                   LTR  LTR/Gypsy
+C_gar_LG01  762250   769669   TE_00003970  LTR/Gypsy    structural  0.9979  .  +  .  motif=TGCA;tsd=CGGAG                                   LTR  LTR/Gypsy</code></pre>
+      </div>
+
+      <div class="ga-card">
+        <div class="ga-card-header">
+          <div class="ga-card-title">Cross-references</div>
+          <div class="ga-card-status">see also</div>
+        </div>
+        <div class="ga-card-para ga-dim">
+          • <b>page_repeats_te</b> — focal-haplotype TE landscape (Gar + Mac
+          only). This page is the cross-species view of the same data.<br>
+          • <b>page_ancestral_karyotype</b> — uses the same ALG collinearity
+          map (View 4) to reconstruct ancestral linkage groups.<br>
+          • <b>page_synteny</b> — pairwise-ribbon and Oxford-grid views over
+          the same orthologue anchors.<br>
+          • <b>page_chromosome_overview</b> — Cgar centromere coords (View 3)
+          should be swapped onto the chromosome_map.json from the quarTeT
+          output when it lands.<br>
+          • <b>Inversion Atlas page16</b> — receives the breakpoint × TE
+          enrichment badge from View 5.<br>
+          • <b>Chapter 5 module:</b> <code>fixtures/chapter5/</code>; the R
+          script set in <code>chapter5_TE_module.tar.gz</code> regenerates
+          every figure here on a results refresh.
+        </div>
+      </div>
+  </div>
+</div>
