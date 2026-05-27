@@ -79,6 +79,64 @@
         </div>
       </div>
 
+      <div class="ga-card" data-ga-card="pairwise-ribbon">
+        <div class="ga-card-header">
+          <div class="ga-card-title">View 1 — Pairwise synteny ribbon</div>
+          <div class="ga-card-status" data-ga-ribbon-source>sample data</div>
+        </div>
+        <div class="ga-card-para ga-dim">
+          Two horizontal length-scaled chromosome strips (query above, target
+          below) connected by polygons over <b>wfmash synteny blocks</b>.
+          Polygons colour-coded by orientation:
+          <b class="ga-ribbon-fwd">same-strand</b> blocks vs
+          <b class="ga-ribbon-rev">inverted</b> blocks. Polygons that
+          cross between target chromosomes indicate translocations or
+          fusion/fission events. Reads the schema-v2 shape produced upstream
+          by the cross-species pipeline (<code>wfmash_synteny</code>).
+        </div>
+
+        <div class="ga-oxford-toolbar" role="toolbar" aria-label="Pairwise ribbon controls">
+          <span class="ga-oxford-tool-label">min block</span>
+          <select class="ga-oxford-select" data-ga-ribbon-minblock>
+            <option value="0">all</option>
+            <option value="100000">≥ 100 kb</option>
+            <option value="250000" selected>≥ 250 kb</option>
+            <option value="500000">≥ 500 kb</option>
+            <option value="1000000">≥ 1 Mb</option>
+          </select>
+          <span class="ga-oxford-tool-spacer"></span>
+          <label class="ga-oxford-toggle">
+            <input type="checkbox" data-ga-ribbon-strand="+" checked>
+            <span class="ga-ribbon-fwd">same-strand</span>
+          </label>
+          <label class="ga-oxford-toggle">
+            <input type="checkbox" data-ga-ribbon-strand="-" checked>
+            <span class="ga-ribbon-rev">inverted</span>
+          </label>
+        </div>
+
+        <div class="ga-ribbon-host" data-ga-ribbon
+             role="img" aria-label="Pairwise wfmash synteny ribbon between two species.">
+          <svg class="ga-ribbon-svg"
+               viewBox="0 0 1000 300"
+               preserveAspectRatio="xMidYMid meet"
+               xmlns="http://www.w3.org/2000/svg"></svg>
+          <div class="ga-oxford-tooltip" data-ga-ribbon-tip role="tooltip" hidden></div>
+        </div>
+
+        <div class="ga-card-footnote">
+          Data contract: <code>synteny_blocks.json</code> (schema v2,
+          <code>wfmash_synteny</code>) — <code>{ species_query, species_target,
+          chrom_lengths_query, chrom_lengths_target, synteny_blocks: [{ gar_chr,
+          gar_start, gar_end, mac_chr, mac_start, mac_end, strand,
+          block_size_bp, mapping_quality }] }</code>.
+          The renderer ships with a real 42-block Cgar↔Cmac dataset
+          (focal LG15 / LG23 / LG27 / LG28 vs LG01 / LG06) sourced from
+          <code>results_genome/04_synteny/</code> of the cross-species
+          pipeline.
+        </div>
+      </div>
+
       <div class="ga-card" data-ga-card="oxford-grid">
         <div class="ga-card-header">
           <div class="ga-card-title">View 3 — MacrosyntR Oxford macro-synteny grid</div>

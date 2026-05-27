@@ -69,9 +69,10 @@
       "tier": "cold",
       "source": "file",
       "path": "data/comparative/synteny_blocks.json",
-      "_status": "not_loaded",
-      "_feeds": "collinearity vs related Siluriformes (phase D). Ancestral-karyotype reconstruction was promoted out of the Genome Atlas to the cross-species breakpoints atlas (Chapter 5) — this layer no longer feeds an ancestral-karyotype view here.",
-      "_source_pipeline": "Cactus pairwise"
+      "_status": "shipped",
+      "_schema": "wfmash_synteny v2",
+      "_feeds": "page9 view 1 (pairwise ribbon). Real 42-block focal Cgar↔Cmac dataset (LG15/LG23/LG27/LG28 vs LG01/LG06) lives at the canonical data/comparative/ path. Ancestral-karyotype reconstruction lives in the cross-species breakpoints atlas (Chapter 5), not here.",
+      "_source_pipeline": "wfmash (cross-species pipeline, results_genome/04_synteny/)"
     },
 
     "macrosynteny_orthologs": {

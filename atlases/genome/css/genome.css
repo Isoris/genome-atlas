@@ -1784,6 +1784,51 @@ html[data-theme="light"] .ga-pipeline-stage:hover .ga-pipeline-stage-box {
   stroke: #c2410c;
 }
 
+/* --------------------------------------------------------------------- */
+/* page9 View 1 — Pairwise synteny ribbon (wfmash synteny_blocks).       */
+/* --------------------------------------------------------------------- */
+
+.ga-ribbon-host {
+  position: relative;
+  margin: 4px 0 6px 0;
+  padding: 6px 8px 8px 8px;
+  background: var(--panel-3);
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+}
+.ga-ribbon-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  font-family: var(--mono);
+  user-select: none;
+}
+.ga-ribbon-chrom {
+  fill: var(--panel-2);
+  stroke: var(--ink-dim);
+  stroke-width: 0.5;
+}
+.ga-ribbon-chrom.is-query  { stroke: var(--ink-dim); }
+.ga-ribbon-chrom.is-target { stroke: var(--ink-dim); }
+.ga-ribbon-chrom-label {
+  font-size: 9.5px;
+  fill: var(--ink);
+  letter-spacing: 0.02em;
+}
+.ga-ribbon-poly { transition: fill-opacity 80ms ease; }
+.ga-ribbon-poly:hover { fill-opacity: 0.65; stroke-opacity: 1; }
+.ga-ribbon-species-label {
+  font-size: 10.5px;
+  fill: var(--ink);
+  font-style: italic;
+  letter-spacing: 0.02em;
+}
+.ga-ribbon-species-label.is-query  { fill: var(--ink); }
+.ga-ribbon-species-label.is-target { fill: var(--ink); }
+.ga-ribbon-status { font-size: 9.5px; fill: var(--ink-dim); letter-spacing: 0.02em; }
+.ga-ribbon-fwd { color: #2E6FB0; font-weight: 600; }
+.ga-ribbon-rev { color: #C0392B; font-weight: 600; }
+
 /* --- JSON-schema codeblock ------------------------------------------- */
 .ga-schema-block {
   margin: 4px 0;

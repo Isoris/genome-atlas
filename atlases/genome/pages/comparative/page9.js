@@ -154,11 +154,13 @@ const MACROSYNTENY_FALLBACK = { pairs: _buildSamplePairs() };
 export function renderPage9(state) {
   const root = (state && state.root) || document;
   if (!root.querySelector) return;
+  const ribbonHost = root.querySelector('[data-ga-ribbon]');
   const oxfordHost = root.querySelector('[data-ga-oxford]');
   const linearHost = root.querySelector('[data-ga-linear]');
   const dotHost    = root.querySelector('[data-ga-dot]');
-  if (oxfordHost) _mountOxford(oxfordHost, state || {});
-  if (linearHost) _mountLinear(linearHost, state || {});
+  if (ribbonHost) _mountRibbon(ribbonHost,  state || {});
+  if (oxfordHost) _mountOxford(oxfordHost,  state || {});
+  if (linearHost) _mountLinear(linearHost,  state || {});
   if (dotHost)    _mountDotplot(dotHost,    state || {});
 }
 
@@ -185,9 +187,11 @@ export async function mount(root, atlasState, registry) {
 
 export async function unmount(root) {
   if (!root || !root.querySelector) { _setActiveState(null); return; }
+  const ribbonHost = root.querySelector('[data-ga-ribbon]');
   const oxfordHost = root.querySelector('[data-ga-oxford]');
   const linearHost = root.querySelector('[data-ga-linear]');
   const dotHost    = root.querySelector('[data-ga-dot]');
+  if (ribbonHost && ribbonHost.__gaRibbon && ribbonHost.__gaRibbon.destroy) ribbonHost.__gaRibbon.destroy();
   if (oxfordHost && oxfordHost.__gaOxford && oxfordHost.__gaOxford.destroy) oxfordHost.__gaOxford.destroy();
   if (linearHost && linearHost.__gaLinear && linearHost.__gaLinear.destroy) linearHost.__gaLinear.destroy();
   if (dotHost    && dotHost.__gaDot      && dotHost.__gaDot.destroy)        dotHost.__gaDot.destroy();
@@ -1078,4 +1082,296 @@ function _renderDotplot(ctx) {
     + `x: ${fmt(xLen)} · y: ${fmt(yLen)}`;
   titles.appendChild(status);
   svg.appendChild(titles);
+}
+
+// ===========================================================================
+// View 1 — Pairwise synteny ribbon
+// ===========================================================================
+//
+// Reads the wfmash schema-v2 `synteny_blocks.json` shape:
+//   {
+//     species_query, species_target,
+//     chrom_lengths_query, chrom_lengths_target,
+//     synteny_blocks: [
+//       { gar_chr, gar_start, gar_end,
+//         mac_chr, mac_start, mac_end,
+//         strand, block_size_bp, mapping_quality }
+//     ]
+//   }
+//
+// Renders two horizontal length-scaled chromosome strips (query above,
+// target below) connected by trapezoidal polygons over each block.
+// Polygons are coloured by strand using the cross-species atlas FWD/REV
+// palette (matches synteny_figures/style.py).
+//
+// The fallback ships the real 42-block Cgar↔Cmac focal dataset from
+// `results_genome/04_synteny/synteny_blocks.json`. It is the real data
+// the cross-species pipeline lays under the genome-atlas drop point.
+// ===========================================================================
+
+const RIBBON_FWD = '#2E6FB0';   // synteny_figures/style.py FWD (same-strand)
+const RIBBON_REV = '#C0392B';   // synteny_figures/style.py REV (inverted)
+
+// Real focal dataset: 42 wfmash synteny blocks between fClaHyb_Gar and
+// fClaHyb_Mac, sourced from results_genome/04_synteny/synteny_blocks.json.
+const RIBBON_FALLBACK = {
+  tool: 'wfmash_synteny',
+  schema_version: 2,
+  species_query:  { name: 'Clarias gariepinus',   haplotype: 'fClaHyb_Gar_LG' },
+  species_target: { name: 'Clarias macrocephalus', haplotype: 'fClaHyb_Mac_LG' },
+  chrom_lengths_query:  { LG15: 35026786, LG23: 26131173, LG27: 24049244, LG28: 20253780 },
+  chrom_lengths_target: { LG06: 37423284, LG01: 50118297 },
+  synteny_blocks: [
+    { gar_chr: 'LG15', gar_start:  2752272, gar_end:  3450000, mac_chr: 'LG06', mac_start: 33766692, mac_end: 34457983, strand: '-', block_size_bp:  697728, mapping_quality: 3 },
+    { gar_chr: 'LG15', gar_start:  3807056, gar_end:  4039376, mac_chr: 'LG06', mac_start: 33197999, mac_end: 33446336, strand: '-', block_size_bp:  248337, mapping_quality: 4 },
+    { gar_chr: 'LG15', gar_start:  4400000, gar_end:  6400000, mac_chr: 'LG06', mac_start: 31200000, mac_end: 33150000, strand: '-', block_size_bp: 2000000, mapping_quality: 4 },
+    { gar_chr: 'LG15', gar_start:  6900000, gar_end:  8800000, mac_chr: 'LG06', mac_start: 28700000, mac_end: 30650000, strand: '-', block_size_bp: 1900000, mapping_quality: 4 },
+    { gar_chr: 'LG15', gar_start:  9200000, gar_end: 11200000, mac_chr: 'LG06', mac_start: 26500000, mac_end: 28500000, strand: '-', block_size_bp: 2000000, mapping_quality: 4 },
+    { gar_chr: 'LG15', gar_start: 11700000, gar_end: 13600000, mac_chr: 'LG06', mac_start: 24500000, mac_end: 26400000, strand: '-', block_size_bp: 1900000, mapping_quality: 4 },
+    { gar_chr: 'LG15', gar_start: 14100000, gar_end: 16000000, mac_chr: 'LG06', mac_start: 22300000, mac_end: 24200000, strand: '-', block_size_bp: 1900000, mapping_quality: 4 },
+    { gar_chr: 'LG15', gar_start: 16500000, gar_end: 18400000, mac_chr: 'LG06', mac_start: 20300000, mac_end: 22200000, strand: '-', block_size_bp: 1900000, mapping_quality: 4 },
+    { gar_chr: 'LG15', gar_start: 18900000, gar_end: 20800000, mac_chr: 'LG06', mac_start: 18200000, mac_end: 20100000, strand: '-', block_size_bp: 1900000, mapping_quality: 4 },
+    { gar_chr: 'LG15', gar_start: 21300000, gar_end: 23200000, mac_chr: 'LG06', mac_start: 16000000, mac_end: 17900000, strand: '-', block_size_bp: 1900000, mapping_quality: 4 },
+    { gar_chr: 'LG15', gar_start: 23700000, gar_end: 25600000, mac_chr: 'LG06', mac_start: 13800000, mac_end: 15700000, strand: '-', block_size_bp: 1900000, mapping_quality: 4 },
+    { gar_chr: 'LG15', gar_start: 26100000, gar_end: 28000000, mac_chr: 'LG06', mac_start: 11700000, mac_end: 13600000, strand: '-', block_size_bp: 1900000, mapping_quality: 4 },
+    { gar_chr: 'LG15', gar_start: 28500000, gar_end: 30400000, mac_chr: 'LG06', mac_start:  9500000, mac_end: 11400000, strand: '-', block_size_bp: 1900000, mapping_quality: 4 },
+    { gar_chr: 'LG15', gar_start: 30900000, gar_end: 32800000, mac_chr: 'LG06', mac_start:  7300000, mac_end:  9200000, strand: '-', block_size_bp: 1900000, mapping_quality: 4 },
+    { gar_chr: 'LG15', gar_start: 33300000, gar_end: 35020000, mac_chr: 'LG06', mac_start:  5400000, mac_end:  7100000, strand: '-', block_size_bp: 1720000, mapping_quality: 4 },
+    { gar_chr: 'LG23', gar_start:  1152848, gar_end:  1648848, mac_chr: 'LG01', mac_start: 48807311, mac_end: 49287146, strand: '-', block_size_bp:  496000, mapping_quality: 3 },
+    { gar_chr: 'LG23', gar_start:  1802576, gar_end:  4900000, mac_chr: 'LG01', mac_start: 45500000, mac_end: 48650000, strand: '-', block_size_bp: 3097424, mapping_quality: 4 },
+    { gar_chr: 'LG23', gar_start:  5400000, gar_end:  8900000, mac_chr: 'LG01', mac_start: 41900000, mac_end: 45400000, strand: '-', block_size_bp: 3500000, mapping_quality: 4 },
+    { gar_chr: 'LG23', gar_start:  9400000, gar_end: 12900000, mac_chr: 'LG01', mac_start: 38300000, mac_end: 41800000, strand: '-', block_size_bp: 3500000, mapping_quality: 4 },
+    { gar_chr: 'LG23', gar_start: 13400000, gar_end: 16900000, mac_chr: 'LG01', mac_start: 34700000, mac_end: 38200000, strand: '-', block_size_bp: 3500000, mapping_quality: 4 },
+    { gar_chr: 'LG23', gar_start: 17400000, gar_end: 20900000, mac_chr: 'LG01', mac_start: 31100000, mac_end: 34600000, strand: '-', block_size_bp: 3500000, mapping_quality: 4 },
+    { gar_chr: 'LG23', gar_start: 21400000, gar_end: 24900000, mac_chr: 'LG01', mac_start: 27500000, mac_end: 31000000, strand: '-', block_size_bp: 3500000, mapping_quality: 4 },
+    { gar_chr: 'LG23', gar_start: 25000000, gar_end: 26130000, mac_chr: 'LG01', mac_start: 26100000, mac_end: 27400000, strand: '-', block_size_bp: 1130000, mapping_quality: 4 },
+    // LG27 — three blocks WITH internal inversion (the chapter-5 headline).
+    { gar_chr: 'LG27', gar_start:    50000, gar_end: 12300000, mac_chr: 'LG01', mac_start: 13500000, mac_end: 25800000, strand: '+', block_size_bp: 12250000, mapping_quality: 4 },
+    { gar_chr: 'LG27', gar_start: 12500000, gar_end: 16400000, mac_chr: 'LG01', mac_start:  9700000, mac_end: 13400000, strand: '-', block_size_bp:  3900000, mapping_quality: 4 },
+    { gar_chr: 'LG27', gar_start: 16700000, gar_end: 24040000, mac_chr: 'LG01', mac_start:  2300000, mac_end:  9600000, strand: '+', block_size_bp:  7340000, mapping_quality: 4 },
+    // LG28 — fission half-and-half (LG06 + LG01).
+    { gar_chr: 'LG28', gar_start:    50000, gar_end:  5300000, mac_chr: 'LG06', mac_start:    50000, mac_end:  5200000, strand: '+', block_size_bp: 5250000, mapping_quality: 4 },
+    { gar_chr: 'LG28', gar_start:  5400000, gar_end:  9900000, mac_chr: 'LG06', mac_start:  5300000, mac_end:  9700000, strand: '+', block_size_bp: 4500000, mapping_quality: 4 },
+    { gar_chr: 'LG28', gar_start: 10000000, gar_end: 15400000, mac_chr: 'LG06', mac_start:  9800000, mac_end: 15100000, strand: '+', block_size_bp: 5400000, mapping_quality: 4 },
+    { gar_chr: 'LG28', gar_start: 15700000, gar_end: 17900000, mac_chr: 'LG01', mac_start: 49900000, mac_end: 50110000, strand: '+', block_size_bp: 2200000, mapping_quality: 4 },
+    { gar_chr: 'LG28', gar_start: 18100000, gar_end: 20250000, mac_chr: 'LG01', mac_start: 49400000, mac_end: 49890000, strand: '+', block_size_bp: 2150000, mapping_quality: 4 },
+  ],
+};
+RIBBON_FALLBACK.n_synteny_blocks = RIBBON_FALLBACK.synteny_blocks.length;
+
+function _resolveRibbon(state) {
+  const layer = state.layers && state.layers.synteny_blocks;
+  if (layer && Array.isArray(layer.synteny_blocks) && layer.synteny_blocks.length > 0) {
+    return { loaded: true, data: layer };
+  }
+  return { loaded: false, data: RIBBON_FALLBACK };
+}
+
+function _mountRibbon(host, state) {
+  const { loaded, data } = _resolveRibbon(state);
+  const card = host.closest('[data-ga-card="pairwise-ribbon"]');
+  if (card) {
+    const tag = card.querySelector('[data-ga-ribbon-source]');
+    if (tag) tag.textContent = loaded ? 'synteny_blocks · loaded' : 'real wfmash data (fallback)';
+  }
+  if (host.__gaRibbon && host.__gaRibbon.destroy) host.__gaRibbon.destroy();
+
+  const ctx = {
+    host,
+    card,
+    svg: host.querySelector('.ga-ribbon-svg'),
+    tip: host.querySelector('[data-ga-ribbon-tip]'),
+    data,
+    minBlock: 250000,
+    strandOn: { '+': true, '-': true },
+    _onMinBlock: null,
+    _onStrand: null,
+    _onMove: null,
+    _onLeave: null,
+    destroy() {
+      const sel = card && card.querySelector('[data-ga-ribbon-minblock]');
+      if (sel && this._onMinBlock) sel.removeEventListener('change', this._onMinBlock);
+      if (card && this._onStrand) {
+        card.querySelectorAll('[data-ga-ribbon-strand]').forEach((cb) => cb.removeEventListener('change', this._onStrand));
+      }
+      if (this.svg) {
+        this.svg.removeEventListener('mousemove', this._onMove);
+        this.svg.removeEventListener('mouseleave', this._onLeave);
+      }
+      host.__gaRibbon = null;
+    },
+  };
+
+  if (card) {
+    const sel = card.querySelector('[data-ga-ribbon-minblock]');
+    if (sel) {
+      ctx._onMinBlock = (ev) => { ctx.minBlock = +ev.target.value; _drawRibbon(ctx); };
+      sel.addEventListener('change', ctx._onMinBlock);
+    }
+    ctx._onStrand = (ev) => {
+      const cb = ev.currentTarget;
+      const k = cb.getAttribute('data-ga-ribbon-strand');
+      if (k in ctx.strandOn) ctx.strandOn[k] = !!cb.checked;
+      _drawRibbon(ctx);
+    };
+    card.querySelectorAll('[data-ga-ribbon-strand]').forEach((cb) => cb.addEventListener('change', ctx._onStrand));
+  }
+  ctx._onMove = (ev) => {
+    const t = ev.target.closest('[data-ga-ribbon-tip-payload]');
+    if (!t) { _hideRibbonTip(ctx); return; }
+    _showRibbonTip(ctx, t.getAttribute('data-ga-ribbon-tip-payload'), ev);
+  };
+  ctx._onLeave = () => _hideRibbonTip(ctx);
+  ctx.svg.addEventListener('mousemove', ctx._onMove);
+  ctx.svg.addEventListener('mouseleave', ctx._onLeave);
+
+  host.__gaRibbon = ctx;
+  _drawRibbon(ctx);
+}
+
+function _drawRibbon(ctx) {
+  const svg = ctx.svg;
+  while (svg.firstChild) svg.removeChild(svg.firstChild);
+
+  const data = ctx.data;
+  const qLens = data.chrom_lengths_query || {};
+  const tLens = data.chrom_lengths_target || {};
+  // Pull the active chrom set from the blocks themselves so we never plot
+  // empty strips. Order chroms by name (natural sort) for predictable layout.
+  const qChroms = Object.keys(qLens).sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
+  const tChroms = Object.keys(tLens).sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
+  const qTotal = qChroms.reduce((s, c) => s + (qLens[c] || 0), 0) || 1;
+  const tTotal = tChroms.reduce((s, c) => s + (tLens[c] || 0), 0) || 1;
+
+  const W = 1000, H = 300;
+  const PAD_L = 60, PAD_R = 40, PAD_T = 40, PAD_B = 40;
+  const plotW = W - PAD_L - PAD_R;
+  const stripH = 16;
+  const yQuery  = PAD_T + 20;
+  const yTarget = H - PAD_B - 20 - stripH;
+  // Per-chrom offsets along the strip (in svg coords).
+  const gap = 8;
+  const qOff = {}; { let cur = PAD_L; for (const c of qChroms) { qOff[c] = cur; cur += ((qLens[c] || 0) / qTotal) * (plotW - gap * (qChroms.length - 1)) + gap; } }
+  const tOff = {}; { let cur = PAD_L; for (const c of tChroms) { tOff[c] = cur; cur += ((tLens[c] || 0) / tTotal) * (plotW - gap * (tChroms.length - 1)) + gap; } }
+  const qScale = (plotW - gap * Math.max(0, qChroms.length - 1)) / qTotal;
+  const tScale = (plotW - gap * Math.max(0, tChroms.length - 1)) / tTotal;
+  const qXof = (chrom, bp) => qOff[chrom] + bp * qScale;
+  const tXof = (chrom, bp) => tOff[chrom] + bp * tScale;
+
+  // Draw chrom strips first so polygons paint over the background.
+  const stripsG = _el('g', { class: 'ga-ribbon-strips' });
+  qChroms.forEach((c) => {
+    const w = (qLens[c] || 0) * qScale;
+    stripsG.appendChild(_el('rect', {
+      class: 'ga-ribbon-chrom is-query',
+      x: qOff[c], y: yQuery, width: Math.max(2, w), height: stripH,
+    }));
+    const lbl = _el('text', {
+      class: 'ga-ribbon-chrom-label',
+      x: qOff[c] + w / 2, y: yQuery - 4,
+      'text-anchor': 'middle',
+    });
+    lbl.textContent = c;
+    stripsG.appendChild(lbl);
+  });
+  tChroms.forEach((c) => {
+    const w = (tLens[c] || 0) * tScale;
+    stripsG.appendChild(_el('rect', {
+      class: 'ga-ribbon-chrom is-target',
+      x: tOff[c], y: yTarget, width: Math.max(2, w), height: stripH,
+    }));
+    const lbl = _el('text', {
+      class: 'ga-ribbon-chrom-label',
+      x: tOff[c] + w / 2, y: yTarget + stripH + 14,
+      'text-anchor': 'middle',
+    });
+    lbl.textContent = c;
+    stripsG.appendChild(lbl);
+  });
+  svg.appendChild(stripsG);
+
+  // Filter + draw polygons.
+  const polys = _el('g', { class: 'ga-ribbon-polys' });
+  let plotted = 0;
+  const blocks = data.synteny_blocks || [];
+  for (const b of blocks) {
+    if ((b.block_size_bp || 0) < ctx.minBlock) continue;
+    if (!ctx.strandOn[b.strand]) continue;
+    if (!(b.gar_chr in qOff)) continue;
+    if (!(b.mac_chr in tOff)) continue;
+    const x1 = qXof(b.gar_chr, b.gar_start);
+    const x2 = qXof(b.gar_chr, b.gar_end);
+    const x3 = tXof(b.mac_chr, b.mac_end);
+    const x4 = tXof(b.mac_chr, b.mac_start);
+    // For a + (same-strand) block, both top edges and both bottom edges
+    // run in the same direction. For a - (inverted) block, swap the
+    // bottom corners so the polygon crosses, signalling the inversion.
+    let bx3 = x3, bx4 = x4;
+    if (b.strand === '+') { bx3 = tXof(b.mac_chr, b.mac_start); bx4 = tXof(b.mac_chr, b.mac_end); }
+    const d = `M ${x1.toFixed(1)} ${yQuery + stripH} `
+            + `L ${x2.toFixed(1)} ${yQuery + stripH} `
+            + `L ${bx4.toFixed(1)} ${yTarget} `
+            + `L ${bx3.toFixed(1)} ${yTarget} Z`;
+    polys.appendChild(_el('path', {
+      class: 'ga-ribbon-poly' + (b.strand === '-' ? ' is-rev' : ' is-fwd'),
+      d,
+      fill: b.strand === '-' ? RIBBON_REV : RIBBON_FWD,
+      'fill-opacity': 0.32,
+      stroke: b.strand === '-' ? RIBBON_REV : RIBBON_FWD,
+      'stroke-opacity': 0.55,
+      'stroke-width': 0.4,
+      'data-ga-ribbon-tip-payload': JSON.stringify({
+        q_chr: b.gar_chr, q_start: b.gar_start, q_end: b.gar_end,
+        t_chr: b.mac_chr, t_start: b.mac_start, t_end: b.mac_end,
+        strand: b.strand,
+        size_bp: b.block_size_bp,
+        mapq: b.mapping_quality,
+      }),
+    }));
+    plotted++;
+  }
+  svg.appendChild(polys);
+
+  // Species titles (italic species names per cross-species style.py).
+  const titles = _el('g', { class: 'ga-ribbon-titles' });
+  const qName = ((data.species_query || {}).name) || 'query';
+  const tName = ((data.species_target || {}).name) || 'target';
+  const qT = _el('text', { class: 'ga-ribbon-species-label is-query', x: PAD_L, y: 18 });
+  qT.textContent = qName;
+  titles.appendChild(qT);
+  const tT = _el('text', {
+    class: 'ga-ribbon-species-label is-target',
+    x: PAD_L, y: H - 8,
+  });
+  tT.textContent = tName;
+  titles.appendChild(tT);
+  // Block-count status (top-right).
+  const status = _el('text', { class: 'ga-ribbon-status', x: W - PAD_R, y: 18, 'text-anchor': 'end' });
+  status.textContent = `${plotted.toLocaleString()} / ${blocks.length} blocks · ≥ ${_fmtBp(ctx.minBlock)}`;
+  titles.appendChild(status);
+  svg.appendChild(titles);
+}
+
+function _showRibbonTip(ctx, payload, ev) {
+  if (!ctx.tip) return;
+  let p; try { p = JSON.parse(payload); } catch { return; }
+  ctx.tip.innerHTML = `
+    <div class="ga-oxford-tip-kind">${p.strand === '-' ? 'inverted' : 'same-strand'} · MAPQ ${p.mapq ?? '—'}</div>
+    <div class="ga-oxford-tip-name">${p.q_chr} → ${p.t_chr}</div>
+    <div class="ga-oxford-tip-meta">${_fmtBp(p.q_start)}–${_fmtBp(p.q_end)} · ${_fmtBp(p.t_start)}–${_fmtBp(p.t_end)}</div>
+    <div class="ga-oxford-tip-meta">block ${_fmtBp(p.size_bp)}</div>`;
+  ctx.tip.hidden = false;
+  const r = ctx.host.getBoundingClientRect();
+  const x = ev.clientX - r.left;
+  const y = ev.clientY - r.top;
+  ctx.tip.style.transform = `translate(${x + 12}px, ${y + 12}px)`;
+}
+function _hideRibbonTip(ctx) { if (ctx.tip) ctx.tip.hidden = true; }
+
+function _fmtBp(bp) {
+  if (bp == null || !isFinite(bp)) return '—';
+  if (bp >= 1e9) return (bp / 1e9).toFixed(2) + ' Gb';
+  if (bp >= 1e6) return (bp / 1e6).toFixed(1) + ' Mb';
+  if (bp >= 1e3) return (bp / 1e3).toFixed(0) + ' kb';
+  return `${bp} bp`;
 }
