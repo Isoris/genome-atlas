@@ -18,6 +18,7 @@
 // =============================================================================
 
 import { _pageState, _setActiveState } from './page2/_state.js';
+import { installRouter as _installCrossAtlasRouter, onActiveChrom as _onActiveChrom, getActiveChrom as _getActiveChrom } from '../../shared/cross-atlas.js';
 
 // ---------------------------------------------------------------------------
 // Sample dataset (fallback). Deterministic per-chrom values.
@@ -116,9 +117,30 @@ export async function mount(root, atlasState, registry) {
   const legacyState = _buildLegacyState(atlasState);
   legacyState.root = root || document;
   _setActiveState(legacyState);
+  _installCrossAtlasRouter();
   try { renderPage2(legacyState); }
   catch (e) { console.warn('page2.mount: renderPage2 threw —', e); }
+  _applyActiveChromToQc(root, _getActiveChrom());
+  if (root && !root.__gaPage2ChromSub) {
+    root.__gaPage2ChromSub = _onActiveChrom(({ chrom, hap }) => {
+      _applyActiveChromToQc(root, chrom ? { chrom, hap } : null);
+    });
+  }
   if (atlasState.genome) atlasState.genome._page2State = legacyState;
+}
+
+function _applyActiveChromToQc(root, active) {
+  if (!root || !root.querySelectorAll) return;
+  const id = active && active.chrom;
+  let target = null;
+  root.querySelectorAll('.ga-qc-tr').forEach((tr) => {
+    const match = id != null && tr.getAttribute('data-ga-qc-chrom') === id;
+    tr.classList.toggle('is-active', match);
+    if (match) target = tr;
+  });
+  if (target && target.scrollIntoView) {
+    target.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
 }
 
 export async function unmount(root) {

@@ -37,7 +37,7 @@
 
 import { _pageState, _setActiveState } from './page5/_state.js';
 import { CANDIDATES_FALLBACK, resolveCandidates as _resolveSharedCandidates, isFallback as _isFallbackCandidates } from '../../shared/candidates.js';
-import { installRouter as _installCrossAtlasRouter, onActiveCandidate as _onActiveCandidate, getActiveCandidate as _getActiveCandidate, setActiveCandidate as _setActiveCandidate } from '../../shared/cross-atlas.js';
+import { installRouter as _installCrossAtlasRouter, onActiveCandidate as _onActiveCandidate, getActiveCandidate as _getActiveCandidate, setActiveCandidate as _setActiveCandidate, onActiveChrom as _onActiveChrom, getActiveChrom as _getActiveChrom } from '../../shared/cross-atlas.js';
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 const IMPACT_COLORS = {
@@ -236,7 +236,25 @@ export async function mount(root, atlasState, registry) {
       _applyActiveCandidateHighlight(root, candidate);
     });
   }
+  // Chrom-driven auto-nav: when any sibling page reports a new active
+  // chrom (or a candidate that carries one), drive View 2's dropdown to
+  // match. Apply once on mount so the initial state is in sync.
+  _applyActiveChromToTrack(root, _getActiveChrom());
+  if (root && !root.__gaPage5ChromSub) {
+    root.__gaPage5ChromSub = _onActiveChrom(({ chrom }) => {
+      _applyActiveChromToTrack(root, chrom ? { chrom } : null);
+    });
+  }
   if (atlasState.genome) atlasState.genome._page5State = legacyState;
+}
+
+function _applyActiveChromToTrack(root, active) {
+  if (!root || !active || !active.chrom) return;
+  const ctx = root.__gaPage5TrackCtx;
+  if (ctx && typeof ctx.setChrom === 'function' && ctx.chromId !== active.chrom
+      && ctx.geneData && ctx.geneData.chroms && ctx.geneData.chroms[active.chrom]) {
+    ctx.setChrom(active.chrom);
+  }
 }
 
 export async function unmount(root) {
@@ -331,6 +349,9 @@ function _mount(root, state) {
   _mountDensity(root, { geneData, inventory });
   const trackCtx = _mountTrack(root, { geneData, inventory });
   _mountCargo(root, { geneData, candidates, impact });
+  // Stash the track ctx on root so the cross-atlas subscription (set up in
+  // mount()) can drive setChrom whenever the router's active chrom changes.
+  if (root) root.__gaPage5TrackCtx = trackCtx;
 
   // Wire bar-click → set track chrom + scroll.
   const densityHost = root.querySelector('[data-ga-gene-density]');

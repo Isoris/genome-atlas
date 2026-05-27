@@ -21,7 +21,7 @@
 
 import { _pageState, _setActiveState } from './page8/_state.js';
 import { CANDIDATES_FALLBACK, resolveCandidates as _resolveSharedCandidates } from '../../shared/candidates.js';
-import { installRouter as _installCrossAtlasRouter, onActiveCandidate as _onActiveCandidate, getActiveCandidate as _getActiveCandidate } from '../../shared/cross-atlas.js';
+import { installRouter as _installCrossAtlasRouter, onActiveCandidate as _onActiveCandidate, getActiveCandidate as _getActiveCandidate, onActiveChrom as _onActiveChrom, getActiveChrom as _getActiveChrom } from '../../shared/cross-atlas.js';
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 const N_BINS = 80;
@@ -152,6 +152,14 @@ export async function mount(root, atlasState, registry) {
       _applyActiveCandidateHighlight(root, candidate);
     });
   }
+  // Chrom-driven auto-nav: switch the UCE strip's chrom to whatever the
+  // router currently flags as active.
+  _applyActiveChromToStrip(root, _getActiveChrom());
+  if (root && !root.__gaPage8ChromSub) {
+    root.__gaPage8ChromSub = _onActiveChrom(({ chrom }) => {
+      _applyActiveChromToStrip(root, chrom ? { chrom } : null);
+    });
+  }
   if (atlasState.genome) atlasState.genome._page8State = legacyState;
 }
 
@@ -161,6 +169,15 @@ function _applyActiveCandidateHighlight(root, candidate) {
   root.querySelectorAll('.ga-impact-tr').forEach((tr) => {
     tr.classList.toggle('is-active', id != null && tr.getAttribute('data-ga-cand-id') === id);
   });
+}
+
+function _applyActiveChromToStrip(root, active) {
+  if (!root || !active || !active.chrom) return;
+  const ctx = root.__gaPage8StripCtx;
+  if (ctx && typeof ctx.setChrom === 'function' && ctx.chromId !== active.chrom
+      && ctx.conserved && ctx.conserved.chroms && ctx.conserved.chroms[active.chrom]) {
+    ctx.setChrom(active.chrom);
+  }
 }
 
 export async function unmount(root) {
@@ -298,7 +315,9 @@ function _mountStrip(root, { conserved, inventory }) {
   ctx.svg.addEventListener('mouseleave', ctx._onLeave);
 
   host.__gaPage8 = ctx;
+  if (root) root.__gaPage8StripCtx = ctx;
   _drawStrip(ctx);
+  return ctx;
 }
 
 function _drawStrip(ctx) {

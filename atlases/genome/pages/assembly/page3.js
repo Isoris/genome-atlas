@@ -30,7 +30,7 @@
 
 import { _pageState, _setActiveState } from './page3/_state.js';
 import { CANDIDATES_FALLBACK as _SHARED_CANDIDATES_FALLBACK, resolveCandidates as _resolveSharedCandidates } from '../../shared/candidates.js';
-import { installRouter as _installCrossAtlasRouter } from '../../shared/cross-atlas.js';
+import { installRouter as _installCrossAtlasRouter, onActiveChrom as _onActiveChrom, getActiveChrom as _getActiveChrom } from '../../shared/cross-atlas.js';
 
 const N_BINS = 80;                 // density bin count per chrom in the fallback
 const COHORT_HIGHLIGHT_PALETTE = ['#ff8c6e', '#9b6fa3', '#4f9e64', '#3a5f9f'];
@@ -136,7 +136,30 @@ export async function mount(root, atlasState, registry) {
   _installCrossAtlasRouter();
   try { renderPage3(legacyState); }
   catch (e) { console.warn('page3.mount: renderPage3 threw —', e); }
+  // Active-chrom highlight: when the router reports a chrom, flag the
+  // matching strip row .is-active and scroll it into view. Re-applied on
+  // every router update so sister-page clicks scroll us to the same chrom.
+  _applyActiveChromToStrip(root, _getActiveChrom());
+  if (root && !root.__gaPage3ChromSub) {
+    root.__gaPage3ChromSub = _onActiveChrom(({ chrom, hap }) => {
+      _applyActiveChromToStrip(root, chrom ? { chrom, hap } : null);
+    });
+  }
   if (atlasState.genome) atlasState.genome._page3State = legacyState;
+}
+
+function _applyActiveChromToStrip(root, active) {
+  if (!root || !root.querySelectorAll) return;
+  const id = active && active.chrom;
+  let target = null;
+  root.querySelectorAll('.ga-strip-row').forEach((row) => {
+    const match = id != null && row.getAttribute('data-ga-strip-chrom') === id;
+    row.classList.toggle('is-active', match);
+    if (match) target = row;
+  });
+  if (target && target.scrollIntoView) {
+    target.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
 }
 
 export async function unmount(root) {
