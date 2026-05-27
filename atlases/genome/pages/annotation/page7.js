@@ -24,6 +24,7 @@
 import { _pageState, _setActiveState } from './page7/_state.js';
 import { CANDIDATES_FALLBACK, resolveCandidates as _resolveSharedCandidates } from '../../shared/candidates.js';
 import { installRouter as _installCrossAtlasRouter, onActiveCandidate as _onActiveCandidate, getActiveCandidate as _getActiveCandidate } from '../../shared/cross-atlas.js';
+import { installActivePill as _installActivePill } from '../../shared/active-pill.js';
 
 const IMPACT_COLORS = {
   HIGH: '#c0392b',
@@ -149,6 +150,7 @@ export async function mount(root, atlasState, registry) {
   legacyState.root = root || document;
   _setActiveState(legacyState);
   _installCrossAtlasRouter();
+  _installActivePill();
   try { renderPage7(legacyState); }
   catch (e) { console.warn('page7.mount: renderPage7 threw —', e); }
   _applyActiveCandidateHighlight(root, _getActiveCandidate());
