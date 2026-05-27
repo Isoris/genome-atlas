@@ -1218,6 +1218,176 @@ html[data-theme="light"] .ga-strip-btn.is-active {
   background: rgba(194, 65, 12, 0.10);
 }
 
+/* --------------------------------------------------------------------- */
+/* page5 — Genes (density bar chart + per-chrom track + cargo table).    */
+/* --------------------------------------------------------------------- */
+
+.ga-gene-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin: 6px 0 6px 0;
+  font-size: 10px;
+  color: var(--ink-dim);
+}
+.ga-gene-tool-label {
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-right: 2px;
+}
+.ga-gene-tool-spacer { flex: 1 1 auto; }
+.ga-gene-btn {
+  font: inherit; font-size: 10px;
+  color: var(--ink-dim);
+  background: var(--panel-3);
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  padding: 3px 8px;
+  cursor: pointer;
+  font-family: var(--mono);
+  letter-spacing: 0.02em;
+}
+.ga-gene-btn:hover { color: var(--ink); border-color: #ff8c6e; }
+.ga-gene-btn.is-active {
+  color: var(--ink); border-color: #ff8c6e;
+  background: rgba(255, 140, 110, 0.10);
+}
+.ga-gene-select {
+  font: inherit; font-size: 10px;
+  font-family: var(--mono);
+  color: var(--ink);
+  background: var(--panel-3);
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  padding: 2px 4px;
+  letter-spacing: 0.02em;
+}
+.ga-gene-toggle {
+  display: inline-flex; align-items: center; gap: 4px;
+  cursor: pointer;
+  font-family: var(--mono); font-size: 10px;
+  color: var(--ink-dim);
+}
+.ga-gene-toggle input { cursor: pointer; }
+.ga-gene-fwd { color: #2E6FB0; font-weight: 600; }
+.ga-gene-rev { color: #C0392B; font-weight: 600; }
+
+.ga-gene-density-host,
+.ga-gene-track-host {
+  position: relative;
+  margin: 4px 0 6px 0;
+  padding: 6px 8px 8px 8px;
+  background: var(--panel-3);
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+}
+.ga-gene-density-svg,
+.ga-gene-track-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  font-family: var(--mono);
+  user-select: none;
+}
+
+.ga-gene-plot-bg { fill: var(--panel-2); }
+.ga-gene-frame   { fill: none; stroke: var(--rule); stroke-width: 1; }
+.ga-gene-gridline { stroke: var(--rule); stroke-width: 0.5; opacity: 0.7; }
+.ga-gene-tick     { stroke: var(--rule); stroke-width: 1; }
+.ga-gene-axis-label { font-size: 9px; fill: var(--ink-dim); }
+.ga-gene-axis-title { font-size: 10.5px; fill: var(--ink); letter-spacing: 0.02em; }
+
+.ga-gene-bar { stroke: none; cursor: pointer; opacity: 0.92; }
+.ga-gene-bar:hover { opacity: 1; filter: brightness(1.08); }
+
+.ga-gene-backbone { stroke: var(--ink-dimmer); stroke-width: 1.5; }
+.ga-gene-box { stroke: none; opacity: 0.95; }
+.ga-gene-box:hover { filter: brightness(1.15); }
+
+.ga-gene-tooltip {
+  position: absolute;
+  top: 0; left: 0;
+  pointer-events: none;
+  background: var(--panel-2);
+  border: 1px solid var(--rule);
+  border-left: 3px solid #ff8c6e;
+  border-radius: 3px;
+  padding: 6px 8px;
+  font-size: 10px;
+  font-family: var(--mono);
+  color: var(--ink);
+  min-width: 140px;
+  max-width: 280px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+  z-index: 5;
+}
+.ga-gene-tooltip[hidden] { display: none; }
+.ga-gene-tip-kind {
+  font-size: 8.5px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+  margin-bottom: 2px;
+}
+.ga-gene-tip-name { font-weight: 600; margin-bottom: 2px; }
+.ga-gene-tip-meta { color: var(--ink-dim); font-size: 9.5px; }
+.ga-gene-empty { font-size: 11px; fill: var(--ink-dim); }
+
+/* Cargo table */
+.ga-gene-cargo-host {
+  overflow-x: auto;
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  background: var(--panel-3);
+}
+.ga-cargo-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  color: var(--ink);
+}
+.ga-cargo-th,
+.ga-cargo-td {
+  padding: 5px 9px;
+  text-align: left;
+  border-bottom: 1px solid var(--rule);
+}
+.ga-cargo-th {
+  background: var(--panel-2);
+  color: var(--ink-dim);
+  font-weight: 600;
+  font-size: 9.5px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.ga-cargo-th.is-num,
+.ga-cargo-td.is-num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.ga-cargo-tr { cursor: pointer; transition: background-color 80ms ease; }
+.ga-cargo-tr:hover { background: rgba(255, 140, 110, 0.06); }
+.ga-cargo-tr:last-child .ga-cargo-td { border-bottom: none; }
+.ga-cargo-genelist { color: var(--ink-dim); font-size: 10px; }
+.ga-cargo-impact {
+  display: inline-block;
+  padding: 1px 6px;
+  font-size: 9px;
+  letter-spacing: 0.04em;
+  color: #fff;
+  border-radius: 2px;
+  font-weight: 600;
+}
+
+html[data-theme="light"] .ga-gene-btn.is-active {
+  color: #c2410c;
+  border-color: #c2410c;
+  background: rgba(194, 65, 12, 0.10);
+}
+html[data-theme="light"] .ga-gene-tooltip { border-left-color: #c2410c; }
+
 /* --- JSON-schema codeblock ------------------------------------------- */
 .ga-schema-block {
   margin: 4px 0;
