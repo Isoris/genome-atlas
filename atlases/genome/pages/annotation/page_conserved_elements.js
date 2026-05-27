@@ -16,6 +16,13 @@
 
 import { probeModeB, renderModeBBadge } from '../../../../core/mode_b_badge.js';
 import { _pageState, _setActiveState } from './page_conserved_elements/_state.js';
+import {
+  installRouter as _installCrossAtlasRouter,
+  onActiveCandidate as _onActiveCandidate,
+  getActiveCandidate as _getActiveCandidate,
+} from '../../shared/cross-atlas.js';
+import { installActivePill as _installActivePill } from '../../shared/active-pill.js';
+import { installPageIndex as _installPageIndex } from '../../shared/page-index.js';
 
 // ----- Column synonyms ---------------------------------------------------
 const CHROM_KEYS = ['chrom', 'chromosome', 'chr', 'seqid'];
@@ -262,7 +269,7 @@ function _renderOverlap() {
     '<th class="ga-num">n elements</th><th class="ga-num">covered (kb)</th>',
     '<th class="ga-num">frac of span</th></tr></thead><tbody>'];
   for (const r of rows) {
-    lines.push('<tr>' +
+    lines.push('<tr class="ga-cargo-row" data-ga-cand-id="' + _esc(r.candidate_id) + '">' +
       `<td><code>${_esc(r.candidate_id)}</code></td>` +
       `<td>${_esc(r.chrom)}</td>` +
       `<td class="ga-num">${_fmtMb(r.start_bp)} – ${_fmtMb(r.end_bp)}</td>` +
@@ -273,6 +280,38 @@ function _renderOverlap() {
   }
   lines.push('</tbody></table>');
   slot.innerHTML = lines.join('');
+  _wireOverlapClicks();
+  _applyActiveCandidateHighlight(_getActiveCandidate());
+}
+
+function _wireOverlapClicks() {
+  const slot = document.getElementById('pageConsElOverlapSlot');
+  if (!slot || slot.__gaOverlapClicksWired) return;
+  slot.addEventListener('click', (ev) => {
+    const tr = ev.target.closest && ev.target.closest('tr[data-ga-cand-id]');
+    if (!tr) return;
+    const candId = tr.getAttribute('data-ga-cand-id');
+    if (!candId) return;
+    const cand = _state.overlap.find((c) => c.candidate_id === candId);
+    tr.dispatchEvent(new CustomEvent('ga-ce-cand-click', {
+      bubbles: true,
+      detail: {
+        candidate: cand
+          ? { id: candId, chrom: cand.chrom, start_bp: cand.start_bp, end_bp: cand.end_bp, label: candId }
+          : { id: candId },
+      },
+    }));
+  });
+  slot.__gaOverlapClicksWired = true;
+}
+
+function _applyActiveCandidateHighlight(active) {
+  const slot = document.getElementById('pageConsElOverlapSlot');
+  if (!slot) return;
+  const id = active && active.id;
+  slot.querySelectorAll('tr[data-ga-cand-id]').forEach((tr) => {
+    tr.classList.toggle('is-active', id != null && tr.getAttribute('data-ga-cand-id') === id);
+  });
 }
 
 // ----- View 3 — length distribution + longest elements -----------------
@@ -478,6 +517,16 @@ export async function mount(root, atlasState, registry) {
   _state.lengthTopView = [];
   _state.registry = registry || null;
   _setActiveState(_state);
+
+  _installCrossAtlasRouter();
+  _installActivePill();
+  _installPageIndex(root, 'page_conserved_elements');
+  if (root && !root.__gaConsCandSub) {
+    root.__gaConsCandSub = _onActiveCandidate(({ candidate }) => {
+      _applyActiveCandidateHighlight(candidate);
+    });
+  }
+
   _wire();
 
   const probe = await probeModeB(registry, 'conserved_elements');
@@ -522,6 +571,10 @@ export async function unmount(root) {
   _state.overlapView = [];
   _state.lengthBuckets = [];
   _state.lengthTopView = [];
+  if (root && typeof root.__gaConsCandSub === 'function') {
+    try { root.__gaConsCandSub(); } catch (_) {}
+    root.__gaConsCandSub = null;
+  }
 }
 
 // ----- Legacy compat -----------------------------------------------------
