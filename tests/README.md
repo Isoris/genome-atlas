@@ -1,10 +1,19 @@
 # `tests/` — Genome Atlas smoke tests
 
-One Python script + one GitHub Actions workflow. Runs on every push to
-`main` and every PR; blocks merge when an invariant breaks. Stdlib-only
-(no `pip install`).
+Two scripts + one GitHub Actions workflow. The smoke pass runs on every
+push to `main` and every PR; blocks merge when an invariant breaks.
+Stdlib-only (no `pip install`).
 
-## What it checks
+```
+tests/
+  smoke_genome_atlas.py    the 7-check smoke pass (run against the repo)
+  test_smoke_checks.py     self-tests for the smoke pass — plant a
+                            known regression, run the smoke script in
+                            a worktree copy, confirm it surfaces
+  README.md                this file
+```
+
+## What the smoke pass checks
 
 | # | Check | Guards against |
 |---|---|---|
@@ -14,6 +23,7 @@ One Python script + one GitHub Actions workflow. Runs on every push to
 | 4 | Every `class="ga-*"` referenced on a page resolves in one of `manifest.json#stylesheets` | New UI primitives added to pages without the matching CSS rule. |
 | 5 | Every inline `<pre class="ga-schema-block"><code>{…}</code></pre>` that looks like JSON parses | A schema-block edit that quietly broke the embedded contract. Non-JSON code blocks (GFF3 / BED examples) are detected and skipped. |
 | 6 | Every Python adapter under `atlases/genome/registries/{extractors,runners}/` compiles | A syntax error in a Python adapter that wouldn't get caught until someone actually invokes it. |
+| 7 | Every `<b>page_<topic></b>` mention on a page resolves to a real page in `manifest.json#pages` | A stale "see also" link after a page is renamed / carved out / removed. Cross-atlas refs like `<b>Inversion Atlas page16</b>` are excluded — they reference a different repo and live by a different naming convention. |
 
 ## Run locally
 
@@ -30,15 +40,55 @@ Sample output:
 ```
 Genome Atlas smoke tests
 ==================================================
-  [1/6] JSON parse           : 39 files
-  [2/6] Manifest paths       : 11 pages
-  [3/6] HTML tag balance     : 11 pages
-  [4/6] CSS class resolution : 11 pages
-  [5/6] Inline schemas       : 3 schema blocks
-  [6/6] Python adapters      : 65 files compile
+  [1/7] JSON parse           : 47 files
+  [2/7] Manifest paths       : 12 pages
+  [3/7] HTML tag balance     : 12 pages
+  [4/7] CSS class resolution : 12 pages
+  [5/7] Inline schemas       : 5 schema blocks
+  [6/7] Python adapters      : 79 files compile
+  [7/7] Cross-references     : 22 page refs across 12 pages
 ==================================================
-PASS — all 6 checks green.
+PASS — all 7 checks green.
 ```
+
+## Self-tests (`test_smoke_checks.py`)
+
+Verifies the smoke pass itself does what it claims — for each check,
+plant a known regression in a `git worktree`-isolated copy of the repo,
+run the smoke script in that copy, confirm the failure surfaces with
+the expected `[<check>]` prefix.
+
+```bash
+python3 tests/test_smoke_checks.py
+```
+
+Sample output:
+
+```
+Self-tests for tests/smoke_genome_atlas.py
+============================================================
+  PASS  clean tree → smoke passes
+  PASS  plant JSON typo → caught
+  PASS  plant ghost manifest entry → caught
+  PASS  plant stray </div> → caught
+  PASS  plant undefined ga-* class → caught
+  PASS  plant schema corruption → caught
+  PASS  plant Python syntax error → caught
+  PASS  plant stale page_* cross-ref → caught
+============================================================
+PASS — all 8 self-tests green
+```
+
+Each test uses `git worktree add --detach` to get a clean checkout
+isolated from the repo's index/working tree; plants the targeted
+regression in the worktree copy; runs the worktree's *own* copy of
+the smoke script (so `__file__`-relative path discovery sees the
+planted change); asserts the right `[<check>]` prefix appears in the
+output. Stdlib-only — uses `subprocess` + `tempfile` + `shutil`.
+
+CI runs both `smoke_genome_atlas.py` and `test_smoke_checks.py` so a
+regression in either the *checks* or the *code under check* surfaces
+on every PR.
 
 ## Design notes
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Genome Atlas smoke tests — the four cheap, high-leverage invariants.
+"""Genome Atlas smoke tests — seven cheap, high-leverage invariants.
 
 Run from the repo root:
 
@@ -26,6 +26,10 @@ Checks
 6. Python adapters      every *.py under atlases/genome/registries/
                          {extractors,runners}/ compiles cleanly
                          (py_compile pass — no runtime imports needed)
+7. Cross-references     every `<b>page_<topic></b>` mention on a page
+                         resolves to an existing page in the manifest.
+                         Catches stale "see also" links after a page is
+                         renamed / carved out / removed.
 
 The script is intentionally Python-stdlib-only so it can run in any
 CI environment without `pip install`.
@@ -271,6 +275,41 @@ def check_python_adapters(failures: List[str]) -> int:
     return n
 
 
+# Pattern: <b>page_<topic></b> or <b>page_<topic> (label)</b>
+# Captures `page_<topic>` for validation against the manifest.
+# Does NOT match "Inversion Atlas page16" (different leading word + capital A).
+_CROSS_REF_RE = re.compile(
+    r'<b>\s*(page_[a-zA-Z_][a-zA-Z_0-9]*)'
+    r'(?:\s*\([^)]*\))?\s*</b>'
+)
+
+
+def check_cross_references(manifest: dict, failures: List[str]) -> int:
+    """Every `<b>page_<id></b>` mention on a page must resolve to a real
+    page in the manifest. Catches stale "see also" links after a page is
+    renamed, carved out, or removed."""
+    known = {p['id'] for p in manifest.get('pages', [])}
+    pages_dir = ATLAS / 'pages'
+    if not pages_dir.exists():
+        return 0
+
+    n_pages = 0
+    n_refs  = 0
+    for html in sorted(pages_dir.rglob('page_*.html')):
+        n_pages += 1
+        src = _read(html)
+        refs = set(_CROSS_REF_RE.findall(src))
+        for ref in sorted(refs):
+            n_refs += 1
+            if ref not in known:
+                rel = html.relative_to(ROOT)
+                failures.append(
+                    f'[cross-refs] {rel}: <b>{ref}</b> references a page '
+                    f'not in manifest.json#pages'
+                )
+    return n_refs
+
+
 # ─── Driver ───────────────────────────────────────────────────────────
 
 
@@ -281,22 +320,25 @@ def main() -> int:
     print('=' * 50)
 
     n = check_json_parse(failures)
-    print(f'  [1/6] JSON parse           : {n} files')
+    print(f'  [1/7] JSON parse           : {n} files')
 
     n, manifest = check_manifest_paths(failures)
-    print(f'  [2/6] Manifest paths       : {n} pages')
+    print(f'  [2/7] Manifest paths       : {n} pages')
 
     n = check_html_balance(manifest, failures)
-    print(f'  [3/6] HTML tag balance     : {n} pages')
+    print(f'  [3/7] HTML tag balance     : {n} pages')
 
     n = check_css_class_resolution(manifest, failures)
-    print(f'  [4/6] CSS class resolution : {n} pages')
+    print(f'  [4/7] CSS class resolution : {n} pages')
 
     n = check_inline_schemas(manifest, failures)
-    print(f'  [5/6] Inline schemas       : {n} schema blocks')
+    print(f'  [5/7] Inline schemas       : {n} schema blocks')
 
     n = check_python_adapters(failures)
-    print(f'  [6/6] Python adapters      : {n} files compile')
+    print(f'  [6/7] Python adapters      : {n} files compile')
+
+    n = check_cross_references(manifest, failures)
+    print(f'  [7/7] Cross-references     : {n} page refs across {len(manifest.get("pages", []))} pages')
 
     print('=' * 50)
     if failures:
@@ -304,7 +346,7 @@ def main() -> int:
         for f in failures:
             print(f'  - {f}')
         return 1
-    print('PASS — all 6 checks green.')
+    print('PASS — all 7 checks green.')
     return 0
 
 
