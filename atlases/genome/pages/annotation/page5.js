@@ -1,21 +1,33 @@
 // atlases/genome/pages/annotation/page5.js
 // =============================================================================
-// page5 — Genes (stage: annotation)
+// page5 — Annotated features (stage: annotation)
+//
+// Renders annotated genomic features across three views — coding genes,
+// non-coding RNAs (miRNA, tRNA, rRNA, snoRNA, lncRNA), pseudogenes, and
+// repeat features (microsatellites, minisatellites, tandem repeats). The
+// page used to be gene-only; the type catalog (FEATURE_TYPES) is now the
+// single source of truth so adding a new biotype is a one-line edit.
 //
 // Three working views:
-//   1. Genome-wide gene-density bar chart (one bar per chromosome)
-//   2. Per-chromosome gene track (gene boxes coloured by strand)
-//   3. Gene-cargo table per inversion candidate (cross-atlas from
-//      `shared.candidates`)
+//   1. Genome-wide feature-density bar chart (one bar per chromosome).
+//   2. Per-chromosome feature track — colour by biotype, two strand lanes,
+//      with tick glyphs for tiny features (mi/microsat/minisat) so they
+//      don't blow out the box layer. Biotype + strand filter chips.
+//   3. Per-candidate cargo table — feature count, biotype mini-breakdown,
+//      max SnpEff impact when variant_annotations is loaded.
 //
 // Pure ESM / SVG + HTML for the table; no d3. Reads:
-//   state.layers.gene_track          — { chroms: { <id>: { gene_count, genes: [<gene>] } } }
-//   state.layers.chromosome_map      — chrom inventory + lengths (shared with page3)
-//   state.layers.variant_annotations — optional impact lookup (`{ gene_id: "HIGH"|... }`)
+//   state.layers.gene_track          — preferred shape
+//                                        { chroms: { <id>: { length_bp,
+//                                          features: [<feature>] } } }
+//                                      legacy shape (still accepted):
+//                                        { chroms: { <id>: { genes: [...] } } }
+//   state.layers.chromosome_map      — chrom inventory + lengths
+//   state.layers.variant_annotations — optional gene → impact lookup
 //   state.shared.candidates          — cross-atlas Inversion-Atlas overlay
 //
-// Falls back to a baked-in F₁ hybrid sample (55 chroms × ~120 genes/chrom)
-// when any layer is missing.
+// Falls back to a baked-in F₁ hybrid sample (55 chroms × ~10 feature types
+// × density-per-Mb scaling) when any layer is missing.
 //
 // Cross-card events:
 //   - Click a density bar → switches View 2's chrom dropdown to that chrom.
@@ -26,14 +38,51 @@
 import { _pageState, _setActiveState } from './page5/_state.js';
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
-const FWD_COLOR = '#2E6FB0';   // same blue used by the cross-species atlas style.py FWD
-const REV_COLOR = '#C0392B';   // matches REV
 const IMPACT_COLORS = {
   HIGH: '#c0392b',
   MODERATE: '#d98c00',
   LOW: '#4f9e64',
   MODIFIER: '#7a86a8',
 };
+
+// ---------------------------------------------------------------------------
+// Feature-type catalog. ORDER drives the legend, filter buttons, density
+// stack, and cargo-breakdown ordering. Edit here when a new biotype lands.
+// `glyph: 'box'` = filled rectangle along the track (good for kb-scale
+// features); `glyph: 'tick'` = 1.5 px vertical mark (good for <1 kb features
+// like microsats / miRNAs so they don't overlap into mush).
+// ---------------------------------------------------------------------------
+
+const FEATURE_TYPES = {
+  protein_coding: { label: 'protein-coding', short: 'prot',    color: '#2E6FB0', group: 'gene',   glyph: 'box',
+                    sample: { density_per_mb: 26, len_range: [5_000, 60_000] } },
+  lncRNA:         { label: 'lncRNA',         short: 'lncRNA',  color: '#3FA9C9', group: 'ncRNA',  glyph: 'box',
+                    sample: { density_per_mb: 4,  len_range: [200,    5_000] } },
+  pseudogene:     { label: 'pseudogene',     short: 'pseudo',  color: '#7a86a8', group: 'gene',   glyph: 'box',
+                    sample: { density_per_mb: 1.4, len_range: [500,   8_000] } },
+  miRNA:          { label: 'miRNA',          short: 'miRNA',   color: '#9b6fa3', group: 'ncRNA',  glyph: 'tick',
+                    sample: { density_per_mb: 0.7, len_range: [22,      100] } },
+  tRNA:           { label: 'tRNA',           short: 'tRNA',    color: '#4f9e64', group: 'ncRNA',  glyph: 'tick',
+                    sample: { density_per_mb: 0.8, len_range: [70,       90] } },
+  rRNA:           { label: 'rRNA',           short: 'rRNA',    color: '#c9a23a', group: 'ncRNA',  glyph: 'box',
+                    sample: { density_per_mb: 0.12, len_range: [1_500, 2_800] } },
+  snoRNA:         { label: 'snoRNA',         short: 'snoRNA',  color: '#3a8a8a', group: 'ncRNA',  glyph: 'tick',
+                    sample: { density_per_mb: 0.5, len_range: [80,      200] } },
+  microsatellite: { label: 'microsat',       short: 'µsat',    color: '#d98c00', group: 'repeat', glyph: 'tick',
+                    sample: { density_per_mb: 22,  len_range: [20,      200] } },
+  minisatellite:  { label: 'minisat',        short: 'minisat', color: '#b86b00', group: 'repeat', glyph: 'tick',
+                    sample: { density_per_mb: 2.5, len_range: [200,   1_000] } },
+  tandem_repeat:  { label: 'tandem rep.',    short: 'tandem',  color: '#a88b66', group: 'repeat', glyph: 'tick',
+                    sample: { density_per_mb: 5,   len_range: [100,   2_000] } },
+};
+const FEATURE_TYPE_ORDER = Object.keys(FEATURE_TYPES);
+const FEATURE_GROUPS = ['gene', 'ncRNA', 'repeat'];
+const FEATURE_GROUP_LABEL = { gene: 'gene', ncRNA: 'ncRNA', repeat: 'repeat' };
+
+function _typeOf(f) {
+  const t = f && (f.type || f.biotype);
+  return (t && FEATURE_TYPES[t]) ? t : 'protein_coding';   // safe default for legacy data
+}
 
 // ---------------------------------------------------------------------------
 // Deterministic sample data (fallback).
@@ -60,36 +109,59 @@ function _sampleChroms(hap, count, lenBase, seed) {
   return out;
 }
 
-function _sampleGenes(chrom, seed) {
-  // Gene count scales with chromosome length: ~30 genes / Mb.
+function _sampleFeatures(chrom, seed) {
+  // Per-type counts scale with chrom length using FEATURE_TYPES[*].sample.
+  // Microsats are dense (~22/Mb), miRNAs/tRNAs sparse (~0.7-0.8/Mb), and
+  // protein-coding stays the dominant box layer.
   const rng = _rng(seed);
   const lenMb = (chrom.length_bp || 1) / 1e6;
-  const n = Math.max(20, Math.floor(lenMb * (24 + 8 * rng())));
-  const genes = [];
-  for (let i = 0; i < n; i++) {
-    const start_bp = Math.floor(rng() * (chrom.length_bp - 60_000));
-    const len = 5_000 + Math.floor(rng() * 55_000);
-    const end_bp = Math.min(chrom.length_bp, start_bp + len);
-    genes.push({
-      id: `${chrom.id}:g${i + 1}`,
-      name: _sampleGeneName(rng, i + 1),
-      start_bp,
-      end_bp,
-      strand: rng() < 0.5 ? '+' : '-',
-      biotype: rng() < 0.92 ? 'protein_coding' : (rng() < 0.5 ? 'lncRNA' : 'pseudogene'),
-    });
+  const features = [];
+  let counter = 0;
+  for (const t of FEATURE_TYPE_ORDER) {
+    const cfg = FEATURE_TYPES[t].sample;
+    const n = Math.max(0, Math.floor(lenMb * cfg.density_per_mb * (0.82 + 0.36 * rng())));
+    const [lmin, lmax] = cfg.len_range;
+    for (let i = 0; i < n; i++) {
+      const start_bp = Math.floor(rng() * Math.max(1, chrom.length_bp - lmax));
+      const len = lmin + Math.floor(rng() * (lmax - lmin));
+      const end_bp = Math.min(chrom.length_bp, start_bp + len);
+      counter++;
+      features.push({
+        id:    `${chrom.id}:f${counter}`,
+        name:  _sampleFeatureName(rng, t, counter),
+        type:  t,
+        biotype: t,
+        start_bp,
+        end_bp,
+        strand: t === 'microsatellite' || t === 'minisatellite' || t === 'tandem_repeat'
+          ? '.'   // repeat features are unstranded
+          : (rng() < 0.5 ? '+' : '-'),
+      });
+    }
   }
-  genes.sort((a, b) => a.start_bp - b.start_bp);
-  return genes;
+  features.sort((a, b) => a.start_bp - b.start_bp);
+  return features;
 }
-function _sampleGeneName(rng, n) {
-  // Generate plausible gene symbols — uppercase 3-5 chars + optional digit.
-  const ABC = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-  const len = 3 + Math.floor(rng() * 3);
-  let s = '';
-  for (let i = 0; i < len; i++) s += ABC[Math.floor(rng() * 26)];
-  if (rng() < 0.4) s += String(1 + Math.floor(rng() * 9));
-  return s;
+
+function _sampleFeatureName(rng, type, n) {
+  if (type === 'protein_coding' || type === 'pseudogene' || type === 'lncRNA') {
+    // Uppercase symbol-style (TYRP1, BRCA2, …)
+    const ABC = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const len = 3 + Math.floor(rng() * 3);
+    let s = '';
+    for (let i = 0; i < len; i++) s += ABC[Math.floor(rng() * 26)];
+    if (rng() < 0.4) s += String(1 + Math.floor(rng() * 9));
+    return s;
+  }
+  if (type === 'miRNA')  return `mir-${100 + Math.floor(rng() * 900)}`;
+  if (type === 'tRNA')   return `tRNA-${'ACDEFGHIKLMNPQRSTVWY'[Math.floor(rng() * 20)]}${'ACGT'[Math.floor(rng() * 4)]}${'ACGT'[Math.floor(rng() * 4)]}`;
+  if (type === 'rRNA')   return ['5S', '5.8S', '18S', '28S'][Math.floor(rng() * 4)] + '_rRNA';
+  if (type === 'snoRNA') return `SNOR${'AD'[Math.floor(rng() * 2)]}${1 + Math.floor(rng() * 99)}`;
+  // Repeat features get a motif-style id.
+  if (type === 'microsatellite') return `(${['AT', 'GT', 'CAG', 'ATG', 'AAT'][Math.floor(rng() * 5)]})n_${n}`;
+  if (type === 'minisatellite')  return `mini_${n}`;
+  if (type === 'tandem_repeat')  return `TR_${n}`;
+  return `feat_${n}`;
 }
 
 const GENE_TRACK_FALLBACK = (() => {
@@ -98,13 +170,18 @@ const GENE_TRACK_FALLBACK = (() => {
   const out = { chroms: {} };
   for (let i = 0; i < chroms.length; i++) {
     const c = chroms[i];
-    const genes = _sampleGenes(c, 91 + i * 13);
+    const features = _sampleFeatures(c, 91 + i * 13);
+    const breakdown = {};
+    for (const t of FEATURE_TYPE_ORDER) breakdown[t] = 0;
+    for (const f of features) breakdown[f.type] = (breakdown[f.type] || 0) + 1;
     out.chroms[c.id] = {
       chrom: c.id,
       hap: c.hap,
       length_bp: c.length_bp,
-      gene_count: genes.length,
-      genes,
+      feature_count: features.length,
+      gene_count:    breakdown.protein_coding + breakdown.lncRNA + breakdown.pseudogene,
+      feature_breakdown: breakdown,
+      features,
     };
   }
   return out;
@@ -179,7 +256,34 @@ function _buildLegacyState(atlasState) {
 
 function _resolveGeneData(state) {
   const layer = state.layers && state.layers.gene_track;
-  if (layer && layer.chroms && Object.keys(layer.chroms).length > 0) return layer;
+  if (layer && layer.chroms && Object.keys(layer.chroms).length > 0) {
+    // Normalize to the new schema: every chrom entry exposes .features and
+    // .feature_breakdown. Legacy data may have used `.genes` without a
+    // biotype mix — that path defaults every feature to protein_coding so
+    // existing payloads keep rendering.
+    const out = { chroms: {} };
+    for (const cid of Object.keys(layer.chroms)) {
+      const e = layer.chroms[cid];
+      const features = Array.isArray(e.features) ? e.features
+                       : Array.isArray(e.genes)  ? e.genes
+                       : [];
+      const breakdown = {};
+      for (const t of FEATURE_TYPE_ORDER) breakdown[t] = 0;
+      for (const f of features) {
+        const t = _typeOf(f);
+        breakdown[t] = (breakdown[t] || 0) + 1;
+      }
+      out.chroms[cid] = Object.assign({}, e, {
+        features,
+        feature_count: e.feature_count != null ? e.feature_count : features.length,
+        gene_count: e.gene_count != null
+          ? e.gene_count
+          : (breakdown.protein_coding + breakdown.lncRNA + breakdown.pseudogene),
+        feature_breakdown: e.feature_breakdown || breakdown,
+      });
+    }
+    return out;
+  }
   return GENE_TRACK_FALLBACK;
 }
 function _resolveChromInventory(state, geneData) {
@@ -256,14 +360,17 @@ function _mountDensity(root, { geneData, inventory }) {
     geneData,
     hapFilter: 'all',
     sort: 'count',
+    stack: 'total',     // 'total' (haplotype-coloured) | 'biotype' (stacked)
     _onHap: null,
     _onSort: null,
+    _onStack: null,
     _onMove: null,
     _onLeave: null,
     destroy() {
       if (card) {
         card.querySelectorAll('[data-ga-gene-hap]').forEach((b) => b.removeEventListener('click', this._onHap));
         card.querySelectorAll('[data-ga-gene-sort]').forEach((b) => b.removeEventListener('click', this._onSort));
+        card.querySelectorAll('[data-ga-gene-stack]').forEach((b) => b.removeEventListener('click', this._onStack));
       }
       if (this.svg) {
         this.svg.removeEventListener('mousemove', this._onMove);
@@ -289,6 +396,14 @@ function _mountDensity(root, { geneData, inventory }) {
       _renderDensity(ctx);
     };
     card.querySelectorAll('[data-ga-gene-sort]').forEach((b) => b.addEventListener('click', ctx._onSort));
+
+    ctx._onStack = (ev) => {
+      const btn = ev.currentTarget;
+      ctx.stack = btn.getAttribute('data-ga-gene-stack');
+      card.querySelectorAll('[data-ga-gene-stack]').forEach((b) => b.classList.toggle('is-active', b === btn));
+      _renderDensity(ctx);
+    };
+    card.querySelectorAll('[data-ga-gene-stack]').forEach((b) => b.addEventListener('click', ctx._onStack));
   }
   ctx._onMove = (ev) => {
     const t = ev.target.closest('[data-ga-gene-tip-payload]');
@@ -317,7 +432,8 @@ function _renderDensity(ctx) {
   const svg = ctx.svg;
   while (svg.firstChild) svg.removeChild(svg.firstChild);
 
-  // Build dataset.
+  // Build dataset. feature_count drives bar heights; breakdown drives the
+  // stacked-by-biotype rendering when ctx.stack === 'biotype'.
   let rows = ctx.inventory
     .filter((c) => ctx.hapFilter === 'all' ? true : c.hap === ctx.hapFilter)
     .map((c) => {
@@ -325,10 +441,11 @@ function _renderDensity(ctx) {
       return {
         id: c.id, name: c.name, hap: c.hap,
         length_bp: c.length_bp,
-        gene_count: e ? e.gene_count : 0,
+        feature_count: e ? e.feature_count : 0,
+        breakdown: e ? e.feature_breakdown : {},
       };
     });
-  if (ctx.sort === 'count')  rows.sort((a, b) => b.gene_count - a.gene_count);
+  if (ctx.sort === 'count')       rows.sort((a, b) => b.feature_count - a.feature_count);
   else if (ctx.sort === 'length') rows.sort((a, b) => b.length_bp - a.length_bp);
   else if (ctx.sort === 'chrom')  rows.sort((a, b) => String(a.id).localeCompare(String(b.id), undefined, { numeric: true }));
 
@@ -336,7 +453,7 @@ function _renderDensity(ctx) {
   const PAD_L = 56, PAD_R = 16, PAD_T = 24, PAD_B = 56;
   const plotW = W - PAD_L - PAD_R;
   const plotH = H - PAD_T - PAD_B;
-  const maxCount = rows.reduce((m, r) => Math.max(m, r.gene_count), 1);
+  const maxCount = rows.reduce((m, r) => Math.max(m, r.feature_count), 1);
   const n = Math.max(1, rows.length);
   const barW = plotW / n;
   const innerW = Math.max(2, barW - 2);
@@ -361,22 +478,47 @@ function _renderDensity(ctx) {
   }
   svg.appendChild(gridG);
 
-  // Bars.
+  // Bars — either a single flat bar (haplotype-coloured) or stacked by
+  // biotype, depending on ctx.stack.
   const bars = _el('g', { class: 'ga-gene-bars' });
   rows.forEach((r, i) => {
-    const h = plotH * (r.gene_count / Math.max(1, maxCount));
     const x = PAD_L + i * barW + (barW - innerW) / 2;
-    const y = PAD_T + plotH - h;
-    const fill = r.hap === 'Mac' ? '#e08c9c' : '#ff8c6e';
-    bars.appendChild(_el('rect', {
-      class: 'ga-gene-bar',
-      x, y, width: innerW, height: Math.max(1, h),
-      fill,
-      'data-ga-gene-chrom': r.id,
-      'data-ga-gene-tip-payload': JSON.stringify({
-        chrom: r.id, hap: r.hap, count: r.gene_count, length_bp: r.length_bp,
-      }),
-    }));
+    if (ctx.stack === 'biotype') {
+      // Walk FEATURE_TYPE_ORDER bottom→up so the legend reads top→bottom
+      // in the same order, with the dominant biotype (protein_coding) at
+      // the bottom of the stack.
+      let cum = 0;
+      FEATURE_TYPE_ORDER.forEach((t) => {
+        const n = (r.breakdown && r.breakdown[t]) || 0;
+        if (n === 0) return;
+        const segH = plotH * (n / Math.max(1, maxCount));
+        const y = PAD_T + plotH - (plotH * (cum + n) / Math.max(1, maxCount));
+        cum += n;
+        bars.appendChild(_el('rect', {
+          class: 'ga-gene-bar',
+          x, y, width: innerW, height: Math.max(0.6, segH),
+          fill: FEATURE_TYPES[t].color,
+          'data-ga-gene-chrom': r.id,
+          'data-ga-gene-tip-payload': JSON.stringify({
+            chrom: r.id, hap: r.hap, count: r.feature_count, length_bp: r.length_bp,
+            biotype: t, biotype_count: n, biotype_label: FEATURE_TYPES[t].label,
+          }),
+        }));
+      });
+    } else {
+      const h = plotH * (r.feature_count / Math.max(1, maxCount));
+      const y = PAD_T + plotH - h;
+      const fill = r.hap === 'Mac' ? '#e08c9c' : '#ff8c6e';
+      bars.appendChild(_el('rect', {
+        class: 'ga-gene-bar',
+        x, y, width: innerW, height: Math.max(1, h),
+        fill,
+        'data-ga-gene-chrom': r.id,
+        'data-ga-gene-tip-payload': JSON.stringify({
+          chrom: r.id, hap: r.hap, count: r.feature_count, length_bp: r.length_bp,
+        }),
+      }));
+    }
     // Tick label, rotated for legibility.
     const tx = PAD_L + i * barW + barW / 2;
     bars.appendChild(_rotText(tx, PAD_T + plotH + 6, -55, 'ga-gene-axis-label', r.name));
@@ -395,12 +537,15 @@ function _renderDensity(ctx) {
     'text-anchor': 'middle',
     transform: `rotate(-90, 14, ${PAD_T + plotH / 2})`,
   });
-  yLab.textContent = 'gene count';
+  yLab.textContent = 'feature count';
   svg.appendChild(yLab);
 }
 
 // ---------------------------------------------------------------------------
-// View 2 — Per-chromosome gene track.
+// View 2 — Per-chromosome feature track. Three strand lanes (+, ., −) so
+// unstranded repeat features have somewhere to live; features coloured by
+// biotype; tick-glyph types (microsat, miRNA, …) render as 1.5 px marks
+// instead of fills so they don't blow out the box layer.
 // ---------------------------------------------------------------------------
 
 function _mountTrack(root, { geneData, inventory }) {
@@ -409,12 +554,17 @@ function _mountTrack(root, { geneData, inventory }) {
   const card = host.closest('[data-ga-card="gene-track"]');
   if (host.__gaPage5 && host.__gaPage5.destroy) host.__gaPage5.destroy();
 
-  // Default to the chrom with the most genes (loudest signal).
+  // Default to the chrom with the most features (loudest signal).
   const sortedByCount = inventory.slice().sort((a, b) => {
     const ca = geneData.chroms[a.id]; const cb = geneData.chroms[b.id];
-    return ((cb ? cb.gene_count : 0) - (ca ? ca.gene_count : 0));
+    return ((cb ? cb.feature_count : 0) - (ca ? ca.feature_count : 0));
   });
   const defaultChrom = sortedByCount[0] && sortedByCount[0].id;
+
+  // Default: all biotypes visible. Strand toggles are kept independent so
+  // a user can view e.g. "only + strand miRNAs".
+  const typeOn = {};
+  for (const t of FEATURE_TYPE_ORDER) typeOn[t] = true;
 
   const ctx = {
     host,
@@ -424,25 +574,29 @@ function _mountTrack(root, { geneData, inventory }) {
     inventory,
     geneData,
     chromId: defaultChrom,
-    strandOn: { '+': true, '-': true },
+    strandOn: { '+': true, '-': true, '.': true },
+    typeOn,
     setChrom(id) {
       if (!id) return;
       ctx.chromId = id;
       const sel = card && card.querySelector('[data-ga-gene-track-chrom]');
       if (sel) sel.value = id;
       _renderTrack(ctx);
-      // Scroll the view into view so the click on a density bar gives visual feedback.
       if (host.scrollIntoView) host.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     },
     _onChromChange: null,
     _onStrandToggle: null,
+    _onTypeToggle: null,
+    _onGroupClick: null,
     _onMove: null,
     _onLeave: null,
     destroy() {
       const sel = card && card.querySelector('[data-ga-gene-track-chrom]');
       if (sel && this._onChromChange) sel.removeEventListener('change', this._onChromChange);
-      if (card && this._onStrandToggle) {
-        card.querySelectorAll('[data-ga-gene-strand]').forEach((cb) => cb.removeEventListener('change', this._onStrandToggle));
+      if (card) {
+        if (this._onStrandToggle) card.querySelectorAll('[data-ga-gene-strand]').forEach((cb) => cb.removeEventListener('change', this._onStrandToggle));
+        if (this._onTypeToggle)   card.querySelectorAll('[data-ga-gene-type]').forEach((cb) => cb.removeEventListener('change', this._onTypeToggle));
+        if (this._onGroupClick)   card.querySelectorAll('[data-ga-gene-group]').forEach((b) => b.removeEventListener('click', this._onGroupClick));
       }
       if (this.svg) {
         this.svg.removeEventListener('mousemove', this._onMove);
@@ -459,13 +613,19 @@ function _mountTrack(root, { geneData, inventory }) {
     inventory.forEach((c) => {
       const opt = document.createElement('option');
       opt.value = c.id;
-      opt.textContent = `${c.name || c.id} · ${_fmtBp(c.length_bp)} · ${(geneData.chroms[c.id] || {}).gene_count ?? '—'} genes`;
+      const e = geneData.chroms[c.id];
+      opt.textContent = `${c.name || c.id} · ${_fmtBp(c.length_bp)} · ${(e ? e.feature_count : 0).toLocaleString()} feats`;
       sel.appendChild(opt);
     });
     sel.value = ctx.chromId;
     ctx._onChromChange = (ev) => { ctx.chromId = ev.target.value; _renderTrack(ctx); };
     sel.addEventListener('change', ctx._onChromChange);
   }
+
+  // Inject the biotype filter strip + render. The strip is built once at
+  // mount time (toolbar host is data-ga-gene-type-strip on the track card).
+  _buildBiotypeStrip(card, ctx);
+
   if (card) {
     ctx._onStrandToggle = (ev) => {
       const cb = ev.currentTarget;
@@ -474,7 +634,31 @@ function _mountTrack(root, { geneData, inventory }) {
       _renderTrack(ctx);
     };
     card.querySelectorAll('[data-ga-gene-strand]').forEach((cb) => cb.addEventListener('change', ctx._onStrandToggle));
+
+    ctx._onTypeToggle = (ev) => {
+      const cb = ev.currentTarget;
+      const k = cb.getAttribute('data-ga-gene-type');
+      if (k in ctx.typeOn) ctx.typeOn[k] = !!cb.checked;
+      _renderTrack(ctx);
+    };
+    card.querySelectorAll('[data-ga-gene-type]').forEach((cb) => cb.addEventListener('change', ctx._onTypeToggle));
+
+    ctx._onGroupClick = (ev) => {
+      const btn = ev.currentTarget;
+      const g = btn.getAttribute('data-ga-gene-group');
+      // "only this group": flip every type to (type.group === g).
+      for (const t of FEATURE_TYPE_ORDER) ctx.typeOn[t] = (g === 'all') || (FEATURE_TYPES[t].group === g);
+      // Reflect into the type checkboxes.
+      card.querySelectorAll('[data-ga-gene-type]').forEach((cb) => {
+        const k = cb.getAttribute('data-ga-gene-type');
+        cb.checked = !!ctx.typeOn[k];
+      });
+      card.querySelectorAll('[data-ga-gene-group]').forEach((b) => b.classList.toggle('is-active', b === btn));
+      _renderTrack(ctx);
+    };
+    card.querySelectorAll('[data-ga-gene-group]').forEach((b) => b.addEventListener('click', ctx._onGroupClick));
   }
+
   ctx._onMove = (ev) => {
     const t = ev.target.closest('[data-ga-gene-tip-payload]');
     if (!t) { _hideTip(ctx); return; }
@@ -489,95 +673,191 @@ function _mountTrack(root, { geneData, inventory }) {
   return ctx;
 }
 
+// Build the biotype legend + filter row inside the track card's toolbar.
+// Idempotent — re-runs at mount safely.
+function _buildBiotypeStrip(card, ctx) {
+  if (!card) return;
+  const host = card.querySelector('[data-ga-gene-type-strip]');
+  if (!host) return;
+  while (host.firstChild) host.removeChild(host.firstChild);
+
+  // Group "only" buttons on the left.
+  const groupLabel = document.createElement('span');
+  groupLabel.className = 'ga-gene-tool-label';
+  groupLabel.textContent = 'group';
+  host.appendChild(groupLabel);
+  ['all', ...FEATURE_GROUPS].forEach((g) => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'ga-gene-btn' + (g === 'all' ? ' is-active' : '');
+    btn.setAttribute('data-ga-gene-group', g);
+    btn.textContent = g === 'all' ? 'all' : FEATURE_GROUP_LABEL[g];
+    host.appendChild(btn);
+  });
+
+  const spacer = document.createElement('span');
+  spacer.className = 'ga-gene-tool-spacer';
+  host.appendChild(spacer);
+
+  // Per-type checkboxes with color swatches.
+  FEATURE_TYPE_ORDER.forEach((t) => {
+    const cfg = FEATURE_TYPES[t];
+    const wrap = document.createElement('label');
+    wrap.className = 'ga-gene-toggle';
+    const cb = document.createElement('input');
+    cb.type = 'checkbox';
+    cb.checked = ctx.typeOn[t];
+    cb.setAttribute('data-ga-gene-type', t);
+    wrap.appendChild(cb);
+    const sw = document.createElement('span');
+    sw.className = 'ga-gene-swatch';
+    sw.style.background = cfg.color;
+    wrap.appendChild(sw);
+    const txt = document.createElement('span');
+    txt.textContent = cfg.short;
+    wrap.appendChild(txt);
+    host.appendChild(wrap);
+  });
+}
+
 function _renderTrack(ctx) {
   const svg = ctx.svg;
   while (svg.firstChild) svg.removeChild(svg.firstChild);
   const entry = ctx.geneData.chroms[ctx.chromId];
-  if (!entry) { _drawEmptySvg(svg, 'No genes on this chromosome.', 960, 200); return; }
+  if (!entry) { _drawEmptySvg(svg, 'No features on this chromosome.', 960, 220); return; }
 
-  const W = 960, H = 200;
-  const PAD_L = 40, PAD_R = 24, PAD_T = 30, PAD_B = 48;
+  const W = 960, H = 220;
+  const PAD_L = 56, PAD_R = 24, PAD_T = 30, PAD_B = 48;
   const plotW = W - PAD_L - PAD_R;
   const plotH = H - PAD_T - PAD_B;
   const length_bp = entry.length_bp || 1;
-  const yFwd = PAD_T + plotH * 0.20;
-  const yRev = PAD_T + plotH * 0.65;
-  const boxH = 10;
+  // Three strand lanes: + (top), unstranded "." (middle, for repeats), − (bottom).
+  const laneH = plotH / 3;
+  const lanePadding = laneH * 0.18;
+  const lanes = {
+    '+': { y0: PAD_T + 0 * laneH + lanePadding, y1: PAD_T + 1 * laneH - lanePadding },
+    '.': { y0: PAD_T + 1 * laneH + lanePadding, y1: PAD_T + 2 * laneH - lanePadding },
+    '-': { y0: PAD_T + 2 * laneH + lanePadding, y1: PAD_T + 3 * laneH - lanePadding },
+  };
+  const boxH = Math.min(12, (lanes['+'].y1 - lanes['+'].y0));
+  const tickH = boxH;
 
   // Backbone.
   svg.appendChild(_el('rect', {
     class: 'ga-gene-plot-bg', x: PAD_L, y: PAD_T, width: plotW, height: plotH,
   }));
-  svg.appendChild(_el('line', {
-    class: 'ga-gene-backbone',
-    x1: PAD_L, x2: PAD_L + plotW, y1: yFwd + boxH / 2, y2: yFwd + boxH / 2,
-  }));
-  svg.appendChild(_el('line', {
-    class: 'ga-gene-backbone',
-    x1: PAD_L, x2: PAD_L + plotW, y1: yRev + boxH / 2, y2: yRev + boxH / 2,
-  }));
-
-  // Gene boxes.
-  const genes = entry.genes || [];
-  const boxes = _el('g', { class: 'ga-gene-boxes' });
-  let plotted = 0;
-  for (const g of genes) {
-    if (!ctx.strandOn[g.strand]) continue;
-    const x = PAD_L + (g.start_bp / length_bp) * plotW;
-    const w = Math.max(1, ((g.end_bp - g.start_bp) / length_bp) * plotW);
-    const y = g.strand === '+' ? yFwd : yRev;
-    boxes.appendChild(_el('rect', {
-      class: 'ga-gene-box' + (g.strand === '+' ? ' is-fwd' : ' is-rev'),
-      x, y, width: w, height: boxH,
-      fill: g.strand === '+' ? FWD_COLOR : REV_COLOR,
-      'data-ga-gene-tip-payload': JSON.stringify({
-        name: g.name, id: g.id, biotype: g.biotype,
-        start: g.start_bp, end: g.end_bp, strand: g.strand,
-      }),
+  Object.keys(lanes).forEach((s) => {
+    const yMid = (lanes[s].y0 + lanes[s].y1) / 2;
+    svg.appendChild(_el('line', {
+      class: 'ga-gene-backbone',
+      x1: PAD_L, x2: PAD_L + plotW, y1: yMid, y2: yMid,
     }));
+    const lbl = _el('text', {
+      class: 'ga-gene-axis-label',
+      x: PAD_L - 6, y: yMid, 'text-anchor': 'end', 'dominant-baseline': 'middle',
+    });
+    lbl.textContent = (s === '+' ? '+ str' : s === '-' ? '− str' : 'unstr.');
+    svg.appendChild(lbl);
+  });
+
+  // Render features. Box-glyph types get a fill rect on their strand lane;
+  // tick-glyph types get a 1.5 px vertical mark so dense repeat layers stay
+  // legible (with thousands of microsats per chrom, fill rects collapse to mush).
+  // Order: boxes first, ticks on top, so dense ticks remain visible.
+  const features = entry.features || [];
+  const boxesByType = {};
+  const ticksByType = {};
+  let plotted = 0;
+  for (const f of features) {
+    const t = _typeOf(f);
+    if (!ctx.typeOn[t]) continue;
+    const strand = (f.strand === '+' || f.strand === '-' || f.strand === '.') ? f.strand : '+';
+    if (!ctx.strandOn[strand]) continue;
+    if (FEATURE_TYPES[t].glyph === 'box') {
+      (boxesByType[t] = boxesByType[t] || []).push({ f, strand });
+    } else {
+      (ticksByType[t] = ticksByType[t] || []).push({ f, strand });
+    }
     plotted++;
   }
+
+  const boxes = _el('g', { class: 'ga-gene-boxes' });
+  FEATURE_TYPE_ORDER.forEach((t) => {
+    if (!boxesByType[t]) return;
+    const cfg = FEATURE_TYPES[t];
+    const g = _el('g', { class: `ga-gene-type-group is-${t.replace(/_/g, '-')}` });
+    for (const { f, strand } of boxesByType[t]) {
+      const x = PAD_L + (f.start_bp / length_bp) * plotW;
+      const w = Math.max(1, ((f.end_bp - f.start_bp) / length_bp) * plotW);
+      const y = lanes[strand].y0;
+      g.appendChild(_el('rect', {
+        class: 'ga-gene-box',
+        x, y, width: w, height: boxH,
+        fill: cfg.color,
+        'data-ga-gene-tip-payload': JSON.stringify({
+          name: f.name, id: f.id, biotype: t, biotype_label: cfg.label,
+          start: f.start_bp, end: f.end_bp, strand,
+        }),
+      }));
+    }
+    boxes.appendChild(g);
+  });
   svg.appendChild(boxes);
+
+  const ticks = _el('g', { class: 'ga-gene-ticks' });
+  FEATURE_TYPE_ORDER.forEach((t) => {
+    if (!ticksByType[t]) return;
+    const cfg = FEATURE_TYPES[t];
+    const g = _el('g', { class: `ga-gene-type-group is-${t.replace(/_/g, '-')}` });
+    for (const { f, strand } of ticksByType[t]) {
+      const mid = (f.start_bp + f.end_bp) / 2;
+      const x = PAD_L + (mid / length_bp) * plotW;
+      const y0 = lanes[strand].y0;
+      g.appendChild(_el('line', {
+        class: 'ga-gene-tick-mark',
+        x1: x, x2: x, y1: y0, y2: y0 + tickH,
+        stroke: cfg.color,
+        'stroke-width': 1.5,
+        'data-ga-gene-tip-payload': JSON.stringify({
+          name: f.name, id: f.id, biotype: t, biotype_label: cfg.label,
+          start: f.start_bp, end: f.end_bp, strand,
+        }),
+      }));
+    }
+    ticks.appendChild(g);
+  });
+  svg.appendChild(ticks);
 
   // Axis (bp ticks at 0, mid, end).
   const axis = _el('g', { class: 'ga-gene-axis' });
-  for (const f of [0, 0.5, 1]) {
-    const x = PAD_L + plotW * f;
+  for (const fr of [0, 0.5, 1]) {
+    const x = PAD_L + plotW * fr;
     axis.appendChild(_el('line', {
       class: 'ga-gene-tick', x1: x, x2: x, y1: PAD_T + plotH, y2: PAD_T + plotH + 4,
     }));
     const lbl = _el('text', {
       class: 'ga-gene-axis-label', x, y: PAD_T + plotH + 16, 'text-anchor': 'middle',
     });
-    lbl.textContent = _fmtBp(length_bp * f);
+    lbl.textContent = _fmtBp(length_bp * fr);
     axis.appendChild(lbl);
   }
   svg.appendChild(axis);
 
-  // Title.
+  // Title — total feature count + plotted-after-filter.
   const t = _el('text', {
     class: 'ga-gene-axis-title',
     x: PAD_L, y: PAD_T - 12,
     'text-anchor': 'start',
   });
-  t.textContent = `${ctx.chromId} · ${_fmtBp(length_bp)} · ${entry.gene_count.toLocaleString()} genes · plotted ${plotted.toLocaleString()}`;
+  t.textContent = `${ctx.chromId} · ${_fmtBp(length_bp)} · ${entry.feature_count.toLocaleString()} features (${entry.gene_count.toLocaleString()} genes) · plotted ${plotted.toLocaleString()}`;
   svg.appendChild(t);
-
-  // Strand legend chips on the right.
-  const legend = _el('g', { class: 'ga-gene-legend' });
-  const chip = (cy, color, txt) => {
-    legend.appendChild(_el('rect', { x: PAD_L + plotW - 84, y: cy - 5, width: 10, height: 10, fill: color }));
-    const tx = _el('text', { class: 'ga-gene-axis-label', x: PAD_L + plotW - 70, y: cy, 'dominant-baseline': 'middle' });
-    tx.textContent = txt;
-    legend.appendChild(tx);
-  };
-  chip(yFwd + boxH / 2, FWD_COLOR, '+ strand');
-  chip(yRev + boxH / 2, REV_COLOR, '− strand');
-  svg.appendChild(legend);
 }
 
 // ---------------------------------------------------------------------------
-// View 3 — Gene-cargo table per inversion candidate.
+// View 3 — Feature-cargo table per inversion candidate. Columns: candidate,
+// chrom, span, feature count, biotype breakdown chips, top gene names, max
+// SnpEff impact (when variant_annotations is loaded). One row per
+// shared.candidates entry; click fires ga-cargo-cand-click cross-card.
 // ---------------------------------------------------------------------------
 
 function _mountCargo(root, { geneData, candidates, impact }) {
@@ -597,10 +877,10 @@ function _mountCargo(root, { geneData, candidates, impact }) {
   table.className = 'ga-cargo-table';
   const thead = document.createElement('thead');
   const trh = document.createElement('tr');
-  const headers = ['candidate', 'chrom', 'span', 'gene count', 'gene list', 'max impact'];
+  const headers = ['candidate', 'chrom', 'span', 'feature count', 'biotype mix', 'top gene names', 'max impact'];
   headers.forEach((h) => {
     const th = document.createElement('th');
-    th.className = 'ga-cargo-th' + ((h === 'gene count') ? ' is-num' : '');
+    th.className = 'ga-cargo-th' + ((h === 'feature count') ? ' is-num' : '');
     th.textContent = h;
     trh.appendChild(th);
   });
@@ -616,7 +896,11 @@ function _mountCargo(root, { geneData, candidates, impact }) {
     tr.addEventListener('click', () => {
       const ev = new CustomEvent('ga-cargo-cand-click', {
         bubbles: true,
-        detail: { candidate: c, cargo: cargo.gene_ids },
+        detail: {
+          candidate: c,
+          cargo: cargo.feature_ids,
+          biotype_counts: cargo.biotype_counts,
+        },
       });
       tr.dispatchEvent(ev);
     });
@@ -631,13 +915,50 @@ function _mountCargo(root, { geneData, candidates, impact }) {
     tr.appendChild(td(`${_fmtBp(c.start_bp)} – ${_fmtBp(c.end_bp)}`));
     tr.appendChild(td(cargo.count.toLocaleString(), 'is-num'));
 
+    // Biotype-mix cell — colour swatches sized in proportion to that type's
+    // count, with a hover tooltip on each chip showing the exact number.
+    const mixCell = document.createElement('td');
+    mixCell.className = 'ga-cargo-td ga-cargo-mix';
+    if (cargo.count === 0) {
+      mixCell.textContent = '—';
+    } else {
+      const bar = document.createElement('span');
+      bar.className = 'ga-cargo-mix-bar';
+      FEATURE_TYPE_ORDER.forEach((t) => {
+        const n = cargo.biotype_counts[t] || 0;
+        if (n === 0) return;
+        const seg = document.createElement('span');
+        seg.className = 'ga-cargo-mix-seg';
+        seg.style.background = FEATURE_TYPES[t].color;
+        seg.style.flexGrow = String(n);
+        seg.setAttribute('title', `${FEATURE_TYPES[t].label}: ${n.toLocaleString()}`);
+        bar.appendChild(seg);
+      });
+      mixCell.appendChild(bar);
+      // Compact text summary below the bar.
+      const txt = document.createElement('span');
+      txt.className = 'ga-cargo-mix-text';
+      // Pick the top 3 biotypes for the inline summary.
+      const top = FEATURE_TYPE_ORDER
+        .filter((t) => (cargo.biotype_counts[t] || 0) > 0)
+        .sort((a, b) => (cargo.biotype_counts[b] || 0) - (cargo.biotype_counts[a] || 0))
+        .slice(0, 3)
+        .map((t) => `${cargo.biotype_counts[t]} ${FEATURE_TYPES[t].short}`)
+        .join(' · ');
+      txt.textContent = top;
+      mixCell.appendChild(txt);
+    }
+    tr.appendChild(mixCell);
+
+    // Top-genes column: protein-coding + lncRNA names only (the others
+    // don't have human-readable symbols).
     const listCell = document.createElement('td');
     listCell.className = 'ga-cargo-td ga-cargo-genelist';
-    if (cargo.count === 0) {
+    if (cargo.gene_names.length === 0) {
       listCell.textContent = '—';
     } else {
       const first = cargo.gene_names.slice(0, 5).join(', ');
-      const more = cargo.count > 5 ? ` (+${cargo.count - 5} more)` : '';
+      const more = cargo.gene_names.length > 5 ? ` (+${cargo.gene_names.length - 5} more)` : '';
       listCell.textContent = first + more;
     }
     tr.appendChild(listCell);
@@ -662,21 +983,29 @@ function _mountCargo(root, { geneData, candidates, impact }) {
 }
 
 function _computeCargo(geneData, candidate, impact) {
+  const empty = {
+    count: 0, feature_ids: [], gene_names: [], max_impact: null,
+    biotype_counts: Object.fromEntries(FEATURE_TYPE_ORDER.map((t) => [t, 0])),
+  };
   const entry = candidate && candidate.chrom && geneData.chroms[candidate.chrom];
-  if (!entry || candidate.start_bp == null || candidate.end_bp == null) {
-    return { count: 0, gene_ids: [], gene_names: [], max_impact: null };
-  }
+  if (!entry || candidate.start_bp == null || candidate.end_bp == null) return empty;
   const a = Math.min(candidate.start_bp, candidate.end_bp);
   const b = Math.max(candidate.start_bp, candidate.end_bp);
-  const hit = [];
-  for (const g of entry.genes) {
-    if (g.end_bp < a || g.start_bp > b) continue;
-    hit.push(g);
+  const counts = Object.fromEntries(FEATURE_TYPE_ORDER.map((t) => [t, 0]));
+  const ids = [];
+  const gene_names = [];
+  for (const f of (entry.features || [])) {
+    if (f.end_bp < a || f.start_bp > b) continue;
+    const t = _typeOf(f);
+    counts[t]++;
+    ids.push(f.id);
+    // "Top gene names" = symbolic biotypes only.
+    if (t === 'protein_coding' || t === 'lncRNA' || t === 'pseudogene') {
+      gene_names.push(f.name);
+    }
   }
-  const ids = hit.map((g) => g.id);
-  const names = hit.map((g) => g.name);
   let max_impact = null;
-  if (impact) {
+  if (impact && ids.length > 0) {
     const order = { HIGH: 4, MODERATE: 3, LOW: 2, MODIFIER: 1 };
     let bestRank = 0;
     for (const id of ids) {
@@ -685,7 +1014,7 @@ function _computeCargo(geneData, candidate, impact) {
       if (r > bestRank) { bestRank = r; max_impact = imp; }
     }
   }
-  return { count: hit.length, gene_ids: ids, gene_names: names, max_impact };
+  return { count: ids.length, feature_ids: ids, gene_names, max_impact, biotype_counts: counts };
 }
 
 // ---------------------------------------------------------------------------
@@ -695,17 +1024,22 @@ function _computeCargo(geneData, candidate, impact) {
 function _showTipDensity(ctx, payload, ev) {
   if (!ctx.tip) return;
   let p; try { p = JSON.parse(payload); } catch { return; }
+  const biotypeLine = p.biotype
+    ? `<div class="ga-gene-tip-meta">${p.biotype_label || p.biotype}: ${(p.biotype_count || 0).toLocaleString()}</div>`
+    : '';
   ctx.tip.innerHTML = `
     <div class="ga-gene-tip-kind">${p.hap || ''} chrom</div>
     <div class="ga-gene-tip-name">${p.chrom}</div>
-    <div class="ga-gene-tip-meta">${p.count.toLocaleString()} genes · ${_fmtBp(p.length_bp)}</div>`;
+    <div class="ga-gene-tip-meta">${(p.count || 0).toLocaleString()} features · ${_fmtBp(p.length_bp)}</div>
+    ${biotypeLine}`;
   _placeTip(ctx, ev);
 }
 function _showTipTrack(ctx, payload, ev) {
   if (!ctx.tip) return;
   let p; try { p = JSON.parse(payload); } catch { return; }
+  const strand = p.strand === '+' ? 'fwd' : p.strand === '-' ? 'rev' : 'unstr.';
   ctx.tip.innerHTML = `
-    <div class="ga-gene-tip-kind">${p.strand === '+' ? 'fwd' : 'rev'} · ${p.biotype || 'gene'}</div>
+    <div class="ga-gene-tip-kind">${strand} · ${p.biotype_label || p.biotype || 'feature'}</div>
     <div class="ga-gene-tip-name">${p.name || p.id}</div>
     <div class="ga-gene-tip-meta">${_fmtBp(p.start)} – ${_fmtBp(p.end)} · ${_fmtBp(p.end - p.start)}</div>`;
   _placeTip(ctx, ev);

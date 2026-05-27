@@ -75,19 +75,24 @@
 
       <div class="ga-card" data-ga-card="gene-density">
         <div class="ga-card-header">
-          <div class="ga-card-title">View 1 — Gene density per chromosome</div>
+          <div class="ga-card-title">View 1 — Feature density per chromosome</div>
           <div class="ga-card-status" data-ga-gene-source>sample data</div>
         </div>
         <div class="ga-card-para ga-dim">
-          One bar per chromosome, height ∝ gene count. Toggle the haplotype
-          filter or sort direction; click any bar to scroll View 2 to that
+          One bar per chromosome, height = total annotated features (genes +
+          ncRNAs + repeats). Switch the <i>stack</i> control to break each
+          bar down by biotype. Click any bar to scroll View 2 to that
           chromosome.
         </div>
-        <div class="ga-gene-toolbar" role="toolbar" aria-label="Gene density controls">
+        <div class="ga-gene-toolbar" role="toolbar" aria-label="Feature density controls">
           <span class="ga-gene-tool-label">hap</span>
           <button type="button" class="ga-gene-btn is-active" data-ga-gene-hap="all">all</button>
           <button type="button" class="ga-gene-btn" data-ga-gene-hap="Gar">Gar</button>
           <button type="button" class="ga-gene-btn" data-ga-gene-hap="Mac">Mac</button>
+          <span class="ga-gene-tool-spacer"></span>
+          <span class="ga-gene-tool-label">stack</span>
+          <button type="button" class="ga-gene-btn is-active" data-ga-gene-stack="total">total</button>
+          <button type="button" class="ga-gene-btn" data-ga-gene-stack="biotype">by biotype</button>
           <span class="ga-gene-tool-spacer"></span>
           <span class="ga-gene-tool-label">sort</span>
           <button type="button" class="ga-gene-btn is-active" data-ga-gene-sort="count">count</button>
@@ -95,7 +100,7 @@
           <button type="button" class="ga-gene-btn" data-ga-gene-sort="chrom">chrom</button>
         </div>
         <div class="ga-gene-density-host" data-ga-gene-density
-             role="img" aria-label="Per-chromosome gene-density bar chart.">
+             role="img" aria-label="Per-chromosome feature-density bar chart.">
           <svg class="ga-gene-density-svg"
                viewBox="0 0 960 320"
                preserveAspectRatio="xMidYMid meet"
@@ -106,17 +111,20 @@
 
       <div class="ga-card" data-ga-card="gene-track">
         <div class="ga-card-header">
-          <div class="ga-card-title">View 2 — Per-chromosome gene track</div>
+          <div class="ga-card-title">View 2 — Per-chromosome feature track</div>
           <div class="ga-card-status" data-ga-gene-track-status>sample data · pick a chrom</div>
         </div>
         <div class="ga-card-para ga-dim">
-          Gene models on a length-scaled axis for one chromosome. Boxes =
-          exons (or single-exon gene span when exon detail is absent);
-          colour encodes strand (<b class="ga-gene-fwd">+ forward</b> /
-          <b class="ga-gene-rev">− reverse</b>). Hover any gene for its name
-          and biotype.
+          Annotated features along one chromosome, length-scaled.
+          Box-glyph types (protein-coding, lncRNA, pseudogene, rRNA) render
+          as filled rectangles; tick-glyph types (miRNA, tRNA, snoRNA,
+          microsatellite, minisatellite, tandem repeat) render as 1.5 px
+          marks so the dense repeat layers stay legible. Three strand
+          lanes (<b class="ga-gene-fwd">+</b>, unstranded, <b class="ga-gene-rev">−</b>).
+          Filter by biotype group or per-type. Hover any feature for its
+          name, biotype, and span.
         </div>
-        <div class="ga-gene-toolbar" role="toolbar" aria-label="Gene track controls">
+        <div class="ga-gene-toolbar" role="toolbar" aria-label="Feature track main controls">
           <span class="ga-gene-tool-label">chrom</span>
           <select class="ga-gene-select" data-ga-gene-track-chrom></select>
           <span class="ga-gene-tool-spacer"></span>
@@ -126,14 +134,20 @@
             <span class="ga-gene-fwd">+</span>
           </label>
           <label class="ga-gene-toggle">
+            <input type="checkbox" data-ga-gene-strand="." checked>
+            <span>·</span>
+          </label>
+          <label class="ga-gene-toggle">
             <input type="checkbox" data-ga-gene-strand="-" checked>
             <span class="ga-gene-rev">−</span>
           </label>
         </div>
+        <div class="ga-gene-toolbar ga-gene-type-strip" role="toolbar" aria-label="Biotype filter"
+             data-ga-gene-type-strip></div>
         <div class="ga-gene-track-host" data-ga-gene-track
-             role="img" aria-label="Single-chromosome gene track.">
+             role="img" aria-label="Single-chromosome feature track.">
           <svg class="ga-gene-track-svg"
-               viewBox="0 0 960 200"
+               viewBox="0 0 960 220"
                preserveAspectRatio="xMidYMid meet"
                xmlns="http://www.w3.org/2000/svg"></svg>
           <div class="ga-gene-tooltip" data-ga-gene-track-tip role="tooltip" hidden></div>
@@ -142,15 +156,17 @@
 
       <div class="ga-card" data-ga-card="gene-cargo">
         <div class="ga-card-header">
-          <div class="ga-card-title">View 3 — Gene cargo per inversion candidate</div>
+          <div class="ga-card-title">View 3 — Feature cargo per inversion candidate</div>
           <div class="ga-card-status" data-ga-cargo-status>sample candidates</div>
         </div>
         <div class="ga-card-para ga-dim">
-          One row per promoted candidate read from <code>shared.candidates</code>
-          (Inversion-Atlas cross-atlas slot). Cargo = genes whose span overlaps
-          the candidate's <code>[start_bp, end_bp]</code> interval on the same
-          chromosome. Impact column populates from <code>variant_annotations</code>
-          when it lands (phase E); meanwhile the column reports "—".
+          One row per promoted candidate from <code>shared.candidates</code>.
+          Cargo = every feature whose span overlaps the candidate window on
+          the same chromosome — protein-coding genes, ncRNAs, and repeat
+          features. The biotype-mix column shows the per-type breakdown as
+          a colour bar plus a compact top-3 textual summary. Impact column
+          populates from <code>variant_annotations</code> when it lands
+          (phase E); meanwhile the column reports "—".
         </div>
         <div class="ga-gene-cargo-host" data-ga-gene-cargo></div>
       </div>

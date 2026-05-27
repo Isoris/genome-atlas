@@ -1388,6 +1388,46 @@ html[data-theme="light"] .ga-gene-btn.is-active {
 }
 html[data-theme="light"] .ga-gene-tooltip { border-left-color: #c2410c; }
 
+/* Biotype filter strip: a second toolbar row hanging below the main one.
+   Each toggle has a colour swatch + the type's short label. */
+.ga-gene-type-strip {
+  margin-top: 0;
+  gap: 6px 10px;
+  border-top: 1px dashed var(--rule);
+  padding-top: 4px;
+}
+.ga-gene-swatch {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  vertical-align: middle;
+  margin: 0 2px 0 0;
+}
+.ga-gene-tick-mark { cursor: crosshair; }
+.ga-gene-tick-mark:hover { stroke-width: 3; }
+
+/* Cargo biotype-mix cell. Bar segments grow with `flex-grow: <count>` so
+   each chip ends up proportionally wide without needing per-cell math. */
+.ga-cargo-mix { min-width: 220px; }
+.ga-cargo-mix-bar {
+  display: flex;
+  height: 8px;
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: 3px;
+  background: var(--panel-2);
+  border: 1px solid var(--rule);
+}
+.ga-cargo-mix-seg { flex: 0 1 auto; min-width: 1px; }
+.ga-cargo-mix-text {
+  display: block;
+  font-size: 9px;
+  color: var(--ink-dim);
+  font-family: var(--mono);
+  letter-spacing: 0.02em;
+}
+
 /* --------------------------------------------------------------------- */
 /* page7 — Variant annotations (tally · stacked bars · HIGH detail).     */
 /* --------------------------------------------------------------------- */
