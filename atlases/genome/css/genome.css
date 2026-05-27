@@ -1601,6 +1601,149 @@ html[data-theme="light"] .ga-gene-tooltip { border-left-color: #c2410c; }
 
 html[data-theme="light"] .ga-ce-range { accent-color: #c2410c; }
 
+/* --------------------------------------------------------------------- */
+/* page4 — Assembly methods pipeline DAG (SVG nodes + arrows + detail).  */
+/* --------------------------------------------------------------------- */
+
+.ga-pipeline-host {
+  margin: 6px 0 6px 0;
+  padding: 6px 8px 4px 8px;
+  background: var(--panel-3);
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+}
+.ga-pipeline-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  font-family: var(--mono);
+  user-select: none;
+  outline: none;
+}
+.ga-pipeline-svg:focus-visible { outline: 1px dashed #ff8c6e; outline-offset: 1px; }
+
+.ga-pipeline-arrow {
+  stroke: var(--ink-dim);
+  stroke-width: 1.5;
+  fill: none;
+}
+
+.ga-pipeline-stage { cursor: pointer; }
+.ga-pipeline-stage-box {
+  fill: var(--panel-2);
+  stroke: var(--rule);
+  stroke-width: 1;
+  transition: stroke 80ms ease, fill 80ms ease;
+}
+.ga-pipeline-stage:hover .ga-pipeline-stage-box {
+  stroke: #ff8c6e;
+  fill: rgba(255, 140, 110, 0.06);
+}
+.ga-pipeline-stage.is-selected .ga-pipeline-stage-box {
+  stroke: #ff8c6e;
+  stroke-width: 2;
+  fill: rgba(255, 140, 110, 0.10);
+}
+.ga-pipeline-stage-num {
+  font-size: 8.5px;
+  fill: var(--ink-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.ga-pipeline-stage-title {
+  font-size: 11px;
+  fill: var(--ink);
+  font-weight: 600;
+}
+.ga-pipeline-stage-tool {
+  font-size: 9px;
+  fill: var(--ink-dim);
+}
+.ga-pipeline-output {
+  font-size: 9px;
+  fill: var(--ink-dimmer);
+  font-style: italic;
+}
+.ga-pipeline-input-label {
+  font-size: 9px;
+  fill: #fff;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+.ga-pipeline-input-connector { stroke-dasharray: 2 2; opacity: 0.6; }
+
+/* Detail panel — sits below the SVG inside the same card */
+.ga-pipeline-detail {
+  margin-top: 4px;
+  padding: 10px 12px;
+  background: var(--panel-3);
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  color: var(--ink);
+  line-height: 1.5;
+}
+.ga-pipeline-detail-head {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+.ga-pipeline-detail-num {
+  font-size: 9px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #ff8c6e;
+  font-weight: 600;
+}
+.ga-pipeline-detail-title {
+  font-size: 11px;
+  color: var(--ink);
+  font-weight: 600;
+}
+.ga-pipeline-detail-inputs,
+.ga-pipeline-detail-output {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  font-size: 10px;
+  margin-bottom: 4px;
+}
+.ga-pipeline-detail-inputs-label,
+.ga-pipeline-detail-out-label {
+  font-size: 8.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-dim);
+}
+.ga-pipeline-detail-inputs-none { color: var(--ink-dim); font-style: italic; }
+.ga-pipeline-detail-input-chip {
+  display: inline-block;
+  color: #fff;
+  font-size: 9px;
+  font-weight: 600;
+  padding: 1px 7px;
+  border-radius: 8px;
+  letter-spacing: 0.04em;
+}
+.ga-pipeline-detail-out-text { color: var(--ink); }
+.ga-pipeline-detail-body { color: var(--ink-dim); margin-top: 6px; }
+.ga-pipeline-detail-body p { margin: 0 0 6px 0; }
+.ga-pipeline-detail-body p:last-child { margin-bottom: 0; }
+.ga-pipeline-detail-body code { color: var(--ink); }
+.ga-pipeline-detail-body b { color: var(--ink); }
+
+html[data-theme="light"] .ga-pipeline-detail-num { color: #c2410c; }
+html[data-theme="light"] .ga-pipeline-stage.is-selected .ga-pipeline-stage-box {
+  stroke: #c2410c;
+  fill: rgba(194, 65, 12, 0.10);
+}
+html[data-theme="light"] .ga-pipeline-stage:hover .ga-pipeline-stage-box {
+  stroke: #c2410c;
+}
+
 /* --- JSON-schema codeblock ------------------------------------------- */
 .ga-schema-block {
   margin: 4px 0;

@@ -25,27 +25,28 @@
         </div>
       </div>
 
-      <div class="ga-card">
+      <div class="ga-card" data-ga-card="pipeline-dag">
         <div class="ga-card-header">
-          <div class="ga-card-title">Pipeline stages</div>
-          <div class="ga-card-status">narrative</div>
+          <div class="ga-card-title">Pipeline DAG</div>
+          <div class="ga-card-status">interactive · click a stage</div>
         </div>
-        <div class="ga-phasing-grid">
-          <div class="ga-phase-name">stage 1</div>
-          <div class="ga-phase-desc">PacBio HiFi reads → primary contigs (hifiasm). Phased with Hi-C reads to produce two haplotype-resolved contig sets.</div>
-
-          <div class="ga-phase-name">stage 2</div>
-          <div class="ga-phase-desc">Hi-C scaffolding (YaHS / SALSA2). Contig sets join into chromosome-scale scaffolds; haplotype 1 = Gar parent, haplotype 2 = Mac parent.</div>
-
-          <div class="ga-phase-name">stage 3</div>
-          <div class="ga-phase-desc">ONT polishing + gap closure (Medaka / TGS-GapCloser). Reduces N-runs, improves homopolymer accuracy, fills inter-contig gaps.</div>
-
-          <div class="ga-phase-name">stage 4</div>
-          <div class="ga-phase-desc">Curation pass (manual + Pretext / Hi-C contact-map review). Misjoins resolved, orientation flips fixed, final FAI + AGP emitted.</div>
-
-          <div class="ga-phase-name">stage 5</div>
-          <div class="ga-phase-desc">QC (BUSCO + asmstats + tidk + merqury). Outputs back the <code>assembly_stats</code> + <code>centromere_telomere</code> layers used by page2.</div>
+        <div class="ga-card-para ga-dim">
+          Five stages from raw long-reads to a curated chromosome-scale
+          assembly. Each stage shows the tool, the inputs it consumes, and
+          the artefact it emits. Click any stage box (or use ← / → arrow
+          keys when focused) for a detailed breakdown.
         </div>
+        <div class="ga-pipeline-host" data-ga-pipeline-host>
+          <svg class="ga-pipeline-svg"
+               viewBox="0 0 960 320"
+               preserveAspectRatio="xMidYMid meet"
+               xmlns="http://www.w3.org/2000/svg"
+               tabindex="0"
+               role="img"
+               aria-label="Assembly pipeline DAG (5 stages)"></svg>
+        </div>
+        <div class="ga-pipeline-detail" data-ga-pipeline-detail
+             role="region" aria-live="polite"></div>
       </div>
 
       <div class="ga-card">
