@@ -30,9 +30,14 @@ Checks
                          resolves to an existing page in the manifest.
                          Catches stale "see also" links after a page is
                          renamed / carved out / removed.
+8. Schema validation    every (fixture, schema) pair declared in
+                         tests/fixture_schema_pairs.json validates
+                         (requires jsonschema; skips silently if not
+                         installed — CI installs via requirements-test.txt)
 
-The script is intentionally Python-stdlib-only so it can run in any
-CI environment without `pip install`.
+Checks 1-7 are stdlib-only — the script runs without any pip deps.
+Check 8 needs jsonschema; install via `pip install -r tests/requirements-test.txt`
+to enforce it locally. CI installs it automatically.
 """
 from __future__ import annotations
 
@@ -310,6 +315,117 @@ def check_cross_references(manifest: dict, failures: List[str]) -> int:
     return n_refs
 
 
+def _load_fixture_schema_pairs() -> List[dict]:
+    """Read tests/fixture_schema_pairs.json — explicit (fixture, schema) bindings.
+    Each entry has `fixture` (path) + EITHER `schema_file` (path to JSON Schema)
+    OR `inline_from_page` (path) + `schema_index` (0-based ga-schema-block index).
+    Comments allowed via `_doc` keys on entries."""
+    path = ROOT / 'tests' / 'fixture_schema_pairs.json'
+    if not path.exists():
+        return []
+    try:
+        data = json.loads(path.read_text(encoding='utf-8'))
+        return data.get('pairs', [])
+    except Exception:
+        return []
+
+
+def check_schema_validation(failures: List[str]) -> Tuple[int, str]:
+    """For each (fixture, schema) pair in tests/fixture_schema_pairs.json,
+    load the fixture + load/extract the schema and validate.
+
+    Returns (n_validated, status_message). If jsonschema isn't installed,
+    returns (0, 'skipped') and does NOT add failures — local runs without
+    PyPI deps still pass; CI installs jsonschema so the check is enforced
+    there."""
+    try:
+        import jsonschema  # noqa: F401
+    except ImportError:
+        return 0, 'jsonschema not installed (skip)'
+
+    import jsonschema as _js
+
+    pairs = _load_fixture_schema_pairs()
+    if not pairs:
+        return 0, 'no pairs declared'
+
+    n = 0
+    for pair in pairs:
+        fix_path_rel = pair.get('fixture', '')
+        fix_path = ROOT / fix_path_rel
+        if not fix_path.exists():
+            failures.append(
+                f'[schema-validate] {fix_path_rel}: fixture file not found'
+            )
+            continue
+        try:
+            fixture = json.loads(fix_path.read_text(encoding='utf-8'))
+        except Exception as e:
+            failures.append(f'[schema-validate] {fix_path_rel}: fixture not parseable: {e}')
+            continue
+
+        # Resolve the schema
+        if 'schema_file' in pair:
+            sch_path = ROOT / pair['schema_file']
+            if not sch_path.exists():
+                failures.append(
+                    f'[schema-validate] {fix_path_rel}: schema_file '
+                    f'{pair["schema_file"]} not found'
+                )
+                continue
+            try:
+                schema = json.loads(sch_path.read_text(encoding='utf-8'))
+            except Exception as e:
+                failures.append(f'[schema-validate] {fix_path_rel}: schema not parseable: {e}')
+                continue
+        elif 'inline_from_page' in pair:
+            page_path = ROOT / pair['inline_from_page']
+            if not page_path.exists():
+                failures.append(
+                    f'[schema-validate] {fix_path_rel}: page '
+                    f'{pair["inline_from_page"]} not found'
+                )
+                continue
+            blocks = _extract_schema_blocks(_read(page_path))
+            idx = pair.get('schema_index', 0)
+            if idx >= len(blocks):
+                failures.append(
+                    f'[schema-validate] {fix_path_rel}: page has {len(blocks)} '
+                    f'schema blocks; index {idx} out of range'
+                )
+                continue
+            decoded = _decode_entities(blocks[idx]).strip()
+            if not _looks_like_json(decoded):
+                failures.append(
+                    f'[schema-validate] {fix_path_rel}: inline schema block at '
+                    f'index {idx} is not JSON'
+                )
+                continue
+            try:
+                schema = json.loads(decoded)
+            except Exception as e:
+                failures.append(f'[schema-validate] {fix_path_rel}: inline schema not parseable: {e}')
+                continue
+        else:
+            failures.append(
+                f'[schema-validate] {fix_path_rel}: pair must have schema_file '
+                f'OR inline_from_page'
+            )
+            continue
+
+        n += 1
+        try:
+            _js.validate(instance=fixture, schema=schema)
+        except _js.ValidationError as e:
+            path = '/'.join(str(p) for p in e.absolute_path) or '<root>'
+            failures.append(
+                f'[schema-validate] {fix_path_rel}: {e.message}  '
+                f'(at {path})'
+            )
+
+    return n, f'{n} pairs validated'
+
+
 # ─── Driver ───────────────────────────────────────────────────────────
 
 
@@ -320,25 +436,28 @@ def main() -> int:
     print('=' * 50)
 
     n = check_json_parse(failures)
-    print(f'  [1/7] JSON parse           : {n} files')
+    print(f'  [1/8] JSON parse           : {n} files')
 
     n, manifest = check_manifest_paths(failures)
-    print(f'  [2/7] Manifest paths       : {n} pages')
+    print(f'  [2/8] Manifest paths       : {n} pages')
 
     n = check_html_balance(manifest, failures)
-    print(f'  [3/7] HTML tag balance     : {n} pages')
+    print(f'  [3/8] HTML tag balance     : {n} pages')
 
     n = check_css_class_resolution(manifest, failures)
-    print(f'  [4/7] CSS class resolution : {n} pages')
+    print(f'  [4/8] CSS class resolution : {n} pages')
 
     n = check_inline_schemas(manifest, failures)
-    print(f'  [5/7] Inline schemas       : {n} schema blocks')
+    print(f'  [5/8] Inline schemas       : {n} schema blocks')
 
     n = check_python_adapters(failures)
-    print(f'  [6/7] Python adapters      : {n} files compile')
+    print(f'  [6/8] Python adapters      : {n} files compile')
 
     n = check_cross_references(manifest, failures)
-    print(f'  [7/7] Cross-references     : {n} page refs across {len(manifest.get("pages", []))} pages')
+    print(f'  [7/8] Cross-references     : {n} page refs across {len(manifest.get("pages", []))} pages')
+
+    n, status = check_schema_validation(failures)
+    print(f'  [8/8] Schema validation    : {status}')
 
     print('=' * 50)
     if failures:
@@ -346,7 +465,7 @@ def main() -> int:
         for f in failures:
             print(f'  - {f}')
         return 1
-    print('PASS — all 7 checks green.')
+    print('PASS — all 8 checks green.')
     return 0
 
 

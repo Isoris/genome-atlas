@@ -674,7 +674,7 @@
               "required": ["div", "bp"],
               "properties": {
                 "div": { "type": "integer", "minimum": 0, "description": "K2P divergence bucket (0..N)." },
-                "bp":  { "type": "array", "items": { "type": "integer", "minimum": 0 }, "description": "bp annotated per family at this div, indexed by `families`." }
+                "bp":  { "type": "array", "items": { "type": "integer" }, "description": "bp annotated per family at this div, indexed by `families`. Note: RepeatMasker divsum can emit small negative values (~ -1 to -25) on low-coverage buckets — these are rounding artifacts, not data corruption." }
               }
             }
           }

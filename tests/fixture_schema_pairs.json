@@ -1,0 +1,11 @@
+{
+  "_doc": "Explicit (fixture, schema) pairs the smoke pass validates. Add a new entry whenever a fixture's schema is decided. Two binding styles:\n  • schema_file       — path to a standalone JSON Schema (under atlases/genome/registries/schemas/schema_out/ etc.)\n  • inline_from_page  — path to a page HTML + schema_index (0-based ga-schema-block index on that page).\nThe check skips silently if jsonschema isn't installed (stdlib-only local runs still pass); CI installs jsonschema so the check is enforced there.",
+  "pairs": [
+    {
+      "_doc": "Chapter 5 consolidated TE envelope — the single fetch page_comparative_te reads. Validates against the inline draft-2020-12 schema on the page itself (block 0; block 1 is the BED format spec, not JSON).",
+      "fixture": "fixtures/chapter5/consolidated.json",
+      "inline_from_page": "atlases/genome/pages/comparative/page_comparative_te.html",
+      "schema_index": 0
+    }
+  ]
+}
