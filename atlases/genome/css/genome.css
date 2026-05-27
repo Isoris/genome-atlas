@@ -453,6 +453,27 @@ html[data-theme="light"] .ga-table tbody tr.is-active {
   background: rgba(194, 65, 12, 0.12);
   box-shadow: inset 3px 0 0 0 #c2410c;
 }
+/* Same active-row affordance for the SVG chromosome-strip rows on
+   page_chromosome_overview. Backbone rects only have stroke/fill, no
+   background — so we boost their stroke + drop a thin accent under the
+   row's labels via CSS filters on the parent <g>. */
+.ga-chromov-svg g.ga-chromov-row { cursor: pointer; }
+.ga-chromov-svg g.ga-chromov-row.is-active .ga-chromov-bone {
+  stroke: #ff8c6e;
+  stroke-width: 1.5;
+}
+.ga-chromov-svg g.ga-chromov-row.is-active .ga-chromov-label,
+.ga-chromov-svg g.ga-chromov-row.is-active .ga-chromov-len {
+  fill: #ff8c6e;
+  font-weight: 600;
+}
+html[data-theme="light"] .ga-chromov-svg g.ga-chromov-row.is-active .ga-chromov-bone {
+  stroke: #c2410c;
+}
+html[data-theme="light"] .ga-chromov-svg g.ga-chromov-row.is-active .ga-chromov-label,
+html[data-theme="light"] .ga-chromov-svg g.ga-chromov-row.is-active .ga-chromov-len {
+  fill: #c2410c;
+}
 .ga-table td.ga-cell-num  { font-variant-numeric: tabular-nums; }
 .ga-table td.ga-cell-id   { color: var(--ink); }
 .ga-table td.ga-cell-flag { text-align: center; color: var(--ink-dim); }

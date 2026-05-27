@@ -17,6 +17,13 @@
 
 import { probeModeB, renderModeBBadge } from '../../../../core/mode_b_badge.js';
 import { _pageState, _setActiveState } from './page_chromosome_overview/_state.js';
+import {
+  installRouter as _installCrossAtlasRouter,
+  onActiveChrom as _onActiveChrom,
+  getActiveChrom as _getActiveChrom,
+} from '../../shared/cross-atlas.js';
+import { installActivePill as _installActivePill } from '../../shared/active-pill.js';
+import { installPageIndex as _installPageIndex } from '../../shared/page-index.js';
 
 function _hostBucket(atlasState) {
   if (!atlasState) return null;
@@ -290,6 +297,12 @@ function _renderStrip() {
     const xEnd = xFor(c.length_bp);
     const w = xEnd - LABEL_W;
 
+    // Each chrom row lives inside its own <g> so the cross-atlas router
+    // and CSS can target individual rows by their data-ga-strip-chrom id.
+    parts.push(
+      `<g class="ga-chromov-row ga-qc-row" data-ga-strip-chrom="${_esc(c.id)}">`
+    );
+
     // Label + length (+ T2T chip when complete)
     const ct = _state.ctByChrom ? _state.ctByChrom.get(c.id) : null;
     const yMid = yTop + BACKBONE_H / 2 + 4;
@@ -359,10 +372,50 @@ function _renderStrip() {
         `<title>${_esc(cand.id)} · ${_esc(c.id)} · ${_fmtMb(cand.start_bp)} – ${_fmtMb(cand.end_bp)} Mb</title></rect>`
       );
     }
+    // Close the per-chrom group opened above.
+    parts.push('</g>');
   });
 
   parts.push('</svg>');
   slot.innerHTML = parts.join('');
+
+  // Hook click delegation + apply any existing active-chrom highlight.
+  _wireStripClicks();
+  _applyActiveChromHighlight(_getActiveChrom());
+}
+
+// Click any chrom row → dispatch ga-strip-chrom-click. The router translates
+// that into an active-chrom update; sister pages (page_assembly_stats,
+// page_genes, page_conserved_elements, page_haplotype_synteny, …) react.
+function _wireStripClicks() {
+  const slot = document.getElementById('pageChromOvStripSlot');
+  if (!slot || slot.__gaStripClicksWired) return;
+  slot.addEventListener('click', (ev) => {
+    const g = ev.target.closest && ev.target.closest('g[data-ga-strip-chrom]');
+    if (!g) return;
+    const chrom = g.getAttribute('data-ga-strip-chrom');
+    if (!chrom) return;
+    g.dispatchEvent(new CustomEvent('ga-strip-chrom-click', {
+      bubbles: true,
+      detail: { chrom },
+    }));
+  });
+  slot.__gaStripClicksWired = true;
+}
+
+function _applyActiveChromHighlight(active) {
+  const slot = document.getElementById('pageChromOvStripSlot');
+  if (!slot) return;
+  const id = active && active.chrom;
+  let target = null;
+  slot.querySelectorAll('g[data-ga-strip-chrom]').forEach((g) => {
+    const match = id != null && g.getAttribute('data-ga-strip-chrom') === id;
+    g.classList.toggle('is-active', match);
+    if (match) target = g;
+  });
+  if (target && target.scrollIntoView) {
+    target.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
 }
 
 function _drawStripe(parts, arr, max, x0, y, w, kind) {
@@ -431,6 +484,20 @@ export async function mount(root, atlasState, registry) {
   _state.ctByChrom = null;
   _state.registry = registry || null;
   _setActiveState(_state);
+
+  // Cross-atlas wiring — idempotent. Router catches the ga-strip-chrom-click
+  // events emitted by _wireStripClicks; subscribers below highlight the
+  // matching row when any sister page (page_assembly_stats QC click, etc.)
+  // updates the active chrom.
+  _installCrossAtlasRouter();
+  _installActivePill();
+  _installPageIndex(root, 'page_chromosome_overview');
+  if (root && !root.__gaChromOvChromSub) {
+    root.__gaChromOvChromSub = _onActiveChrom(({ chrom, hap }) => {
+      _applyActiveChromHighlight(chrom ? { chrom, hap } : null);
+    });
+  }
+
   _wire();
 
   const probe = await probeModeB(registry, 'chromosome_map', null, {
@@ -500,6 +567,10 @@ export async function unmount(root) {
   _state.uceBins = null;
   _state.candidates = [];
   _state.ctByChrom = null;
+  if (root && typeof root.__gaChromOvChromSub === 'function') {
+    try { root.__gaChromOvChromSub(); } catch (_) {}
+    root.__gaChromOvChromSub = null;
+  }
 }
 
 // ----- Legacy compat ----------------------------------------------------
