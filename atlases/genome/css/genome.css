@@ -214,6 +214,60 @@
 }
 
 /* ---------------------------------------------------------------------
+ * Section 2b: live page roster (read from manifest.json at mount time).
+ * One ga-roster-stage block per stage; inside it a ga-roster-grid of
+ * label · id · tooltip rows. Reuses ga-card / ga-dim / code styling.
+ * --------------------------------------------------------------------- */
+.ga-roster-host {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 6px;
+}
+.ga-roster-stage {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.ga-roster-stage-header {
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+  font-size: 10.5px;
+  color: var(--ink-dim);
+}
+.ga-roster-stage-tag {
+  display: inline-block;
+  padding: 1px 6px;
+  border-radius: 2px;
+  border: 1px solid var(--rule);
+  font-family: var(--mono);
+  font-size: 9.5px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #ff8c6e;
+}
+.ga-roster-stage-tag[data-stage="annotation"]  { color: #c5a8e0; }
+.ga-roster-stage-tag[data-stage="comparative"] { color: #88c5b6; }
+.ga-roster-stage-count {
+  color: var(--ink-dimmer);
+  font-family: var(--mono);
+}
+.ga-roster-grid {
+  display: grid;
+  grid-template-columns: 1.0fr 1.0fr 2.4fr;
+  gap: 4px 12px;
+  font-size: 10.5px;
+  align-items: baseline;
+}
+.ga-roster-row {
+  display: contents;  /* keep three child cells in the grid */
+}
+.ga-roster-label { color: var(--ink); }
+.ga-roster-id    { color: var(--ink-dim); }
+.ga-roster-tt    { color: var(--ink-dim); }
+
+/* ---------------------------------------------------------------------
  * Section 3: chromosome-overview mockup
  * --------------------------------------------------------------------- */
 .ga-chrom-mockup {

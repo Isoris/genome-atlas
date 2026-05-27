@@ -101,6 +101,24 @@
         </div>
       </div>
 
+      <!-- ── Section 2b: Live page roster ──────────────────────────────
+           Rendered at mount time from manifest.json. Lists every page
+           registered with the atlas, grouped by stage, with each page's
+           label + tooltip and a click-through anchor. Card stays hidden
+           when the manifest fetch fails (offline / file://). -->
+      <div class="ga-card" id="pageScaffoldRosterCard" hidden>
+        <div class="ga-card-header">
+          <div class="ga-card-title">Pages in this atlas</div>
+          <div class="ga-card-status"><span id="pageScaffoldRosterCount">—</span></div>
+        </div>
+        <div class="ga-card-para ga-dim">
+          Live roster read from <code>manifest.json</code> at mount time.
+          Stages run <b>assembly</b> → <b>annotation</b> → <b>comparative</b>;
+          within a stage pages are listed in manifest order.
+        </div>
+        <div id="pageScaffoldRosterSlot" class="ga-roster-host"></div>
+      </div>
+
       <!-- ── Section 3: Chromosome overview mockup ────────────────────── -->
       <div class="ga-card">
         <div class="ga-card-header">
