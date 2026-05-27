@@ -96,6 +96,58 @@ function _parseFeatures(rows) {
   return out;
 }
 
+// centromere_telomere envelope: { haplotype, per_chrom: [{ chrom, centromere,
+// telomere_l, telomere_r, t2t, completeness }], source }. Tolerant of two
+// upstream shapes:
+//   - boolean fields (the basic "is it complete?" form found in
+//     fixtures/assembly_qc/assembly_stats.json: `centromere_complete`,
+//     `telomere_L`, `telomere_R`, `is_t2t`)
+//   - object centromere with positional coords ({start_bp, end_bp} or {mb})
+//
+// Returns Map<chrom_id, row>. Rows carry whatever fields the upstream had;
+// the renderer fail-softs on missing positions.
+function _parseCt(payload) {
+  if (!payload) return null;
+  const rows = Array.isArray(payload) ? payload
+             : Array.isArray(payload.per_chrom) ? payload.per_chrom
+             : Array.isArray(payload.chroms) ? payload.chroms
+             : Array.isArray(payload.rows) ? payload.rows
+             : [];
+  const out = new Map();
+  for (const r of rows) {
+    if (!r) continue;
+    const chrom = r.chrom || r.id || r.name;
+    if (!chrom) continue;
+    out.set(String(chrom), {
+      centromere:    r.centromere ?? (r.centromere_complete === true ? true : null),
+      telomere_l:    r.telomere_l ?? r.telomere_L ?? null,
+      telomere_r:    r.telomere_r ?? r.telomere_R ?? null,
+      t2t:           r.t2t ?? r.is_t2t ?? null,
+      completeness:  r.completeness ?? null,
+    });
+  }
+  return out.size ? out : null;
+}
+
+// Derive centromere band [start_bp, end_bp] from a tolerant `centromere`
+// field. Returns null when no positional info is available.
+function _centBand(cent, chromLen) {
+  if (cent == null || cent === false) return null;
+  if (cent === true) {
+    // Booleans tell us "complete" but not where — fall back to the
+    // canonical fish-genome approximation: centered constriction marker.
+    return { mid: chromLen * 0.5, kind: 'flag' };
+  }
+  if (typeof cent === 'object') {
+    const s = _toNum(cent.start_bp ?? cent.start ?? cent.start_CE);
+    const e = _toNum(cent.end_bp   ?? cent.end   ?? cent.end_CE);
+    if (s != null && e != null && e > s) return { start_bp: s, end_bp: e, kind: 'band' };
+    const mb = _toNum(cent.mb);
+    if (mb != null && mb > 0) return { mid: mb * 1e6, kind: 'flag' };
+  }
+  return null;
+}
+
 function _parseCandidates(payload) {
   const rows = Array.isArray(payload) ? payload
              : (payload && Array.isArray(payload.candidates)) ? payload.candidates
@@ -151,6 +203,7 @@ const _state = {
   repeatBins: null,
   uceBins: null,
   candidates: [],
+  ctByChrom: null,    // Map<chrom_id, { centromere, telomere_l, telomere_r, t2t }>
   registry: null,
 };
 
@@ -159,12 +212,14 @@ const BIN_BP = 100_000;
 // ----- Layout constants --------------------------------------------------
 const STRIP_W      = 820;
 const LABEL_W      = 56;
-const LEN_W        = 60;
+const LEN_W        = 88;  // wider — accommodates length + T2T chip
 const ROW_H        = 56;   // per-chrom row height (backbone + 3 stripes)
 const BACKBONE_H   = 10;
 const STRIPE_H     = 8;
 const STRIPE_GAP   = 2;
 const ROW_PAD_T    = 4;
+const CENT_DOT_R   = 3.5;
+const TELO_TICK_W  = 3;
 
 const INNER_W = STRIP_W - LABEL_W - LEN_W;
 
@@ -181,14 +236,26 @@ function _renderStatStrip() {
   const geneN   = _state.geneBins ? Array.from(_state.geneBins.values()).reduce((s, a) => s + a.reduce((x, y) => x + y, 0), 0) : 0;
   const repN    = _state.repeatBins ? Array.from(_state.repeatBins.values()).reduce((s, a) => s + a.reduce((x, y) => x + y, 0), 0) : 0;
   const uceN    = _state.uceBins ? Array.from(_state.uceBins.values()).reduce((s, a) => s + a.reduce((x, y) => x + y, 0), 0) : 0;
-  slot.innerHTML = [
+  const tally = { cent: 0, t2t: 0 };
+  if (_state.ctByChrom) {
+    for (const r of _state.ctByChrom.values()) {
+      if (r.centromere) tally.cent++;
+      if (r.t2t === true) tally.t2t++;
+    }
+  }
+  const cells = [
     cell('chroms', _fmtInt(chroms.length)),
     cell('total',  `${_fmtMb(totalBp)} Mb`),
     cell('genes',  _fmtInt(geneN)),
     cell('repeats',_fmtInt(repN)),
     cell('UCEs',   _fmtInt(uceN)),
     cell('candidates', _fmtInt(_state.candidates.length)),
-  ].join('');
+  ];
+  if (_state.ctByChrom) {
+    cells.push(cell('centromeres', `${_fmtInt(tally.cent)} / ${_fmtInt(chroms.length)}`));
+    cells.push(cell('T2T',         `${_fmtInt(tally.t2t)} / ${_fmtInt(chroms.length)}`));
+  }
+  slot.innerHTML = cells.join('');
 }
 
 function _renderStrip() {
@@ -223,17 +290,57 @@ function _renderStrip() {
     const xEnd = xFor(c.length_bp);
     const w = xEnd - LABEL_W;
 
-    // Label + length
+    // Label + length (+ T2T chip when complete)
+    const ct = _state.ctByChrom ? _state.ctByChrom.get(c.id) : null;
+    const yMid = yTop + BACKBONE_H / 2 + 4;
     parts.push(
-      `<text x="${LABEL_W - 6}" y="${yTop + BACKBONE_H / 2 + 4}" text-anchor="end" class="ga-chromov-label">${_esc(c.id)}</text>`,
-      `<text x="${xEnd + 6}" y="${yTop + BACKBONE_H / 2 + 4}" class="ga-chromov-len">${_fmtMb(c.length_bp)} Mb</text>`,
+      `<text x="${LABEL_W - 6}" y="${yMid}" text-anchor="end" class="ga-chromov-label">${_esc(c.id)}</text>`,
+      `<text x="${xEnd + 6}" y="${yMid}" class="ga-chromov-len">${_fmtMb(c.length_bp)} Mb</text>`,
     );
+    if (ct && ct.t2t === true) {
+      parts.push(
+        `<text x="${xEnd + 56}" y="${yMid}" class="ga-chromov-t2t">T2T</text>`
+      );
+    }
 
     // Backbone
     parts.push(
       `<rect class="ga-chromov-bone" x="${LABEL_W}" y="${yTop}" width="${w}" height="${BACKBONE_H}" rx="4" ry="4">` +
       `<title>${_esc(c.id)} · ${_fmtMb(c.length_bp)} Mb</title></rect>`
     );
+
+    // Centromere overlay (band or constriction marker).
+    if (ct) {
+      const band = _centBand(ct.centromere, c.length_bp);
+      if (band && band.kind === 'band') {
+        const bx0 = xFor(band.start_bp);
+        const bx1 = xFor(band.end_bp);
+        const bw = Math.max(2, bx1 - bx0);
+        parts.push(
+          `<rect class="ga-chromov-cent-band" x="${bx0.toFixed(1)}" y="${yTop}" width="${bw.toFixed(1)}" height="${BACKBONE_H}" rx="2" ry="2">` +
+          `<title>centromere · ${_fmtMb(band.start_bp)} – ${_fmtMb(band.end_bp)} Mb</title></rect>`
+        );
+      } else if (band && band.kind === 'flag') {
+        const cx = xFor(band.mid);
+        parts.push(
+          `<circle class="ga-chromov-cent-dot" cx="${cx.toFixed(1)}" cy="${yTop + BACKBONE_H / 2}" r="${CENT_DOT_R}">` +
+          `<title>centromere · complete${Number.isFinite(band.mid) && band.mid > 0 ? ` · ~${_fmtMb(band.mid)} Mb` : ''}</title></circle>`
+        );
+      }
+      // Telomere caps at the chromosome ends.
+      if (ct.telomere_l === true) {
+        parts.push(
+          `<rect class="ga-chromov-telo" x="${LABEL_W - 1}" y="${yTop - 1}" width="${TELO_TICK_W}" height="${BACKBONE_H + 2}" rx="1" ry="1">` +
+          `<title>${_esc(c.id)} · telomere L present</title></rect>`
+        );
+      }
+      if (ct.telomere_r === true) {
+        parts.push(
+          `<rect class="ga-chromov-telo" x="${(xEnd - 2).toFixed(1)}" y="${yTop - 1}" width="${TELO_TICK_W}" height="${BACKBONE_H + 2}" rx="1" ry="1">` +
+          `<title>${_esc(c.id)} · telomere R present</title></rect>`
+        );
+      }
+    }
 
     // Stripes
     let stripeY = yTop + BACKBONE_H + STRIPE_GAP;
@@ -276,7 +383,7 @@ function _drawStripe(parts, arr, max, x0, y, w, kind) {
 
 // ----- TSV export --------------------------------------------------------
 function _exportChroms() {
-  const lines = ['chrom\tord\tlength_bp\tgene_count\trepeat_count\tuce_count\tcandidate_count'];
+  const lines = ['chrom\tord\tlength_bp\tgene_count\trepeat_count\tuce_count\tcandidate_count\tcentromere\ttelomere_l\ttelomere_r\tt2t'];
   const candByChrom = new Map();
   for (const c of _state.candidates) candByChrom.set(c.chrom, (candByChrom.get(c.chrom) || 0) + 1);
   for (const c of _state.chroms) {
@@ -284,7 +391,11 @@ function _exportChroms() {
     const rN = _state.repeatBins && _state.repeatBins.get(c.id) ? _state.repeatBins.get(c.id).reduce((s, v) => s + v, 0) : 0;
     const uN = _state.uceBins    && _state.uceBins.get(c.id)    ? _state.uceBins.get(c.id).reduce((s, v) => s + v, 0) : 0;
     const cN = candByChrom.get(c.id) || 0;
-    lines.push([c.id, c.ord, c.length_bp, gN, rN, uN, cN].join('\t'));
+    const ct = _state.ctByChrom ? _state.ctByChrom.get(c.id) : null;
+    const ctCell = (v) => (v == null ? '' : (typeof v === 'object' ? JSON.stringify(v) : String(v)));
+    lines.push([c.id, c.ord, c.length_bp, gN, rN, uN, cN,
+                ctCell(ct && ct.centromere), ctCell(ct && ct.telomere_l),
+                ctCell(ct && ct.telomere_r), ctCell(ct && ct.t2t)].join('\t'));
   }
   const blob = new Blob([lines.join('\n') + '\n'], { type: 'text/tab-separated-values' });
   const url  = URL.createObjectURL(blob);
@@ -317,6 +428,7 @@ export async function mount(root, atlasState, registry) {
   _state.repeatBins = null;
   _state.uceBins = null;
   _state.candidates = [];
+  _state.ctByChrom = null;
   _state.registry = registry || null;
   _setActiveState(_state);
   _wire();
@@ -348,11 +460,19 @@ export async function mount(root, atlasState, registry) {
     } catch (_) { return []; }
   };
 
-  const [genes, reps, uces, cands] = await Promise.all([
+  // centromere_telomere resolves to an envelope, not a flat row list — keep
+  // it raw and parse separately.
+  const tryResolveRaw = async (key) => {
+    try { return await Promise.resolve(registry.resolve(key)); }
+    catch (_) { return null; }
+  };
+
+  const [genes, reps, uces, cands, ct] = await Promise.all([
     tryResolve('gene_track'),
     tryResolve('repeat_track'),
     tryResolve('conserved_elements'),
     tryResolve('inversion.candidates_v1'),
+    tryResolveRaw('centromere_telomere'),
   ]);
 
   const geneFeats   = _parseFeatures(genes);
@@ -363,6 +483,7 @@ export async function mount(root, atlasState, registry) {
   if (repeatFeats.length) _state.repeatBins = _binFeatures(repeatFeats, _state.chroms, BIN_BP);
   if (uceFeats.length)    _state.uceBins    = _binFeatures(uceFeats,    _state.chroms, BIN_BP);
   _state.candidates = _parseCandidates(cands);
+  _state.ctByChrom  = _parseCt(ct);
 
   _renderStatStrip();
   _renderStrip();
@@ -378,6 +499,7 @@ export async function unmount(root) {
   _state.repeatBins = null;
   _state.uceBins = null;
   _state.candidates = [];
+  _state.ctByChrom = null;
 }
 
 // ----- Legacy compat ----------------------------------------------------
