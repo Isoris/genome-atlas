@@ -1613,3 +1613,228 @@ html[data-theme="light"]    .ga-sankey-btn.is-active {
 }
 .ga-chromov-cand:hover { fill: var(--accent); fill-opacity: 0.18; }
 
+
+/* ---------------------------------------------------------------------
+ * Live-page UI primitives (added 2026-05-27).
+ *
+ * Used across the data-driven pages (page_genes, page_variant_annotations,
+ * page_conserved_elements, page_ancestral_karyotype) for the toolbars,
+ * search inputs, count badges, export buttons, and the SVG / table render
+ * slots that the JS modules paint into.
+ * --------------------------------------------------------------------- */
+
+/* `live` status pill on a ga-card-status — green tint, signals
+   real-data-backed view (vs spec/mockup placeholder). */
+.ga-card-status.ga-status-live {
+  color: #4f9e64;
+  border-color: #4f9e64;
+  background: rgba(79, 158, 100, 0.10);
+}
+
+/* Toolbar row above a render slot — search + count + button(s). */
+.ga-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 10px;
+  margin-bottom: 8px;
+  font-size: 10.5px;
+}
+.ga-toolbar input[type="search"],
+.ga-toolbar input[type="text"] {
+  font: inherit;
+  font-size: 10.5px;
+  font-family: var(--mono);
+  color: var(--ink);
+  background: var(--panel-3);
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  padding: 3px 8px;
+  min-width: 180px;
+}
+.ga-toolbar input:focus {
+  outline: none;
+  border-color: #ff8c6e;
+}
+.ga-toolbar select {
+  font: inherit;
+  font-size: 10.5px;
+  font-family: var(--mono);
+  color: var(--ink);
+  background: var(--panel-3);
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  padding: 2px 6px;
+}
+.ga-toolbar label {
+  color: var(--ink-dim);
+}
+
+/* Generic button + small variant. */
+.ga-btn,
+.ga-btn-mini {
+  font: inherit;
+  font-family: var(--mono);
+  color: var(--ink-dim);
+  background: var(--panel-3);
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  cursor: pointer;
+  letter-spacing: 0.02em;
+}
+.ga-btn       { font-size: 10.5px; padding: 3px 8px; }
+.ga-btn-mini  { font-size: 9.5px;  padding: 2px 6px; }
+.ga-btn:hover,
+.ga-btn-mini:hover {
+  color: var(--ink);
+  border-color: #ff8c6e;
+}
+.ga-btn:disabled,
+.ga-btn-mini:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Row-count badge inside a toolbar. */
+.ga-count {
+  font-family: var(--mono);
+  color: var(--ink-dim);
+  font-size: 10px;
+  letter-spacing: 0.02em;
+}
+
+/* Render slots — the JS module paints SVG / a table into these. */
+.ga-svg-slot {
+  display: block;
+  width: 100%;
+  min-height: 80px;
+  background: var(--panel-3);
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  padding: 4px 6px;
+}
+.ga-svg-slot:empty::before {
+  content: "○ no data yet";
+  display: block;
+  text-align: center;
+  color: var(--ink-dimmer);
+  font-size: 10px;
+  padding: 28px 0;
+}
+.ga-table-slot {
+  display: block;
+  width: 100%;
+}
+.ga-table-slot:empty::before {
+  content: "○ no rows yet";
+  display: block;
+  color: var(--ink-dimmer);
+  font-size: 10px;
+  padding: 12px 0;
+}
+
+/* SVG row group for karyotype renders — marker class only; the
+   per-element fills come from inline attributes. */
+.ga-kary-row { /* group marker */ }
+
+/* Mode-B data-source badge — small chip showing layer resolution status.
+   Lives at top of a page, scoped to the section that consumes a layer.
+   Painted by core/mode_b_badge.js. */
+.data-source-badge {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 9.5px;
+  color: var(--ink-dim);
+  background: var(--panel-3);
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  padding: 2px 6px;
+  letter-spacing: 0.02em;
+}
+.data-source-badge:empty { display: none; }
+
+/* Generic table primitive — when a page renders a full <table>. */
+.ga-table-wrap {
+  overflow-x: auto;
+}
+.ga-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 10.5px;
+  font-family: var(--mono);
+}
+.ga-table th,
+.ga-table td {
+  padding: 4px 8px;
+  border-bottom: 1px dashed var(--rule);
+  text-align: left;
+}
+.ga-table th {
+  font-weight: 600;
+  color: var(--ink-dim);
+  font-size: 10px;
+  letter-spacing: 0.02em;
+  border-bottom: 1px solid var(--rule);
+  cursor: pointer;
+  user-select: none;
+}
+.ga-table th:hover { color: #ff8c6e; }
+
+/* Cross-atlas IN/OUT adapter strip — used by page_assembly_stats and any
+   other page that surfaces its cross-atlas contracts. */
+.ga-adapter-strip {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+@media (max-width: 640px) {
+  .ga-adapter-strip { grid-template-columns: 1fr; }
+}
+.ga-adapter-col {
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  padding: 6px 10px;
+  background: var(--panel-3);
+}
+.ga-adapter-label {
+  font-size: 10px;
+  color: var(--ink-dim);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.ga-adapter-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  font-size: 10.5px;
+  margin: 4px 0;
+}
+.ga-adapter-row.ga-adapter-empty {
+  color: var(--ink-dim);
+}
+.ga-adapter-tag {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: #ff8c6e;
+  background: rgba(255, 140, 110, 0.08);
+  border: 1px solid #ff8c6e;
+  border-radius: 2px;
+  padding: 1px 6px;
+}
+.ga-adapter-tag.empty {
+  color: var(--ink-dimmer);
+  border-color: var(--rule);
+  background: transparent;
+}
+.ga-adapter-arrow {
+  color: var(--ink-dim);
+}
+.ga-adapter-consumer {
+  font-family: var(--mono);
+  color: var(--ink);
+}
+.ga-adapter-doc {
+  color: var(--ink-dim);
+}
