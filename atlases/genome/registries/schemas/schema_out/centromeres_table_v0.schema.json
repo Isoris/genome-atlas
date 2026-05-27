@@ -1,0 +1,58 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "centromeres_table_v0.schema.json",
+  "title": "centromeres_table_v0 — quarTeT / centromics centromere table",
+  "description": "Output envelope from extractors.centromere_table.extract. Each row is one chromosome's predicted centromere with TR (tandem-repeat) + TE coverage; the adapter derives `TRcoverage_pct` / `TEcoverage_pct` (floats in [0,1]) from the raw '99.55%' percentage strings and labels each row with a `verdict` (TR-dominant / TE-dominant / mixed). The summary block carries cohort-level tallies for the page header.",
+  "type": "object",
+  "required": [
+    "source",
+    "n_rows",
+    "rows",
+    "summary",
+    "schema_version"
+  ],
+  "additionalProperties": true,
+  "properties": {
+    "source":         { "type": "string" },
+    "schema_version": { "const": "centromeres_table_v0" },
+    "n_rows":         { "type": "integer", "minimum": 0 },
+    "params":         { "type": "object", "additionalProperties": true },
+
+    "summary": {
+      "type": "object",
+      "required": ["n_chroms", "n_tr_dominant", "n_te_dominant", "n_mixed", "mean_length_bp"],
+      "additionalProperties": true,
+      "properties": {
+        "n_chroms":       { "type": "integer", "minimum": 0 },
+        "n_tr_dominant":  { "type": "integer", "minimum": 0 },
+        "n_te_dominant":  { "type": "integer", "minimum": 0 },
+        "n_mixed":        { "type": "integer", "minimum": 0 },
+        "mean_length_bp": { "type": "integer", "minimum": 0 }
+      }
+    },
+
+    "rows": {
+      "type": "array",
+      "description": "One row per chromosome. Numeric coordinates cast to int; coverage strings preserved as-is with normalised *_pct floats added.",
+      "items": {
+        "type": "object",
+        "required": ["verdict", "TRcoverage_pct", "TEcoverage_pct"],
+        "additionalProperties": true,
+        "properties": {
+          "Chr":             {},
+          "start_CE":        { "type": "integer", "minimum": 0 },
+          "end_CE":          { "type": "integer", "minimum": 0 },
+          "length_CE":       { "type": "integer", "minimum": 0 },
+          "TRlength":        { "type": "integer", "minimum": 0 },
+          "TElength":        { "type": "integer", "minimum": 0 },
+          "TRcoverage":      { "type": "string" },
+          "TEcoverage":      { "type": "string" },
+          "TRcoverage_pct":  { "type": "number", "minimum": 0, "maximum": 1 },
+          "TEcoverage_pct":  { "type": "number", "minimum": 0, "maximum": 1 },
+          "regionscore":     { "type": "number" },
+          "verdict":         { "enum": ["TR-dominant", "TE-dominant", "mixed"] }
+        }
+      }
+    }
+  }
+}

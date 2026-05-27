@@ -1,0 +1,51 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "te_abundance_v0.schema.json",
+  "title": "te_abundance_v0 — long-format TE-abundance payload",
+  "description": "Output envelope from extractors.te_abundance_table.extract. Long format: one row per (species × Repeat_Class × Repeat_Family). Sources the Chapter 5 Fig 5.1 stacked bar comparing 17 catfish genomes. The `rows` array preserves the original TSV row shape (column names from the header) — numeric columns are cast in place; unknown columns pass through unchanged so the page can render whatever the source provided.",
+  "type": "object",
+  "required": [
+    "source",
+    "n_rows",
+    "species",
+    "classes",
+    "rows",
+    "schema_version"
+  ],
+  "additionalProperties": true,
+  "properties": {
+    "source":         { "type": "string" },
+    "schema_version": { "const": "te_abundance_v0" },
+    "n_rows":         { "type": "integer", "minimum": 0 },
+    "params":         { "type": "object", "additionalProperties": true },
+
+    "species": {
+      "type": "array",
+      "description": "Unique tree-tip labels found in the table, sorted.",
+      "items": { "type": "string" }
+    },
+    "classes": {
+      "type": "array",
+      "description": "Unique Repeat_Class labels found in the table, sorted.",
+      "items": { "type": "string" }
+    },
+
+    "rows": {
+      "type": "array",
+      "description": "One element per data row. Schema is open (additionalProperties: true) so the table can carry any columns the source TSV happened to provide; the recommended numeric columns are listed.",
+      "items": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "Tree_tip_label":           { "type": "string" },
+          "Repeat_Class":             { "type": "string" },
+          "Repeat_Family":            { "type": "string" },
+          "TE_Count":                 { "type": "integer" },
+          "Masked_lenght_":           { "type": "integer" },
+          "TE_abundance_genome_pct":  { "type": "number" },
+          "Avg_TE_length_bp":         { "type": "number" }
+        }
+      }
+    }
+  }
+}

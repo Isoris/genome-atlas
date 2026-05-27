@@ -1,0 +1,31 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "te_abundance_ingest_v1.schema.json",
+  "title": "te_abundance_ingest_v1 — manifest contract for the long-format TE-abundance TSV",
+  "description": "Validates POST /api/actions when type='te_abundance_ingest'. Resolves a `TE_data_figure1_*.tsv` (long format: one row per species × Repeat_Class × Repeat_Family) from the workspace and emits a te_abundance_v0 envelope (Chapter 5 Fig 5.1 source).",
+  "type": "object",
+  "required": ["target"],
+  "additionalProperties": true,
+  "properties": {
+    "target": {
+      "type": "object",
+      "required": ["path"],
+      "additionalProperties": true,
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Workspace-relative path to the long-format TE abundance TSV."
+        },
+        "subject": {
+          "type": "string",
+          "description": "Optional tag for the cohort the table describes (e.g. 'catfish_17_genomes')."
+        }
+      }
+    },
+    "params": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "kimura_distance_ingest_v1.schema.json",
+  "title": "kimura_distance_ingest_v1 — manifest contract for RepeatMasker divsum ingest",
+  "description": "Validates POST /api/actions when type='kimura_distance_ingest'. Resolves a RepeatMasker `.distance` (divsum) file from the workspace; the extractor parses it into per-divergence-bucket × per-family bp counts and emits a kimura_landscape_v0 envelope (Chapter 5 Fig 5.2 source).",
+  "type": "object",
+  "required": ["target"],
+  "additionalProperties": true,
+  "properties": {
+    "target": {
+      "type": "object",
+      "required": ["path"],
+      "additionalProperties": true,
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Workspace-relative path to the RepeatMasker `.distance` file."
+        },
+        "subject": {
+          "type": "string",
+          "description": "Optional tag for the species / assembly the landscape describes (e.g. 'Clarias_gariepinus')."
+        }
+      }
+    },
+    "params": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  }
+}
