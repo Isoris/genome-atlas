@@ -10,7 +10,7 @@ atlases/genome/                — atlas package (paired with atlas-core)
   pages/
     assembly/                  — page1 scaffold · page2 stats · page3 chromosome overview · page4 methods
     annotation/                — page5 genes · page6 repeats/TE · page7 variant annotations · page8 conserved elements
-    comparative/               — page9 synteny · page10 ancestral karyotype
+    comparative/               — page9 synteny (Gar↔Mac wfmash + MacrosyntR)
   registries/data/             — pages / layers / slots / files / operations registries
   css/genome.css               — atlas-wide stylesheet (orange/coral accent)
   shared/, data/               — reserved for phase B+

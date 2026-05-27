@@ -78,14 +78,6 @@
       "tooltip": "Cactus pairwise synteny: ribbon diagram (Cgar vs Cmac and other Siluriformes) + per-chrom dotplot. Phase D."
     },
     {
-      "id": "page10",
-      "label": "ancestral karyotype",
-      "stage": "comparative",
-      "fragment": "atlases/genome/pages/comparative/page10.html",
-      "module": "atlases/genome/pages/comparative/page10.js",
-      "tooltip": "Reconstructed Siluriformes ancestral karyotype + per-branch event annotations. Likely promoted to a Supplementary Note. Phase D."
-    },
-    {
       "id": "page11",
       "label": "crossovers",
       "stage": "annotation",
@@ -128,5 +120,5 @@
       "order": 3
     }
   ],
-  "_stages_doc": "Three stages chosen to match the kickoff (KICKOFF_genome_atlas.md §Q2): assembly (chromosomes, N50, BUSCO, gaps), annotation (genes, repeats, TEs), comparative (synteny, ancestral karyotype). Round 1 ships only one page in `assembly`; the other two stages are reserved for future rounds."
+  "_stages_doc": "Three stages chosen to match the kickoff (KICKOFF_genome_atlas.md §Q2): assembly (chromosomes, N50, BUSCO, gaps), annotation (genes, repeats, TEs, crossovers), comparative (Gar↔Mac synteny). Ancestral-karyotype reconstruction was removed from the Genome Atlas's scope — it lives in the cross-species breakpoints atlas (Chapter 5) alongside fusion/fission and outgroup polarisation. Round 1 ships only one page in `assembly`; the other two stages are reserved for future rounds."
 }

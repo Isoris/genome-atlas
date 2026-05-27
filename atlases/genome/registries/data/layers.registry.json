@@ -70,7 +70,7 @@
       "source": "file",
       "path": "data/comparative/synteny_blocks.json",
       "_status": "not_loaded",
-      "_feeds": "collinearity vs related Siluriformes · ancestral karyotype (phase D)",
+      "_feeds": "collinearity vs related Siluriformes (phase D). Ancestral-karyotype reconstruction was promoted out of the Genome Atlas to the cross-species breakpoints atlas (Chapter 5) — this layer no longer feeds an ancestral-karyotype view here.",
       "_source_pipeline": "Cactus pairwise"
     },
 
