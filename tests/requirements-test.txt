@@ -1,0 +1,6 @@
+# Optional PyPI dependencies for the smoke pass.
+# The 6 core checks (#1-#6) are stdlib-only — the script runs without
+# this requirements file. Check #7 (schema validation) needs jsonschema;
+# the workflow installs this in CI so the check is enforced there.
+
+jsonschema>=4.0
