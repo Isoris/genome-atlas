@@ -153,9 +153,13 @@ const MACROSYNTENY_FALLBACK = { pairs: _buildSamplePairs() };
 
 export function renderPage9(state) {
   const root = (state && state.root) || document;
-  const host = root.querySelector ? root.querySelector('[data-ga-oxford]') : null;
-  if (!host) return;
-  _mountOxford(host, state || {});
+  if (!root.querySelector) return;
+  const oxfordHost = root.querySelector('[data-ga-oxford]');
+  const linearHost = root.querySelector('[data-ga-linear]');
+  const dotHost    = root.querySelector('[data-ga-dot]');
+  if (oxfordHost) _mountOxford(oxfordHost, state || {});
+  if (linearHost) _mountLinear(linearHost, state || {});
+  if (dotHost)    _mountDotplot(dotHost,    state || {});
 }
 
 export const PAGE9_META = {
@@ -180,8 +184,13 @@ export async function mount(root, atlasState, registry) {
 }
 
 export async function unmount(root) {
-  const host = root && root.querySelector ? root.querySelector('[data-ga-oxford]') : null;
-  if (host && host.__gaOxford && host.__gaOxford.destroy) host.__gaOxford.destroy();
+  if (!root || !root.querySelector) { _setActiveState(null); return; }
+  const oxfordHost = root.querySelector('[data-ga-oxford]');
+  const linearHost = root.querySelector('[data-ga-linear]');
+  const dotHost    = root.querySelector('[data-ga-dot]');
+  if (oxfordHost && oxfordHost.__gaOxford && oxfordHost.__gaOxford.destroy) oxfordHost.__gaOxford.destroy();
+  if (linearHost && linearHost.__gaLinear && linearHost.__gaLinear.destroy) linearHost.__gaLinear.destroy();
+  if (dotHost    && dotHost.__gaDot      && dotHost.__gaDot.destroy)        dotHost.__gaDot.destroy();
   _setActiveState(null);
 }
 
@@ -556,4 +565,517 @@ function _el(tag, attrs) {
     n.setAttribute(k, String(attrs[k]));
   }
   return n;
+}
+
+// ===========================================================================
+// View 4 — Linear macro-synteny (port of `macrosyntR::plot_macrosynteny`).
+//
+// Two length-scaled chromosome strips (x on top, y on bottom). One thin
+// cubic-bezier curve per ortholog from the x-strip down to the y-strip,
+// coloured by y-chrom (or x-chrom on toggle). Reorder picks the y-strip
+// permutation greedily so the strongest pairwise matches sit directly under
+// their x partners — same algorithm as the Oxford grid.
+// ===========================================================================
+
+function _mountLinear(host, state) {
+  const data = _resolveData(state);
+  const card = host.closest('[data-ga-card="linear-synteny"]');
+  if (card) {
+    const tag = card.querySelector('[data-ga-linear-source]');
+    if (tag) tag.textContent = (state.layers && state.layers.macrosynteny_orthologs)
+      ? 'macrosynteny_orthologs · loaded'
+      : 'sample data';
+  }
+
+  if (host.__gaLinear && host.__gaLinear.destroy) host.__gaLinear.destroy();
+
+  const ctx = {
+    host,
+    card,
+    svg: host.querySelector('.ga-linear-svg'),
+    tip: host.querySelector('[data-ga-linear-tip]'),
+    data,
+    pairIdx: 0,
+    reorder: true,
+    colorByX: false,
+    _onPairChange: null,
+    _onToggleChange: null,
+    _onMove: null,
+    _onLeave: null,
+    destroy() {
+      const sel = card && card.querySelector('[data-ga-linear-pair]');
+      if (sel && this._onPairChange) sel.removeEventListener('change', this._onPairChange);
+      if (card && this._onToggleChange) {
+        card.querySelectorAll('input[type=checkbox]').forEach((cb) => {
+          cb.removeEventListener('change', this._onToggleChange);
+        });
+      }
+      if (this.svg && this._onMove)  this.svg.removeEventListener('mousemove', this._onMove);
+      if (this.svg && this._onLeave) this.svg.removeEventListener('mouseleave', this._onLeave);
+      host.__gaLinear = null;
+    },
+  };
+
+  // Pair dropdown.
+  const sel = card ? card.querySelector('[data-ga-linear-pair]') : null;
+  if (sel) {
+    while (sel.firstChild) sel.removeChild(sel.firstChild);
+    data.pairs.forEach((p, i) => {
+      const opt = document.createElement('option');
+      opt.value = String(i);
+      opt.textContent = p.name || p.id || `pair ${i + 1}`;
+      sel.appendChild(opt);
+    });
+    sel.value = String(ctx.pairIdx);
+    ctx._onPairChange = (ev) => {
+      ctx.pairIdx = parseInt(ev.target.value, 10) || 0;
+      _renderLinear(ctx);
+    };
+    sel.addEventListener('change', ctx._onPairChange);
+  }
+
+  // Toggle wiring.
+  if (card) {
+    ctx._onToggleChange = (ev) => {
+      const cb = ev.target;
+      if (cb.matches('[data-ga-linear-reorder]'))     ctx.reorder = cb.checked;
+      if (cb.matches('[data-ga-linear-color-by-x]')) ctx.colorByX = cb.checked;
+      _renderLinear(ctx);
+    };
+    card.querySelectorAll('input[type=checkbox]').forEach((cb) => {
+      if (!cb.matches('[data-ga-linear-reorder], [data-ga-linear-color-by-x]')) return;
+      cb.addEventListener('change', ctx._onToggleChange);
+    });
+  }
+
+  ctx._onMove = (ev) => {
+    const t = ev.target.closest('[data-ga-linear-tip-payload]');
+    if (!t) { _hideTip(ctx); return; }
+    _showTip(ctx, t.getAttribute('data-ga-linear-tip-payload'), ev);
+  };
+  ctx._onLeave = () => _hideTip(ctx);
+  ctx.svg.addEventListener('mousemove', ctx._onMove);
+  ctx.svg.addEventListener('mouseleave', ctx._onLeave);
+
+  host.__gaLinear = ctx;
+  _renderLinear(ctx);
+}
+
+function _renderLinear(ctx) {
+  const svg = ctx.svg;
+  while (svg.firstChild) svg.removeChild(svg.firstChild);
+
+  const pair = ctx.data.pairs[ctx.pairIdx];
+  if (!pair) { _drawEmpty(svg); return; }
+
+  const W = 1000, H = 300;
+  const PAD_L = 24, PAD_R = 24;
+  const STRIP_TOP_Y = 56;    // x-strip top
+  const STRIP_BOT_Y = 220;   // y-strip top
+  const STRIP_H = 20;
+  const usableW = W - PAD_L - PAD_R;
+
+  // Always keep x in natural order; optionally reorder y to chase x.
+  let xs = pair.x.chroms.slice();
+  let ys = pair.y.chroms.slice();
+  if (ctx.reorder) {
+    // Greedy reorder mirroring _reorder, but freezes x order — for each x
+    // chrom (in original order), pick the y chrom with the most orthologs
+    // pointing to it from the remaining pool.
+    const xIdx = new Map(xs.map((c, i) => [c.id, i]));
+    const yIdx = new Map(ys.map((c, i) => [c.id, i]));
+    const counts = Array.from({ length: xs.length }, () => new Int32Array(ys.length));
+    for (const o of pair.orthologs) {
+      const xi = xIdx.get(o.xc); const yi = yIdx.get(o.yc);
+      if (xi !== undefined && yi !== undefined) counts[xi][yi]++;
+    }
+    const yUsed = new Set();
+    const yOrder = [];
+    for (let xi = 0; xi < xs.length; xi++) {
+      let best = -1; let bestC = -1;
+      for (let yi = 0; yi < ys.length; yi++) {
+        if (yUsed.has(yi)) continue;
+        if (counts[xi][yi] > bestC) { best = yi; bestC = counts[xi][yi]; }
+      }
+      if (best >= 0 && bestC > 0) { yOrder.push(best); yUsed.add(best); }
+    }
+    for (let yi = 0; yi < ys.length; yi++) if (!yUsed.has(yi)) yOrder.push(yi);
+    ys = yOrder.map((i) => pair.y.chroms[i]);
+  }
+
+  const xOffsets = _cumulativeOffsets(xs);
+  const yOffsets = _cumulativeOffsets(ys);
+  const xTotal = xOffsets[xOffsets.length - 1] || 1;
+  const yTotal = yOffsets[yOffsets.length - 1] || 1;
+
+  // Palette — same rainbow as the Oxford grid for visual consistency.
+  const yPalette = ys.map((_, i, a) => _rainbow(i / Math.max(1, a.length - 1)));
+  const xPalette = xs.map((_, i, a) => _rainbow(i / Math.max(1, a.length - 1)));
+
+  // ---- Ribbons (lines) ----------------------------------------------------
+  const ribbons = _el('g', { class: 'ga-linear-ribbons' });
+  const yLookupX = new Map(xs.map((c, i) => [c.id, i]));
+  const yLookupY = new Map(ys.map((c, i) => [c.id, i]));
+  let plotted = 0;
+  for (const o of pair.orthologs) {
+    const xi = yLookupX.get(o.xc); const yi = yLookupY.get(o.yc);
+    if (xi === undefined || yi === undefined) continue;
+    const xLen = xs[xi].length_bp || 1;
+    const yLen = ys[yi].length_bp || 1;
+    const xp = Math.max(0, Math.min(xLen, o.xp || 0));
+    const yp = Math.max(0, Math.min(yLen, o.yp || 0));
+    const px = PAD_L + ((xOffsets[xi] + xp) / xTotal) * usableW;
+    const py = PAD_L + ((yOffsets[yi] + yp) / yTotal) * usableW;
+    const y0 = STRIP_TOP_Y + STRIP_H;
+    const y1 = STRIP_BOT_Y;
+    const cy = (y0 + y1) / 2;
+    const stroke = ctx.colorByX ? xPalette[xi] : yPalette[yi];
+    ribbons.appendChild(_el('path', {
+      class: 'ga-linear-ribbon',
+      d: `M${px},${y0} C${px},${cy} ${py},${cy} ${py},${y1}`,
+      stroke,
+      'data-ga-linear-tip-payload': _tipPayloadForDot(o, xs[xi], ys[yi]),
+    }));
+    plotted++;
+  }
+  svg.appendChild(ribbons);
+
+  // ---- Top + bottom chromosome strips (drawn after ribbons so they sit on top)
+  const strips = _el('g', { class: 'ga-linear-strips' });
+
+  xs.forEach((c, i) => {
+    const x0 = PAD_L + (xOffsets[i] / xTotal) * usableW;
+    const w  = ((c.length_bp || 1) / xTotal) * usableW;
+    const rect = _el('rect', {
+      class: 'ga-linear-chrom',
+      x: x0, y: STRIP_TOP_Y, width: Math.max(1, w - 1), height: STRIP_H,
+      rx: 2, ry: 2,
+    });
+    if (ctx.colorByX) rect.setAttribute('fill', xPalette[i]);
+    strips.appendChild(rect);
+    const txt = _el('text', {
+      class: 'ga-linear-xlabel',
+      x: x0 + w / 2,
+      y: STRIP_TOP_Y - 6,
+      'text-anchor': 'middle',
+    });
+    txt.textContent = c.name || c.id;
+    strips.appendChild(txt);
+  });
+
+  ys.forEach((c, i) => {
+    const x0 = PAD_L + (yOffsets[i] / yTotal) * usableW;
+    const w  = ((c.length_bp || 1) / yTotal) * usableW;
+    const rect = _el('rect', {
+      class: 'ga-linear-chrom',
+      x: x0, y: STRIP_BOT_Y, width: Math.max(1, w - 1), height: STRIP_H,
+      rx: 2, ry: 2,
+    });
+    if (!ctx.colorByX) rect.setAttribute('fill', yPalette[i]);
+    strips.appendChild(rect);
+    const txt = _el('text', {
+      class: 'ga-linear-ylabel',
+      x: x0 + w / 2,
+      y: STRIP_BOT_Y + STRIP_H + 14,
+      'text-anchor': 'middle',
+    });
+    txt.textContent = c.name || c.id;
+    strips.appendChild(txt);
+  });
+  svg.appendChild(strips);
+
+  // ---- Species titles + status -------------------------------------------
+  const titles = _el('g', { class: 'ga-linear-titles' });
+  const top = _el('text', {
+    class: 'ga-oxford-axis-title',
+    x: PAD_L,
+    y: STRIP_TOP_Y - 24,
+    'text-anchor': 'start',
+  });
+  top.textContent = pair.x.name || pair.x.id;
+  titles.appendChild(top);
+  const bot = _el('text', {
+    class: 'ga-oxford-axis-title',
+    x: PAD_L,
+    y: STRIP_BOT_Y + STRIP_H + 34,
+    'text-anchor': 'start',
+  });
+  bot.textContent = pair.y.name || pair.y.id;
+  titles.appendChild(bot);
+  const status = _el('text', {
+    class: 'ga-oxford-status',
+    x: W - PAD_R,
+    y: STRIP_BOT_Y + STRIP_H + 34,
+    'text-anchor': 'end',
+  });
+  status.textContent = `${plotted.toLocaleString()} orthologs · ${xs.length} × ${ys.length} chroms`
+    + (ctx.reorder ? ' · y-strip reordered' : ' · natural y-order');
+  titles.appendChild(status);
+  svg.appendChild(titles);
+}
+
+// ===========================================================================
+// View 5 — Per-chrom dotplot.
+//
+// Single (x_chrom, y_chrom) pair zoom. Same data source as the Oxford grid
+// but axes are bp positions along the two chromosomes, with the orthologs
+// drawn as dots. The pair selector defaults to the (x, y) cell with the
+// most orthologs (the strongest diagonal cell from the Oxford reorder).
+// ===========================================================================
+
+function _mountDotplot(host, state) {
+  const data = _resolveData(state);
+  const card = host.closest('[data-ga-card="chrom-dotplot"]');
+  if (card) {
+    const tag = card.querySelector('[data-ga-dot-source]');
+    if (tag) tag.textContent = (state.layers && state.layers.macrosynteny_orthologs)
+      ? 'macrosynteny_orthologs · loaded'
+      : 'sample data';
+  }
+
+  if (host.__gaDot && host.__gaDot.destroy) host.__gaDot.destroy();
+
+  const ctx = {
+    host,
+    card,
+    svg: host.querySelector('.ga-dotplot-svg'),
+    tip: host.querySelector('[data-ga-dot-tip]'),
+    data,
+    pairIdx: 0,
+    xcId: null,
+    ycId: null,
+    _onPair: null, _onXc: null, _onYc: null,
+    _onMove: null, _onLeave: null,
+    destroy() {
+      const pairSel = card && card.querySelector('[data-ga-dot-pair]');
+      const xcSel   = card && card.querySelector('[data-ga-dot-xc]');
+      const ycSel   = card && card.querySelector('[data-ga-dot-yc]');
+      if (pairSel && this._onPair) pairSel.removeEventListener('change', this._onPair);
+      if (xcSel   && this._onXc)   xcSel.removeEventListener('change', this._onXc);
+      if (ycSel   && this._onYc)   ycSel.removeEventListener('change', this._onYc);
+      if (this.svg && this._onMove)  this.svg.removeEventListener('mousemove', this._onMove);
+      if (this.svg && this._onLeave) this.svg.removeEventListener('mouseleave', this._onLeave);
+      host.__gaDot = null;
+    },
+  };
+
+  const pairSel = card ? card.querySelector('[data-ga-dot-pair]') : null;
+  const xcSel   = card ? card.querySelector('[data-ga-dot-xc]') : null;
+  const ycSel   = card ? card.querySelector('[data-ga-dot-yc]') : null;
+
+  function populatePairSel() {
+    if (!pairSel) return;
+    while (pairSel.firstChild) pairSel.removeChild(pairSel.firstChild);
+    data.pairs.forEach((p, i) => {
+      const opt = document.createElement('option');
+      opt.value = String(i);
+      opt.textContent = p.name || p.id || `pair ${i + 1}`;
+      pairSel.appendChild(opt);
+    });
+    pairSel.value = String(ctx.pairIdx);
+  }
+  function defaultChromPick() {
+    // Pick the (xc, yc) with the most orthologs — the "main diagonal" cell.
+    const pair = data.pairs[ctx.pairIdx];
+    if (!pair) { ctx.xcId = null; ctx.ycId = null; return; }
+    const counts = new Map(); // key = `${xc}|${yc}`
+    for (const o of pair.orthologs) {
+      const k = `${o.xc}|${o.yc}`;
+      counts.set(k, (counts.get(k) || 0) + 1);
+    }
+    let bestK = null; let bestC = -1;
+    counts.forEach((c, k) => { if (c > bestC) { bestC = c; bestK = k; } });
+    if (bestK) {
+      const [xc, yc] = bestK.split('|');
+      ctx.xcId = xc; ctx.ycId = yc;
+    } else {
+      ctx.xcId = pair.x.chroms[0] && pair.x.chroms[0].id;
+      ctx.ycId = pair.y.chroms[0] && pair.y.chroms[0].id;
+    }
+  }
+  function populateChromSels() {
+    const pair = data.pairs[ctx.pairIdx];
+    if (!pair) return;
+    if (xcSel) {
+      while (xcSel.firstChild) xcSel.removeChild(xcSel.firstChild);
+      pair.x.chroms.forEach((c) => {
+        const opt = document.createElement('option');
+        opt.value = c.id;
+        opt.textContent = c.name || c.id;
+        xcSel.appendChild(opt);
+      });
+      xcSel.value = ctx.xcId;
+    }
+    if (ycSel) {
+      while (ycSel.firstChild) ycSel.removeChild(ycSel.firstChild);
+      pair.y.chroms.forEach((c) => {
+        const opt = document.createElement('option');
+        opt.value = c.id;
+        opt.textContent = c.name || c.id;
+        ycSel.appendChild(opt);
+      });
+      ycSel.value = ctx.ycId;
+    }
+  }
+
+  populatePairSel();
+  defaultChromPick();
+  populateChromSels();
+
+  if (pairSel) {
+    ctx._onPair = (ev) => {
+      ctx.pairIdx = parseInt(ev.target.value, 10) || 0;
+      defaultChromPick();
+      populateChromSels();
+      _renderDotplot(ctx);
+    };
+    pairSel.addEventListener('change', ctx._onPair);
+  }
+  if (xcSel) {
+    ctx._onXc = (ev) => { ctx.xcId = ev.target.value; _renderDotplot(ctx); };
+    xcSel.addEventListener('change', ctx._onXc);
+  }
+  if (ycSel) {
+    ctx._onYc = (ev) => { ctx.ycId = ev.target.value; _renderDotplot(ctx); };
+    ycSel.addEventListener('change', ctx._onYc);
+  }
+
+  ctx._onMove = (ev) => {
+    const t = ev.target.closest('[data-ga-dot-tip-payload]');
+    if (!t) { _hideTip(ctx); return; }
+    _showTip(ctx, t.getAttribute('data-ga-dot-tip-payload'), ev);
+  };
+  ctx._onLeave = () => _hideTip(ctx);
+  ctx.svg.addEventListener('mousemove', ctx._onMove);
+  ctx.svg.addEventListener('mouseleave', ctx._onLeave);
+
+  host.__gaDot = ctx;
+  _renderDotplot(ctx);
+}
+
+function _renderDotplot(ctx) {
+  const svg = ctx.svg;
+  while (svg.firstChild) svg.removeChild(svg.firstChild);
+  const pair = ctx.data.pairs[ctx.pairIdx];
+  if (!pair) { _drawEmpty(svg); return; }
+  const xc = pair.x.chroms.find((c) => c.id === ctx.xcId);
+  const yc = pair.y.chroms.find((c) => c.id === ctx.ycId);
+  if (!xc || !yc) { _drawEmpty(svg); return; }
+
+  const W = 720, H = 540;
+  const PAD_L = 70, PAD_R = 24, PAD_T = 50, PAD_B = 56;
+  const plotW = W - PAD_L - PAD_R;
+  const plotH = H - PAD_T - PAD_B;
+  const xLen = Math.max(1, xc.length_bp || 1);
+  const yLen = Math.max(1, yc.length_bp || 1);
+
+  svg.appendChild(_el('rect', {
+    class: 'ga-oxford-plot-bg',
+    x: PAD_L, y: PAD_T, width: plotW, height: plotH,
+  }));
+
+  // Subtle background grid (10 ticks per axis).
+  const grid = _el('g', { class: 'ga-dotplot-grid' });
+  for (let i = 1; i < 10; i++) {
+    const gx = PAD_L + (plotW * i) / 10;
+    const gy = PAD_T + (plotH * i) / 10;
+    grid.appendChild(_el('line', {
+      class: 'ga-oxford-gridline',
+      x1: gx, x2: gx, y1: PAD_T, y2: PAD_T + plotH,
+    }));
+    grid.appendChild(_el('line', {
+      class: 'ga-oxford-gridline',
+      x1: PAD_L, x2: PAD_L + plotW, y1: gy, y2: gy,
+    }));
+  }
+  svg.appendChild(grid);
+
+  // Dots (only orthologs whose (xc, yc) match the current selection).
+  const dots = _el('g', { class: 'ga-dotplot-dots' });
+  let plotted = 0;
+  for (const o of pair.orthologs) {
+    if (o.xc !== ctx.xcId || o.yc !== ctx.ycId) continue;
+    const xp = Math.max(0, Math.min(xLen, o.xp || 0));
+    const yp = Math.max(0, Math.min(yLen, o.yp || 0));
+    const px = PAD_L + (xp / xLen) * plotW;
+    const py = PAD_T + (yp / yLen) * plotH;
+    dots.appendChild(_el('circle', {
+      class: 'ga-dotplot-dot',
+      cx: px, cy: py, r: 2.4,
+      fill: '#ff8c6e',
+      'data-ga-dot-tip-payload': _tipPayloadForDot(o, xc, yc),
+    }));
+    plotted++;
+  }
+  svg.appendChild(dots);
+
+  svg.appendChild(_el('rect', {
+    class: 'ga-oxford-frame',
+    x: PAD_L, y: PAD_T, width: plotW, height: plotH,
+  }));
+
+  // Axis ticks + labels (bp at 0, mid, end).
+  const axes = _el('g', { class: 'ga-dotplot-axes' });
+  const fmt = (bp) => bp >= 1e6 ? (bp / 1e6).toFixed(1) + ' Mb'
+                  : bp >= 1e3 ? (bp / 1e3).toFixed(0) + ' kb'
+                  : `${bp} bp`;
+  // x ticks
+  for (const f of [0, 0.5, 1]) {
+    const x = PAD_L + plotW * f;
+    axes.appendChild(_el('line', {
+      class: 'ga-dotplot-tick',
+      x1: x, x2: x, y1: PAD_T + plotH, y2: PAD_T + plotH + 4,
+    }));
+    const lbl = _el('text', {
+      class: 'ga-dotplot-tick-label',
+      x, y: PAD_T + plotH + 16, 'text-anchor': 'middle',
+    });
+    lbl.textContent = fmt(xLen * f);
+    axes.appendChild(lbl);
+  }
+  // y ticks (rendered top-down because SVG y-axis grows downward)
+  for (const f of [0, 0.5, 1]) {
+    const y = PAD_T + plotH * f;
+    axes.appendChild(_el('line', {
+      class: 'ga-dotplot-tick',
+      x1: PAD_L - 4, x2: PAD_L, y1: y, y2: y,
+    }));
+    const lbl = _el('text', {
+      class: 'ga-dotplot-tick-label',
+      x: PAD_L - 6, y, 'text-anchor': 'end', 'dominant-baseline': 'middle',
+    });
+    lbl.textContent = fmt(yLen * f);
+    axes.appendChild(lbl);
+  }
+  svg.appendChild(axes);
+
+  // Titles + chrom labels.
+  const titles = _el('g', { class: 'ga-dotplot-titles' });
+  const xt = _el('text', {
+    class: 'ga-oxford-axis-title',
+    x: PAD_L + plotW / 2,
+    y: PAD_T - 24,
+    'text-anchor': 'middle',
+  });
+  xt.textContent = `${pair.x.name || pair.x.id}  ·  chrom ${xc.name || xc.id}`;
+  titles.appendChild(xt);
+  const yt = _el('text', {
+    class: 'ga-oxford-axis-title',
+    x: 14, y: PAD_T + plotH / 2,
+    'text-anchor': 'middle',
+    transform: `rotate(-90, 14, ${PAD_T + plotH / 2})`,
+  });
+  yt.textContent = `${pair.y.name || pair.y.id}  ·  chrom ${yc.name || yc.id}`;
+  titles.appendChild(yt);
+
+  const status = _el('text', {
+    class: 'ga-oxford-status',
+    x: PAD_L,
+    y: PAD_T + plotH + 36,
+    'text-anchor': 'start',
+  });
+  status.textContent = `${plotted.toLocaleString()} orthologs in cell · `
+    + `x: ${fmt(xLen)} · y: ${fmt(yLen)}`;
+  titles.appendChild(status);
+  svg.appendChild(titles);
 }

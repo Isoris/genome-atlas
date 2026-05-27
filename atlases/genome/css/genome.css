@@ -833,6 +833,80 @@ html[data-theme="light"]    .ga-sankey-btn.is-active {
 
 html[data-theme="light"] .ga-oxford-tooltip { border-left-color: #c2410c; }
 
+/* --------------------------------------------------------------------- */
+/* page9 View 4 — Linear macro-synteny (port of plot_macrosynteny).      */
+/* Two horizontal length-scaled strips connected by thin ortholog        */
+/* ribbons.                                                              */
+/* --------------------------------------------------------------------- */
+.ga-linear-host {
+  position: relative;
+  margin: 4px 0 6px 0;
+  padding: 6px 8px 8px 8px;
+  background: var(--panel-3);
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+}
+.ga-linear-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  font-family: var(--mono);
+  user-select: none;
+}
+.ga-linear-chrom {
+  fill: var(--panel-2);
+  stroke: var(--rule);
+  stroke-width: 0.7;
+}
+.ga-linear-ribbon {
+  fill: none;
+  stroke-width: 0.6;
+  opacity: 0.32;
+  transition: opacity 100ms ease;
+}
+.ga-linear-ribbon:hover {
+  opacity: 0.8;
+  stroke-width: 1.2;
+}
+.ga-linear-xlabel,
+.ga-linear-ylabel {
+  font-size: 8.5px;
+  fill: var(--ink-dim);
+  letter-spacing: 0.02em;
+}
+
+/* --------------------------------------------------------------------- */
+/* page9 View 5 — Per-chrom dotplot. Single (x_chrom, y_chrom) zoom.     */
+/* --------------------------------------------------------------------- */
+.ga-dotplot-host {
+  position: relative;
+  margin: 4px 0 6px 0;
+  padding: 6px 8px 8px 8px;
+  background: var(--panel-3);
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+}
+.ga-dotplot-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  font-family: var(--mono);
+  user-select: none;
+}
+.ga-dotplot-dot {
+  stroke: none;
+  opacity: 0.9;
+}
+.ga-dotplot-tick {
+  stroke: var(--rule);
+  stroke-width: 1;
+}
+.ga-dotplot-tick-label {
+  font-size: 9px;
+  fill: var(--ink-dim);
+  letter-spacing: 0.02em;
+}
+
 /* --- JSON-schema codeblock ------------------------------------------- */
 .ga-schema-block {
   margin: 4px 0;

@@ -71,8 +71,11 @@
           <div class="ga-panel-name">View 3 — MacrosyntR Oxford grid</div>
           <div class="ga-panel-desc">Whole-genome Oxford dotplot — x-axis = chroms of species A, y-axis = chroms of species B, length-scaled and reordered so the strongest pairwise matches sit on the diagonal. Each dot is one ortholog gene pair; colour encodes the y-chromosome. Direct port of <code>macrosyntR::plot_oxford_grid</code>.</div>
 
-          <div class="ga-panel-name">View 4 — per-chrom dotplot</div>
-          <div class="ga-panel-desc">Click any chromosome in the ribbon to open a full dotplot (Cgar chrom × homolog chrom). Hover for block coordinates and identity.</div>
+          <div class="ga-panel-name">View 4 — linear macro-synteny</div>
+          <div class="ga-panel-desc">Two horizontal length-scaled chromosome strips with a straight line per ortholog connecting them. Lines coloured by y-chromosome (matches the Oxford grid). Direct port of <code>macrosyntR::plot_macrosynteny</code>.</div>
+
+          <div class="ga-panel-name">View 5 — per-chrom dotplot</div>
+          <div class="ga-panel-desc">Single-pair zoom — pick one x-chrom + one y-chrom and inspect their ortholog dots at full resolution. Hover any dot for the ortholog's bp coordinates on both axes.</div>
         </div>
       </div>
 
@@ -124,6 +127,87 @@
           <code>xc</code>/<code>yc</code> are chrom ids; <code>xp</code>/<code>yp</code>
           are positions in bp. Until the layer lands, the renderer falls back
           to a baked-in 28×27 example pair (<i>fClaHyb_Gar</i> × <i>C. fuscus</i>).
+        </div>
+      </div>
+
+      <div class="ga-card" data-ga-card="linear-synteny">
+        <div class="ga-card-header">
+          <div class="ga-card-title">View 4 — Linear macro-synteny</div>
+          <div class="ga-card-status" data-ga-linear-source>sample data</div>
+        </div>
+        <div class="ga-card-para ga-dim">
+          Two horizontal length-scaled chromosome strips with one line per
+          ortholog connecting them. Lines coloured by the y-chromosome —
+          same colour contract <code>macrosyntR::plot_macrosynteny</code>
+          uses out of the box. Reorder the y-strip greedily so the strongest
+          pairwise matches sit directly under their x partners (toggle off
+          for natural order).
+        </div>
+
+        <div class="ga-oxford-toolbar" role="toolbar" aria-label="Linear macrosynteny controls">
+          <span class="ga-oxford-tool-label">pair</span>
+          <select class="ga-oxford-select" data-ga-linear-pair></select>
+          <span class="ga-oxford-tool-spacer"></span>
+          <label class="ga-oxford-toggle">
+            <input type="checkbox" data-ga-linear-reorder checked>
+            <span>reorder y-strip</span>
+          </label>
+          <label class="ga-oxford-toggle">
+            <input type="checkbox" data-ga-linear-color-by-x>
+            <span>colour by x-chrom</span>
+          </label>
+        </div>
+
+        <div class="ga-linear-host" data-ga-linear
+             role="img" aria-label="Linear MacrosyntR-style macro-synteny ribbons.">
+          <svg class="ga-linear-svg"
+               viewBox="0 0 1000 300"
+               preserveAspectRatio="xMidYMid meet"
+               xmlns="http://www.w3.org/2000/svg"></svg>
+          <div class="ga-oxford-tooltip" data-ga-linear-tip role="tooltip" hidden></div>
+        </div>
+
+        <div class="ga-card-footnote">
+          Uses the same <code>macrosynteny_orthologs.json</code> contract as
+          View 3. Each ortholog draws as a thin curve from the x-strip down
+          to the y-strip at length-scaled positions.
+        </div>
+      </div>
+
+      <div class="ga-card" data-ga-card="chrom-dotplot">
+        <div class="ga-card-header">
+          <div class="ga-card-title">View 5 — Per-chrom dotplot</div>
+          <div class="ga-card-status" data-ga-dot-source>sample data</div>
+        </div>
+        <div class="ga-card-para ga-dim">
+          Single-pair zoom. Pick one x-chrom and one y-chrom; every ortholog
+          between them renders as a dot at its (x-bp, y-bp) coordinate. The
+          default pair is the one with the most orthologs (the "main
+          diagonal" cell of View 3).
+        </div>
+
+        <div class="ga-oxford-toolbar" role="toolbar" aria-label="Per-chrom dotplot controls">
+          <span class="ga-oxford-tool-label">pair</span>
+          <select class="ga-oxford-select" data-ga-dot-pair></select>
+          <span class="ga-oxford-tool-label">x-chrom</span>
+          <select class="ga-oxford-select" data-ga-dot-xc></select>
+          <span class="ga-oxford-tool-label">y-chrom</span>
+          <select class="ga-oxford-select" data-ga-dot-yc></select>
+        </div>
+
+        <div class="ga-dotplot-host" data-ga-dot
+             role="img" aria-label="Per-chromosome synteny dotplot.">
+          <svg class="ga-dotplot-svg"
+               viewBox="0 0 720 540"
+               preserveAspectRatio="xMidYMid meet"
+               xmlns="http://www.w3.org/2000/svg"></svg>
+          <div class="ga-oxford-tooltip" data-ga-dot-tip role="tooltip" hidden></div>
+        </div>
+
+        <div class="ga-card-footnote">
+          Same data contract as View 3. Useful for inspecting inversions
+          (anti-diagonal segments) or translocations (off-diagonal clusters)
+          in a single chromosome pair.
         </div>
       </div>
 
