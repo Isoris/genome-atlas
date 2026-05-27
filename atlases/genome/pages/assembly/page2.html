@@ -51,66 +51,71 @@
         </div>
       </div>
 
-      <!-- ── Section 3: Mockup — global QC tiles ──────────────────────── -->
-      <div class="ga-card">
+      <!-- ── Section 3: Global QC tiles ───────────────────────────────── -->
+      <div class="ga-card" data-ga-card="qc-banner">
         <div class="ga-card-header">
-          <div class="ga-card-title">QC banner (mockup)</div>
-          <div class="ga-card-status">placeholder values</div>
+          <div class="ga-card-title">QC banner</div>
+          <div class="ga-card-status" data-ga-qc-source>sample data</div>
         </div>
         <div class="ga-tile-grid">
           <div class="ga-tile">
             <div class="ga-tile-label">BUSCO single-copy</div>
-            <div class="ga-tile-value">— %</div>
-            <div class="ga-tile-sub">actinopterygii_odb10 · n=3640</div>
+            <div class="ga-tile-value" data-ga-tile="busco_pct">— %</div>
+            <div class="ga-tile-sub" data-ga-tile="busco_sub">actinopterygii_odb10 · n=—</div>
           </div>
           <div class="ga-tile">
             <div class="ga-tile-label">contig N50</div>
-            <div class="ga-tile-value">— Mb</div>
+            <div class="ga-tile-value" data-ga-tile="contig_n50">— Mb</div>
             <div class="ga-tile-sub">HiFi + Hi-C scaffolded</div>
           </div>
           <div class="ga-tile">
             <div class="ga-tile-label">scaffold N50</div>
-            <div class="ga-tile-value">— Mb</div>
+            <div class="ga-tile-value" data-ga-tile="scaffold_n50">— Mb</div>
             <div class="ga-tile-sub">post-curation</div>
           </div>
           <div class="ga-tile">
             <div class="ga-tile-label">gap rate</div>
-            <div class="ga-tile-value">—</div>
+            <div class="ga-tile-value" data-ga-tile="gap_rate">—</div>
             <div class="ga-tile-sub">N's per 100 kbp</div>
           </div>
           <div class="ga-tile">
             <div class="ga-tile-label">T2T chroms</div>
-            <div class="ga-tile-value">— / —</div>
+            <div class="ga-tile-value" data-ga-tile="t2t_count">— / —</div>
             <div class="ga-tile-sub">centromere + both telomeres</div>
           </div>
           <div class="ga-tile">
             <div class="ga-tile-label">total length</div>
-            <div class="ga-tile-value">— Gb</div>
-            <div class="ga-tile-sub">Gar + Mac haploids</div>
+            <div class="ga-tile-value" data-ga-tile="total_length">— Gb</div>
+            <div class="ga-tile-sub" data-ga-tile="total_length_sub">Gar + Mac haploids</div>
           </div>
         </div>
         <div class="ga-card-footnote">
-          Tiles populate from <code>assembly_stats.json</code> when the cluster-side
-          QC pipeline lands. Dashes are intentional — the layer hasn't shipped.
+          Tiles populate from <code>assembly_stats.json</code>. Until that
+          layer lands the renderer falls back to a small example dataset.
         </div>
       </div>
 
-      <!-- ── Section 4: Per-chromosome table (mockup) ─────────────────── -->
-      <div class="ga-card">
+      <!-- ── Section 4: Per-chromosome QC table ───────────────────────── -->
+      <div class="ga-card" data-ga-card="qc-table">
         <div class="ga-card-header">
-          <div class="ga-card-title">Per-chromosome QC (mockup)</div>
+          <div class="ga-card-title">Per-chromosome QC</div>
           <div class="ga-card-status">phase B+</div>
         </div>
         <div class="ga-card-para ga-dim">
-          One row per chromosome per haplotype. Columns: chrom · length (Mb) · GC% ·
-          gap count · N-bases · centromere localized? · 5′ telomere · 3′ telomere ·
-          T2T chip. Sort by any column. Click a row to drill into the chromosome
-          overview (page3) at that chrom.
+          One row per chromosome per haplotype. Sort by any column header
+          (click to toggle). The T2T chip combines centromere + 5′ + 3′
+          telomere status — ● both telomeres &amp; centromere, ◐ partial,
+          ○ none.
         </div>
-        <div class="ga-todo-banner">
-          TODO_MISSING(per-chromosome QC table renderer) — wires to
-          <code>assembly_stats.per_chrom[]</code> + <code>centromere_telomere</code>.
+        <div class="ga-qc-toolbar" role="toolbar" aria-label="Per-chromosome QC filter">
+          <span class="ga-qc-tool-label">haplotype</span>
+          <button type="button" class="ga-qc-btn is-active" data-ga-qc-hap="all">all</button>
+          <button type="button" class="ga-qc-btn" data-ga-qc-hap="Gar">Gar (28)</button>
+          <button type="button" class="ga-qc-btn" data-ga-qc-hap="Mac">Mac (27)</button>
+          <span class="ga-qc-tool-spacer"></span>
+          <span class="ga-qc-tool-meta" data-ga-qc-summary></span>
         </div>
+        <div class="ga-qc-table-host" data-ga-qc-table></div>
       </div>
 
       <!-- ── Section 5: Cross-references ──────────────────────────────── -->

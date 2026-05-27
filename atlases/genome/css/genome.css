@@ -907,6 +907,119 @@ html[data-theme="light"] .ga-oxford-tooltip { border-left-color: #c2410c; }
   letter-spacing: 0.02em;
 }
 
+/* --------------------------------------------------------------------- */
+/* page2 — Per-chromosome QC table (one row per haplotype × chrom).      */
+/* Sortable headers; T2T-completeness chips; haplotype filter toolbar.   */
+/* --------------------------------------------------------------------- */
+.ga-qc-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin: 6px 0 8px 0;
+  font-size: 10px;
+  color: var(--ink-dim);
+}
+.ga-qc-tool-label {
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-right: 4px;
+}
+.ga-qc-tool-spacer { flex: 1 1 auto; }
+.ga-qc-tool-meta {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--ink-dimmer);
+}
+.ga-qc-btn {
+  font: inherit;
+  font-size: 10px;
+  color: var(--ink-dim);
+  background: var(--panel-3);
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  padding: 3px 8px;
+  cursor: pointer;
+  font-family: var(--mono);
+  letter-spacing: 0.02em;
+}
+.ga-qc-btn:hover {
+  color: var(--ink);
+  border-color: #ff8c6e;
+}
+.ga-qc-btn.is-active {
+  color: var(--ink);
+  border-color: #ff8c6e;
+  background: rgba(255, 140, 110, 0.10);
+}
+
+.ga-qc-table-host {
+  overflow-x: auto;
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  background: var(--panel-3);
+}
+.ga-qc-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  color: var(--ink);
+}
+.ga-qc-th,
+.ga-qc-td {
+  padding: 5px 9px;
+  text-align: left;
+  border-bottom: 1px solid var(--rule);
+  white-space: nowrap;
+}
+.ga-qc-th {
+  position: sticky;
+  top: 0;
+  background: var(--panel-2);
+  color: var(--ink-dim);
+  font-weight: 600;
+  font-size: 9.5px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+  user-select: none;
+}
+.ga-qc-th:hover { color: var(--ink); }
+.ga-qc-th.is-sorted { color: #ff8c6e; }
+.ga-qc-th.is-num,
+.ga-qc-td.is-num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.ga-qc-tr { cursor: pointer; transition: background-color 80ms ease; }
+.ga-qc-tr:hover { background: rgba(255, 140, 110, 0.06); }
+.ga-qc-tr:last-child .ga-qc-td { border-bottom: none; }
+
+.ga-qc-chip {
+  display: inline-block;
+  width: 14px;
+  font-size: 11px;
+  line-height: 1;
+  text-align: center;
+  font-family: var(--mono);
+}
+.ga-qc-chip.is-on    { color: #4f9e64; }   /* green ● */
+.ga-qc-chip.is-off   { color: var(--ink-dimmer); }
+.ga-qc-chip.ga-qc-t2t.is-full    { color: #4f9e64; }
+.ga-qc-chip.ga-qc-t2t.is-partial { color: #c9a23a; }   /* amber ◐ */
+.ga-qc-chip.ga-qc-t2t.is-empty   { color: var(--ink-dimmer); }
+
+html[data-theme="light"] .ga-qc-th.is-sorted,
+html[data-theme="light"] .ga-qc-btn.is-active {
+  color: #c2410c;
+  border-color: #c2410c;
+}
+html[data-theme="light"] .ga-qc-btn.is-active {
+  background: rgba(194, 65, 12, 0.10);
+}
+
 /* --- JSON-schema codeblock ------------------------------------------- */
 .ga-schema-block {
   margin: 4px 0;
