@@ -1829,6 +1829,39 @@ html[data-theme="light"] .ga-pipeline-stage:hover .ga-pipeline-stage-box {
 .ga-ribbon-fwd { color: #2E6FB0; font-weight: 600; }
 .ga-ribbon-rev { color: #C0392B; font-weight: 600; }
 
+/* page9 View 2 — Multi-species ribbon stack */
+.ga-stack-host {
+  position: relative;
+  margin: 4px 0 6px 0;
+  padding: 6px 8px 8px 8px;
+  background: var(--panel-3);
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+}
+.ga-stack-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  font-family: var(--mono);
+  user-select: none;
+}
+.ga-stack-chrom { stroke: var(--ink-dim); stroke-width: 0.5; }
+.ga-stack-chrom.is-other { fill: var(--panel-2); }
+.ga-stack-species-label {
+  font-size: 10.5px;
+  fill: var(--ink);
+  font-style: italic;
+  letter-spacing: 0.02em;
+}
+.ga-stack-link { transition: stroke-opacity 80ms ease; }
+.ga-stack-link:hover { stroke-opacity: 0.95; stroke-width: 1.2; }
+.ga-stack-species-strip {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  align-items: center;
+}
+
 /* --- JSON-schema codeblock ------------------------------------------- */
 .ga-schema-block {
   margin: 4px 0;

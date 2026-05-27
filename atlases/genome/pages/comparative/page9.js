@@ -136,13 +136,39 @@ function _buildSamplePairs() {
     name: 'C. fuscus',
     chroms: _sampleChroms('Fus_', 27, 40_000_000, 23),
   };
-  return [{
+  // Pair 1 — the Oxford-grid-shape pair (X = fus, Y = gar). Kept first so
+  // Views 3/4/5 (which use pairs[0] by default) render identically.
+  const oxfordPair = {
     id: 'gar_vs_fuscus',
     name: 'fClaHyb_Gar  vs  C. fuscus',
-    x: fus, // C. fuscus on X (as in the reference image)
-    y: gar, // fClaHyb_Gar on Y
+    x: fus, y: gar,
     orthologs: _buildSampleOrthologs(fus.chroms, gar.chroms, 7),
-  }];
+  };
+  // Multi-species pairs — all share Y = fClaHyb_Gar so View 2 can stack
+  // them. Each X species has slightly different chrom counts to reflect
+  // real catfish karyotype variation (27–30).
+  const otherSpecies = [
+    { id: 'c_macrocephalus', name: 'C. macrocephalus', n: 27, lenBase: 39_500_000, seed: 19 },
+    { id: 'c_batrachus',     name: 'C. batrachus',     n: 28, lenBase: 38_500_000, seed: 31 },
+    { id: 'c_bouchelli',     name: 'Cranoglanis bouchelli', n: 25, lenBase: 42_000_000, seed: 43 },
+    { id: 'i_furcatus',      name: 'Ictalurus furcatus', n: 29, lenBase: 36_500_000, seed: 57 },
+    { id: 'n_graeffei',      name: 'Neoarius graeffei (outgroup)', n: 30, lenBase: 32_000_000, seed: 71 },
+  ];
+  const pairs = [oxfordPair];
+  for (const sp of otherSpecies) {
+    const species = {
+      id: sp.id,
+      name: sp.name,
+      chroms: _sampleChroms(sp.id.split('_')[1].slice(0, 3).toUpperCase() + '_', sp.n, sp.lenBase, sp.seed),
+    };
+    pairs.push({
+      id: `gar_vs_${sp.id}`,
+      name: `fClaHyb_Gar  vs  ${sp.name}`,
+      x: gar, y: species,                                   // gar on X → View 2 reads .x as focal
+      orthologs: _buildSampleOrthologs(gar.chroms, species.chroms, sp.seed + 3),
+    });
+  }
+  return pairs;
 }
 
 const MACROSYNTENY_FALLBACK = { pairs: _buildSamplePairs() };
@@ -155,10 +181,12 @@ export function renderPage9(state) {
   const root = (state && state.root) || document;
   if (!root.querySelector) return;
   const ribbonHost = root.querySelector('[data-ga-ribbon]');
+  const stackHost  = root.querySelector('[data-ga-stack]');
   const oxfordHost = root.querySelector('[data-ga-oxford]');
   const linearHost = root.querySelector('[data-ga-linear]');
   const dotHost    = root.querySelector('[data-ga-dot]');
   if (ribbonHost) _mountRibbon(ribbonHost,  state || {});
+  if (stackHost)  _mountStack(stackHost,    state || {});
   if (oxfordHost) _mountOxford(oxfordHost,  state || {});
   if (linearHost) _mountLinear(linearHost,  state || {});
   if (dotHost)    _mountDotplot(dotHost,    state || {});
@@ -188,10 +216,12 @@ export async function mount(root, atlasState, registry) {
 export async function unmount(root) {
   if (!root || !root.querySelector) { _setActiveState(null); return; }
   const ribbonHost = root.querySelector('[data-ga-ribbon]');
+  const stackHost  = root.querySelector('[data-ga-stack]');
   const oxfordHost = root.querySelector('[data-ga-oxford]');
   const linearHost = root.querySelector('[data-ga-linear]');
   const dotHost    = root.querySelector('[data-ga-dot]');
   if (ribbonHost && ribbonHost.__gaRibbon && ribbonHost.__gaRibbon.destroy) ribbonHost.__gaRibbon.destroy();
+  if (stackHost  && stackHost.__gaStack   && stackHost.__gaStack.destroy)   stackHost.__gaStack.destroy();
   if (oxfordHost && oxfordHost.__gaOxford && oxfordHost.__gaOxford.destroy) oxfordHost.__gaOxford.destroy();
   if (linearHost && linearHost.__gaLinear && linearHost.__gaLinear.destroy) linearHost.__gaLinear.destroy();
   if (dotHost    && dotHost.__gaDot      && dotHost.__gaDot.destroy)        dotHost.__gaDot.destroy();
@@ -1375,3 +1405,332 @@ function _fmtBp(bp) {
   if (bp >= 1e3) return (bp / 1e3).toFixed(0) + ' kb';
   return `${bp} bp`;
 }
+
+// ===========================================================================
+// View 2 — Multi-species ribbon stack
+// ===========================================================================
+//
+// Reuses the macrosynteny_orthologs schema. The renderer auto-detects the
+// "focal" genome as the species that appears in the most pairs (across both
+// x and y sides). That focal genome is drawn as a single length-scaled
+// chromosome strip at the top; one strip per other species is stacked
+// below. Each ortholog draws as a thin curve from its focal bp to its bp
+// on the other species' strip, coloured by the focal chromosome — so a
+// fusion (one focal chrom landing on two species chroms) reads as the
+// colour band splitting; a fission reads as two focal chrom colours
+// converging on one species chrom.
+// ===========================================================================
+
+function _resolveStack(state) {
+  const layer = state.layers && state.layers.macrosynteny_orthologs;
+  if (layer && Array.isArray(layer.pairs) && layer.pairs.length > 0) {
+    return { loaded: true, data: layer };
+  }
+  return { loaded: false, data: MACROSYNTENY_FALLBACK };
+}
+
+function _detectFocal(pairs) {
+  // Count appearances of each species id; tie-break on first occurrence.
+  const tally = new Map();
+  const meta  = new Map();
+  for (const p of pairs) {
+    for (const side of ['x', 'y']) {
+      const s = p[side];
+      if (!s || !s.id) continue;
+      tally.set(s.id, (tally.get(s.id) || 0) + 1);
+      if (!meta.has(s.id)) meta.set(s.id, s);
+    }
+  }
+  let bestId = null, bestCount = -1;
+  for (const [id, n] of tally) {
+    if (n > bestCount) { bestId = id; bestCount = n; }
+  }
+  return meta.get(bestId) || null;
+}
+
+function _mountStack(host, state) {
+  const { loaded, data } = _resolveStack(state);
+  const card = host.closest('[data-ga-card="multi-species-stack"]');
+  if (card) {
+    const tag = card.querySelector('[data-ga-stack-source]');
+    if (tag) tag.textContent = loaded ? 'macrosynteny_orthologs · loaded' : 'sample data';
+  }
+  if (host.__gaStack && host.__gaStack.destroy) host.__gaStack.destroy();
+
+  const pairs = data.pairs || [];
+  const focal = _detectFocal(pairs);
+  if (!focal) return;
+
+  // For each pair, extract the "other" species + a normalized accessor for
+  // the ortholog endpoints. We store (chrom, pos) tuples for focal and
+  // other so the draw loop doesn't have to branch on x/y direction.
+  const stackPairs = [];
+  for (const p of pairs) {
+    let other; let getFocal; let getOther;
+    if (p.x && p.x.id === focal.id) {
+      other = p.y;
+      getFocal = (o) => ({ chrom: o.xc, pos: o.xp });
+      getOther = (o) => ({ chrom: o.yc, pos: o.yp });
+    } else if (p.y && p.y.id === focal.id) {
+      other = p.x;
+      getFocal = (o) => ({ chrom: o.yc, pos: o.yp });
+      getOther = (o) => ({ chrom: o.xc, pos: o.xp });
+    } else {
+      continue;   // pair doesn't include the focal — skip
+    }
+    if (!other) continue;
+    stackPairs.push({
+      pair_id: p.id,
+      name: p.name,
+      other,
+      orthologs: p.orthologs || [],
+      getFocal, getOther,
+    });
+  }
+
+  // Default: all species visible.
+  const speciesOn = {};
+  for (const sp of stackPairs) speciesOn[sp.other.id] = true;
+
+  const ctx = {
+    host, card,
+    svg: host.querySelector('.ga-stack-svg'),
+    tip: host.querySelector('[data-ga-stack-tip]'),
+    focal,
+    stackPairs,
+    speciesOn,
+    samplePct: 50,    // 1..100, % of orthologs per pair to keep
+    _onSpeciesToggle: null,
+    _onSample: null,
+    _onMove: null,
+    _onLeave: null,
+    destroy() {
+      if (card) {
+        card.querySelectorAll('[data-ga-stack-species]').forEach((cb) => {
+          cb.removeEventListener('change', this._onSpeciesToggle);
+        });
+        const range = card.querySelector('[data-ga-stack-sample]');
+        if (range && this._onSample) range.removeEventListener('input', this._onSample);
+      }
+      if (this.svg) {
+        this.svg.removeEventListener('mousemove', this._onMove);
+        this.svg.removeEventListener('mouseleave', this._onLeave);
+      }
+      host.__gaStack = null;
+    },
+  };
+
+  // Build the species checkbox strip dynamically (one per other species).
+  _buildStackSpeciesStrip(card, ctx);
+
+  if (card) {
+    ctx._onSpeciesToggle = (ev) => {
+      const cb = ev.currentTarget;
+      const id = cb.getAttribute('data-ga-stack-species');
+      if (id in ctx.speciesOn) ctx.speciesOn[id] = !!cb.checked;
+      _drawStack(ctx);
+    };
+    card.querySelectorAll('[data-ga-stack-species]').forEach((cb) => {
+      cb.addEventListener('change', ctx._onSpeciesToggle);
+    });
+    const range = card.querySelector('[data-ga-stack-sample]');
+    const readout = card.querySelector('[data-ga-stack-sample-readout]');
+    if (range) {
+      ctx._onSample = (ev) => {
+        ctx.samplePct = +ev.target.value;
+        if (readout) readout.textContent = `${ctx.samplePct}%`;
+        _drawStack(ctx);
+      };
+      range.addEventListener('input', ctx._onSample);
+    }
+  }
+  ctx._onMove = (ev) => {
+    const t = ev.target.closest('[data-ga-stack-tip-payload]');
+    if (!t) { _hideStackTip(ctx); return; }
+    _showStackTip(ctx, t.getAttribute('data-ga-stack-tip-payload'), ev);
+  };
+  ctx._onLeave = () => _hideStackTip(ctx);
+  ctx.svg.addEventListener('mousemove', ctx._onMove);
+  ctx.svg.addEventListener('mouseleave', ctx._onLeave);
+
+  host.__gaStack = ctx;
+  _drawStack(ctx);
+}
+
+function _buildStackSpeciesStrip(card, ctx) {
+  if (!card) return;
+  const host = card.querySelector('[data-ga-stack-species-strip]');
+  if (!host) return;
+  while (host.firstChild) host.removeChild(host.firstChild);
+  ctx.stackPairs.forEach((sp) => {
+    const wrap = document.createElement('label');
+    wrap.className = 'ga-oxford-toggle';
+    const cb = document.createElement('input');
+    cb.type = 'checkbox';
+    cb.checked = !!ctx.speciesOn[sp.other.id];
+    cb.setAttribute('data-ga-stack-species', sp.other.id);
+    wrap.appendChild(cb);
+    const txt = document.createElement('span');
+    // Italicize species names if they look binomial.
+    const italic = / /.test(sp.other.name);
+    txt.innerHTML = italic
+      ? `<i>${sp.other.name.replace(/ \(.*?\)$/, '')}</i>${(sp.other.name.match(/ \(.*?\)$/) || [''])[0]}`
+      : sp.other.name;
+    wrap.appendChild(txt);
+    host.appendChild(wrap);
+  });
+}
+
+function _drawStack(ctx) {
+  const svg = ctx.svg;
+  while (svg.firstChild) svg.removeChild(svg.firstChild);
+
+  // Active pairs = those whose species checkbox is on.
+  const active = ctx.stackPairs.filter((sp) => ctx.speciesOn[sp.other.id]);
+
+  const W = 1000, H = 480;
+  const PAD_L = 100, PAD_R = 24, PAD_T = 30, PAD_B = 30;
+  const plotW = W - PAD_L - PAD_R;
+  const stripH = 14;
+  const nLanes = 1 + active.length;     // focal + each other species
+  const laneStep = (H - PAD_T - PAD_B - stripH) / Math.max(1, nLanes - 1);
+
+  // Focal chrom layout — length-scaled across the strip, named-sorted.
+  const focalChroms = ((ctx.focal && ctx.focal.chroms) || []).slice()
+    .sort((a, b) => String(a.id).localeCompare(String(b.id), undefined, { numeric: true }));
+  const focalTotal = focalChroms.reduce((s, c) => s + (c.length_bp || 0), 0) || 1;
+  const focalOff = {};
+  {
+    let cur = PAD_L;
+    const gap = 2;
+    for (const c of focalChroms) {
+      focalOff[c.id] = cur;
+      cur += ((c.length_bp || 0) / focalTotal) * (plotW - gap * (focalChroms.length - 1)) + gap;
+    }
+  }
+  const focalScale = (plotW - 2 * Math.max(0, focalChroms.length - 1)) / focalTotal;
+  const focalX = (chrom, bp) => (focalOff[chrom] != null ? focalOff[chrom] + bp * focalScale : null);
+  const focalIdx = new Map();
+  focalChroms.forEach((c, i) => focalIdx.set(c.id, i));
+
+  // Per-species strip layout.
+  const speciesLayouts = active.map((sp, i) => {
+    const chroms = (sp.other.chroms || []).slice()
+      .sort((a, b) => String(a.id).localeCompare(String(b.id), undefined, { numeric: true }));
+    const total = chroms.reduce((s, c) => s + (c.length_bp || 0), 0) || 1;
+    const off = {};
+    let cur = PAD_L;
+    const gap = 2;
+    for (const c of chroms) {
+      off[c.id] = cur;
+      cur += ((c.length_bp || 0) / total) * (plotW - gap * (chroms.length - 1)) + gap;
+    }
+    const scale = (plotW - 2 * Math.max(0, chroms.length - 1)) / total;
+    return {
+      sp, chroms, total, off, scale,
+      y: PAD_T + (i + 1) * laneStep,
+      x: (chrom, bp) => (off[chrom] != null ? off[chrom] + bp * scale : null),
+    };
+  });
+  const focalY = PAD_T;
+
+  // Draw strips first (so curves overlay them).
+  const stripsG = _el('g', { class: 'ga-stack-strips' });
+  // Focal strip + chrom rectangles.
+  const focalLbl = _el('text', {
+    class: 'ga-stack-species-label', x: PAD_L - 8, y: focalY + stripH / 2,
+    'text-anchor': 'end', 'dominant-baseline': 'middle',
+  });
+  focalLbl.textContent = (ctx.focal.name || ctx.focal.id);
+  stripsG.appendChild(focalLbl);
+  focalChroms.forEach((c, i) => {
+    const w = (c.length_bp || 0) * focalScale;
+    stripsG.appendChild(_el('rect', {
+      class: 'ga-stack-chrom is-focal',
+      x: focalOff[c.id], y: focalY, width: Math.max(2, w), height: stripH,
+      fill: _rainbow(i / Math.max(1, focalChroms.length - 1)),
+      'fill-opacity': 0.85,
+    }));
+  });
+  // Per-species strips.
+  speciesLayouts.forEach((layout) => {
+    const lbl = _el('text', {
+      class: 'ga-stack-species-label',
+      x: PAD_L - 8, y: layout.y + stripH / 2,
+      'text-anchor': 'end', 'dominant-baseline': 'middle',
+    });
+    lbl.textContent = layout.sp.other.name;
+    stripsG.appendChild(lbl);
+    layout.chroms.forEach((c) => {
+      const w = (c.length_bp || 0) * layout.scale;
+      stripsG.appendChild(_el('rect', {
+        class: 'ga-stack-chrom is-other',
+        x: layout.off[c.id], y: layout.y, width: Math.max(2, w), height: stripH,
+      }));
+    });
+  });
+  svg.appendChild(stripsG);
+
+  // Curves. Sub-sample for performance — keep every k-th ortholog s.t.
+  // total visible curves ≤ ~3000 per render.
+  const linesG = _el('g', { class: 'ga-stack-links' });
+  let drawn = 0;
+  const samplePct = Math.max(1, Math.min(100, ctx.samplePct)) / 100;
+  speciesLayouts.forEach((layout) => {
+    const oxs = layout.sp.orthologs;
+    const step = Math.max(1, Math.round(1 / samplePct));
+    for (let i = 0; i < oxs.length; i += step) {
+      const o = oxs[i];
+      const f = layout.sp.getFocal(o);
+      const t = layout.sp.getOther(o);
+      const x1 = focalX(f.chrom, f.pos);
+      const x2 = layout.x(t.chrom, t.pos);
+      if (x1 == null || x2 == null) continue;
+      const y1 = focalY + stripH;
+      const y2 = layout.y;
+      // S-curve via cubic bezier — control points pulled vertically.
+      const midY = (y1 + y2) / 2;
+      const d = `M ${x1.toFixed(1)} ${y1.toFixed(1)} `
+              + `C ${x1.toFixed(1)} ${midY.toFixed(1)} ${x2.toFixed(1)} ${midY.toFixed(1)} `
+              + `${x2.toFixed(1)} ${y2.toFixed(1)}`;
+      const colorIdx = focalIdx.get(f.chrom) ?? 0;
+      const stroke = _rainbow(colorIdx / Math.max(1, focalChroms.length - 1));
+      linesG.appendChild(_el('path', {
+        class: 'ga-stack-link',
+        d, fill: 'none',
+        stroke,
+        'stroke-opacity': 0.22,
+        'stroke-width': 0.5,
+        'data-ga-stack-tip-payload': JSON.stringify({
+          species: layout.sp.other.name,
+          f_chrom: f.chrom, f_pos: f.pos,
+          o_chrom: t.chrom, o_pos: t.pos,
+        }),
+      }));
+      drawn++;
+    }
+  });
+  svg.appendChild(linesG);
+
+  // Status line.
+  const status = _el('text', {
+    class: 'ga-ribbon-status', x: W - PAD_R, y: 18, 'text-anchor': 'end',
+  });
+  status.textContent = `${active.length} species · ${drawn.toLocaleString()} curves drawn (${ctx.samplePct}% sample)`;
+  svg.appendChild(status);
+}
+
+function _showStackTip(ctx, payload, ev) {
+  if (!ctx.tip) return;
+  let p; try { p = JSON.parse(payload); } catch { return; }
+  ctx.tip.innerHTML = `
+    <div class="ga-oxford-tip-kind">${p.species}</div>
+    <div class="ga-oxford-tip-name">${p.f_chrom} → ${p.o_chrom}</div>
+    <div class="ga-oxford-tip-meta">focal ${_fmtBp(p.f_pos)} · target ${_fmtBp(p.o_pos)}</div>`;
+  ctx.tip.hidden = false;
+  const r = ctx.host.getBoundingClientRect();
+  const x = ev.clientX - r.left;
+  const y = ev.clientY - r.top;
+  ctx.tip.style.transform = `translate(${x + 12}px, ${y + 12}px)`;
+}
+function _hideStackTip(ctx) { if (ctx.tip) ctx.tip.hidden = true; }

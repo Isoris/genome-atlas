@@ -137,6 +137,51 @@
         </div>
       </div>
 
+      <div class="ga-card" data-ga-card="multi-species-stack">
+        <div class="ga-card-header">
+          <div class="ga-card-title">View 2 — Multi-species ribbon stack</div>
+          <div class="ga-card-status" data-ga-stack-source>sample data</div>
+        </div>
+        <div class="ga-card-para ga-dim">
+          Focal genome (the one shared across the most pairs) drawn as a
+          single length-scaled strip at the top, with one strip per related
+          Siluriformes genome stacked below. Each ortholog renders as a
+          thin curve from its focal position up/down to its position on
+          the other species' strip; <b>curve colour = the focal chrom</b>
+          so events that move orthologs onto a different chrom (fusions,
+          fissions, large translocations) read as a colour migration.
+          Toggle species in/out and trim the per-pair sample size with
+          the slider for legibility.
+        </div>
+
+        <div class="ga-oxford-toolbar" role="toolbar" aria-label="Multi-species stack controls">
+          <span class="ga-oxford-tool-label">species</span>
+          <span class="ga-stack-species-strip" data-ga-stack-species-strip></span>
+          <span class="ga-oxford-tool-spacer"></span>
+          <span class="ga-oxford-tool-label">sample per pair</span>
+          <input type="range" min="1" max="100" value="50" step="5"
+                 class="ga-ce-range" data-ga-stack-sample>
+          <span class="ga-ce-threshold-readout" data-ga-stack-sample-readout>50%</span>
+        </div>
+
+        <div class="ga-stack-host" data-ga-stack
+             role="img" aria-label="Multi-species macro-synteny ribbon stack.">
+          <svg class="ga-stack-svg"
+               viewBox="0 0 1000 480"
+               preserveAspectRatio="xMidYMid meet"
+               xmlns="http://www.w3.org/2000/svg"></svg>
+          <div class="ga-oxford-tooltip" data-ga-stack-tip role="tooltip" hidden></div>
+        </div>
+
+        <div class="ga-card-footnote">
+          Same <code>macrosynteny_orthologs.json</code> contract as View 3.
+          The renderer auto-detects the focal genome as the species
+          appearing in the most pairs (here: <i>C. gariepinus</i>). Until
+          real cross-species ortholog tables ship, the fallback baked in
+          here covers <i>C. gariepinus</i> vs five other catfish.
+        </div>
+      </div>
+
       <div class="ga-card" data-ga-card="oxford-grid">
         <div class="ga-card-header">
           <div class="ga-card-title">View 3 — MacrosyntR Oxford macro-synteny grid</div>
