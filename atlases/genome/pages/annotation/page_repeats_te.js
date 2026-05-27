@@ -246,17 +246,29 @@ export async function mount(root, atlasState, registry) {
   catch (e) { console.warn('page_repeats_te.mount: refreshPage6 threw —', e); }
   if (atlasState.genome) atlasState.genome._page_repeats_teState = legacyState;
 
-  // Mode-B probe — non-blocking. Round-1 layer is CONTRACT-ONLY so this
-  // routinely reports "○ data pending" until the repeat track ships.
+  // ── View 4 (Sankey) keeps its own mount path above; Views 1/2/3 share a
+  // single Mode-B probe that feeds the data-source badge AND the three live
+  // cards. The probe is non-blocking so the Sankey never waits on it.
   probeModeB(registry, 'repeat_track', null, { extractRows: _extractRepeatRows })
-    .then((probe) => renderModeBBadge('prteModeBBadge', probe, {
-      label:    'repeat track',
-      layerKey: 'repeat_track',
-      compare:  _compareRepeats,
-    }))
+    .then((probe) => {
+      renderModeBBadge('prteModeBBadge', probe, {
+        label:    'repeat track',
+        layerKey: 'repeat_track',
+        compare:  _compareRepeats,
+      });
+      if (probe.ok && probe.rows && probe.rows.length) {
+        _v123State.rows = _normalizeRepeatRows(probe.rows);
+        _renderStatStrip();
+        _renderComposition();
+        _renderHeatmap();
+        _loadCandidatesAndRenderFlank(registry);
+      }
+    })
     .catch((e) => {
       console.warn('page_repeats_te.mount: Mode-B probe threw —', e);
     });
+
+  _wireV123();
 }
 
 export async function unmount(root) {
@@ -870,4 +882,532 @@ function _textAt(x, y, cls, content) {
   const t = _el('text', { class: cls, x, y, 'text-anchor': 'middle' });
   t.textContent = content;
   return t;
+}
+
+
+// ─────────────────────────────────────────────────────────────────────────
+// Views 1 / 2 / 3 — composition, per-chrom heatmap, breakpoint enrichment.
+// Independent of the View 4 Sankey above; both share the same Mode-B probe.
+// All three views fail-soft when the layer (or the cross-atlas candidates)
+// is unavailable: their cards stay `hidden` and the Sankey is unaffected.
+// ─────────────────────────────────────────────────────────────────────────
+
+// Tolerant column matching: repeat_track may ship as a BED-derived row set
+// or a normalised TSV. Either way we want { chrom, start_bp, end_bp,
+// te_class, length_bp, haplotype? }.
+const _R_CHROM_KEYS    = ['chrom', 'chromosome', 'chr', 'seqid', 'seqname'];
+const _R_START_KEYS    = ['start_bp', 'start', 'chromStart', 'chrom_start'];
+const _R_END_KEYS      = ['end_bp', 'end', 'chromEnd', 'chrom_end'];
+const _R_CLASS_KEYS    = ['te_class', 'class', 'repeat_class', 'Class', 'repClass'];
+const _R_FAMILY_KEYS   = ['family', 'repeat_family', 'Family', 'repFamily'];
+const _R_HAP_KEYS      = ['haplotype', 'hap', 'parent', 'subject'];
+
+function _v123PickKey(rows, keys) {
+  if (!rows || !rows.length) return null;
+  const first = rows[0] || {};
+  for (const k of keys) if (k in first) return k;
+  return null;
+}
+function _v123ToNum(v) {
+  if (v == null || v === '') return null;
+  const n = typeof v === 'number' ? v : parseFloat(v);
+  return Number.isFinite(n) ? n : null;
+}
+function _v123Esc(s) {
+  return String(s ?? '')
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+function _v123FmtInt(v) {
+  if (!Number.isFinite(v)) return '—';
+  return Math.round(v).toLocaleString();
+}
+function _v123FmtMb(bp) {
+  if (!Number.isFinite(bp)) return '—';
+  return (bp / 1e6).toFixed(2);
+}
+function _v123FmtX(x) {
+  if (!Number.isFinite(x)) return '—';
+  return x.toFixed(2) + '×';
+}
+
+// Normalise a class label to one of the canonical buckets so per-class
+// composition reads cleanly. Anything we don't recognise → 'unclassified'.
+function _canonicalClass(raw) {
+  if (!raw) return 'unclassified';
+  const s = String(raw).toUpperCase();
+  if (s.includes('LTR'))                                  return 'LTR';
+  if (s.includes('LINE'))                                 return 'LINE';
+  if (s.includes('SINE'))                                 return 'SINE';
+  if (s.includes('DNA'))                                  return 'DNA';
+  if (s.includes('HELITRON') || s.includes('HELI'))       return 'Helitron';
+  if (s.includes('SIMPLE') || s.includes('SAT') ||
+      s.includes('TANDEM') || s.includes('LOW'))          return 'simple';
+  if (s.includes('RRNA') || s.includes('TRNA') ||
+      s.includes('SNRNA') || s === 'RNA')                 return 'rRNA';
+  return 'unclassified';
+}
+
+const _CANONICAL_CLASSES = ['LTR', 'LINE', 'SINE', 'DNA', 'Helitron', 'simple', 'rRNA', 'unclassified'];
+const _CLASS_COLORS = {
+  LTR:           '#7c3aed',  // violet-600
+  LINE:          '#2563eb',  // blue-600
+  SINE:          '#0891b2',  // cyan-600
+  DNA:           '#16a34a',  // green-600
+  Helitron:      '#ca8a04',  // yellow-600
+  simple:        '#9ca3af',  // gray-400
+  rRNA:          '#dc2626',  // red-600
+  unclassified:  '#475569',  // slate-600
+};
+
+function _normalizeRepeatRows(rows) {
+  if (!Array.isArray(rows) || !rows.length) return [];
+  const cCol = _v123PickKey(rows, _R_CHROM_KEYS);
+  const sCol = _v123PickKey(rows, _R_START_KEYS);
+  const eCol = _v123PickKey(rows, _R_END_KEYS);
+  const klCol = _v123PickKey(rows, _R_CLASS_KEYS);
+  const fmCol = _v123PickKey(rows, _R_FAMILY_KEYS);
+  const hCol  = _v123PickKey(rows, _R_HAP_KEYS);
+  if (!cCol || !sCol || !eCol) return [];
+  const out = [];
+  for (const r of rows) {
+    const chrom = r[cCol];
+    const s     = _v123ToNum(r[sCol]);
+    const e     = _v123ToNum(r[eCol]);
+    if (chrom == null || s == null || e == null || e <= s) continue;
+    const rawClass = klCol ? r[klCol] : (fmCol ? r[fmCol] : '');
+    out.push({
+      chrom:      String(chrom),
+      start_bp:   s,
+      end_bp:     e,
+      length_bp:  e - s,
+      te_class:   _canonicalClass(rawClass),
+      haplotype:  hCol ? String(r[hCol] || '') : '',
+    });
+  }
+  return out;
+}
+
+// View 1/2/3 state — separate from the legacy Sankey state.
+const _v123State = {
+  rows: [],
+  candidates: [],
+  compBasis: 'bp',
+  heatSort: 'total',
+  flankFilter: '',
+  flankSort: 'enrich',
+  flankWindow: 2_000_000,
+  flank: [],
+  flankView: [],
+};
+
+// ── Stat strip ──────────────────────────────────────────────────────────
+function _renderStatStrip() {
+  const slot = document.getElementById('pageRepeatsStats');
+  if (!slot) return;
+  const rows = _v123State.rows;
+  if (!rows.length) { slot.innerHTML = ''; return; }
+  let totalBp = 0;
+  const chromSet = new Set();
+  const classSet = new Set();
+  for (const r of rows) { totalBp += r.length_bp; chromSet.add(r.chrom); classSet.add(r.te_class); }
+  const cell = (lbl, val) =>
+    `<div class="ga-stat-cell"><div class="ga-stat-lbl">${lbl}</div>` +
+    `<div class="ga-stat-val">${val}</div></div>`;
+  slot.innerHTML = [
+    cell('intervals', _v123FmtInt(rows.length)),
+    cell('covered',  `${_v123FmtMb(totalBp)} Mb`),
+    cell('chroms',    _v123FmtInt(chromSet.size)),
+    cell('classes',   _v123FmtInt(classSet.size)),
+  ].join('');
+}
+
+// ── View 1 — per-class composition bar(s) ───────────────────────────────
+function _aggregateCompByHap() {
+  // Returns Map<haplotype, Map<te_class, { bp, n }>>; haplotype '' is the
+  // global pseudo-haplotype used when no haplotype column exists.
+  const out = new Map();
+  for (const r of _v123State.rows) {
+    const hk = r.haplotype || '';
+    let inner = out.get(hk);
+    if (!inner) { inner = new Map(); out.set(hk, inner); }
+    const slot = inner.get(r.te_class) || { bp: 0, n: 0 };
+    slot.bp += r.length_bp;
+    slot.n  += 1;
+    inner.set(r.te_class, slot);
+  }
+  return out;
+}
+
+const COMP_W = 760;
+const COMP_BAR_H = 28;
+const COMP_LABEL_W = 110;
+const COMP_PAD_T = 12;
+const COMP_PAD_B = 6;
+
+function _renderComposition() {
+  const slot = document.getElementById('pageRepeatsCompSlot');
+  const card = document.getElementById('pageRepeatsCompCard');
+  const count = document.getElementById('pageRepeatsCompCount');
+  if (!slot || !card) return;
+  if (!_v123State.rows.length) { card.hidden = true; return; }
+  card.hidden = false;
+  const grouped = _aggregateCompByHap();
+  const haps = Array.from(grouped.keys()).sort();
+  if (count) count.textContent = `${haps.length} ${haps.length === 1 ? 'series' : 'haplotypes'} · ${_CANONICAL_CLASSES.length} class bins`;
+
+  const barW = COMP_W - COMP_LABEL_W - 8;
+  const H = COMP_PAD_T + haps.length * (COMP_BAR_H + 8) + COMP_PAD_B + 26;  // +26 for legend strip
+  const basis = _v123State.compBasis;
+  const parts = [`<svg class="ga-density-svg" viewBox="0 0 ${COMP_W} ${H}" preserveAspectRatio="xMinYMin meet">`];
+
+  haps.forEach((hap, hi) => {
+    const yTop = COMP_PAD_T + hi * (COMP_BAR_H + 8);
+    const inner = grouped.get(hap);
+    let total = 0;
+    for (const v of inner.values()) total += (basis === 'bp' ? v.bp : v.n);
+    if (total <= 0) return;
+    // Label
+    const lbl = hap || '(all)';
+    parts.push(`<text x="${COMP_LABEL_W - 8}" y="${yTop + COMP_BAR_H / 2 + 5}" text-anchor="end" class="ga-density-label">${_v123Esc(lbl)}</text>`);
+    // Stacked segments
+    let xCur = COMP_LABEL_W;
+    for (const cls of _CANONICAL_CLASSES) {
+      const slot = inner.get(cls);
+      if (!slot) continue;
+      const v = basis === 'bp' ? slot.bp : slot.n;
+      if (v <= 0) continue;
+      const w = (v / total) * barW;
+      parts.push(
+        `<rect x="${xCur.toFixed(2)}" y="${yTop}" width="${w.toFixed(2)}" height="${COMP_BAR_H}" fill="${_CLASS_COLORS[cls]}" fill-opacity="0.85">` +
+          `<title>${_v123Esc(lbl)} · ${cls}: ${basis === 'bp' ? _v123FmtMb(v) + ' Mb' : _v123FmtInt(v) + ' intervals'} · ${(v / total * 100).toFixed(1)}%</title>` +
+        `</rect>`
+      );
+      xCur += w;
+    }
+  });
+
+  // Legend strip
+  const legendY = H - 18;
+  let lx = COMP_LABEL_W;
+  for (const cls of _CANONICAL_CLASSES) {
+    parts.push(
+      `<rect x="${lx.toFixed(2)}" y="${legendY}" width="10" height="10" fill="${_CLASS_COLORS[cls]}" fill-opacity="0.85"/>`,
+      `<text x="${(lx + 14).toFixed(2)}" y="${legendY + 9}" class="ga-density-label">${cls}</text>`
+    );
+    lx += 14 + cls.length * 6.2 + 6;
+  }
+  parts.push('</svg>');
+  slot.innerHTML = parts.join('');
+}
+
+// ── View 2 — per-chrom × class heatmap ───────────────────────────────────
+function _aggregateHeat() {
+  // chrom -> class -> bp
+  const byChrom = new Map();
+  for (const r of _v123State.rows) {
+    let inner = byChrom.get(r.chrom);
+    if (!inner) { inner = new Map(); byChrom.set(r.chrom, inner); }
+    inner.set(r.te_class, (inner.get(r.te_class) || 0) + r.length_bp);
+  }
+  // Build rows array with total + per-class.
+  const rows = [];
+  for (const [chrom, inner] of byChrom.entries()) {
+    const row = { chrom, total: 0, perClass: {} };
+    for (const cls of _CANONICAL_CLASSES) {
+      const v = inner.get(cls) || 0;
+      row.perClass[cls] = v;
+      row.total += v;
+    }
+    rows.push(row);
+  }
+  if (_v123State.heatSort === 'chrom') {
+    rows.sort((a, b) => String(a.chrom).localeCompare(String(b.chrom)));
+  } else {
+    rows.sort((a, b) => b.total - a.total);
+  }
+  return rows;
+}
+
+const HEAT_W = 760;
+const HEAT_LABEL_W = 90;
+const HEAT_ROW_H = 18;
+const HEAT_CELL_W = 56;
+const HEAT_HDR_H = 22;
+const HEAT_PAD_T = 8;
+const HEAT_PAD_B = 6;
+
+function _renderHeatmap() {
+  const slot = document.getElementById('pageRepeatsHeatSlot');
+  const card = document.getElementById('pageRepeatsHeatCard');
+  const count = document.getElementById('pageRepeatsHeatCount');
+  if (!slot || !card) return;
+  if (!_v123State.rows.length) { card.hidden = true; return; }
+  card.hidden = false;
+  const heatRows = _aggregateHeat();
+  if (count) count.textContent = `${heatRows.length} chroms × ${_CANONICAL_CLASSES.length} classes`;
+  if (!heatRows.length) { slot.innerHTML = '<span class="ga-hint">no chroms.</span>'; return; }
+
+  let cellMax = 0;
+  for (const r of heatRows) for (const cls of _CANONICAL_CLASSES) if (r.perClass[cls] > cellMax) cellMax = r.perClass[cls];
+  cellMax = cellMax || 1;
+  // log scale: opacity = log1p(v) / log1p(max)
+  const logMax = Math.log1p(cellMax);
+
+  const W = HEAT_LABEL_W + _CANONICAL_CLASSES.length * HEAT_CELL_W + 90;  // +90 for total column
+  const H = HEAT_PAD_T + HEAT_HDR_H + heatRows.length * HEAT_ROW_H + HEAT_PAD_B;
+  const parts = [`<svg class="ga-density-svg" viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMinYMin meet">`];
+
+  // Header: class names
+  _CANONICAL_CLASSES.forEach((cls, ci) => {
+    const x = HEAT_LABEL_W + ci * HEAT_CELL_W + HEAT_CELL_W / 2;
+    parts.push(`<text x="${x}" y="${HEAT_PAD_T + 14}" text-anchor="middle" class="ga-density-label">${cls}</text>`);
+  });
+  const totalX = HEAT_LABEL_W + _CANONICAL_CLASSES.length * HEAT_CELL_W + 8;
+  parts.push(`<text x="${totalX + 32}" y="${HEAT_PAD_T + 14}" text-anchor="middle" class="ga-density-label">total (Mb)</text>`);
+
+  // Rows
+  heatRows.forEach((r, ri) => {
+    const yTop = HEAT_PAD_T + HEAT_HDR_H + ri * HEAT_ROW_H;
+    parts.push(`<text x="${HEAT_LABEL_W - 6}" y="${yTop + HEAT_ROW_H / 2 + 4}" text-anchor="end" class="ga-density-label">${_v123Esc(r.chrom)}</text>`);
+    _CANONICAL_CLASSES.forEach((cls, ci) => {
+      const v = r.perClass[cls];
+      const x = HEAT_LABEL_W + ci * HEAT_CELL_W;
+      const op = v > 0 ? Math.min(1, Math.log1p(v) / logMax) : 0;
+      if (op > 0) {
+        parts.push(
+          `<rect x="${x + 1}" y="${yTop + 1}" width="${HEAT_CELL_W - 2}" height="${HEAT_ROW_H - 2}" fill="${_CLASS_COLORS[cls]}" fill-opacity="${op.toFixed(3)}">` +
+            `<title>${_v123Esc(r.chrom)} · ${cls}: ${_v123FmtMb(v)} Mb</title>` +
+          `</rect>`
+        );
+      } else {
+        parts.push(`<rect x="${x + 1}" y="${yTop + 1}" width="${HEAT_CELL_W - 2}" height="${HEAT_ROW_H - 2}" fill="none" stroke="var(--rule, #444)" stroke-width="0.4"/>`);
+      }
+    });
+    parts.push(`<text x="${totalX + 32}" y="${yTop + HEAT_ROW_H / 2 + 4}" text-anchor="middle" class="ga-density-val">${_v123FmtMb(r.total)}</text>`);
+  });
+
+  parts.push('</svg>');
+  slot.innerHTML = parts.join('');
+}
+
+// ── View 3 — breakpoint flank enrichment ────────────────────────────────
+function _parseCandidates(payload) {
+  const rows = Array.isArray(payload) ? payload
+             : (payload && Array.isArray(payload.candidates)) ? payload.candidates
+             : (payload && Array.isArray(payload.rows)) ? payload.rows
+             : [];
+  const out = [];
+  for (const r of rows) {
+    if (!r) continue;
+    const id    = r.id || r.candidate_id;
+    const chrom = r.chrom || r.chromosome;
+    const s     = _v123ToNum(r.start_bp ?? r.start);
+    const e     = _v123ToNum(r.end_bp ?? r.end);
+    if (!id || !chrom || s == null || e == null) continue;
+    out.push({ id: String(id), chrom: String(chrom), start_bp: s, end_bp: e });
+  }
+  return out;
+}
+
+function _buildFlank() {
+  if (!_v123State.candidates.length || !_v123State.rows.length) { _v123State.flank = []; return; }
+  const win = _v123State.flankWindow;
+  // Group repeat rows by chrom for fast scan.
+  const byChrom = new Map();
+  for (const r of _v123State.rows) {
+    let arr = byChrom.get(r.chrom);
+    if (!arr) { arr = []; byChrom.set(r.chrom, arr); }
+    arr.push(r);
+  }
+  // Per-chrom total bp + chrom span so we can compute the chrom mean
+  // (covered bp per bp).
+  const chromStats = new Map();
+  for (const [chrom, arr] of byChrom.entries()) {
+    let totalBp = 0; let maxEnd = 0;
+    for (const r of arr) { totalBp += r.length_bp; if (r.end_bp > maxEnd) maxEnd = r.end_bp; }
+    chromStats.set(chrom, { totalBp, span: maxEnd || 1 });
+  }
+  const out = [];
+  for (const cand of _v123State.candidates) {
+    const arr = byChrom.get(cand.chrom) || [];
+    const stats = chromStats.get(cand.chrom) || { totalBp: 0, span: 1 };
+    const chromRate = stats.totalBp / stats.span;
+    // Flank window: ±win bp around each breakpoint, clipped to chrom span.
+    // Two windows (left + right) summed.
+    const wins = [
+      [Math.max(0, cand.start_bp - win), Math.min(stats.span, cand.start_bp + win)],
+      [Math.max(0, cand.end_bp   - win), Math.min(stats.span, cand.end_bp   + win)],
+    ];
+    let flankBp = 0; let flankSpan = 0;
+    for (const [lo, hi] of wins) {
+      flankSpan += Math.max(0, hi - lo);
+      for (const r of arr) {
+        if (r.end_bp <= lo) continue;
+        if (r.start_bp >= hi) continue;
+        flankBp += Math.max(0, Math.min(r.end_bp, hi) - Math.max(r.start_bp, lo));
+      }
+    }
+    const flankRate = flankSpan > 0 ? flankBp / flankSpan : 0;
+    const enrich = chromRate > 0 ? flankRate / chromRate : 0;
+    out.push({
+      candidate_id: cand.id,
+      chrom:        cand.chrom,
+      start_bp:     cand.start_bp,
+      end_bp:       cand.end_bp,
+      flank_bp:     flankBp,
+      flank_span:   flankSpan,
+      chrom_rate:   chromRate,
+      flank_rate:   flankRate,
+      enrich,
+      flag:         enrich >= 1.5,
+    });
+  }
+  _v123State.flank = out;
+}
+
+function _applyFlank() {
+  const q = _v123State.flankFilter.toLowerCase();
+  let v = q
+    ? _v123State.flank.filter(r => r.candidate_id.toLowerCase().includes(q))
+    : _v123State.flank.slice();
+  const k = _v123State.flankSort;
+  v.sort((a, b) => {
+    if (k === 'candidate_id') return a.candidate_id.localeCompare(b.candidate_id);
+    if (k === 'flank_bp')     return b.flank_bp - a.flank_bp;
+    return b.enrich - a.enrich;
+  });
+  _v123State.flankView = v;
+}
+
+function _renderFlank() {
+  const slot = document.getElementById('pageRepeatsFlankSlot');
+  const card = document.getElementById('pageRepeatsFlankCard');
+  const count = document.getElementById('pageRepeatsFlankCount');
+  if (!slot || !card) return;
+  if (!_v123State.flank.length) { card.hidden = true; return; }
+  card.hidden = false;
+  const rows = _v123State.flankView;
+  if (count) count.textContent = `${rows.length} of ${_v123State.flank.length}`;
+  if (!rows.length) { slot.innerHTML = '<span class="ga-hint">no candidates match.</span>'; return; }
+  const lines = ['<table class="ga-table"><thead><tr>',
+    '<th>candidate</th><th>chrom</th><th class="ga-num">span (Mb)</th>',
+    '<th class="ga-num">flank bp (Mb)</th><th class="ga-num">flank rate</th>',
+    '<th class="ga-num">chrom rate</th><th class="ga-num">enrichment</th>',
+    '<th>flag</th></tr></thead><tbody>'];
+  for (const r of rows) {
+    lines.push('<tr>' +
+      `<td><code>${_v123Esc(r.candidate_id)}</code></td>` +
+      `<td>${_v123Esc(r.chrom)}</td>` +
+      `<td class="ga-num">${_v123FmtMb(r.start_bp)} – ${_v123FmtMb(r.end_bp)}</td>` +
+      `<td class="ga-num">${_v123FmtMb(r.flank_bp)}</td>` +
+      `<td class="ga-num">${r.flank_rate.toFixed(3)}</td>` +
+      `<td class="ga-num ga-dim">${r.chrom_rate.toFixed(3)}</td>` +
+      `<td class="ga-num">${_v123FmtX(r.enrich)}</td>` +
+      `<td>${r.flag ? '<span class="ga-pill ga-pill-bad">●</span>' : '<span class="ga-dim">·</span>'}</td>` +
+      '</tr>');
+  }
+  lines.push('</tbody></table>');
+  slot.innerHTML = lines.join('');
+}
+
+async function _loadCandidatesAndRenderFlank(registry) {
+  try {
+    const cands = await Promise.resolve(registry.resolve('inversion.candidates_v1'));
+    _v123State.candidates = _parseCandidates(cands);
+    _buildFlank();
+    _applyFlank();
+    _renderFlank();
+  } catch (e) {
+    // fail-soft — flank card stays hidden
+    console.debug('page_repeats_te: inversion.candidates_v1 unavailable —', e && e.message);
+  }
+}
+
+// ── TSV exports ──────────────────────────────────────────────────────────
+function _v123ExportTsv(filename, header, rows, project) {
+  const lines = [header.join('\t')];
+  for (const r of rows) lines.push(project(r).map(v => String(v ?? '')).join('\t'));
+  const blob = new Blob([lines.join('\n') + '\n'], { type: 'text/tab-separated-values' });
+  const url  = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(url), 1500);
+}
+function _exportComposition() {
+  const grouped = _aggregateCompByHap();
+  const lines = [['haplotype', 'te_class', 'covered_bp', 'n_intervals'].join('\t')];
+  for (const [hap, inner] of grouped.entries()) {
+    for (const cls of _CANONICAL_CLASSES) {
+      const v = inner.get(cls);
+      if (!v) continue;
+      lines.push([hap || '(all)', cls, v.bp, v.n].join('\t'));
+    }
+  }
+  const blob = new Blob([lines.join('\n') + '\n'], { type: 'text/tab-separated-values' });
+  const url  = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = `repeats_composition_${Date.now()}.tsv`;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(url), 1500);
+}
+function _exportHeatmap() {
+  const rows = _aggregateHeat();
+  _v123ExportTsv(
+    `repeats_heatmap_${Date.now()}.tsv`,
+    ['chrom', 'total_bp', ..._CANONICAL_CLASSES.map(c => `bp_${c}`)],
+    rows,
+    r => [r.chrom, r.total, ..._CANONICAL_CLASSES.map(c => r.perClass[c] || 0)],
+  );
+}
+function _exportFlank() {
+  _v123ExportTsv(
+    `repeats_flank_${Date.now()}.tsv`,
+    ['candidate_id', 'chrom', 'start_bp', 'end_bp', 'flank_bp', 'flank_span', 'chrom_rate', 'flank_rate', 'enrichment', 'flag'],
+    _v123State.flankView,
+    r => [r.candidate_id, r.chrom, r.start_bp, r.end_bp, r.flank_bp, r.flank_span,
+          r.chrom_rate.toFixed(6), r.flank_rate.toFixed(6), r.enrich.toFixed(4), r.flag ? 1 : 0],
+  );
+}
+
+// ── Wiring ───────────────────────────────────────────────────────────────
+function _wireV123() {
+  const cBasis = document.getElementById('pageRepeatsCompBasis');
+  if (cBasis) cBasis.addEventListener('change', (e) => {
+    _v123State.compBasis = e.target.value || 'bp';
+    _renderComposition();
+  });
+  const cExport = document.getElementById('pageRepeatsCompExportBtn');
+  if (cExport) cExport.addEventListener('click', _exportComposition);
+
+  const hSort = document.getElementById('pageRepeatsHeatSort');
+  if (hSort) hSort.addEventListener('change', (e) => {
+    _v123State.heatSort = e.target.value || 'total';
+    _renderHeatmap();
+  });
+  const hExport = document.getElementById('pageRepeatsHeatExportBtn');
+  if (hExport) hExport.addEventListener('click', _exportHeatmap);
+
+  const fSearch = document.getElementById('pageRepeatsFlankSearch');
+  if (fSearch) fSearch.addEventListener('input', (e) => {
+    _v123State.flankFilter = e.target.value || '';
+    _applyFlank();
+    _renderFlank();
+  });
+  const fWin = document.getElementById('pageRepeatsFlankWindow');
+  if (fWin) fWin.addEventListener('change', (e) => {
+    _v123State.flankWindow = parseInt(e.target.value, 10) || 2_000_000;
+    _buildFlank();
+    _applyFlank();
+    _renderFlank();
+  });
+  const fSort = document.getElementById('pageRepeatsFlankSort');
+  if (fSort) fSort.addEventListener('change', (e) => {
+    _v123State.flankSort = e.target.value || 'enrich';
+    _applyFlank();
+    _renderFlank();
+  });
+  const fExport = document.getElementById('pageRepeatsFlankExportBtn');
+  if (fExport) fExport.addEventListener('click', _exportFlank);
 }
