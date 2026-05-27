@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "import_assembly_stats_v1.schema.json",
+  "title": "import_assembly_stats_v1 — manifest contract for BUSCO+asmstats imports",
+  "description": "Validates POST /api/actions when type='import_assembly_stats'. Reads a single per-haplotype assembly_stats.json (or compatible) and emits an assembly_stats_v1 envelope. Source pipeline: BUSCO single-copy + asmstats + custom T2T checker.",
+  "type": "object",
+  "required": ["target"],
+  "additionalProperties": true,
+  "properties": {
+    "target": {
+      "type": "object",
+      "required": ["path"],
+      "additionalProperties": true,
+      "properties": {
+        "path":    { "type": "string", "minLength": 1, "description": "Workspace-relative path to the assembly stats JSON." },
+        "subject": { "type": "string", "description": "Tag (typically 'assembly_metrics')." }
+      }
+    },
+    "params": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "haplotype": { "type": "string", "description": "Override haplotype id (e.g. 'Gar' or 'Mac') when not present in the file." }
+      }
+    }
+  }
+}

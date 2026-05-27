@@ -1,0 +1,43 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "assembly_stats_v1.schema.json",
+  "title": "assembly_stats_v1 — normalised BUSCO + asmstats per-haplotype payload",
+  "type": "object",
+  "required": ["haplotype", "global", "per_chrom"],
+  "additionalProperties": true,
+  "properties": {
+    "haplotype": { "type": "string" },
+    "global": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "busco_pct":       { "type": "number", "minimum": 0, "maximum": 100 },
+        "contig_n50":      { "type": "integer", "minimum": 0 },
+        "scaffold_n50":    { "type": "integer", "minimum": 0 },
+        "gap_rate":        { "type": "number", "minimum": 0, "maximum": 1 },
+        "total_length_bp": { "type": "integer", "minimum": 0 },
+        "t2t_pct":         { "type": "number", "minimum": 0, "maximum": 100 }
+      }
+    },
+    "per_chrom": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["chrom"],
+        "additionalProperties": true,
+        "properties": {
+          "chrom":      { "type": "string" },
+          "length_bp":  { "type": "integer", "minimum": 0 },
+          "gaps":       { "type": "integer", "minimum": 0 },
+          "centromere": { "type": ["string", "boolean", "object", "null"] },
+          "telomere_l": { "type": ["boolean", "string", "null"] },
+          "telomere_r": { "type": ["boolean", "string", "null"] },
+          "t2t":        { "type": "boolean" },
+          "busco_pct":  { "type": "number", "minimum": 0, "maximum": 100 },
+          "n50":        { "type": "integer", "minimum": 0 }
+        }
+      }
+    },
+    "source": { "type": "string" }
+  }
+}

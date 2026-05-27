@@ -1,0 +1,63 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "macrosynteny_orthologs_v1.schema.json",
+  "title": "macrosynteny_orthologs_v1 — per-pair gene-anchor positions",
+  "type": "object",
+  "required": ["pairs"],
+  "additionalProperties": true,
+  "properties": {
+    "pairs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "x", "y", "orthologs"],
+        "additionalProperties": true,
+        "properties": {
+          "id":   { "type": "string" },
+          "name": { "type": "string" },
+          "x":    { "$ref": "#/definitions/genome" },
+          "y":    { "$ref": "#/definitions/genome" },
+          "orthologs": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["xc", "xp", "yc", "yp"],
+              "additionalProperties": true,
+              "properties": {
+                "xc": { "type": "string" },
+                "xp": { "type": "integer", "minimum": 0 },
+                "yc": { "type": "string" },
+                "yp": { "type": "integer", "minimum": 0 }
+              }
+            }
+          }
+        }
+      }
+    },
+    "source": { "type": "string" }
+  },
+  "definitions": {
+    "genome": {
+      "type": "object",
+      "required": ["id", "chroms"],
+      "additionalProperties": true,
+      "properties": {
+        "id":   { "type": "string" },
+        "name": { "type": "string" },
+        "chroms": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["id", "length_bp"],
+            "additionalProperties": true,
+            "properties": {
+              "id":        { "type": "string" },
+              "name":      { "type": "string" },
+              "length_bp": { "type": "integer", "minimum": 0 }
+            }
+          }
+        }
+      }
+    }
+  }
+}

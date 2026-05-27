@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "repeat_track_v1.schema.json",
+  "title": "repeat_track_v1 — flat repeat-interval array from RepeatMasker / EDTA BED",
+  "type": "object",
+  "required": ["intervals", "n_intervals"],
+  "additionalProperties": true,
+  "properties": {
+    "haplotype":   { "type": "string" },
+    "n_intervals": { "type": "integer", "minimum": 0 },
+    "intervals": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["chrom", "start_bp", "end_bp"],
+        "additionalProperties": true,
+        "properties": {
+          "chrom":    { "type": "string" },
+          "start_bp": { "type": "integer", "minimum": 0 },
+          "end_bp":   { "type": "integer", "minimum": 0 },
+          "name":     { "type": "string" },
+          "class":    { "type": "string" },
+          "family":   { "type": "string" },
+          "score":    { "type": "number" }
+        }
+      }
+    },
+    "source": { "type": "string" }
+  }
+}

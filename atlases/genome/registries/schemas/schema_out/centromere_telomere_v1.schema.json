@@ -1,0 +1,35 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "centromere_telomere_v1.schema.json",
+  "title": "centromere_telomere_v1 — per-chromosome centromere span + telomere flags",
+  "type": "object",
+  "required": ["per_chrom"],
+  "additionalProperties": true,
+  "properties": {
+    "haplotype": { "type": "string" },
+    "per_chrom": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["chrom"],
+        "additionalProperties": true,
+        "properties": {
+          "chrom":      { "type": "string" },
+          "centromere": {
+            "type": ["object", "null"],
+            "additionalProperties": true,
+            "properties": {
+              "start_bp": { "type": "integer", "minimum": 0 },
+              "end_bp":   { "type": "integer", "minimum": 0 }
+            }
+          },
+          "telomere_l":   { "type": ["boolean", "string"] },
+          "telomere_r":   { "type": ["boolean", "string"] },
+          "t2t":          { "type": "boolean" },
+          "completeness": { "type": "number", "minimum": 0, "maximum": 100 }
+        }
+      }
+    },
+    "source": { "type": "string" }
+  }
+}

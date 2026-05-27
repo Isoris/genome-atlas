@@ -1,0 +1,102 @@
+{
+  "_doc": "Mock example for ortholog_tables (per focal genome = cgar). Rows match the page_orthologues View 1 mockup. Validates the JSON-Schema embedded on page_orthologues.",
+  "focal": {
+    "id": "cgar",
+    "label": "C. gariepinus",
+    "assembly": "GAtlas-Cgar-2026-v1 (mock)",
+    "gene_count": 19855,
+    "chroms": [
+      { "id": "LG01", "gene_count": 1412 },
+      { "id": "LG02", "gene_count": 1298 },
+      { "id": "LG03", "gene_count": 1105 },
+      { "id": "LG04", "gene_count": 1088 }
+    ]
+  },
+  "non_focal": [
+    {
+      "id": "cmac",
+      "label": "C. macrocephalus",
+      "assembly": "GAtlas-Cmac-2026-v1 (mock)",
+      "gene_count": 19420,
+      "summary": {
+        "one_to_one":        17842,
+        "one_to_many":         612,
+        "many_to_one":         418,
+        "many_to_many":         94,
+        "focal_orphans":      1503,
+        "nonfocal_orphans":   1711
+      },
+      "per_focal_chrom": [
+        { "chrom": "LG01", "pct_one_to_one": 94.1 },
+        { "chrom": "LG02", "pct_one_to_one": 93.4 },
+        { "chrom": "LG03", "pct_one_to_one": 91.8 },
+        { "chrom": "LG04", "pct_one_to_one": 92.5 }
+      ]
+    },
+    {
+      "id": "ipun",
+      "label": "I. punctatus",
+      "assembly": "GCF_001660625.3 (mock-mirrored)",
+      "gene_count": 21330,
+      "summary": {
+        "one_to_one":        14091,
+        "one_to_many":         774,
+        "many_to_one":         696,
+        "many_to_many":        142,
+        "focal_orphans":      4759,
+        "nonfocal_orphans":   5022
+      },
+      "per_focal_chrom": [
+        { "chrom": "LG01", "pct_one_to_one": 78.6 },
+        { "chrom": "LG02", "pct_one_to_one": 77.0 },
+        { "chrom": "LG03", "pct_one_to_one": 74.2 },
+        { "chrom": "LG04", "pct_one_to_one": 76.1 }
+      ]
+    },
+    {
+      "id": "phyp",
+      "label": "P. hypophthalmus",
+      "assembly": "GCF_003952975.1 (mock-mirrored)",
+      "gene_count": 22845,
+      "summary": {
+        "one_to_one":        12380,
+        "one_to_many":         820,
+        "many_to_one":         711,
+        "many_to_many":        158,
+        "focal_orphans":      6388,
+        "nonfocal_orphans":   6605
+      },
+      "per_focal_chrom": [
+        { "chrom": "LG01", "pct_one_to_one": 71.2 },
+        { "chrom": "LG02", "pct_one_to_one": 69.8 },
+        { "chrom": "LG03", "pct_one_to_one": 66.9 },
+        { "chrom": "LG04", "pct_one_to_one": 68.4 }
+      ]
+    },
+    {
+      "id": "saso",
+      "label": "S. asotus",
+      "assembly": "GCA_-mock-saso-2026 (mock)",
+      "gene_count": 19625,
+      "summary": {
+        "one_to_one":        10996,
+        "one_to_many":         893,
+        "many_to_one":         770,
+        "many_to_many":        172,
+        "focal_orphans":      7638,
+        "nonfocal_orphans":   8011
+      },
+      "per_focal_chrom": [
+        { "chrom": "LG01", "pct_one_to_one": 64.0 },
+        { "chrom": "LG02", "pct_one_to_one": 62.1 },
+        { "chrom": "LG03", "pct_one_to_one": 58.7 },
+        { "chrom": "LG04", "pct_one_to_one": 60.5 }
+      ]
+    }
+  ],
+  "thresholds": {
+    "pct_good": 90,
+    "pct_mid":  65
+  },
+  "source_pipeline": "OrthoFinder v2.5.5 (mock)"
+}

@@ -1,0 +1,46 @@
+{
+  "_doc": "Mock example for ortholog_pairs (per focal x non-focal pair). Rows match the page_orthologues View 3 gene-level explorer mockup. Lazy-loaded by page_orthologues.js on column reveal.",
+  "focal_id": "cgar",
+  "non_focal_id": "cmac",
+  "rows": [
+    {
+      "focal_gene": "CGAR.LG01.g00012",
+      "chrom": "LG01",
+      "pos_bp": 1420000,
+      "orthologs": [
+        { "id": "CMAC.LG01.g00018", "chrom": "LG01", "pos_bp": 1438000, "kind": "1:1" }
+      ]
+    },
+    {
+      "focal_gene": "CGAR.LG01.g00013",
+      "chrom": "LG01",
+      "pos_bp": 1460000,
+      "orthologs": [
+        { "id": "CMAC.LG01.g00019", "chrom": "LG01", "pos_bp": 1471000, "kind": "1:1" }
+      ]
+    },
+    {
+      "focal_gene": "CGAR.LG01.g00014",
+      "chrom": "LG01",
+      "pos_bp": 1510000,
+      "orthologs": []
+    },
+    {
+      "focal_gene": "CGAR.LG01.g00015",
+      "chrom": "LG01",
+      "pos_bp": 1550000,
+      "orthologs": [
+        { "id": "CMAC.LG01.g00020", "chrom": "LG01", "pos_bp": 1562000, "kind": "1:n" },
+        { "id": "CMAC.LG01.g00020b", "chrom": "LG01", "pos_bp": 1565000, "kind": "1:n" }
+      ]
+    },
+    {
+      "focal_gene": "CGAR.LG01.g00016",
+      "chrom": "LG01",
+      "pos_bp": 1590000,
+      "orthologs": [
+        { "id": "CMAC.LG01.g00021", "chrom": "LG01", "pos_bp": 1601000, "kind": "1:1" }
+      ]
+    }
+  ]
+}

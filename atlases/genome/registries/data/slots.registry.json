@@ -1,6 +1,6 @@
 {
   "$schema": "../../../../core/registry_core.schema.json",
-  "_doc": "Cross-page state slots for the Genome Atlas. Round 1 is the scaffold-only phase — page1 doesn't read or write any state. The two slots declared below are RESERVED for phase B+ (they're what the page1 vision section commits to). Adding them now keeps the registry shape stable and lets the shell flag misuse early.",
+  "_doc": "Cross-page state slots for the Genome Atlas. Round 1 is the scaffold-only phase — page_scaffold doesn't read or write any state. The two slots declared below are RESERVED for phase B+ (they're what the page_scaffold vision section commits to). Adding them now keeps the registry shape stable and lets the shell flag misuse early.",
   "_round1_status": "Two reserved slots, neither used yet. activeChrom + activeHaplotype will be wired when phase B's chromosome-overview renderer lands.",
   "slots": {
 

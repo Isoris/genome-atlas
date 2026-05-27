@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "import_centromere_telomere_v1.schema.json",
+  "title": "import_centromere_telomere_v1 — tidk / centromics summary import",
+  "description": "Validates POST /api/actions when type='import_centromere_telomere'. Per-chromosome centromere span + telomere repeat presence + T2T flag. Emits centromere_telomere_v1.",
+  "type": "object",
+  "required": ["target"],
+  "additionalProperties": true,
+  "properties": {
+    "target": {
+      "type": "object",
+      "required": ["path"],
+      "additionalProperties": true,
+      "properties": {
+        "path":    { "type": "string", "minLength": 1 },
+        "subject": { "type": "string" }
+      }
+    },
+    "params": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": { "haplotype": { "type": "string" } }
+    }
+  }
+}

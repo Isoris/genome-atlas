@@ -1,0 +1,63 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "synteny_oxford_grid_v1.schema.json",
+  "title": "synteny_oxford_grid_v1 — macrosyntR aggregated Oxford-grid (per ordered focal pair)",
+  "type": "object",
+  "required": ["genome_a", "genome_b", "cells"],
+  "additionalProperties": true,
+  "properties": {
+    "pair_id":         { "type": "string" },
+    "method":          { "type": "string" },
+    "ortholog_source": { "type": "string" },
+    "genome_a":        { "$ref": "#/definitions/genome" },
+    "genome_b":        { "$ref": "#/definitions/genome" },
+    "thresholds": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "q_hi": { "type": "number" },
+        "q_lo": { "type": "number" }
+      }
+    },
+    "cells": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["chrom_a", "chrom_b", "n_orthologs"],
+        "additionalProperties": true,
+        "properties": {
+          "chrom_a":     { "type": "string" },
+          "chrom_b":     { "type": "string" },
+          "n_orthologs": { "type": "integer", "minimum": 0 },
+          "fisher_p":    { "type": "number" },
+          "fisher_q":    { "type": "number" },
+          "significant": { "type": "boolean" }
+        }
+      }
+    },
+    "source": { "type": "string" }
+  },
+  "definitions": {
+    "genome": {
+      "type": "object",
+      "required": ["id", "chroms"],
+      "additionalProperties": true,
+      "properties": {
+        "id":     { "type": "string" },
+        "label":  { "type": "string" },
+        "chroms": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["id"],
+            "additionalProperties": true,
+            "properties": {
+              "id":        { "type": "string" },
+              "length_bp": { "type": "integer", "minimum": 0 }
+            }
+          }
+        }
+      }
+    }
+  }
+}

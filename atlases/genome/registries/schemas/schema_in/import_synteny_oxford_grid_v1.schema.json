@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "import_synteny_oxford_grid_v1.schema.json",
+  "title": "import_synteny_oxford_grid_v1 — macrosyntR Oxford-grid import",
+  "description": "Validates POST /api/actions when type='import_synteny_oxford_grid'. Accepts the canonical {pair_id,method,ortholog_source,genome_a,genome_b,cells[…],thresholds?} shape. Emits synteny_oxford_grid_v1.",
+  "type": "object",
+  "required": ["target"],
+  "additionalProperties": true,
+  "properties": {
+    "target": {
+      "type": "object",
+      "required": ["path"],
+      "additionalProperties": true,
+      "properties": {
+        "path":    { "type": "string", "minLength": 1 },
+        "subject": { "type": "string" }
+      }
+    },
+    "params": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "method":          { "type": "string", "default": "macrosyntR" },
+        "ortholog_source": { "type": "string", "default": "orthofinder" }
+      }
+    }
+  }
+}

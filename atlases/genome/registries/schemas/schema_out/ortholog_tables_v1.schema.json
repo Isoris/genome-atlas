@@ -1,0 +1,81 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "ortholog_tables_v1.schema.json",
+  "title": "ortholog_tables_v1 — OrthoFinder focal vs non-focal summary tables",
+  "type": "object",
+  "required": ["focal", "non_focal"],
+  "additionalProperties": true,
+  "properties": {
+    "focal": {
+      "type": "object",
+      "required": ["id"],
+      "additionalProperties": true,
+      "properties": {
+        "id":         { "type": "string" },
+        "label":      { "type": "string" },
+        "assembly":   { "type": "string" },
+        "gene_count": { "type": "integer", "minimum": 0 },
+        "chroms": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["id"],
+            "additionalProperties": true,
+            "properties": {
+              "id":         { "type": "string" },
+              "gene_count": { "type": "integer", "minimum": 0 }
+            }
+          }
+        }
+      }
+    },
+    "non_focal": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "summary"],
+        "additionalProperties": true,
+        "properties": {
+          "id":         { "type": "string" },
+          "label":      { "type": "string" },
+          "assembly":   { "type": "string" },
+          "gene_count": { "type": "integer", "minimum": 0 },
+          "summary": {
+            "type": "object",
+            "additionalProperties": true,
+            "properties": {
+              "one_to_one":       { "type": "integer", "minimum": 0 },
+              "one_to_many":      { "type": "integer", "minimum": 0 },
+              "many_to_one":      { "type": "integer", "minimum": 0 },
+              "many_to_many":     { "type": "integer", "minimum": 0 },
+              "focal_orphans":    { "type": "integer", "minimum": 0 },
+              "nonfocal_orphans": { "type": "integer", "minimum": 0 }
+            }
+          },
+          "per_focal_chrom": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["chrom", "pct_one_to_one"],
+              "additionalProperties": true,
+              "properties": {
+                "chrom":          { "type": "string" },
+                "pct_one_to_one": { "type": "number", "minimum": 0, "maximum": 100 }
+              }
+            }
+          }
+        }
+      }
+    },
+    "thresholds": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "pct_good": { "type": "number" },
+        "pct_mid":  { "type": "number" }
+      }
+    },
+    "source_pipeline": { "type": "string" },
+    "source":          { "type": "string" }
+  }
+}

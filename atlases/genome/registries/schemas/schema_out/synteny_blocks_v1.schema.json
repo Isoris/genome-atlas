@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "synteny_blocks_v1.schema.json",
+  "title": "synteny_blocks_v1 — Cactus pairwise syntenic blocks (per species pair)",
+  "type": "object",
+  "required": ["pairs"],
+  "additionalProperties": true,
+  "properties": {
+    "method": { "type": "string" },
+    "pairs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id"],
+        "additionalProperties": true,
+        "properties": {
+          "id":     { "type": "string" },
+          "name":   { "type": "string" },
+          "blocks": { "type": "array", "items": { "type": "object", "additionalProperties": true } }
+        }
+      }
+    },
+    "source": { "type": "string" }
+  }
+}

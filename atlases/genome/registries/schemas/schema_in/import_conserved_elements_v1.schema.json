@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "import_conserved_elements_v1.schema.json",
+  "title": "import_conserved_elements_v1 — manifest contract for phastCons / UCE BED imports",
+  "description": "Validates POST /api/actions when type='import_conserved_elements'. Accepts a BED4+ file; col-5 score is preserved when present. Emits conserved_elements_v1.",
+  "type": "object",
+  "required": ["target"],
+  "additionalProperties": true,
+  "properties": {
+    "target": {
+      "type": "object",
+      "required": ["path"],
+      "additionalProperties": true,
+      "properties": {
+        "path":    { "type": "string", "minLength": 1 },
+        "subject": { "type": "string" }
+      }
+    },
+    "params": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "method":   { "type": "string", "description": "phastCons | UCE | gerp | ...", "default": "phastCons" },
+        "max_rows": { "type": "integer", "minimum": 1 }
+      }
+    }
+  }
+}

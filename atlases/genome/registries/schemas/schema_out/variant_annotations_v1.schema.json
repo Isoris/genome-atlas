@@ -1,0 +1,44 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "variant_annotations_v1.schema.json",
+  "title": "variant_annotations_v1 — SnpEff / VEP impact tally per inversion candidate",
+  "type": "object",
+  "required": ["candidate_id", "impact_counts"],
+  "additionalProperties": true,
+  "properties": {
+    "candidate_id": { "type": "string" },
+    "n_variants":   { "type": "integer", "minimum": 0 },
+    "impact_counts": {
+      "type": "object",
+      "required": ["HIGH", "MODERATE", "LOW", "MODIFIER"],
+      "additionalProperties": false,
+      "properties": {
+        "HIGH":     { "type": "integer", "minimum": 0 },
+        "MODERATE": { "type": "integer", "minimum": 0 },
+        "LOW":      { "type": "integer", "minimum": 0 },
+        "MODIFIER": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "high_impact": {
+      "type": ["array", "null"],
+      "items": {
+        "type": "object",
+        "required": ["chrom", "pos_bp"],
+        "additionalProperties": true,
+        "properties": {
+          "chrom":         { "type": "string" },
+          "pos_bp":        { "type": "integer", "minimum": 0 },
+          "ref":           { "type": "string" },
+          "alt":           { "type": "string" },
+          "gene_id":       { "type": "string" },
+          "gene_name":     { "type": "string" },
+          "effect":        { "type": "string" },
+          "hgvs_p":        { "type": "string" },
+          "hgvs_c":        { "type": "string" },
+          "transcript_id": { "type": "string" }
+        }
+      }
+    },
+    "source": { "type": "string" }
+  }
+}
