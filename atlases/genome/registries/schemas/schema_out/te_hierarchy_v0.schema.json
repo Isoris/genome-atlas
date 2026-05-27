@@ -1,0 +1,90 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "te_hierarchy_v0.schema.json",
+  "title": "te_hierarchy_v0 — EDTA all-TE aggregated counts",
+  "description": "Streamed-aggregate payload for the EDTA TEanno.gff3 track. Per-feature rows are NOT in this payload by design — the raw GFF is millions of features. Carries counts + length sums by (Class, Superfamily, Family) and by (chrom × Class). Consumed by page_repeats_te V4 (Sankey) + the per-chrom heatmap.",
+  "type": "object",
+  "required": ["source", "n_features", "total_bp", "by_class", "by_superfamily", "schema_version"],
+  "additionalProperties": true,
+  "properties": {
+    "source":         { "type": "string" },
+    "n_features":     { "type": "integer", "minimum": 0 },
+    "total_bp":       { "type": "integer", "minimum": 0 },
+    "schema_version": { "const": "te_hierarchy_v0" },
+    "params":         { "type": "object", "additionalProperties": true },
+
+    "by_class": {
+      "type": "object",
+      "description": "Class label → {n, bp}. Classes: LTR | LINE | SINE | DNA | Helitron | rRNA | Unknown.",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["n", "bp"],
+        "properties": {
+          "n":  { "type": "integer", "minimum": 0 },
+          "bp": { "type": "integer", "minimum": 0 }
+        }
+      }
+    },
+
+    "by_superfamily": {
+      "type": "object",
+      "description": "Superfamily label → {n, bp}. EDTA's Classification[0] (e.g. 'LTR', 'DNA', 'Helitron').",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["n", "bp"],
+        "properties": {
+          "n":  { "type": "integer", "minimum": 0 },
+          "bp": { "type": "integer", "minimum": 0 }
+        }
+      }
+    },
+
+    "by_class_super": {
+      "type": "object",
+      "description": "Class → Superfamily → {n, bp}. The Sankey's first hop.",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": {
+          "type": "object",
+          "required": ["n", "bp"],
+          "properties": {
+            "n":  { "type": "integer", "minimum": 0 },
+            "bp": { "type": "integer", "minimum": 0 }
+          }
+        }
+      }
+    },
+
+    "by_super_family": {
+      "type": "object",
+      "description": "Superfamily → Family → {n, bp}. The Sankey's second hop.",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": {
+          "type": "object",
+          "required": ["n", "bp"],
+          "properties": {
+            "n":  { "type": "integer", "minimum": 0 },
+            "bp": { "type": "integer", "minimum": 0 }
+          }
+        }
+      }
+    },
+
+    "per_chrom_class": {
+      "type": "object",
+      "description": "chrom → class → {n, bp}. Drives the per-chrom heatmap.",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": {
+          "type": "object",
+          "required": ["n", "bp"],
+          "properties": {
+            "n":  { "type": "integer", "minimum": 0 },
+            "bp": { "type": "integer", "minimum": 0 }
+          }
+        }
+      }
+    }
+  }
+}

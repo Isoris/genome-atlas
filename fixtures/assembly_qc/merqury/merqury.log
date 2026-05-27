@@ -1,0 +1,55 @@
+[2026-05-12 04:21:18] [INFO] Merqury 1.3 — assembly QC by k-mers
+[2026-05-12 04:21:18] [INFO] Truth k-mer db:     /scratch/qa/fClaHyb_trio/truth.k21.meryl
+[2026-05-12 04:21:18] [INFO] Assemblies:
+[2026-05-12 04:21:18] [INFO]     1. assemblies/fClaHyb_Gar.fa  (968,412,571 bp, 31 scaffolds)
+[2026-05-12 04:21:18] [INFO]     2. assemblies/fClaHyb_Mac.fa  (962,108,334 bp, 30 scaffolds)
+[2026-05-12 04:21:18] [INFO] k-mer size:         21
+[2026-05-12 04:21:18] [INFO] Output prefix:      fClaHyb
+
+[2026-05-12 04:21:19] [STEP] 1/5  Counting assembly k-mers (meryl count)
+[2026-05-12 04:21:19] [INFO]   fClaHyb_Gar.meryl ...
+[2026-05-12 04:34:42] [INFO]   fClaHyb_Gar.meryl done — 968,400,000 unique 21-mers
+[2026-05-12 04:34:42] [INFO]   fClaHyb_Mac.meryl ...
+[2026-05-12 04:47:18] [INFO]   fClaHyb_Mac.meryl done — 961,900,000 unique 21-mers
+
+[2026-05-12 04:47:18] [STEP] 2/5  Computing per-assembly QV (.qv)
+[2026-05-12 04:47:18] [INFO]   fClaHyb_Gar:  21,500 k-mers absent from truth db
+[2026-05-12 04:47:18] [INFO]   fClaHyb_Mac:  24,100 k-mers absent from truth db
+[2026-05-12 04:51:02] [INFO]   wrote fClaHyb.qv
+
+[2026-05-12 04:51:02] [STEP] 3/5  Computing per-scaffold QV
+[2026-05-12 04:54:18] [INFO]   wrote fClaHyb.fClaHyb_Gar.qv  (31 rows)
+[2026-05-12 04:56:08] [INFO]   wrote fClaHyb.fClaHyb_Mac.qv  (30 rows)
+
+[2026-05-12 04:56:08] [STEP] 4/5  Computing k-mer completeness (.completeness.stats)
+[2026-05-12 04:56:08] [INFO]   truth db:  482,550,800 solid 21-mers (≥2× evidence)
+[2026-05-12 05:02:14] [INFO]   fClaHyb_Gar:  472,138,420 / 482,550,800  (97.84%)
+[2026-05-12 05:02:14] [INFO]   fClaHyb_Mac:  470,991,020 / 482,550,800  (97.59%)
+[2026-05-12 05:02:14] [INFO]   Both (union): 481,892,150 / 482,550,800  (99.86%)
+[2026-05-12 05:02:14] [INFO]   wrote fClaHyb.completeness.stats
+
+[2026-05-12 05:02:14] [STEP] 5/5  Building copy-number spectrum (spectra-cn.sh)
+[2026-05-12 05:09:48] [INFO]   wrote fClaHyb.spectra-cn.hist
+[2026-05-12 05:09:48] [INFO]   wrote fClaHyb.spectra-asm.hist  (assembly-only spectrum)
+
+[2026-05-12 05:09:48] [INFO] ===== asmstats (embedded) =====
+[2026-05-12 05:09:48] [INFO] fClaHyb_Gar:
+[2026-05-12 05:09:48] [INFO]   total length            968,412,571 bp
+[2026-05-12 05:09:48] [INFO]   scaffolds                        31
+[2026-05-12 05:09:48] [INFO]   contigs                          84
+[2026-05-12 05:09:48] [INFO]   gaps                             53
+[2026-05-12 05:09:48] [INFO]   total gap bp                 18,420
+[2026-05-12 05:09:48] [INFO]   scaffold N50/L50  33,215,800 / 13
+[2026-05-12 05:09:48] [INFO]   contig N50/L50    27,145,200 / 16
+[2026-05-12 05:09:48] [INFO]   GC %                         39.41
+[2026-05-12 05:09:48] [INFO] fClaHyb_Mac:
+[2026-05-12 05:09:48] [INFO]   total length            962,108,334 bp
+[2026-05-12 05:09:48] [INFO]   scaffolds                        30
+[2026-05-12 05:09:48] [INFO]   contigs                          79
+[2026-05-12 05:09:48] [INFO]   gaps                             49
+[2026-05-12 05:09:48] [INFO]   total gap bp                 16,830
+[2026-05-12 05:09:48] [INFO]   scaffold N50/L50  34,102,450 / 13
+[2026-05-12 05:09:48] [INFO]   contig N50/L50    28,031,100 / 15
+[2026-05-12 05:09:48] [INFO]   GC %                         39.58
+
+[2026-05-12 05:09:48] [INFO] Done. Wall clock 48 min 30 s.

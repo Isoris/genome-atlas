@@ -1,0 +1,42 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "edta_all_te_ingest_v1.schema.json",
+  "title": "edta_all_te_ingest_v1 — manifest contract for EDTA all-TE ingest",
+  "description": "Validates POST /api/actions when type='edta_all_te_ingest'. Resolves an EDTA `*.EDTA.TEanno.gff3(.gz)` from the workspace; the extractor streams it line-by-line and emits a te_hierarchy_v0 envelope (aggregated counts, not per-feature rows — the raw file is too large to materialize).",
+  "type": "object",
+  "required": ["target"],
+  "additionalProperties": true,
+  "properties": {
+    "target": {
+      "type": "object",
+      "required": ["path"],
+      "additionalProperties": true,
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Workspace-relative path to the EDTA TEanno GFF3 (plain or .gz)."
+        },
+        "subject": {
+          "type": "string",
+          "description": "Optional tag for the assembly/haplotype these features describe."
+        }
+      }
+    },
+    "params": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "min_length_bp": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Drop features shorter than this. Default 0 (keep all)."
+        },
+        "keep_unknown": {
+          "type": "boolean",
+          "description": "Include features whose classification doesn't map to a known TE class. Default true."
+        }
+      }
+    }
+  }
+}

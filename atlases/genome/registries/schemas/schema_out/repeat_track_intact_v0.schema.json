@@ -1,0 +1,54 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "repeat_track_intact_v0.schema.json",
+  "title": "repeat_track_intact_v0 — EDTA intact-TE features",
+  "description": "Per-feature payload for the EDTA intact.gff3 track. Small enough to materialize fully (catfish-sized assembly: ~30 000 intact features). Consumed by page_repeats_te's per-chrom ideogram view.",
+  "type": "object",
+  "required": ["source", "n_features", "features", "schema_version"],
+  "additionalProperties": true,
+  "properties": {
+    "source":           { "type": "string" },
+    "n_features":       { "type": "integer", "minimum": 0 },
+    "schema_version":   { "const": "repeat_track_intact_v0" },
+    "params":           { "type": "object", "additionalProperties": true },
+
+    "features": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["chrom", "start_bp", "end_bp", "length_bp", "kind", "classification"],
+        "additionalProperties": true,
+        "properties": {
+          "chrom":                 { "type": "string" },
+          "start_bp":              { "type": "integer", "minimum": 0 },
+          "end_bp":                { "type": "integer", "minimum": 0 },
+          "length_bp":             { "type": "integer", "minimum": 0 },
+          "strand":                { "type": ["string", "null"], "enum": ["+", "-", null] },
+          "kind":                  { "type": "string" },
+          "name":                  { "type": "string" },
+          "classification":        { "type": "string" },
+          "classification_super":  { "type": "string" },
+          "classification_family": { "type": "string" },
+          "ltr_identity":          { "type": ["number", "null"] },
+          "motif":                 { "type": ["string", "null"] },
+          "tsd":                   { "type": ["string", "null"] },
+          "method":                { "type": ["string", "null"] }
+        }
+      }
+    },
+
+    "per_chrom_counts": {
+      "type": "object",
+      "description": "chrom → superfamily → count of intact features.",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "per_superfamily_counts": {
+      "type": "object",
+      "description": "superfamily → total count of intact features.",
+      "additionalProperties": { "type": "integer", "minimum": 0 }
+    }
+  }
+}

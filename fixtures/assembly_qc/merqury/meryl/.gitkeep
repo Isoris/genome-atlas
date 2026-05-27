@@ -1,0 +1,15 @@
+# meryl/ — binary k-mer database (not committed)
+#
+# Merqury's truth k-mer database lives here in real cluster runs as a
+# directory of binary index files (~10 GB for catfish at k=21). Too
+# large + too binary for git; rebuild via the cluster pipeline:
+#
+#   meryl count k=21 \
+#     output truth.k21.meryl \
+#     /scratch/reads/fClaHyb_dam.illumina.fq.gz \
+#     /scratch/reads/fClaHyb_sire.illumina.fq.gz \
+#     /scratch/reads/fClaHyb_dam.hifi.fq.gz \
+#     /scratch/reads/fClaHyb_sire.hifi.fq.gz
+#
+# This .gitkeep is what holds the empty directory in git so the
+# expected path exists for tooling that resolves `merqury/meryl/`.

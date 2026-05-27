@@ -1,0 +1,28 @@
+# BUSCO version is: 5.5.0
+# The lineage dataset is: actinopterygii_odb10 (Creation date: 2024-01-08, number of genomes: 26, number of BUSCOs: 3640)
+# Summarized benchmarking in BUSCO notation for file fClaHyb_Mac.fa
+# BUSCO was run in mode: genome
+
+	***** Results: *****
+
+	C:96.8%[S:94.9%,D:1.9%],F:1.4%,M:1.8%,n:3640
+	3523	Complete BUSCOs (C)
+	3454	Complete and single-copy BUSCOs (S)
+	  69	Complete and duplicated BUSCOs (D)
+	  51	Fragmented BUSCOs (F)
+	  66	Missing BUSCOs (M)
+	3640	Total BUSCO groups searched
+
+Assembly Statistics:
+	30	Number of scaffolds
+	79	Number of contigs
+	962108334	Total length
+	16830	Percent gaps
+	34102450	Scaffold N50
+	28031100	Contigs N50
+
+Dependencies and versions:
+	hmmsearch: 3.4
+	metaeuk: 6.a5d39d9
+	bbtools: 39.06
+	busco: 5.5.0

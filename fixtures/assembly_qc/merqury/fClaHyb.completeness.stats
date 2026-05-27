@@ -1,0 +1,4 @@
+Assembly       kmers_solid_in_assembly  kmers_solid_in_truth  pct
+fClaHyb_Gar    472138420                482550800             97.84
+fClaHyb_Mac    470991020                482550800             97.59
+Both           481892150                482550800             99.86

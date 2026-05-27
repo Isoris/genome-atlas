@@ -1,0 +1,42 @@
+{
+  "parameters": {
+    "in":           "fClaHyb_Gar.fa",
+    "out":          "fClaHyb_Gar",
+    "mode":         "genome",
+    "lineage_dataset": {
+      "name":               "actinopterygii_odb10",
+      "creation_date":      "2024-01-08",
+      "number_of_genomes":  26,
+      "number_of_buscos":   3640
+    },
+    "cpu":          16
+  },
+  "versions": {
+    "busco":     "5.5.0",
+    "hmmsearch": "3.4",
+    "metaeuk":   "6.a5d39d9",
+    "bbtools":   "39.06"
+  },
+  "results": {
+    "one_line_summary":        "C:97.0%[S:95.4%,D:1.6%],F:1.3%,M:1.7%,n:3640",
+    "Complete":                 97.0,
+    "Single copy":              95.4,
+    "Multi copy":                1.6,
+    "Fragmented":                1.3,
+    "Missing":                   1.7,
+    "n_markers":                3640,
+    "Complete BUSCOs":          3531,
+    "Complete and single-copy": 3473,
+    "Complete and duplicated":    58,
+    "Fragmented BUSCOs":          47,
+    "Missing BUSCOs":             62
+  },
+  "assembly_statistics": {
+    "Number of scaffolds":      31,
+    "Number of contigs":        84,
+    "Total length":      968412571,
+    "Percent gaps":          18420,
+    "Scaffold N50":       33215800,
+    "Contigs N50":        27145200
+  }
+}
