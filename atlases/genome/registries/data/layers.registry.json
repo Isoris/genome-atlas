@@ -2,7 +2,7 @@
   "$schema": "../../../../core/registry_core.schema.json",
   "_doc": "Layer inventory for the Genome Atlas. Round 1 stubs all planned layers as not-yet-implemented entries so the engine can boot and the [data-ga-layer] chips have a registry to look up. Each layer's `tier` / `source` / `path_under_root` is the COMMITTED contract per SCHEMA section 28; the actual files don't exist yet (ship from the cluster-side genome-annotation pipeline, phase B+). Layers carrying `_optional: true` are facultative: when absent, the consuming page hides the corresponding panel rather than erroring.",
   "_tier_legend": {
-    "hot":  "RAM-pinned at trigger event; pages read state directly; <1ms",
+    "hot": "RAM-pinned at trigger event; pages read state directly; <1ms",
     "warm": "IndexedDB-cached at trigger event; first read async ~50ms; subsequent ~10ms",
     "cold": "Fetched on demand; spinner allowed"
   },
@@ -10,7 +10,6 @@
   "_migration_note_2026_05_19": "crossover_track, prdm9_motif, and nco_gc_track moved to meiosis-atlas on 2026-05-19. page_chromosome_overview consumes crossover_track cross-atlas from meiosis-atlas.",
   "_migration_note_2026_05_23": "Converted all bare `path:` entries to `root: <name>` + `path_under_root: <template>`. Roots resolve through master_config.yaml: genome_assembly, genome_annotation, genome_synteny, genome_conservation. Decouples disk layout from atlas code.",
   "layers": {
-
     "assembly_stats": {
       "tier": "warm",
       "preload_on": "page_mount",
@@ -20,50 +19,45 @@
       "format": "json",
       "schema": "../schemas/schema_out/assembly_stats_v1.schema.json",
       "_status": "not_loaded",
-      "_feeds": "page_assembly_stats QC banner + per-chrom table · OUT adapter for inversion atlas (genome.assembly_stats)",
+      "_feeds": "page_assembly_stats QC banner + per-chrom table \u00b7 OUT adapter for inversion atlas (genome.assembly_stats)",
       "_source_pipeline": "BUSCO + asmstats"
     },
-
     "chromosome_map": {
       "tier": "warm",
       "source": "file",
       "root": "genome_assembly",
       "path_under_root": "chromosome_map.json",
       "_status": "not_loaded",
-      "_feeds": "karyotype strip · per-chrom navigation (phase B)",
+      "_feeds": "karyotype strip \u00b7 per-chrom navigation (phase B)",
       "_source_pipeline": "FAI + AGP"
     },
-
     "centromere_telomere": {
       "tier": "warm",
       "source": "file",
       "root": "genome_assembly",
       "path_under_root": "centromere_telomere.json",
       "_status": "not_loaded",
-      "_feeds": "centromere bands · T2T completeness chip (phase B)",
+      "_feeds": "centromere bands \u00b7 T2T completeness chip (phase B)",
       "_source_pipeline": "tidk / centromics"
     },
-
     "gene_track": {
       "tier": "cold",
       "source": "file",
       "root": "genome_annotation",
       "path_under_root": "gene_track.gff",
       "_status": "not_loaded",
-      "_feeds": "gene cargo per inversion · functional context (phase B/C)",
+      "_feeds": "gene cargo per inversion \u00b7 functional context (phase B/C)",
       "_source_pipeline": "BRAKER / TOGA / RefSeq"
     },
-
     "repeat_track": {
       "tier": "cold",
       "source": "file",
       "root": "genome_annotation",
       "path_under_root": "repeat_track.bed",
       "_status": "not_loaded",
-      "_feeds": "TE landscape · breakpoint repeat enrichment (phase B)",
+      "_feeds": "TE landscape \u00b7 breakpoint repeat enrichment (phase B)",
       "_source_pipeline": "RepeatMasker / EDTA"
     },
-
     "te_hierarchy": {
       "tier": "warm",
       "source": "file",
@@ -71,11 +65,10 @@
       "path_under_root": "te_hierarchy.json",
       "_status": "not_loaded",
       "_optional": true,
-      "_feeds": "page_repeats_te View 4 — TE-hierarchy alluvial (per parental haplotype, N-level)",
-      "_source_pipeline": "RepeatMasker / EDTA post-processing — aggregate bp per (haplotype, repeat, te_category, class, order, family) tree per Wicker et al. 2007",
+      "_feeds": "page_repeats_te View 4 \u2014 TE-hierarchy alluvial (per parental haplotype, N-level)",
+      "_source_pipeline": "RepeatMasker / EDTA post-processing \u2014 aggregate bp per (haplotype, repeat, te_category, class, order, family) tree per Wicker et al. 2007",
       "_schema": "{ haplotypes: [ { id, name, label, column_headers?, nodes: [<node>] } ] }; <node> = { id, name, pct, palette?, children?: [<node>] }."
     },
-
     "variant_annotations": {
       "tier": "cold",
       "source": "file",
@@ -85,27 +78,24 @@
       "_feeds": "deleterious-variant overlap with inversions (phase E)",
       "_source_pipeline": "SnpEff + VEP"
     },
-
     "conserved_elements": {
       "tier": "cold",
       "source": "file",
       "root": "genome_conservation",
       "path_under_root": "conserved_elements.bed",
       "_status": "not_loaded",
-      "_feeds": "UCEs · regulatory candidates (phase C/D)",
+      "_feeds": "UCEs \u00b7 regulatory candidates (phase C/D)",
       "_source_pipeline": "Cactus / phastCons"
     },
-
     "synteny_blocks": {
       "tier": "cold",
       "source": "file",
       "root": "genome_synteny",
       "path_under_root": "synteny_blocks.json",
       "_status": "not_loaded",
-      "_feeds": "collinearity vs related Siluriformes · ancestral karyotype (phase D)",
+      "_feeds": "collinearity vs related Siluriformes \u00b7 ancestral karyotype (phase D)",
       "_source_pipeline": "Cactus pairwise"
     },
-
     "macrosynteny_orthologs": {
       "tier": "cold",
       "source": "file",
@@ -113,11 +103,10 @@
       "path_under_root": "macrosynteny_orthologs.json",
       "_status": "not_loaded",
       "_optional": true,
-      "_feeds": "page_synteny View 3 — MacrosyntR-style Oxford macro-synteny grid",
+      "_feeds": "page_synteny View 3 \u2014 MacrosyntR-style Oxford macro-synteny grid",
       "_source_pipeline": "OrthoFinder + BUSCO single-copy orthologs",
       "_schema": "{ pairs: [{ id, name, x: { id, name, chroms: [{ id, name, length_bp }] }, y: {...}, orthologs: [{ xc, xp, yc, yp }] }] }; positions in bp"
     },
-
     "synteny_oxford_grid": {
       "tier": "cold",
       "source": "file",
@@ -125,10 +114,9 @@
       "path_under_root": "oxford/{a_id}_{b_id}.json",
       "_path_doc": "Per ordered focal pair (genome A x genome B). Renderer fetches the file matching the active selection from the page_synteny toggle; never enumerates the directory.",
       "_status": "not_loaded",
-      "_feeds": "page_synteny View 4 — macrosyntR-style Oxford grid",
+      "_feeds": "page_synteny View 4 \u2014 macrosyntR-style Oxford grid",
       "_source_pipeline": "OrthoFinder -> macrosyntR (SamiLhll/macrosyntR) chrom-pair Fisher exact + BH"
     },
-
     "ortholog_tables": {
       "tier": "warm",
       "source": "file",
@@ -136,10 +124,9 @@
       "path_under_root": "orthologs/{focal_id}.json",
       "_path_doc": "One file per focal genome. Renderer interpolates focal_id from shared.focalGenome.",
       "_status": "not_loaded",
-      "_feeds": "page_orthologues Views 1 + 2 — focal x non-focal summary table and per focal-chrom %1:1 breakdown",
+      "_feeds": "page_orthologues Views 1 + 2 \u2014 focal x non-focal summary table and per focal-chrom %1:1 breakdown",
       "_source_pipeline": "OrthoFinder summary tables"
     },
-
     "ortholog_pairs": {
       "tier": "cold",
       "source": "file",
@@ -148,10 +135,49 @@
       "_path_doc": "Per (focal, non-focal) pair. Lazy-loaded on column reveal in page_orthologues View 3.",
       "_status": "not_loaded",
       "_optional": true,
-      "_feeds": "page_orthologues View 3 — gene-level explorer",
+      "_feeds": "page_orthologues View 3 \u2014 gene-level explorer",
       "_source_pipeline": "OrthoFinder per-pair tables"
     },
-
-    "_meiosis_layers_moved": "crossover_track, prdm9_motif, nco_gc_track moved to meiosis-atlas 2026-05-19."
+    "_meiosis_layers_moved": "crossover_track, prdm9_motif, nco_gc_track moved to meiosis-atlas 2026-05-19.",
+    "te_abundance": {
+      "tier": "warm",
+      "source": "file",
+      "path": "data/comparative/te/te_abundance.json",
+      "_status": "not_loaded",
+      "_feeds": "page_comparative_te V1 (Fig 5.1)",
+      "_source_pipeline": "EDTA + RepeatMasker per species (Chapter 5 module step 04)"
+    },
+    "kimura_landscape": {
+      "tier": "warm",
+      "source": "file",
+      "path": "data/comparative/te/kimura_landscape.json",
+      "_status": "not_loaded",
+      "_feeds": "page_comparative_te V2 (Fig 5.2)",
+      "_source_pipeline": "RepeatMasker divsum per species (Chapter 5 module step 02)"
+    },
+    "centromeres_cgar": {
+      "tier": "warm",
+      "source": "file",
+      "path": "data/comparative/te/centromeres_cgar.json",
+      "_status": "not_loaded",
+      "_feeds": "page_comparative_te V3 (Table 5.4) \u00b7 page_chromosome_overview centromere overlay",
+      "_source_pipeline": "quarTeT / centromics on Cgar RefSeq (Chapter 5 module step 04)"
+    },
+    "alg_collinearity": {
+      "tier": "warm",
+      "source": "file",
+      "path": "data/comparative/te/alg_collinearity.json",
+      "_status": "not_loaded",
+      "_feeds": "page_comparative_te V4 \u00b7 page_ancestral_karyotype",
+      "_source_pipeline": "OrthoFinder + wfmash projection (Chapter 5 module step 06)"
+    },
+    "breakpoint_te_cross": {
+      "tier": "warm",
+      "source": "file",
+      "path": "data/comparative/te/breakpoint_te_cross.json",
+      "_status": "not_loaded",
+      "_feeds": "page_comparative_te V5 \u00b7 Inversion Atlas page16 (breakpoint badge)",
+      "_source_pipeline": "TE12_breakpoint_TE_cross.R (Chapter 5 module step 07)"
+    }
   }
 }

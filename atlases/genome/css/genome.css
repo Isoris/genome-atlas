@@ -1838,3 +1838,602 @@ html[data-theme="light"]    .ga-sankey-btn.is-active {
 .ga-adapter-doc {
   color: var(--ink-dim);
 }
+
+
+/* ---------------------------------------------------------------------
+ * page_comparative_te — 17-species TE landscape (Chapter 5 ingest).
+ *
+ * Five views: abundance bars, Kimura age landscape, Cgar centromere
+ * context, ALG collinearity heatmap, breakpoint × TE cross. All under
+ * the .ga-cte-* prefix to keep distinct from page_repeats_te's .ga-te-*.
+ * --------------------------------------------------------------------- */
+
+/* V1 — TE abundance bars (per species). */
+.ga-cte-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.ga-cte-bar-row {
+  display: grid;
+  grid-template-columns: 180px 1fr 70px;
+  gap: 10px;
+  align-items: center;
+  font-size: 10.5px;
+}
+.ga-cte-bar-label {
+  text-align: right;
+  color: var(--ink-dim);
+  white-space: nowrap;
+}
+.ga-cte-bar-outer {
+  /* width is set inline; outer wraps the inner so the bar shrinks for
+     low-total species */
+}
+.ga-cte-bar {
+  display: flex;
+  height: 18px;
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  overflow: hidden;
+  background: var(--panel-3);
+  font-size: 9px;
+  color: var(--panel-1);
+  width: 100%;
+}
+.ga-cte-bar > span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 0 3px;
+}
+.ga-cte-bar > .ga-te-other2 { background: #aa9988; }
+
+.ga-cte-bar-total {
+  font-family: var(--mono);
+  text-align: right;
+}
+
+/* V2 — Kimura age landscape (per species). */
+.ga-cte-kim-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 10px;
+}
+.ga-cte-kim-panel {
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  padding: 4px 6px 2px 6px;
+  background: var(--panel-3);
+}
+.ga-cte-kim-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 10px;
+  margin-bottom: 2px;
+}
+.ga-cte-kim-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* V3 — Cgar centromere context table. */
+.ga-cte-cen-table {
+  display: grid;
+  grid-template-columns:
+    0.5fr     /* chr */
+    1.0fr     /* start */
+    1.0fr     /* end */
+    0.8fr     /* length */
+    0.8fr     /* TR cov */
+    0.8fr     /* TE cov */
+    0.8fr     /* score */
+    1.2fr;    /* verdict */
+  gap: 2px 10px;
+  font-size: 10.5px;
+}
+.ga-cte-cen-head, .ga-cte-cen-row { display: contents; }
+.ga-cte-cen-head > span {
+  font-weight: 600;
+  color: var(--ink-dim);
+  font-size: 10px;
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 4px;
+}
+.ga-cte-cen-row > span {
+  padding: 3px 0;
+  border-bottom: 1px dashed var(--rule);
+  font-family: var(--mono);
+}
+.ga-cte-cen-chip {
+  font-size: 9px;
+  letter-spacing: 0.04em;
+  padding: 1px 4px;
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  background: var(--panel-3);
+}
+.ga-cte-cen-tr    { color: #ff8c6e; border-color: #ff8c6e; background: rgba(255, 140, 110, 0.08); }
+.ga-cte-cen-te    { color: #6fb8c9; border-color: #6fb8c9; background: rgba(111, 184, 201, 0.08); }
+.ga-cte-cen-mixed { color: var(--ink-dim); }
+
+/* V4 — ALG collinearity heatmap. */
+.ga-cte-alg-table {
+  display: grid;
+  grid-template-columns: 90px repeat(12, 1fr);
+  gap: 1px;
+  font-size: 9px;
+  font-family: var(--mono);
+}
+.ga-cte-alg-head, .ga-cte-alg-row { display: contents; }
+.ga-cte-alg-head > span {
+  font-size: 8px;
+  font-weight: 600;
+  color: var(--ink-dim);
+  text-align: center;
+  padding: 4px 0;
+  border-bottom: 1px solid var(--rule);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ga-cte-alg-head > span:first-child { text-align: left; padding-left: 4px; }
+.ga-cte-alg-row > span:first-child {
+  font-family: var(--mono);
+  color: var(--ink-dim);
+  padding: 2px 4px;
+}
+.ga-cte-alg-cell {
+  display: inline-block;
+  text-align: center;
+  padding: 3px 0;
+  color: var(--panel-1);
+}
+/* 7-step coral ramp for anchor density */
+.ga-cte-alg-cell[data-d="-1"] { background: var(--panel-3);                color: var(--ink-dimmer); }
+.ga-cte-alg-cell[data-d="1"]  { background: rgba(255, 140, 110, 0.18);     color: var(--ink); }
+.ga-cte-alg-cell[data-d="2"]  { background: rgba(255, 140, 110, 0.35);     color: var(--ink); }
+.ga-cte-alg-cell[data-d="3"]  { background: rgba(255, 140, 110, 0.55);     color: var(--panel-1); }
+.ga-cte-alg-cell[data-d="4"]  { background: rgba(255, 140, 110, 0.75);     color: var(--panel-1); }
+.ga-cte-alg-cell[data-d="5"]  { background: rgba(255, 140, 110, 0.92);     color: var(--panel-1); }
+.ga-cte-alg-legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 10px;
+  margin-top: 8px;
+  font-size: 10px;
+  color: var(--ink-dim);
+}
+.ga-cte-alg-legend .ga-cte-alg-cell {
+  display: inline-block;
+  width: 24px;
+  height: 12px;
+  vertical-align: middle;
+  border: 1px solid var(--rule);
+  border-radius: 1px;
+  padding: 0;
+}
+
+/* V5 — breakpoint × TE cross panel. */
+.ga-cte-bp-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+@media (max-width: 720px) {
+  .ga-cte-bp-grid { grid-template-columns: 1fr; }
+}
+.ga-cte-bp-col {
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  padding: 8px 10px;
+  background: var(--panel-3);
+}
+.ga-cte-bp-head {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--ink);
+  padding-bottom: 4px;
+  margin-bottom: 6px;
+  border-bottom: 1px solid var(--rule);
+}
+.ga-cte-bp-caveat {
+  margin-top: 10px;
+  padding: 8px 10px;
+  border: 1px dashed #c9a23a;
+  border-radius: 3px;
+  background: rgba(201, 162, 58, 0.06);
+  font-size: 10.5px;
+  color: var(--ink);
+  line-height: 1.5;
+}
+
+
+/* ---------------------------------------------------------------------
+ * page_assembly_stats — phase-B build-out.
+ *
+ * QC banner with a "good-vs-target" tile variant, side-by-side per-
+ * haplotype breakdown, per-chrom QC table with T2T chips, BUSCO bar,
+ * Merqury QV breakout. All driven by assembly_stats.json (see the
+ * embedded ga-schema-block on the page for the contract).
+ * --------------------------------------------------------------------- */
+
+/* Tile variant — green tint when the metric clears its target. */
+.ga-tile-good {
+  border-left: 3px solid #4f9e64;
+}
+
+/* Tabular-numerics helpers used across the assembly-stats cards. */
+.ga-num {
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  font-family: var(--mono);
+}
+.ga-num-h {
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  color: var(--ink-dim);
+  font-weight: 600;
+}
+.ga-warn { color: #c9a23a; }
+
+/* Per-haplotype side-by-side card. */
+.ga-hap-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+@media (max-width: 720px) {
+  .ga-hap-grid { grid-template-columns: 1fr; }
+}
+.ga-hap-col {
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  padding: 8px 10px;
+  background: var(--panel-3);
+}
+.ga-hap-head {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--ink);
+  padding-bottom: 4px;
+  margin-bottom: 6px;
+  border-bottom: 1px solid var(--rule);
+}
+.ga-hap-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 12px;
+  padding: 2px 0;
+  font-size: 10.5px;
+  color: var(--ink-dim);
+}
+.ga-hap-row > .ga-num {
+  color: var(--ink);
+}
+.ga-hap-row.ga-hap-sep {
+  margin-top: 6px;
+  padding-top: 6px;
+  border-top: 1px dashed var(--rule);
+}
+
+/* Per-chromosome QC table — 10 columns, fixed-width font for alignment. */
+.ga-chrom-qc-table {
+  display: grid;
+  grid-template-columns:
+    /* chrom */     1.0fr
+    /* length */    1.2fr
+    /* GC */        0.7fr
+    /* QV */        1.0fr
+    /* BUSCO */     0.8fr
+    /* gaps */      0.6fr
+    /* cen */       0.5fr
+    /* 5'tel */     0.5fr
+    /* 3'tel */     0.5fr
+    /* T2T */       0.7fr;
+  gap: 2px 8px;
+  font-size: 10.5px;
+  margin-top: 4px;
+}
+.ga-chrom-qc-head {
+  display: contents;
+}
+.ga-chrom-qc-head > span {
+  font-weight: 600;
+  color: var(--ink-dim);
+  font-size: 10px;
+  letter-spacing: 0.02em;
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 4px;
+}
+.ga-chrom-qc-row {
+  display: contents;
+}
+.ga-chrom-qc-row > span {
+  padding: 3px 0;
+  border-bottom: 1px dashed var(--rule);
+  font-family: var(--mono);
+}
+.ga-chrom-qc-row > span:nth-child(7),
+.ga-chrom-qc-row > span:nth-child(8),
+.ga-chrom-qc-row > span:nth-child(9) {
+  text-align: center;
+}
+
+/* T2T chip — fully-T2T chroms light up coral; others stay dim. */
+.ga-t2t-chip {
+  font-size: 9px;
+  letter-spacing: 0.04em;
+  text-align: center;
+  color: var(--ink-dimmer);
+  padding: 1px 4px;
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  background: var(--panel-3);
+}
+.ga-t2t-chip.ga-t2t-yes {
+  color: #ff8c6e;
+  border-color: #ff8c6e;
+  background: rgba(255, 140, 110, 0.06);
+}
+
+/* BUSCO breakout — one bar per haplotype, segments scale by `flex`. */
+.ga-busco-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.ga-busco-bar-row {
+  display: grid;
+  grid-template-columns: 110px 1fr 220px;
+  gap: 10px;
+  align-items: center;
+  font-size: 10.5px;
+}
+.ga-busco-bar-label {
+  color: var(--ink-dim);
+}
+.ga-busco-bar {
+  display: flex;
+  height: 18px;
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  overflow: hidden;
+  background: var(--panel-3);
+  font-size: 9px;
+  color: var(--panel-1);
+}
+.ga-busco-bar > span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ga-busco-s { background: #4f9e64; }
+.ga-busco-d { background: #6fb8c9; }
+.ga-busco-f { background: #c9a23a; }
+.ga-busco-m { background: #c94f6b; }
+.ga-busco-numeric {
+  display: flex;
+  gap: 10px;
+  font-size: 10px;
+  color: var(--ink-dim);
+  font-family: var(--mono);
+}
+.ga-busco-numeric b { color: var(--ink); font-weight: 600; }
+
+/* Merqury QV breakout — 7-column table. */
+.ga-merqury-grid {
+  display: grid;
+  grid-template-columns:
+    1.0fr     /* haplotype */
+    0.8fr     /* QV */
+    1.0fr     /* k-mer errors */
+    1.2fr     /* error rate */
+    1.2fr     /* k-mer completeness */
+    1.0fr     /* switch error */
+    0.6fr;    /* band */
+  gap: 2px 10px;
+  font-size: 10.5px;
+}
+.ga-merqury-row {
+  display: contents;
+}
+.ga-merqury-row > span {
+  padding: 3px 0;
+  border-bottom: 1px dashed var(--rule);
+  font-family: var(--mono);
+}
+.ga-merqury-row:first-child > span {
+  border-bottom: 1px solid var(--rule);
+  font-weight: 600;
+  color: var(--ink-dim);
+  font-size: 10px;
+  letter-spacing: 0.02em;
+}
+.ga-qv-band {
+  font-size: 9px;
+  letter-spacing: 0.04em;
+  text-align: center;
+  padding: 1px 4px;
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  background: var(--panel-3);
+  color: var(--ink-dimmer);
+}
+.ga-qv-band.ga-qv-q40 {
+  color: #4f9e64;
+  border-color: #4f9e64;
+  background: rgba(79, 158, 100, 0.08);
+}
+
+
+/* ---------------------------------------------------------------------
+ * page_repeats_te V1-V3 build-out — stacked bar, density heatmap,
+ * breakpoint-enrichment table. (V4 alluvial Sankey lives further down
+ * with the ga-sankey-* rules main contributed.)
+ * --------------------------------------------------------------------- */
+
+/* V1: TE composition stacked bar. */
+.ga-te-stack-row {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  gap: 10px;
+  align-items: center;
+  font-size: 10.5px;
+  margin-bottom: 6px;
+}
+.ga-te-stack-label { color: var(--ink-dim); }
+.ga-te-stack {
+  display: flex;
+  height: 22px;
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  overflow: hidden;
+  background: var(--panel-3);
+  font-size: 9px;
+  color: var(--panel-1);
+}
+.ga-te-stack > span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 0 4px;
+}
+/* TE-class palette (independent from chrom palette — these are categorical
+   for TE classes, not chromosomes). */
+.ga-te-ltr       { background: #b15b3a; }   /* LTR — warm rust */
+.ga-te-line      { background: #d39a3a; }   /* LINE — amber */
+.ga-te-sine      { background: #c9a23a; }   /* SINE — duller amber */
+.ga-te-dna       { background: #4f9e64; }   /* DNA — green */
+.ga-te-helitron  { background: #6fb8c9; }   /* Helitron — teal */
+.ga-te-rrna      { background: #888888; }   /* rRNA — neutral grey */
+.ga-te-other     { background: #888888; }   /* Other / Unknown */
+.ga-te-nonrep    { background: var(--panel-2); color: var(--ink-dim); }
+
+.ga-te-stack-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+  margin-top: 6px;
+  font-size: 10px;
+  color: var(--ink-dim);
+}
+.ga-te-stack-legend > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.ga-te-leg {
+  display: inline-block;
+  width: 14px;
+  height: 10px;
+  border: 1px solid var(--rule);
+  border-radius: 1px;
+}
+
+/* V2: per-chrom × class density heatmap. */
+.ga-te-heatmap {
+  display: grid;
+  grid-template-columns: 60px repeat(7, 1fr);
+  gap: 2px;
+  font-size: 10.5px;
+  margin-top: 4px;
+}
+.ga-te-hm-head, .ga-te-hm-row { display: contents; }
+.ga-te-hm-head > span {
+  font-weight: 600;
+  color: var(--ink-dim);
+  font-size: 10px;
+  text-align: center;
+  padding: 4px 0;
+  border-bottom: 1px solid var(--rule);
+}
+.ga-te-hm-head > span:first-child { text-align: left; }
+.ga-te-hm-row > span {
+  padding: 4px 0;
+  font-family: var(--mono);
+  text-align: center;
+  border-bottom: 1px dashed var(--rule);
+}
+.ga-te-hm-row > span:first-child {
+  text-align: left;
+  color: var(--ink-dim);
+}
+/* density bucket colouring — 7-step ramp, viridis-ish. */
+.ga-te-hm-cell[data-d="0"] { background: rgba(80,  120, 160, 0.06); color: var(--ink-dim); }
+.ga-te-hm-cell[data-d="1"] { background: rgba(80,  140, 180, 0.18); color: var(--ink-dim); }
+.ga-te-hm-cell[data-d="2"] { background: rgba(80,  160, 170, 0.30); }
+.ga-te-hm-cell[data-d="3"] { background: rgba(110, 180, 130, 0.45); color: var(--panel-1); }
+.ga-te-hm-cell[data-d="4"] { background: rgba(170, 190,  90, 0.60); color: var(--panel-1); }
+.ga-te-hm-cell[data-d="5"] { background: rgba(220, 170,  70, 0.78); color: var(--panel-1); }
+.ga-te-hm-cell[data-d="6"] { background: rgba(220, 130,  60, 0.92); color: var(--panel-1); }
+
+.ga-te-hm-legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 8px;
+  margin-top: 8px;
+  font-size: 10px;
+  color: var(--ink-dim);
+}
+.ga-te-hm-leg {
+  display: inline-block;
+  padding: 1px 6px;
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  font-family: var(--mono);
+}
+.ga-te-hm-leg[data-d="0"] { background: rgba(80, 120, 160, 0.06); }
+.ga-te-hm-leg[data-d="1"] { background: rgba(80, 140, 180, 0.18); }
+.ga-te-hm-leg[data-d="2"] { background: rgba(80, 160, 170, 0.30); }
+.ga-te-hm-leg[data-d="3"] { background: rgba(110, 180, 130, 0.45); }
+.ga-te-hm-leg[data-d="4"] { background: rgba(170, 190,  90, 0.60); }
+.ga-te-hm-leg[data-d="5"] { background: rgba(220, 170,  70, 0.78); }
+.ga-te-hm-leg[data-d="6"] { background: rgba(220, 130,  60, 0.92); color: var(--panel-1); }
+
+/* V3: breakpoint-enrichment table. */
+.ga-bp-enrich {
+  display: grid;
+  grid-template-columns: 1.0fr 0.9fr 0.9fr 0.7fr 0.9fr 1.6fr;
+  gap: 2px 10px;
+  font-size: 10.5px;
+}
+.ga-bp-head, .ga-bp-row { display: contents; }
+.ga-bp-head > span {
+  font-weight: 600;
+  color: var(--ink-dim);
+  font-size: 10px;
+  padding: 3px 0;
+  border-bottom: 1px solid var(--rule);
+}
+.ga-bp-row > span {
+  padding: 3px 0;
+  border-bottom: 1px dashed var(--rule);
+}
+.ga-bp-badge {
+  font-size: 9px;
+  letter-spacing: 0.04em;
+  padding: 1px 4px;
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  background: var(--panel-3);
+  color: var(--ink-dimmer);
+}
+.ga-bp-badge.ga-bp-yes {
+  color: #ff8c6e;
+  border-color: #ff8c6e;
+  background: rgba(255, 140, 110, 0.08);
+}
