@@ -100,6 +100,11 @@
       "runner": "runners.kimura_ingest.centromere_table_ingest",
       "schema_in": "centromere_table_ingest_v1",
       "description": "Resolve a quarTeT / centromics centromere TSV (Chr \u00d7 {start_CE, end_CE, TRcoverage, TEcoverage, regionscore}) and emit a centromeres_table_v0 envelope."
+    },
+    "haplotype_synteny_ingest": {
+      "runner": "runners.kimura_ingest.haplotype_synteny_ingest",
+      "schema_in": "haplotype_synteny_ingest_v1",
+      "description": "Resolve a focal-pair synteny_blocks.json (schema v2) from the workspace and emit a haplotype_synteny_v0 envelope. NOT the multi-species synteny_blocks layer \u2014 this is the focal-pair branch only."
     }
   }
 }

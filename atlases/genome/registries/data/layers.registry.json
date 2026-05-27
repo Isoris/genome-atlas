@@ -178,6 +178,14 @@
       "_status": "not_loaded",
       "_feeds": "page_comparative_te V5 \u00b7 Inversion Atlas page16 (breakpoint badge)",
       "_source_pipeline": "TE12_breakpoint_TE_cross.R (Chapter 5 module step 07)"
+    },
+    "haplotype_synteny_blocks": {
+      "tier": "warm",
+      "source": "file",
+      "path": "data/comparative/haplotype_synteny/synteny_blocks.json",
+      "_status": "not_loaded",
+      "_feeds": "page_haplotype_synteny V1-V3 (focal Gar\u2194Mac only)",
+      "_source_pipeline": "wfmash + STEP_CS01_extract_breakpoints.py (BP_ATLAS focal-pair branch)"
     }
   }
 }

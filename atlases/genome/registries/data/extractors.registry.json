@@ -166,6 +166,15 @@
       "parser": "extractors.centromere_table.extract",
       "input_format": "tsv",
       "_doc": "quarTeT / centromics centromere TSV. Normalizes percentage strings to floats + adds TR-dominant / TE-dominant / mixed verdict per row."
+    },
+    {
+      "extractor_id": "extract_haplotype_synteny_v0",
+      "layer_type": "haplotype_synteny_blocks",
+      "schema_version": "haplotype_synteny_v0",
+      "stage": "normalized",
+      "parser": "extractors.haplotype_synteny_blocks.extract",
+      "input_format": "json",
+      "_doc": "Focal Gar\u2194Mac synteny blocks. Wraps the upstream schema_v2 JSON with per-pair summary + multi-target detection (the LG28 fusion/fission signature)."
     }
   ]
 }
