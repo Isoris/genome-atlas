@@ -2437,3 +2437,122 @@ html[data-theme="light"]    .ga-sankey-btn.is-active {
   border-color: #ff8c6e;
   background: rgba(255, 140, 110, 0.08);
 }
+
+
+/* ---------------------------------------------------------------------
+ * page_haplotype_synteny — focal Gar↔Mac wfmash synteny views.
+ *
+ * V1 ribbon panels (per Gar chrom), V2 focal Oxford dotplot,
+ * V3 LG28↔(LG06+LG01) fusion/fission headline event, V4 strand
+ * orientation summary. All under .ga-syn-ribbon-* / .ga-syn-dotplot-* /
+ * .ga-syn-headline-* / .ga-syn-strand-* prefixes (separate from the
+ * existing .ga-syn-* used by page_synteny's Oxford grid).
+ * --------------------------------------------------------------------- */
+.ga-syn-ribbon-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.ga-syn-ribbon-panel {
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  padding: 6px 8px;
+  background: var(--panel-3);
+}
+.ga-syn-ribbon-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 10.5px;
+  color: var(--ink-dim);
+  margin-bottom: 2px;
+}
+.ga-syn-ribbon-head b { color: var(--ink); }
+.ga-syn-ribbon-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.ga-syn-dotplot-wrap {
+  margin: 4px 0;
+  padding: 6px 8px;
+  background: var(--panel-3);
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+}
+.ga-syn-dotplot-svg {
+  display: block;
+  width: 100%;
+  max-width: 540px;
+  margin: 0 auto;
+  height: auto;
+}
+
+.ga-syn-headline-wrap {
+  margin: 4px 0;
+  padding: 6px 8px;
+  background: var(--panel-3);
+  border: 1px solid var(--rule);
+  border-left: 3px solid #ff8c6e;
+  border-radius: 3px;
+}
+.ga-syn-headline-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.ga-syn-strand-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+@media (max-width: 600px) {
+  .ga-syn-strand-grid { grid-template-columns: 1fr; }
+}
+.ga-syn-strand-tile {
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  padding: 10px 12px;
+  background: var(--panel-3);
+}
+.ga-syn-strand-tile.ga-syn-strand-mix {
+  border-left: 3px solid #ff8c6e;
+}
+.ga-syn-strand-num {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--ink);
+  font-family: var(--mono);
+  line-height: 1;
+}
+.ga-syn-strand-label {
+  font-size: 11px;
+  color: var(--ink);
+  margin-top: 4px;
+}
+.ga-syn-strand-sub {
+  font-size: 10px;
+  color: var(--ink-dim);
+  margin-top: 2px;
+}
+
+/* JSON Schema codeblock — re-used by every page that embeds a contract. */
+.ga-schema-block {
+  background: var(--panel-3);
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  padding: 10px 12px;
+  font-size: 10px;
+  color: var(--ink);
+  font-family: var(--mono);
+  line-height: 1.45;
+  overflow-x: auto;
+  max-height: 460px;
+  overflow-y: auto;
+}
+.ga-schema-block code {
+  background: transparent;
+  padding: 0;
+}

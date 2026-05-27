@@ -100,6 +100,14 @@
       "requires_operations": [],
       "requires_slots": [],
       "preloads": []
+    },
+    "page_haplotype_synteny": {
+      "_label": "haplotype synteny \u2014 focal Gar\u2194Mac wfmash alignment",
+      "_doc": "Focal F1-haplotype whole-genome alignment. Reads fixtures/haplotype_synteny/synteny_blocks.json (schema v2 from STEP_CS01_extract_breakpoints.py); renders ribbons per Gar chrom, focal Oxford dotplot, and the LG28\u2194(LG06+LG01) fusion/fission event panel \u2014 the sequence-level signature of the n=28 vs n=27 karyotype difference. Cross-species panel work lives elsewhere (page_synteny multi-species + the separate cross-species atlas).",
+      "requires_layers": [],
+      "requires_operations": [],
+      "requires_slots": [],
+      "preloads": []
     }
   }
 }
