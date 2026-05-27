@@ -33,6 +33,7 @@
 // =============================================================================
 
 import { _pageState, _setActiveState } from './page9/_state.js';
+import { installRouter as _installCrossAtlasRouter, onActiveChrom as _onActiveChrom, getActiveChrom as _getActiveChrom } from '../../shared/cross-atlas.js';
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 
@@ -208,9 +209,27 @@ export async function mount(root, atlasState, registry) {
   const legacyState = _buildLegacyState(atlasState);
   legacyState.root = root || document;
   _setActiveState(legacyState);
+  _installCrossAtlasRouter();
   try { renderPage9(legacyState); }
   catch (e) { console.warn('page9.mount: renderPage9 threw —', e); }
+  // Auto-nav the per-chrom dotplot to whichever chrom the router has
+  // flagged as active (if it appears in the active pair on either axis).
+  _applyActiveChromToDotplot(root, _getActiveChrom());
+  if (root && !root.__gaPage9ChromSub) {
+    root.__gaPage9ChromSub = _onActiveChrom(({ chrom }) => {
+      _applyActiveChromToDotplot(root, chrom ? { chrom } : null);
+    });
+  }
   if (atlasState.genome) atlasState.genome._page9State = legacyState;
+}
+
+function _applyActiveChromToDotplot(root, active) {
+  if (!root || !active || !active.chrom) return;
+  const host = root.querySelector && root.querySelector('[data-ga-dot]');
+  const ctx = host && host.__gaDot;
+  if (ctx && typeof ctx.setChrom === 'function') {
+    ctx.setChrom(active.chrom);
+  }
 }
 
 export async function unmount(root) {
@@ -984,6 +1003,28 @@ function _mountDotplot(host, state) {
   ctx.svg.addEventListener('mouseleave', ctx._onLeave);
 
   host.__gaDot = ctx;
+  // setChrom: cross-atlas hook — if the active chrom matches this pair's
+  // X or Y inventory, switch the corresponding selector. Same chrom id can
+  // legitimately exist on both axes (catfish LG numbering is shared), so
+  // prefer X when ambiguous.
+  ctx.setChrom = function setChrom(chromId) {
+    if (!chromId) return false;
+    const pair = (data.pairs || [])[ctx.pairIdx];
+    if (!pair) return false;
+    const onX = (pair.x && pair.x.chroms || []).some((c) => c.id === chromId);
+    const onY = (pair.y && pair.y.chroms || []).some((c) => c.id === chromId);
+    let changed = false;
+    if (onX && ctx.xcId !== chromId) { ctx.xcId = chromId; changed = true; }
+    else if (onY && ctx.ycId !== chromId) { ctx.ycId = chromId; changed = true; }
+    if (changed) {
+      const xcSel = card && card.querySelector('[data-ga-dot-xc]');
+      const ycSel = card && card.querySelector('[data-ga-dot-yc]');
+      if (xcSel) xcSel.value = ctx.xcId;
+      if (ycSel) ycSel.value = ctx.ycId;
+      _renderDotplot(ctx);
+    }
+    return changed;
+  };
   _renderDotplot(ctx);
 }
 

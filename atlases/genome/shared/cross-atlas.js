@@ -89,6 +89,14 @@ export function clearActiveCandidate(source) {
   _activeCandidate = null;
   _broadcastCandidate({ candidate: null, source: source || 'programmatic' });
 }
+export function clearActiveChrom(source) {
+  _activeChrom = null;
+  _broadcastChrom({ chrom: null, hap: null, source: source || 'programmatic' });
+}
+export function clearAll(source) {
+  clearActiveCandidate(source);
+  clearActiveChrom(source);
+}
 
 // Subscribe to active-candidate changes. Returns an unsubscribe function.
 export function onActiveCandidate(handler) {
@@ -130,6 +138,17 @@ export function installRouter(root) {
   host.addEventListener('ga-density-chrom-click', (ev) => {
     const d = ev.detail || {};
     setActiveChrom(d.chrom, 'page5:density', d.hap || null);
+  }, false);
+
+  // Escape clears the active selection from anywhere. Skipped when the
+  // user is typing into a control so we don't grief form inputs.
+  host.addEventListener('keydown', (ev) => {
+    if (ev.key !== 'Escape') return;
+    const t = ev.target;
+    if (t && t.tagName && /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName)) return;
+    if (_activeCandidate || _activeChrom) {
+      clearAll('keyboard:escape');
+    }
   }, false);
 
   _installed = true;
